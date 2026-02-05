@@ -1,0 +1,73 @@
+/* ===================== */
+/* Item del menú principal y submenús */
+.menu-item {
+  position: relative;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  white-space: nowrap;
+  list-style: none; /* quitar bullets del primer nivel */
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover > .submenu {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .flag-container {
+    display: inline-block;
+    width: 20px;
+    height: 14px;
+  }
+
+  .flag-icon {
+    width: 20px;
+    height: 14px;
+    margin-right: 6px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    vertical-align: middle;
+  }
+
+  /* Submenú de cualquier nivel */
+  .submenu {
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #34495e;
+    border-radius: 4px;
+    padding: 0.5rem 0;
+    min-width: 150px;
+    z-index: 10;
+    margin: 0;
+    padding-left: 0;
+
+    .menu-item {
+      padding: 0.3rem 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &:hover {
+        background: #3d566e;
+        border-radius: 4px;
+      }
+
+      /* Sub-submenú (nivel 3 en adelante) */
+      .submenu {
+        top: 0;
+        left: 100%;
+        transform: translateX(-10px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+    }
+  }
+}

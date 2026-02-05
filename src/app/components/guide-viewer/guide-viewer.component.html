@@ -1,0 +1,81 @@
+<div
+  *ngIf="guide; else welcome"
+  class="guide-page"
+  [ngStyle]="{ 'background-image': 'url(' + guide.background + ')' }"
+>
+  <div class="guide-content">
+    <!-- Cabecera -->
+    <div class="city-header">
+      <h1>{{ guide.nombre }}</h1>
+      <img
+        *ngIf="guide.flag"
+        [src]="guide.flag"
+        [alt]="guide.nombre + ' flag'"
+        class="city-flag"
+      />
+    </div>
+
+    <p>{{ guide.descripcion }}</p>
+
+    <!-- COMPONENTE INFO-GENERAL -->
+    <app-info-general
+      *ngIf="guide.infoGeneral"
+      [infoGeneral]="guide.infoGeneral">
+    </app-info-general>
+
+    <!-- Secciones -->
+    <div *ngFor="let section of guide.secciones" class="guide-section">
+      <h2>{{ section.titulo }}</h2>
+
+      <!-- Itinerario -->
+      <mat-accordion *ngIf="section.itinerario">
+        <mat-expansion-panel *ngFor="let day of section.itinerario">
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ day.dia }}</mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div class="zone-card" *ngFor="let zona of day.zonas">
+            <h3>{{ zona.nombre }}</h3>
+            <p>{{ zona.descripcion }}</p>
+            <div class="zone-photos" *ngIf="zona.fotos?.length">
+              <img
+                *ngFor="let foto of zona.fotos"
+                [src]="foto"
+                [alt]="zona.nombre"
+              />
+            </div>
+            <p *ngIf="zona.fecha"><strong>Fecha:</strong> {{ zona.fecha }}</p>
+            <p *ngIf="zona.horario"><strong>Horario:</strong> {{ zona.horario }}</p>
+            <p *ngIf="zona.precio"><strong>Precio:</strong> {{ zona.precio }}</p>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <!-- Lugares / Platos -->
+      <div *ngIf="section.lugares?.length || section.platos?.length" class="grid">
+        <div class="item-card" *ngFor="let item of section.lugares || section.platos">
+          <h3>{{ item.nombre }}</h3>
+          <p>{{ item.descripcion }}</p>
+          <img *ngIf="item.foto" [src]="item.foto" [alt]="item.nombre" />
+          <p *ngIf="item.fecha"><strong>Fecha:</strong> {{ item.fecha }}</p>
+          <p *ngIf="item.horario"><strong>Horario:</strong> {{ item.horario }}</p>
+          <p *ngIf="item.precio"><strong>Precio:</strong> {{ item.precio }}</p>
+          <p *ngIf="item.precioOrientativo"><strong>Precio:</strong> {{ item.precioOrientativo }}</p>
+        </div>
+      </div>
+
+      <!-- Contenido simple -->
+      <p *ngIf="!section.itinerario && !section.lugares && !section.platos">{{ section.contenido }}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Pantalla de bienvenida -->
+<ng-template #welcome>
+  <div class="welcome">
+    <img src="assets/logo.png" alt="AvenTourArte" class="welcome-logo" />
+    <h2>Bienvenido a AvenTourArte</h2>
+    <p class="slogan">✨ "Explora, Descubre, Comparte"</p>
+    <p class="slogan">🌍 "Viaja con arte y emoción"</p>
+  </div>
+</ng-template>

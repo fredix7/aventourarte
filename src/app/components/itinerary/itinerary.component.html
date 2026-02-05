@@ -1,0 +1,25 @@
+<div class="itinerary">
+  <div *ngFor="let day of itinerary; let i = index" class="day-block">
+    <button class="day-header" (click)="toggleDay(i)" aria-expanded="{{ isOpen(i) }}">
+      <div class="day-title">
+        <span class="day-label">{{ day.dia || ('Día ' + (i + 1)) }}</span>
+        <strong>{{ day.titulo }}</strong>
+      </div>
+      <span class="chev">{{ isOpen(i) ? '−' : '+' }}</span>
+    </button>
+
+    <div class="day-content" [class.open]="isOpen(i)">
+      <div class="places">
+        <div *ngFor="let place of (day.zonas || day.actividades || [])" class="place-card">
+          <img *ngIf="place.foto" [src]="place.foto" [alt]="place.nombre" class="place-img" />
+          <div class="place-info">
+            <h3>{{ place.nombre }}</h3>
+            <p class="place-desc">{{ place.descripcion || place.detalle }}</p>
+            <p *ngIf="place.horario"><strong>Horario:</strong> {{ place.horario }}</p>
+            <p *ngIf="place.precio"><strong>Precio:</strong> {{ place.precio }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

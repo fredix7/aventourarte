@@ -1,0 +1,131 @@
+/* ===================== */
+/* Header general */
+.app-header {
+  display: flex;
+  align-items: center;
+  background: #2c3e50;
+  padding: 0.7rem 1.5rem;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  position: relative;
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .logo-img {
+    height: 80px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  /* Botón hamburguesa */
+  .menu-toggle {
+    display: none; /* oculto en escritorio */
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    margin-left: auto;
+  }
+
+  /* Menú principal al lado del logo */
+  .main-menu {
+    margin-left: 2rem;
+    flex-grow: 1;
+
+    > ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    &.open {
+      display: block; /* solo para móvil */
+    }
+  }
+}
+
+/* ===================== */
+/* Submenús */
+.menu-item {
+  position: relative;
+  cursor: pointer;
+
+  &:hover > .submenu {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .submenu {
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #34495e;
+    border-radius: 4px;
+    padding: 0.5rem 0;
+    min-width: 150px;
+    z-index: 10;
+    list-style: none;
+    margin: 0;
+
+    .menu-item {
+      padding: 0.3rem 0.8rem;
+
+      &:hover {
+        background: #3d566e;
+        border-radius: 4px;
+      }
+
+      .submenu {
+        top: 0;
+        left: 100%; /* se abre a la derecha del submenú padre */
+        transform: translateX(-10px);
+      }
+    }
+  }
+}
+
+:host {
+  position: relative;
+  z-index: 10;
+}
+
+
+/* ===================== */
+/* Responsive: solo móvil */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .main-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #2c3e50;
+    flex-direction: column;
+
+    &.open {
+      display: flex;
+    }
+
+    > ul {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+}

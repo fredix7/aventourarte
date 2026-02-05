@@ -1,0 +1,5 @@
+1. Meter en el travel-data.ts los valores del listado de la ciudad/país
+2. Crear el fichero ts dentro de guides... de la ciudad donde irá el contenido de la guía (PONER LA RUTA INDICADA DEL travel.data.ts)
+3. Meter las imágenes en la carpeta assets organizadas por ciudad
+4. En el travel.service.ts importar la guia de la ciudad e incluirla en el TravelService
+5. En el guide-viewer.component.ts importar e incluir la guía de la ciudad

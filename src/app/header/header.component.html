@@ -1,0 +1,19 @@
+<header class="app-header"> 
+  <div class="logo-container">
+    <a routerLink="/">
+      <img src="assets/logo.png" alt="AvenTourArte logo" class="logo-img" />
+    </a>
+  </div>
+
+  <!-- Botón hamburguesa solo móvil -->
+  <button class="menu-toggle" (click)="toggleMenu()">☰</button>
+
+  <!-- Menú principal -->
+  <nav class="main-menu" [class.open]="menuOpen">
+    <ul>
+      <ng-container *ngFor="let continent of treeData">
+        <app-header-submenu [node]="continent"></app-header-submenu>
+      </ng-container>
+    </ul>
+  </nav>
+</header>

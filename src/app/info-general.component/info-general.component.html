@@ -1,0 +1,45 @@
+<div class="info-container" *ngIf="infoGeneral">
+  <h2>Información general</h2>
+
+  <ul class="info-list">
+    <li>
+      <span class="material-icons">language</span>
+      <strong>Idioma:</strong> {{ infoGeneral.idioma }}
+    </li>
+
+    <li>
+      <span class="material-icons">payments</span>
+      <strong>Moneda:</strong> {{ infoGeneral.moneda }}
+    </li>
+
+    <li>
+      <span class="material-icons">schedule</span>
+      <strong>Hora:</strong> {{ infoGeneral.hora }}
+    </li>
+
+    <li>
+      <span class="material-icons">wifi</span>
+      <strong>Internet:</strong> {{ infoGeneral.internet }}
+    </li>
+
+    <li>
+      <span class="material-icons">power</span>
+      <strong>Electricidad:</strong> {{ infoGeneral.electricidad }}
+    </li>
+
+    <li>
+      <span class="material-icons">badge</span>
+      <strong>Pasaporte:</strong> {{ infoGeneral.pasaporte }}
+    </li>
+
+    <li>
+      <span class="material-icons">assignment_turned_in</span>
+      <strong>Visado:</strong> {{ infoGeneral.visado }}
+    </li>
+
+    <li>
+      <span class="material-icons">health_and_safety</span>
+      <strong>Vacunas:</strong> {{ infoGeneral.vacunas }}
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,49 @@
+.info-container {
+  margin: 30px 0;
+  padding: 24px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ffffff, #f6f8fa);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+
+  h2 {
+    margin-bottom: 20px;
+    font-size: 1.6rem;
+    text-align: center;
+  }
+}
+
+.info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+
+    mat-icon {
+      font-size: 28px;
+      color: #2c7be5;
+    }
+
+    strong {
+      display: block;
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    span {
+      font-size: 0.95rem;
+      color: #222;
+    }
+  }
+}
