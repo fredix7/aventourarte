@@ -1,73 +1,117 @@
-/* ===================== */
-/* Item del menú principal y submenús */
+/* Item del menú (cualquier nivel) */
 .menu-item {
   position: relative;
-  cursor: pointer;
-  padding: 0.3rem 0.5rem;
+  list-style: none;
   white-space: nowrap;
-  list-style: none; /* quitar bullets del primer nivel */
+}
+
+/* Botón del item (lo que se toca) */
+.menu-btn {
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+
+  width: 100%;
+  padding: 0.3rem 0.8rem;
 
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  text-align: left;
+}
 
-  &:hover > .submenu {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
+.flag-container {
+  display: inline-block;
+  width: 20px;
+  height: 14px;
+}
 
-  .flag-container {
-    display: inline-block;
-    width: 20px;
-    height: 14px;
-  }
+.flag-icon {
+  width: 20px;
+  height: 14px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
 
-  .flag-icon {
-    width: 20px;
-    height: 14px;
-    margin-right: 6px;
-    object-fit: cover;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    vertical-align: middle;
-  }
+.caret {
+  margin-left: auto;
+}
 
-  /* Submenú de cualquier nivel */
+/* Submenú (por defecto oculto en desktop) */
+.submenu {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+
+  position: absolute;
+  top: 100%;
+  left: 0;
+
+  background: #34495e;
+  border-radius: 4px;
+  padding: 0.5rem 0;
+  min-width: 150px;
+  z-index: 10;
+
+  margin: 0;
+  padding-left: 0;
+}
+
+/* Desktop: abrir al pasar el ratón */
+.menu-item:hover > .submenu {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Mobile/click: abrir cuando esté open */
+.menu-item.open > .submenu {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Nivel 2+ (submenus anidados): abrir hacia la derecha en desktop */
+.submenu .submenu {
+  top: 0;
+  left: 100%;
+  transform: translateX(-10px);
+}
+
+/* Hover visual en items dentro del submenu */
+.submenu .menu-btn:hover {
+  background: #3d566e;
+  border-radius: 4px;
+}
+
+/* Móvil: comportamiento tipo acordeón (submenús hacia abajo) */
+@media (max-width: 768px) {
   .submenu {
-    opacity: 0;
-    transform: translateY(-10px);
-    pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    position: absolute;
-    top: 100%;
-    left: 0;
+    position: static;
+    opacity: 1;          /* lo controlamos por open, pero al ser static evitamos anim raras */
+    transform: none;
+    pointer-events: auto;
+    min-width: unset;
+    padding-left: 1rem;
+    background: transparent;  /* opcional: si quieres que no pinte caja */
+  }
+
+  /* En móvil, si quieres mantener “caja”, borra background: transparent */
+  .submenu {
     background: #34495e;
     border-radius: 4px;
-    padding: 0.5rem 0;
-    min-width: 150px;
-    z-index: 10;
-    margin: 0;
-    padding-left: 0;
+  }
 
-    .menu-item {
-      padding: 0.3rem 0.8rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+  .submenu .submenu {
+    left: 0;
+    top: 0;
+  }
 
-      &:hover {
-        background: #3d566e;
-        border-radius: 4px;
-      }
-
-      /* Sub-submenú (nivel 3 en adelante) */
-      .submenu {
-        top: 0;
-        left: 100%;
-        transform: translateX(-10px);
-        transition: opacity 0.2s ease, transform 0.2s ease;
-      }
-    }
+  .caret {
+    transform: rotate(90deg);
   }
 }

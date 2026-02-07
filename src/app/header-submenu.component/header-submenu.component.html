@@ -1,14 +1,22 @@
-<li class="menu-item" (click)="selectNode(node)">
-  <!-- Bandera del país/continente si existe -->
-  <span *ngIf="node.flag" class="flag-container">
-    <img [src]="node.flag" [alt]="node.nombre + ' flag'" class="flag-icon">
-  </span>
-  {{ node.nombre }}
+<!-- Bandera del país/continente si existe -->
+<li class="menu-item" [class.open]="open">
+  <button class="menu-btn" type="button" (click)="onClick(node, $event)">
+    <span *ngIf="node.flag" class="flag-container">
+      <img [src]="node.flag" [alt]="node.nombre + ' flag'" class="flag-icon">
+    </span>
+
+    <span class="label">{{ node.nombre }}</span>
+
+    <span *ngIf="node.hijos?.length" class="caret">▸</span>
+  </button>
 
   <!-- Submenú de hijos -->
   <ul *ngIf="node.hijos?.length" class="submenu">
     <ng-container *ngFor="let child of node.hijos">
-      <app-header-submenu [node]="child" (selected)="selected.emit($event)"></app-header-submenu>
+      <app-header-submenu
+        [node]="child"
+        (selected)="selected.emit($event)">
+      </app-header-submenu>
     </ng-container>
   </ul>
 </li>

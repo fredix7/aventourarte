@@ -12,7 +12,7 @@
   <nav class="main-menu" [class.open]="menuOpen">
     <ul>
       <ng-container *ngFor="let continent of treeData">
-        <app-header-submenu [node]="continent"></app-header-submenu>
+        <app-header-submenu [node]="continent" (selected)="menuOpen = false"></app-header-submenu>
       </ng-container>
     </ul>
   </nav>

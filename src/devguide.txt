@@ -3,3 +3,7 @@
 3. Meter las imágenes en la carpeta assets organizadas por ciudad
 4. En el travel.service.ts importar la guia de la ciudad e incluirla en el TravelService
 5. En el guide-viewer.component.ts importar e incluir la guía de la ciudad
+
+Para publicar en GitHub Pages: Esto copia developer → gh-pages automáticamente
+ng build --configuration production --base-href /aventourarte/
+npx angular-cli-ghpages --dir=dist/aventourarte/browser

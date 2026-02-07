@@ -106,26 +106,29 @@
 /* ===================== */
 /* Responsive: solo móvil */
 @media (max-width: 768px) {
-  .menu-toggle {
-    display: block;
-  }
-
-  .main-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background: #2c3e50;
-    flex-direction: column;
-
-    &.open {
-      display: flex;
+  .app-header {
+    .menu-toggle {
+      display: block;
+      margin-left: auto;
     }
 
-    > ul {
-      flex-direction: column;
-      gap: 0;
+    .main-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: #2c3e50;
+
+      &.open {
+        display: block; // o flex, si quieres
+      }
+
+      > ul {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
     }
   }
 }

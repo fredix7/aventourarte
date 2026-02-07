@@ -14,14 +14,23 @@ export class HeaderSubmenuComponent {
   @Input() node!: TravelNode;
   @Output() selected = new EventEmitter<TravelNode>();
 
+  open = false;
+
   constructor(private router: Router) {}
 
-  selectNode(node: TravelNode) {
-    if (!node.hijos || node.hijos.length === 0) {
-      if (node.path) {
-        this.router.navigate(['/guia', node.path]);
-      }
-      this.selected.emit(node);
+  onClick(node: TravelNode, event: MouseEvent) {
+    event.stopPropagation();
+
+    // Si tiene hijos, toggle del submenú
+    if (node.hijos?.length) {
+      this.open = !this.open;
+      return;
     }
+
+    // Si no tiene hijos, navegar
+    if (node.path) {
+      this.router.navigate(['/guia', node.path]);
+    }
+    this.selected.emit(node);
   }
 }
