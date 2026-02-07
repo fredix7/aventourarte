@@ -1,5 +1,5 @@
 <!-- Bandera del país/continente si existe -->
-<li class="menu-item" [class.open]="open">
+<li class="menu-item" [class.open]="isOpen(node)">
   <button class="menu-btn" type="button" (click)="onClick(node, $event)">
     <span *ngIf="node.flag" class="flag-container">
       <img [src]="node.flag" [alt]="node.nombre + ' flag'" class="flag-icon">

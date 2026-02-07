@@ -92,26 +92,27 @@
 @media (max-width: 768px) {
   .submenu {
     position: static;
-    opacity: 1;          /* lo controlamos por open, pero al ser static evitamos anim raras */
+    opacity: 0; 
     transform: none;
-    pointer-events: auto;
+    pointer-events: none;
+    height: 0;
+    overflow: hidden;
+    padding: 0;
     min-width: unset;
-    padding-left: 1rem;
-    background: transparent;  /* opcional: si quieres que no pinte caja */
+    background: transparent;  /* o #34495e si quieres caja */
   }
 
-  /* En móvil, si quieres mantener “caja”, borra background: transparent */
-  .submenu {
+  .menu-item.open > .submenu {
+    opacity: 1;
+    pointer-events: auto;
+    height: auto;
+    padding: 0.5rem 0 0.5rem 1rem;
     background: #34495e;
     border-radius: 4px;
+    margin-top: 0.25rem;
   }
 
-  .submenu .submenu {
-    left: 0;
-    top: 0;
-  }
-
-  .caret {
-    transform: rotate(90deg);
+  .menu-item.open .caret {
+  transform: rotate(90deg);
   }
 }

@@ -51,59 +51,12 @@
   }
 }
 
-/* ===================== */
-/* Submenús */
-.menu-item {
-  position: relative;
-  cursor: pointer;
-
-  &:hover > .submenu {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  .submenu {
-    opacity: 0;
-    transform: translateY(-10px);
-    pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: #34495e;
-    border-radius: 4px;
-    padding: 0.5rem 0;
-    min-width: 150px;
-    z-index: 10;
-    list-style: none;
-    margin: 0;
-
-    .menu-item {
-      padding: 0.3rem 0.8rem;
-
-      &:hover {
-        background: #3d566e;
-        border-radius: 4px;
-      }
-
-      .submenu {
-        top: 0;
-        left: 100%; /* se abre a la derecha del submenú padre */
-        transform: translateX(-10px);
-      }
-    }
-  }
-}
-
 :host {
   position: relative;
   z-index: 10;
 }
 
 
-/* ===================== */
 /* Responsive: solo móvil */
 @media (max-width: 768px) {
   .app-header {
@@ -111,24 +64,22 @@
       display: block;
       margin-left: auto;
     }
-
+    
     .main-menu {
       display: none;
-      position: absolute;
-      top: 100%;
+      position: fixed;
+      top: 100px;
       left: 0;
-      width: 100%;
+      right: 0;
+      bottom: 0;
       background: #2c3e50;
+      z-index: 9999;
+      overflow-y: auto;
+      padding: 1rem;
+    }
 
-      &.open {
-        display: block; // o flex, si quieres
-      }
-
-      > ul {
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-      }
+    .main-menu.open {
+      display: block;
     }
   }
 }
