@@ -6,7 +6,7 @@
   justify-content: center;
   align-items: flex-start;
   padding: 3rem 1.5rem;
-  overflow: visible;
+  overflow: hidden;
   isolation: isolate;
 
   /* Fondo global dinámico */
@@ -14,14 +14,19 @@
     content: "";
     position: fixed;
     inset: 0;
-    z-index: -2;
+    z-index: -3;
 
     background-image: var(--bg-image);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: var(--bg-pos, 50% 50%);
+    background-attachment: scroll;
 
     filter: brightness(var(--bg-brightness, 0.9));
+
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+    backface-visibility: hidden;
   }
 
   /* BANDERA OVERLAY */
@@ -29,14 +34,18 @@
     content: "";
     position: fixed;
     inset: 0;
-    z-index: -1;
+    z-index: -2;
 
     background-image: var(--flag-image);
     background-repeat: no-repeat;
     background-position: center;
     background-size: var(--flag-size, 55%);
-    opacity: var(--flag-opacity, 0); /* 0 por defecto: no se ve */
+    opacity: var(--flag-opacity, 0);
+    filter: saturate(1.05);
     pointer-events: none;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+    backface-visibility: hidden;
   }
 }
 
@@ -51,6 +60,11 @@
 @media (max-width: 768px) {
   .guide-page::before {
     background-position: var(--bg-pos-mobile, var(--bg-pos, 50% 50%));
+    transform: translateZ(0);
+  }
+  .guide-page::after {
+    opacity: var(--flag-opacity-mobile, var(--flag-opacity, 0));
+    background-size: var(--flag-size-mobile, var(--flag-size, 60%));
   }
 }
 
@@ -208,6 +222,63 @@
     border-radius: 8px;
   }
 }
+
+//Botón al top
+.scroll-top {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 10000;
+
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  border: none;
+
+  display: grid;
+  place-items: center;
+
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #3498db, #2ecc71);
+  color: white;
+
+  box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: floatTravel 3s ease-in-out infinite;
+}
+
+@keyframes floatTravel {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0px); }
+}
+
+.scroll-top:hover {
+  transform: translateY(-6px) scale(1.06);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.34);
+}
+
+.scroll-top-icon {
+  font-size: 26px;
+  transition: transform 0.25s ease;
+}
+
+/* Efecto “despegue” */
+.scroll-top:hover .scroll-top-icon {
+  transform: rotate(-18deg) translateY(-1px);
+}
+
+/* Móvil: un pelín más pequeño */
+@media (max-width: 768px) {
+  .scroll-top {
+    width: 48px;
+    height: 48px;
+    right: 14px;
+    bottom: 14px;
+  }
+}
+
 
 /* Texto general */
 p {

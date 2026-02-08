@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -25,6 +25,21 @@ import { RIO_DE_JANEIRO_GUIDE } from '../../guides/america/sudamerica/brasil/rio
 export class GuideViewerComponent {
   guide: any = null;
   pageStyle: Record<string, string> = {};
+  showScrollTop = false;
+  scrollIcon: 'flight' | 'travel_explore' = 'flight';
+
+  @HostListener('window:scroll')
+  onScroll() {
+    const y = window.scrollY || 0;
+
+    this.showScrollTop = y > 350;
+    this.scrollIcon = y > 1200 ? 'travel_explore' : 'flight';
+  }
+
+
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   private guides: Record<string, any> = {
     'europa/espana/andalucia/cadiz/jerez': JEREZ_GUIDE,
@@ -57,8 +72,19 @@ export class GuideViewerComponent {
       '--bg-brightness': String(guide.bgBrightness ?? 0.9),
 
       '--flag-image': `url(${guide.flag ?? ''})`,
-      '--flag-opacity': String(guide.flagOverlay ? (guide.flagOpacity ?? 0.12) : 0),
+
+      '--flag-opacity': String(
+        guide.flagOverlay ? (guide.flagOpacity ?? 0.12) : 0
+      ),
+
+      '--flag-opacity-mobile': String(
+        guide.flagOverlay
+          ? (guide.flagOpacityMobile ?? guide.flagOpacity ?? 0.12)
+          : 0
+      ),
+
       '--flag-size': guide.flagSize ?? '55%',
+      '--flag-size-mobile': guide.flagSizeMobile ?? guide.flagSize ?? '70%',
     };
   }
 

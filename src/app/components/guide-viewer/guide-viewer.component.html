@@ -68,6 +68,17 @@
       <p *ngIf="!section.itinerario && !section.lugares && !section.platos">{{ section.contenido }}</p>
     </div>
   </div>
+
+  <!-- Botón hacia el top -->
+  <button
+  class="scroll-top"
+  *ngIf="showScrollTop"
+  (click)="scrollToTop()"
+  aria-label="Subir arriba"
+  >
+    <mat-icon class="scroll-top-icon">{{ scrollIcon }}</mat-icon>
+  </button>
+
 </div>
 
 <!-- Pantalla de bienvenida -->
