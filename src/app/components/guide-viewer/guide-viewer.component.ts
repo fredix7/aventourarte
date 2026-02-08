@@ -71,8 +71,8 @@ export class GuideViewerComponent {
       '--flag-image': `url(${guide.flag ?? ''})`,
       '--flag-opacity': String(guide.flagOverlay ? (guide.flagOpacity ?? 0.18) : 0),
       '--flag-opacity-mobile': String(guide.flagOverlay ? (guide.flagOpacityMobile ?? 0.22) : 0),
-      '--flag-size': guide.flagSize ?? '70%',
-      '--flag-size-mobile': guide.flagSizeMobile ?? '95%',
+      '--bg-size': guide.bgSize ?? 'cover',
+      '--bg-size-mobile': guide.bgSizeMobile ?? guide.bgSize ?? 'cover',
     };
   }
 

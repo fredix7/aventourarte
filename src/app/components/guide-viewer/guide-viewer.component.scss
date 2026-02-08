@@ -24,7 +24,7 @@
       ),
       var(--bg-image);
 
-    background-size: cover;
+    background-size: var(--bg-size, cover);
     background-repeat: no-repeat;
     background-position: var(--bg-pos, 50% 50%);
     transform: translateZ(0);
@@ -44,7 +44,7 @@
     background-size: var(--flag-size, 75%);
     opacity: var(--flag-opacity, 0.20);
 
-    mix-blend-mode: soft-light;
+    mix-blend-mode: normal;
     filter: saturate(1.05) contrast(1.02) brightness(1.03);
 
     pointer-events: none;
@@ -55,6 +55,7 @@
 @media (max-width: 768px) {
   .guide-page::before {
     background-position: var(--bg-pos-mobile, var(--bg-pos, 50% 50%));
+    background-size: var(--bg-size-mobile, var(--bg-size, cover));
   }
 
   .guide-page::after {
