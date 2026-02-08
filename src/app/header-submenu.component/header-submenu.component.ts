@@ -12,36 +12,33 @@ import { TravelNode } from '../data/travel-data';
 })
 export class HeaderSubmenuComponent {
   @Input() node!: TravelNode;
-  @Output() selected = new EventEmitter<TravelNode>();
 
-  // Solo un hijo abierto en ESTE nivel
-  private openChildKey: string | null = null;
+  @Input() isOpen = false;
+
+  openChildKey: string | null = null;
+
+  @Output() toggleOpen = new EventEmitter<string>();
+  @Output() selected = new EventEmitter<TravelNode>();
 
   constructor(private router: Router) {}
 
-  private keyOf(n: TravelNode): string {
-    // Si tienes un id mejor, úsalo aquí. Si no, path/nombre vale.
+  keyOf(n: TravelNode): string {
     return n.path ?? n.nombre;
   }
 
-  isOpen(n: TravelNode): boolean {
-    return this.openChildKey === this.keyOf(n);
+  toggleChild(childKey: string) {
+    this.openChildKey = (this.openChildKey === childKey) ? null : childKey;
   }
 
   onClick(n: TravelNode, event: MouseEvent) {
     event.stopPropagation();
 
-    // Si tiene hijos: acordeón (abre uno y cierra el resto)
     if (n.hijos?.length) {
-      const k = this.keyOf(n);
-      this.openChildKey = (this.openChildKey === k) ? null : k;
+      this.toggleOpen.emit(this.keyOf(n));
       return;
     }
 
-    // Si es hoja: navegar
-    if (n.path) {
-      this.router.navigate(['/guia', n.path]);
-    }
+    if (n.path) this.router.navigate(['/guia', n.path]);
     this.selected.emit(n);
   }
 }

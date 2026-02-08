@@ -16,6 +16,16 @@ export class HeaderComponent {
 
   menuOpen = false;
 
+  openContinentKey: string | null = null;
+
+  keyOf(n: any) {
+    return n.path ?? n.nombre;
+  }
+
+  toggleContinent(key: string) {
+    this.openContinentKey = (this.openContinentKey === key) ? null : key;
+  }
+
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
