@@ -26,16 +26,12 @@ export class GuideViewerComponent {
   guide: any = null;
   pageStyle: Record<string, string> = {};
   showScrollTop = false;
-  scrollIcon: 'flight' | 'travel_explore' = 'flight';
+  scrollIcon = 'flight';
 
   @HostListener('window:scroll')
   onScroll() {
-    const y = window.scrollY || 0;
-
-    this.showScrollTop = y > 350;
-    this.scrollIcon = y > 1200 ? 'travel_explore' : 'flight';
+    this.showScrollTop = window.scrollY > 350;
   }
-
 
   scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
