@@ -6,10 +6,12 @@
   </div>
 
   <!-- Botón hamburguesa solo móvil -->
-  <button class="menu-toggle" (click)="toggleMenu()">☰</button>
+  <button class="menu-toggle" (click)="toggleMenu()" aria-label="Abrir/cerrar menú">
+    {{ menuOpen ? '✕' : '☰' }}
+  </button>
 
   <div class="backdrop" *ngIf="menuOpen" (click)="menuOpen = false"></div>
-  
+
   <!-- Menú principal -->
   <nav class="main-menu" [class.open]="menuOpen">
     <ul>

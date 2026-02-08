@@ -2,7 +2,7 @@ export const TREBUJENA_GUIDE = {
   path: 'europa/espana/andalucia/cadiz/trebujena',
   nombre: 'Trebujena',
   flag: 'assets/europa/espana/andalucia/cadiz/trebujena/trebujena-flag.png',
-  background: '/assets/europa/espana/andalucia/cadiz/trebujena/trebujena-bg.jpg',
+  background: 'assets/europa/espana/andalucia/cadiz/trebujena/trebujena-bg.jpg',
   descripcion:
     'Trebujena es un municipio gaditano situado junto al río Guadalquivir y las marismas de Doñana. Con una fuerte identidad agrícola y popular, es conocida por su vino mosto, sus fiestas singulares, su paisaje natural y su carácter auténtico.',
 
