@@ -38,7 +38,6 @@
     inset: 0;
     z-index: -2;
 
-    background-image: var(--flag-image);
     background-repeat: no-repeat;
     background-position: center;
     background-size: var(--flag-size, 75%);
@@ -289,7 +288,7 @@
     width: 48px;
     height: 48px;
     right: 14px;
-    bottom: calc(14px + env(safe-area-inset-bottom));
+    bottom: calc(80px + env(safe-area-inset-bottom));
   }
 }
 
