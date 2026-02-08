@@ -12,10 +12,10 @@ export const TREBUJENA_GUIDE = {
   flagOverlay: true,
   //Transparencia bandera
   flagOpacity: 0.20,
-  flagOpacityMobile: 0.36,
+  flagOpacityMobile: 0.24,
   //Tamaño bandera overlay
   flagSize: '75%',
-  flagSizeMobile: '100%',
+  flagSizeMobile: '78%',
 
   descripcion:
     'Trebujena es un municipio gaditano situado junto al río Guadalquivir y las marismas de Doñana. Con una fuerte identidad agrícola y popular, es conocida por su vino mosto, sus fiestas singulares, su paisaje natural y su carácter auténtico.',

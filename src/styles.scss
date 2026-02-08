@@ -34,3 +34,7 @@ html, body {
 *, *::before, *::after {
   box-sizing: inherit;
 }
+
+:root {
+  --footer-height: 60px;
+}
