@@ -66,15 +66,13 @@ export class GuideViewerComponent {
       '--bg-pos': guide.bgPos ?? '50% 50%',
       '--bg-pos-mobile': guide.bgPosMobile ?? guide.bgPos ?? '50% 50%',
 
-      '--bg-dim': String(guide.bgDim ?? 0.15),
+      '--bg-dim': String(guide.bgDim ?? 0.12),
 
       '--flag-image': `url(${guide.flag ?? ''})`,
-      '--flag-opacity': String(guide.flagOverlay ? (guide.flagOpacity ?? 0.12) : 0),
-      '--flag-opacity-mobile': String(
-        guide.flagOverlay ? (guide.flagOpacityMobile ?? guide.flagOpacity ?? 0.12) : 0
-      ),
-      '--flag-size': guide.flagSize ?? '55%',
-      '--flag-size-mobile': guide.flagSizeMobile ?? guide.flagSize ?? '70%',
+      '--flag-opacity': String(guide.flagOverlay ? (guide.flagOpacity ?? 0.18) : 0),
+      '--flag-opacity-mobile': String(guide.flagOverlay ? (guide.flagOpacityMobile ?? 0.22) : 0),
+      '--flag-size': guide.flagSize ?? '70%',
+      '--flag-size-mobile': guide.flagSizeMobile ?? '95%',
     };
   }
 
