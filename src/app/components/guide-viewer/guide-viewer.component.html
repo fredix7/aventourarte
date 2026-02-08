@@ -1,7 +1,7 @@
 <div
   *ngIf="guide; else welcome"
   class="guide-page"
-  [ngStyle]="{ 'background-image': 'url(' + guide.background + ')' }"
+  [ngStyle]="pageStyle"
 >
   <div class="guide-content">
     <!-- Cabecera -->

@@ -12,16 +12,31 @@
   /* Fondo global dinámico */
   &::before {
     content: "";
-    position: absolute;
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+
+    background-image: var(--bg-image);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: var(--bg-pos, 50% 50%);
+
+    filter: brightness(var(--bg-brightness, 0.9));
+  }
+
+  /* BANDERA OVERLAY */
+  &::after {
+    content: "";
+    position: fixed;
     inset: 0;
     z-index: -1;
 
-    background-size: cover;
-    background-position: center;
+    background-image: var(--flag-image);
     background-repeat: no-repeat;
-    background-image: inherit;
-
-    filter: brightness(0.9);
+    background-position: center;
+    background-size: var(--flag-size, 55%);
+    opacity: var(--flag-opacity, 0); /* 0 por defecto: no se ve */
+    pointer-events: none;
   }
 }
 
@@ -29,15 +44,13 @@
 @media (min-width: 769px) {
   .guide-page::before {
     position: fixed;
-    background-attachment: fixed;
   }
 }
 
 /* Móvil */
 @media (max-width: 768px) {
   .guide-page::before {
-    position: absolute;
-    background-position: center top;
+    background-position: var(--bg-pos-mobile, var(--bg-pos, 50% 50%));
   }
 }
 

@@ -4,6 +4,13 @@ export const RIO_DE_JANEIRO_GUIDE = {
   nombre: 'Río de Janeiro',
   flag: 'assets/america/sudamerica/brasil/rio/rio-flag.png',
   background: 'assets/america/sudamerica/brasil/rio/rio-bg.jpg',
+  bgPos: '50% 35%',
+  bgPosMobile: '50% 30%',
+  flagOverlay: true,
+  flagOpacity: 0.10,
+  flagSize: '55%',
+  bgBrightness: 0.85,
+
   descripcion:
     'Río de Janeiro, la "Cidade Maravilhosa", es famosa por sus playas icónicas (Copacabana, Ipanema), el Cristo Redentor y su vibrante vida cultural y carnavalesca.',
   

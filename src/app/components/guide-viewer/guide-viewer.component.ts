@@ -24,6 +24,7 @@ import { RIO_DE_JANEIRO_GUIDE } from '../../guides/america/sudamerica/brasil/rio
 })
 export class GuideViewerComponent {
   guide: any = null;
+  pageStyle: Record<string, string> = {};
 
   private guides: Record<string, any> = {
     'europa/espana/andalucia/cadiz/jerez': JEREZ_GUIDE,
@@ -37,12 +38,28 @@ export class GuideViewerComponent {
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const placePath = params.get('path');
+
       if (placePath && this.guides[placePath]) {
         this.guide = this.guides[placePath];
+        this.applyGuideStyle(this.guide);
       } else {
-        this.guide = null; // pantalla de bienvenida
+        this.guide = null;
+        this.pageStyle = {};
       }
     });
+  }
+
+  private applyGuideStyle(guide: any) {
+    this.pageStyle = {
+      '--bg-image': `url(${guide.background})`,
+      '--bg-pos': guide.bgPos ?? '50% 50%',
+      '--bg-pos-mobile': guide.bgPosMobile ?? guide.bgPos ?? '50% 50%',
+      '--bg-brightness': String(guide.bgBrightness ?? 0.9),
+
+      '--flag-image': `url(${guide.flag ?? ''})`,
+      '--flag-opacity': String(guide.flagOverlay ? (guide.flagOpacity ?? 0.12) : 0),
+      '--flag-size': guide.flagSize ?? '55%',
+    };
   }
 
   /**
