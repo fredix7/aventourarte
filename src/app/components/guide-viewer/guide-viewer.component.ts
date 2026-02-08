@@ -30,7 +30,7 @@ export class GuideViewerComponent {
 
   @HostListener('window:scroll')
   onScroll() {
-    this.showScrollTop = window.scrollY > 350;
+    this.showScrollTop = (window.scrollY || 0) > 350;
   }
 
   scrollToTop() {
@@ -65,20 +65,14 @@ export class GuideViewerComponent {
       '--bg-image': `url(${guide.background})`,
       '--bg-pos': guide.bgPos ?? '50% 50%',
       '--bg-pos-mobile': guide.bgPosMobile ?? guide.bgPos ?? '50% 50%',
-      '--bg-brightness': String(guide.bgBrightness ?? 0.9),
+
+      '--bg-dim': String(guide.bgDim ?? 0.15),
 
       '--flag-image': `url(${guide.flag ?? ''})`,
-
-      '--flag-opacity': String(
-        guide.flagOverlay ? (guide.flagOpacity ?? 0.12) : 0
-      ),
-
+      '--flag-opacity': String(guide.flagOverlay ? (guide.flagOpacity ?? 0.12) : 0),
       '--flag-opacity-mobile': String(
-        guide.flagOverlay
-          ? (guide.flagOpacityMobile ?? guide.flagOpacity ?? 0.12)
-          : 0
+        guide.flagOverlay ? (guide.flagOpacityMobile ?? guide.flagOpacity ?? 0.12) : 0
       ),
-
       '--flag-size': guide.flagSize ?? '55%',
       '--flag-size-mobile': guide.flagSizeMobile ?? guide.flagSize ?? '70%',
     };

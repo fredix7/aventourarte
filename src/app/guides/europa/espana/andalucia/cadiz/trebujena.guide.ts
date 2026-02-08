@@ -7,14 +7,14 @@ export const TREBUJENA_GUIDE = {
   //Encuadre escritorio
   bgPos: '50% 65%',
   //Encuadre Móvil
-  bgPosMobile: '50% 88%',
-  bgBrightness: 0.86,
+  bgPosMobile: '50% 90%',
+  bgDim: 0.12,
   flagOverlay: true,
   //Transparencia bandera
-  flagOpacity: 0.16,
-  flagOpacityMobile: 0.22,
+  flagOpacity: 0.18,
+  flagOpacityMobile: 0.26,
   //Tamaño bandera overlay
-  flagSize: '70%',
+  flagSize: '75%',
   flagSizeMobile: '95%',
 
   descripcion:
