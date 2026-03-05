@@ -1,5 +1,5 @@
 export const JEREZ_GUIDE = {
-  path: 'europa/espana/andalucia/cadiz/jerez',
+  path: 'europa/espana/andalucia/cadiz/jerez-de-la-frontera',
   nombre: 'Jerez de la Frontera',
   flag: 'assets/europa/espana/andalucia/cadiz/jerez/jerez-flag.png',
   descripcion: 'Ciudad de Andalucía famosa por su vino, flamenco y caballos.',

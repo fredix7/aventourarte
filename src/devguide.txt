@@ -1,8 +1,9 @@
 1. Meter en el travel-data.ts los valores del listado de la ciudad/país
 2. Crear el fichero ts dentro de guides... de la ciudad donde irá el contenido de la guía (PONER LA RUTA INDICADA DEL travel.data.ts)
-3. Meter las imágenes en la carpeta assets organizadas por ciudad
-4. En el guide-viewer.component.ts importar e incluir la guía de la ciudad
+3. En el guide-viewer.component.ts importar e incluir la guía de la ciudad
 
 Para publicar en GitHub Pages: Esto copia developer → gh-pages automáticamente
 ng build --configuration production --base-href /aventourarte/
 npx angular-cli-ghpages --dir=dist/aventourarte/browser
+
+- Imagenes guardadas en Cloudinary

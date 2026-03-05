@@ -1,13 +1,13 @@
 export const TREBUJENA_GUIDE = {
   path: 'europa/espana/andalucia/cadiz/trebujena',
   nombre: 'Trebujena',
-  flag: 'assets/europa/espana/andalucia/cadiz/trebujena/trebujena-flag.png',
-  background: 'assets/europa/espana/andalucia/cadiz/trebujena/trebujena-bg.jpg',
+  flag: 'cld:europa/espana/andalucia/cadiz/trebujena/trebujena-flag',
+  background: 'cld:europa/espana/andalucia/cadiz/trebujena/trebujena-flag',
 
   //Encuadre escritorio
   bgPos: '50% 65%',
   //Encuadre Móvil
-  bgPosMobile: '50% 50%',
+  bgPosMobile: '50% 65%',
   bgDim: 0.10,
   flagOverlay: true,
   //Transparencia bandera
@@ -18,8 +18,8 @@ export const TREBUJENA_GUIDE = {
   flagSizeMobile: '50%',
   //Tamaño del fondo
   bgSize: 'cover',
-  bgSizeMobile: 'contain',
-
+  bgSizeMobile: 'cover',
+  
   descripcion:
     'Trebujena es un municipio gaditano situado junto al río Guadalquivir y las marismas de Doñana. Con una fuerte identidad agrícola y popular, es conocida por su vino mosto, sus fiestas singulares, su paisaje natural y su carácter auténtico.',
 
@@ -41,26 +41,26 @@ export const TREBUJENA_GUIDE = {
           nombre: 'Monumento a la Vendimia',
           descripcion:
             'Escultura que rinde homenaje a la tradición vitivinícola del municipio y al trabajo agrícola vinculado al mosto.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/monumento-vendimia.jpg',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/monumento-vendimia',
         },
         {
           nombre: 'Plaza de España',
           descripcion:
             'Centro neurálgico del municipio, punto de encuentro social donde se celebran actos, fiestas y la vida cotidiana del pueblo.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/plz-espana.jpg',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/plz-espana',
         },
         {
           nombre: 'Ayuntamiento de Trebujena',
           descripcion:
             'Edificio institucional situado en la Plaza de España con fachada académica inspirada en el estilo neoclásico, estructurado en dos cuerpos bien proporcionados. Representa el corazón de la vida administrativa y social del municipio y se encuentra junto a la emblemática Parroquia de la Purísima Concepción, construida en el siglo XVII.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/ayto-trebujena.jpg',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/ayto-trebujena',
           horario: 'Exterior visitable'
         },
         {
           nombre: 'Parroquia de la Purísima Concepción',
           descripcion:
             'Principal templo religioso de Trebujena. De estilo barroco, es uno de los edificios más representativos del patrimonio histórico y espiritual del pueblo.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/iglesia-purisima-concepcion.jpg',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/iglesia-purisima-concepcion',
           horario: 'Horario de culto',
           precio: 'Gratis'
         },
@@ -68,14 +68,14 @@ export const TREBUJENA_GUIDE = {
           nombre: 'Palomar',
           descripcion:
             'Edificación tradicional de mampostería y planta cilíndrica, situada en las proximidades de la Avenida del Guadalquivir. Destaca por su segundo cuerpo cilíndrico con orificios de cerámica destinados a la entrada de palomas, siendo considerado uno de los palomares más interesantes de Andalucía.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/palomar.jpg',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/palomar',
           horario: 'Exterior visitable'
         },
         {
           nombre: 'Castillo de Pérez de Guzmán',
           descripcion:
             'Fortificación medieval construida entre los siglos XIII y comienzos del XIV, con origen en una antigua torre vigía integrada en una red defensiva que controlaba el territorio y el río Guadalquivir. A finales del siglo XIII, Alonso Pérez de Guzmán “Guzmán el Bueno” impulsó su transformación en castillo para asegurar el dominio militar y económico de la zona.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/castillo-trebujena.jpg',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/castillo-trebujena',
           horario: 'Lunes a viernes de 10:00 a 14:00',
           precio: 'Gratis'
         },
@@ -83,7 +83,7 @@ export const TREBUJENA_GUIDE = {
           nombre: 'Parque de la Toya',
           descripcion:
             'Parque urbano situado en la parte más oriental del casco urbano de Trebujena. De forma alargada y cerrado con rejería tradicional, es el principal pulmón verde del municipio y uno de sus espacios sociales más importantes. Uno de sus mayores atractivos es la presencia de fauna urbana: pavos reales que campan libremente por el parque, patos, gallinas y otras aves, lo que lo convierte en un lugar especialmente agradable para pasear y para visitar con niños.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/parque-toya.jpg',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/parque-toya',
           horario: 'Abierto todo el día',
           precio: 'Gratis'
         },
@@ -91,7 +91,7 @@ export const TREBUJENA_GUIDE = {
           nombre: 'Ermita de Nuestra Señora de Palomares',
           descripcion:
             'Templo situado en las afueras del casco urbano, muy ligado a la historia agrícola y espiritual de Trebujena. Está dedicado a la Virgen de Palomares, patrona de la ciudad y es un lugar de especial devoción popular, especialmente durante celebraciones y romerías locales.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/ermita-palomares.jpg',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/ermita-palomares',
           horario: 'Horario de culto y eventos puntuales',
           precio: 'Gratis'
         },
@@ -99,7 +99,7 @@ export const TREBUJENA_GUIDE = {
           nombre: 'Ruinas del Molino de las Haciendas',
           descripcion:
             'Restos de uno de los mayores molinos de aceite de la zona, situado a unos 2 km del casco urbano en el Camino de las Haciendas. Destaca un gran torreón de unos 10 metros de altura, visible desde varios puntos, junto a lienzos de muralla y restos de la construcción original. Testimonio del pasado agrícola e industrial de Trebujena.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/molino-haciendas.jpg',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/molino-haciendas',
           horario: 'Acceso libre',
           precio: 'Gratis'
         },
@@ -107,7 +107,7 @@ export const TREBUJENA_GUIDE = {
           nombre: 'Puesta de sol en las Marismas de Trebujena',
           descripcion:
             'Uno de los atardeceres más espectaculares del Bajo Guadalquivir. Este paisaje fue escenario del rodaje de la película “El Imperio del Sol”.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/marismas.jpg',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/marismas',
           horario: 'Atardecer',
           precio: 'Gratis'
         },
@@ -120,63 +120,63 @@ export const TREBUJENA_GUIDE = {
           nombre: 'Mosto de Trebujena',
           descripcion:
             'Vino joven (mosto) elaborado de forma tradicional. Se consume principalmente en invierno en los “mostos” del pueblo, acompañado de tapas y ambiente popular.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/mosto.jpg',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/mosto',
           precio: '1,50 – 2,50 € vaso'
         },
         {
           nombre: 'Trebujito',
           descripcion:
             'Bebida típica festiva elaborada con vino blanco joven del Marco de Jerez, refresco de lima-limón y hielo. Muy refrescante y protagonista en ferias y fiestas como el Trebufest.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/trebujena-flag.png',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/trebujena-flag',
           precio: '2,50 – 5 €'
         },
         {
           nombre: 'Tortillitas de camarones',
           descripcion:
             'Plato emblemático de la cocina ribereña. Tortillas finas y crujientes elaboradas con camarones del Guadalquivir, harina, cebolla y perejil.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/tortillita-camarones.jpg',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/tortillita-camarones',
           precio: '1,90€/unidad'
         },
         {
           nombre: 'Angulas',
           descripcion:
             'Producto histórico ligado al río Guadalquivir. Consideradas un manjar, tradicionalmente formaron parte de la economía y gastronomía local.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/trebujena-flag.png',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/trebujena-flag',
           precio: 'Según temporada y mercado'
         },
         {
           nombre: 'Potaje con cardillos',
           descripcion:
             'Guiso de temporada elaborado con legumbres y cardillos silvestres, típico de la cocina tradicional del entorno rural.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/trebujena-flag.png',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/trebujena-flag',
           precio: '8 – 12 €'
         },
         {
           nombre: 'Ajo caliente',
           descripcion:
             'Receta humilde y contundente elaborada con pan, ajo, pimentón, aceite y caldo. Muy ligada a la cocina tradicional campesina.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/ajo-caliente.jpg',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/ajo-caliente',
           precio: '4 - 6€'
         },
         {
           nombre: 'Garbanzos como conejos',
           descripcion:
             'Plato popular de garbanzos guisados con arroz. Recibe su nombre porque, en tiempos de escasez, los garbanzos “hacían de conejo”. Es el plato estrella de la fiesta gastronómica de diciembre.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/garbanzos-conejos.jpeg',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/garbanzos-conejos',
           precio: 'Gratis en su fiesta'
         },
         {
           nombre: 'Uvas Palominos',
           descripcion:
             'Postre tradicional elaborado a partir de la uva Palomino, símbolo de la cultura vitivinícola de Trebujena.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/trebujena-flag.png',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/trebujena-flag',
           precio: 'Precio local'
         },
         {
           nombre: 'Mistela',
           descripcion:
             'Vino dulce tradicional, aromático y fácil de beber. Muy presente en fiestas populares y sobremesas.',
-          foto: 'assets/europa/espana/andalucia/cadiz/trebujena/trebujena-flag.png',
+          foto: 'cld:europa/espana/andalucia/cadiz/trebujena/trebujena-flag',
           precio: '2 – 4 € copa'
         },
       ]
@@ -236,13 +236,6 @@ export const TREBUJENA_GUIDE = {
           descripcion:
             'Fiesta gastronómica muy popular donde se reparten garbanzos con arroz (no lleva conejo) y se bebe mosto.',
           fecha: 'Primera semana de diciembre',
-          precio: 'Gratis'
-        },
-        {
-          nombre: 'Navidad',
-          descripcion:
-            'Celebraciones navideñas con ambiente familiar, encuentros vecinales y tradiciones locales.',
-          fecha: 'Diciembre',
           precio: 'Gratis'
         }
       ]

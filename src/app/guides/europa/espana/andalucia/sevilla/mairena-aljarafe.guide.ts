@@ -1,7 +1,9 @@
 export const MAIRENA_ALJARAFE_GUIDE = {
-  path: 'europa/espana/andalucia/sevilla/mairena-aljarafe',
+  path: 'europa/espana/andalucia/sevilla/mairena-del-aljarafe',
   nombre: 'Mairena del Aljarafe',
-  flag: 'assets/andalucia/sevilla/mairena/mairena-aljarafe-flag.png',
+  flag: 'cld:europa/espana/andalucia/sevilla/mairena-aljarafe/mairena-aljarafe-flag',
+  background: 'cld:europa/espana/andalucia/sevilla/mairena-aljarafe/mairena-aljarafe-flag',
+
   descripcion:
   'Municipio del Aljarafe sevillano situado a solo 6 km de Sevilla capital. Mairena del Aljarafe combina historia, zonas verdes, excelente comunicación y una intensa vida cultural y gastronómica dentro del área metropolitana sevillana.',
 
@@ -35,47 +37,23 @@ export const MAIRENA_ALJARAFE_GUIDE = {
           nombre: 'Iglesia Parroquial de San Ildefonso',
           descripcion:
             'Situada en la Plaza Blas Infante, es el principal templo de Mairena del Aljarafe y está dedicada a su patrón, San Ildefonso. Construida en el siglo XVI como capilla mudéjar, fue ampliada en el siglo XVII y reformada en el XVIII. En su interior se veneran las imágenes de la Virgen de las Mercedes y de la Virgen del Rosario.',
-          foto: 'assets/andalucia/sevilla/mairena/iglesia-san-ildefonso.jpg',
-          horario: 'Horario de culto (consultar misas)',
+          foto: 'cld:europa/espana/andalucia/sevilla/mairena-aljarafe/iglesia-San-Ildefonso',
+          horario: 'Misas: Mar – Vier. 11:00 - 13:00 y de 19:00 - 20:00; Sab. 19:00 - 20:00; Dom y festivos 12:00 - 14:00  y 19:00 - 21:00. Lunes cerrado.',
           precio: 'Gratis'
         },
         {
           nombre: 'Arco de la Prusiana',
           descripcion:
             'Ubicado en la calle Zurraque, este arco es uno de los símbolos más reconocibles del municipio. Formaba parte de la entrada de la antigua Hacienda La Prusiana, una finca agrícola del siglo XVIII de la que hoy solo se conserva este elemento arquitectónico.',
-          foto: 'assets/andalucia/sevilla/mairena/arco-prusiana.jpg',
+          foto: 'cld:europa/espana/andalucia/sevilla/mairena-aljarafe/arco-prusiana',
           horario: 'Acceso libre',
           precio: 'Gratis'
-        },
-        {
-          nombre: 'Corredor Verde del Río Pudio',
-          descripcion:
-            'Tramo natural del Corredor Verde del Guadiamar–Riopudio que atraviesa el término municipal de Mairena del Aljarafe. Perfecto para senderismo y paseos en bicicleta, destaca por su paisaje y tranquilidad.',
-          foto: 'assets/andalucia/sevilla/mairena/corredor-verde-pudio.jpg',
-          horario: 'Abierto todo el día',
-          precio: 'Gratis'
-        },
-        {
-          nombre: 'Centro Comercial Metromar',
-          descripcion:
-            'Principal zona comercial y de ocio de Mairena. Cuenta con tiendas, restaurantes, cine y acceso directo al metro, siendo un punto de encuentro habitual.',
-          foto: 'assets/andalucia/sevilla/mairena/metromar.jpg',
-          horario: '10:00 – 22:00 (según establecimiento)',
-          precio: 'Acceso libre'
-        },
-        {
-          nombre: 'Colegio Santa María del Valle',
-          descripcion:
-            'Centro educativo de gran relevancia en la vida social y cultural del municipio, conocido por su tradición, eventos y actividades comunitarias.',
-          foto: 'assets/andalucia/sevilla/mairena/colegio-santa-maria-del-valle.jpg',
-          horario: 'Uso educativo',
-          precio: 'No visitable'
         },
         {
           nombre: 'Parque Porzuna',
           descripcion:
             'Espacio natural protegido situado junto a la Hacienda Porzuna. Cuenta con zona biosaludable, itinerario botánico, área canina, barbacoas y merenderos, siendo un lugar ideal para el ocio y el contacto con la naturaleza.',
-          foto: 'assets/andalucia/sevilla/mairena/parque-porzuna.jpg',
+          foto: 'cld:europa/espana/andalucia/sevilla/mairena-aljarafe/parque-porzuna',
           horario: 'Abierto todo el día',
           precio: 'Gratis'
         },
@@ -83,17 +61,53 @@ export const MAIRENA_ALJARAFE_GUIDE = {
           nombre: 'Hacienda Porzuna',
           descripcion:
             'Antigua hacienda agrícola que representa el pasado rural de Mairena del Aljarafe. Actualmente está restaurada y se utiliza como dependencia municipal, manteniendo su valor histórico y arquitectónico.',
-          foto: 'assets/andalucia/sevilla/mairena/hacienda-porzuna.jpg',
+          foto: 'cld:europa/espana/andalucia/sevilla/mairena-aljarafe/mairena-aljarafe-flag',
           horario: 'Exterior visitable',
           precio: 'Gratis'
+        },
+        {
+          nombre: 'Colegio Santa María del Valle',
+          descripcion:
+            'Centro educativo de gran relevancia en la vida social y cultural del municipio, conocido por su tradición, eventos y actividades comunitarias. Destaca la imagen del Sagrado Corazón a la entrada.',
+          foto: 'cld:europa/espana/andalucia/sevilla/mairena-aljarafe/colegio-santa-maria-valle',
+          horario: 'Uso educativo',
+          precio: 'Gratis'
+        },
+        {
+          nombre: 'Centro Comercial Metromar',
+          descripcion:
+            'Principal zona comercial y de ocio de Mairena. Cuenta con tiendas, restaurantes, cine y acceso directo al metro, siendo un punto de encuentro habitual.',
+          foto: 'cld:europa/espana/andalucia/sevilla/mairena-aljarafe/metromar',
+          horario: '10:00 – 22:00 (según establecimiento)',
+          precio: 'Acceso libre'
         },
         {
           nombre: 'MOVE Climbing',
           descripcion:
             'Rocódromo y centro de escalada indoor muy valorado en Mairena del Aljarafe, con zonas de escalada para todos los niveles, zonas de entrenamiento, boulder y espacio para niños. Ideal para una actividad deportiva y divertida.',
-          foto: 'assets/andalucia/sevilla/mairena/move-climbing.jpg',
+          foto: 'cld:europa/espana/andalucia/sevilla/mairena-aljarafe/mairena-aljarafe-flag',
           horario: 'Lun–Vie 09:30–22:00; Sáb–Dom 11:00–20:00 (según temporada)',
           precio: 'Entrada de día ≈ 10 €, abono mensual ≈ 45 €; alquiler material ≈ 7 €'
+        },
+        {
+          nombre: 'Corredor Verde del Río Pudio',
+          descripcion:
+            'Tramo natural del Corredor Verde del Guadiamar–Riopudio que atraviesa el término municipal de Mairena del Aljarafe. Perfecto para senderismo y paseos en bicicleta, destaca por su paisaje y tranquilidad.',
+          foto: 'cld:europa/espana/andalucia/sevilla/mairena-aljarafe/corredor-verde-rio-pudio',
+          horario: 'Abierto todo el día',
+          precio: 'Gratis'
+        },
+      ]
+    },
+    {
+      titulo: 'Gastronomía',
+      platos: [
+        {
+          nombre: 'Gambas cocidas de Huelva (Pepe el Mudo)',
+          descripcion:
+            'Uno de los imprescindibles de Mairena. Gambas de Huelva cocidas en su punto, con sabor limpio a mar y textura firme y jugosa. Se sirven normalmente recién hechas y son perfectas para acompañar con una cerveza bien fría o una copa de vino. Un clásico del tapeo local.',
+          foto: 'cld:europa/espana/andalucia/sevilla/mairena-aljarafe/gambas-cocidas',
+          precio: 'Según ración y temporada'
         }
       ]
     },
@@ -104,7 +118,6 @@ export const MAIRENA_ALJARAFE_GUIDE = {
           nombre: 'Bar Pepe El Mudo',
           descripcion:
             'Un clásico local famoso por sus gambas de Huelva cocidas, servidas con sencillez y calidad excepcional. Imprescindible para los amantes del marisco.',
-          foto: 'assets/andalucia/sevilla/mairena/pepe-el-mudo.jpg',
           horario: 'Mediodía y noche',
           precio: 'Precio según mercado'
         },
@@ -112,7 +125,6 @@ export const MAIRENA_ALJARAFE_GUIDE = {
           nombre: 'Bar El Metro',
           descripcion:
             'Bar tradicional muy frecuentado por vecinos, ideal para tapas clásicas y ambiente local.',
-          foto: 'assets/andalucia/sevilla/mairena/bar-el-metro.jpg',
           horario: 'Horario comercial',
           precio: 'Económico'
         },
@@ -120,7 +132,6 @@ export const MAIRENA_ALJARAFE_GUIDE = {
           nombre: 'Bodega San Rafael',
           descripcion:
             'Establecimiento de cocina andaluza tradicional, con guisos caseros, carnes y tapas generosas.',
-          foto: 'assets/andalucia/sevilla/mairena/bodega-san-rafael.jpg',
           horario: 'Mediodía',
           precio: 'Moderado'
         },
@@ -128,7 +139,6 @@ export const MAIRENA_ALJARAFE_GUIDE = {
           nombre: 'Restaurante El Mercado de Enma',
           descripcion:
             'Propuesta gastronómica moderna con producto de calidad, cocina creativa y cuidada presentación.',
-          foto: 'assets/andalucia/sevilla/mairena/mercado-de-enma.jpg',
           horario: 'Comidas y cenas',
           precio: 'Medio-alto'
         },
@@ -136,7 +146,6 @@ export const MAIRENA_ALJARAFE_GUIDE = {
           nombre: 'Restaurante Casa Limón',
           descripcion:
             'Uno de los restaurantes más reconocidos de Mairena. Cocina de autor con raíces andaluzas, ideal para ocasiones especiales.',
-          foto: 'assets/andalucia/sevilla/mairena/casa-limon.jpg',
           horario: 'Comidas y cenas',
           precio: 'Medio-alto'
         }

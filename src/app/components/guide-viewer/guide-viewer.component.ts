@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { InfoGeneralComponent } from '../../info-general.component/info-general.component';
+import { ImageService } from '../../shared/image.service';
+import { ImgUrlPipe } from "../../shared/img-url.pipe";
 
 //CADIZ
 import { JEREZ_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/jerez.guide';
@@ -15,10 +17,11 @@ import { MAIRENA_ALJARAFE_GUIDE } from '../../guides/europa/espana/andalucia/sev
 //SUDAMERICA
 import { RIO_DE_JANEIRO_GUIDE } from '../../guides/america/sudamerica/brasil/rio-janeiro.guide';
 
+
 @Component({
   selector: 'app-guide-viewer',
   standalone: true,
-  imports: [CommonModule, InfoGeneralComponent, MatExpansionModule, MatIconModule],
+  imports: [CommonModule, InfoGeneralComponent, MatExpansionModule, MatIconModule, ImgUrlPipe],
   templateUrl: './guide-viewer.component.html',
   styleUrls: ['./guide-viewer.component.scss']
 })
@@ -38,13 +41,13 @@ export class GuideViewerComponent {
   }
 
   private guides: Record<string, any> = {
-    'europa/espana/andalucia/cadiz/jerez': JEREZ_GUIDE,
+    'europa/espana/andalucia/cadiz/jerez-de-la-frontera': JEREZ_GUIDE,
     'europa/espana/andalucia/cadiz/trebujena': TREBUJENA_GUIDE,
-    'europa/espana/andalucia/sevilla/mairena-aljarafe': MAIRENA_ALJARAFE_GUIDE,
+    'europa/espana/andalucia/sevilla/mairena-del-aljarafe': MAIRENA_ALJARAFE_GUIDE,
     'america/sudamerica/brasil/rio-de-janeiro': RIO_DE_JANEIRO_GUIDE
   };
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private img: ImageService) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -58,21 +61,24 @@ export class GuideViewerComponent {
         this.pageStyle = {};
       }
     });
-  }
+}
 
   private applyGuideStyle(guide: any) {
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
     this.pageStyle = {
-      '--bg-image': `url(${guide.background})`,
+      '--bg-image': `url(${this.img.background(guide.background, isMobile)})`,
       '--bg-pos': guide.bgPos ?? '50% 50%',
       '--bg-pos-mobile': guide.bgPosMobile ?? guide.bgPos ?? '50% 50%',
-
-      '--bg-dim': String(guide.bgDim ?? 0.12),
-
-      '--flag-image': `url(${guide.flag ?? ''})`,
-      '--flag-opacity': String(guide.flagOverlay ? (guide.flagOpacity ?? 0.18) : 0),
-      '--flag-opacity-mobile': String(guide.flagOverlay ? (guide.flagOpacityMobile ?? 0.22) : 0),
+      '--bg-dim': String(guide.bgDim ?? 0.10),
       '--bg-size': guide.bgSize ?? 'cover',
       '--bg-size-mobile': guide.bgSizeMobile ?? guide.bgSize ?? 'cover',
+      
+      '--flag-image': `url(${this.img.url(guide.flag, { w: 1400, crop: 'fit' })})`,
+      '--flag-opacity': String(guide.flagOverlay ? (guide.flagOpacity ?? 0.18) : 0),
+      '--flag-opacity-mobile': String(guide.flagOverlay ? (guide.flagOpacityMobile ?? 0.22) : 0),
+      '--flag-size': guide.flagSize ?? '75%',
+      '--flag-size-mobile': guide.flagSizeMobile ?? '95%',
     };
   }
 

@@ -53,8 +53,8 @@ export const TRAVEL_TREE: TravelNode[] = [
                 hijos: [
                   { nombre: 'Cádiz ciudad', path: 'europa/espana/andalucia/cadiz/cadiz-ciudad' },
                   { nombre: 'Grazalema', path: 'europa/espana/andalucia/cadiz/grazalema' },
-                  { nombre: 'Jerez de la Frontera', path: 'europa/espana/andalucia/cadiz/jerez' },
-                  { nombre: 'Setenil de las Bodegas', path: 'europa/espana/andalucia/cadiz/setenil' },
+                  { nombre: 'Jerez de la Frontera', path: 'europa/espana/andalucia/cadiz/jerez-de-la-frontera' },
+                  { nombre: 'Setenil de las Bodegas', path: 'europa/espana/andalucia/cadiz/setenil-de-las-bodegas' },
                   { nombre: 'Trebujena', path: 'europa/espana/andalucia/cadiz/trebujena' }
                 ]
               },
@@ -62,12 +62,12 @@ export const TRAVEL_TREE: TravelNode[] = [
                 nombre: 'Sevilla',
                 hijos: [
                   { nombre: 'Sevilla ciudad', path: 'europa/espana/andalucia/sevilla/sevilla-ciudad' },
-                  { nombre: 'Castilblanco de los Arroyos', path: 'europa/espana/andalucia/sevilla/castilblanco' },
-                  { nombre: 'Coria del Río', path: 'europa/espana/andalucia/sevilla/coria' },
+                  { nombre: 'Castilblanco de los Arroyos', path: 'europa/espana/andalucia/sevilla/castilblanco-de-los-arroyos' },
+                  { nombre: 'Coria del Río', path: 'europa/espana/andalucia/sevilla/coria-del-rio' },
                   { nombre: 'Isla Mayor', path: 'europa/espana/andalucia/sevilla/isla-mayor' },
-                  { nombre: 'Mairena del Aljarafe', path: 'europa/espana/andalucia/sevilla/mairena-aljarafe' },
-                  { nombre: 'Palomares del Río', path: 'europa/espana/andalucia/sevilla/palomares' },
-                  { nombre: 'El Real de la Jara', path: 'europa/espana/andalucia/sevilla/real-jara' },
+                  { nombre: 'Mairena del Aljarafe', path: 'europa/espana/andalucia/sevilla/mairena-del-aljarafe' },
+                  { nombre: 'Palomares del Río', path: 'europa/espana/andalucia/sevilla/palomares-del-rio' },
+                  { nombre: 'El Real de la Jara', path: 'europa/espana/andalucia/sevilla/real-de-la-jara' },
                   { nombre: 'Santiponce', path: 'europa/espana/andalucia/sevilla/santiponce' },
                 ]
               },
