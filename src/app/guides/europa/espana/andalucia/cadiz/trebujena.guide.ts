@@ -9,7 +9,6 @@ export const TREBUJENA_GUIDE = {
   //Encuadre Móvil
   bgPosMobile: '50% 65%',
   bgDim: 0.10,
-  flagOverlay: true,
   //Transparencia bandera
   flagOpacity: 0.12,
   flagOpacityMobile: 0.18,
@@ -213,7 +212,7 @@ export const TREBUJENA_GUIDE = {
         {
           nombre: 'Carnaval',
           descripcion:
-            'Uno de los carnavales más singulares de la zona, conocido por la quema de la Bruja Pipi y su carácter crítico y participativo.',
+            'Uno de los carnavales más singulares de la zona, conocido por la quema de la Bruja Piti y su carácter crítico y participativo.',
           fecha: 'Febrero',
           precio: 'Gratis'
         },
@@ -232,7 +231,7 @@ export const TREBUJENA_GUIDE = {
           precio: 'Gratis'
         },
         {
-          nombre: 'Fiesta de los Garbanzos con Conejo',
+          nombre: 'Fiesta de los Garbanzos como Conejos',
           descripcion:
             'Fiesta gastronómica muy popular donde se reparten garbanzos con arroz (no lleva conejo) y se bebe mosto.',
           fecha: 'Primera semana de diciembre',

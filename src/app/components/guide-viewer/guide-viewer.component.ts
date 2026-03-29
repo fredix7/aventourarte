@@ -7,6 +7,8 @@ import { InfoGeneralComponent } from '../../info-general.component/info-general.
 import { ImageService } from '../../shared/image.service';
 import { ImgUrlPipe } from "../../shared/img-url.pipe";
 
+//////////////////////////////////////EUROPA
+////////////////////ESPAÑA
 //CADIZ
 import { JEREZ_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/jerez.guide';
 import { TREBUJENA_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/trebujena.guide';
@@ -14,6 +16,10 @@ import { TREBUJENA_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/treb
 //SEVILLA
 import { MAIRENA_ALJARAFE_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/mairena-aljarafe.guide';
 
+////////////////////RUMANIA
+import { BUCAREST_GUIDE } from '../../guides/europa/rumania/bucarest.guide';
+
+///////////////////////////////////////AMERICA
 //SUDAMERICA
 import { RIO_DE_JANEIRO_GUIDE } from '../../guides/america/sudamerica/brasil/rio-janeiro.guide';
 
@@ -44,6 +50,7 @@ export class GuideViewerComponent {
     'europa/espana/andalucia/cadiz/jerez-de-la-frontera': JEREZ_GUIDE,
     'europa/espana/andalucia/cadiz/trebujena': TREBUJENA_GUIDE,
     'europa/espana/andalucia/sevilla/mairena-del-aljarafe': MAIRENA_ALJARAFE_GUIDE,
+    'europa/rumania/bucarest': BUCAREST_GUIDE,
     'america/sudamerica/brasil/rio-de-janeiro': RIO_DE_JANEIRO_GUIDE
   };
 

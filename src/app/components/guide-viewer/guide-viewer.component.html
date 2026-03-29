@@ -37,16 +37,37 @@
           <div class="zone-card" *ngFor="let zona of day.zonas">
             <h3>{{ zona.nombre }}</h3>
             <p>{{ zona.descripcion }}</p>
+            <img
+              *ngIf="zona.foto"
+              [src]="zona.foto | imgUrl:1200"
+              [alt]="zona.nombre"
+              loading="lazy"
+            />
             <div class="zone-photos" *ngIf="zona.fotos?.length">
               <img
                 *ngFor="let foto of zona.fotos"
-                [src]="foto"
+                [src]="foto | imgUrl:1200"
                 [alt]="zona.nombre"
               />
             </div>
-            <p *ngIf="zona.fecha"><strong>Fecha:</strong> {{ zona.fecha }}</p>
-            <p *ngIf="zona.horario"><strong>Horario:</strong> {{ zona.horario }}</p>
-            <p *ngIf="zona.precio"><strong>Precio:</strong> {{ zona.precio }}</p>
+            <p *ngIf="zona.acceso" class="info-line">
+              <mat-icon>badge</mat-icon>
+              <span><strong>Acceso:</strong> {{ zona.acceso }}</span>
+            </p>
+            <p *ngIf="zona.fecha" class="info-line">
+              <mat-icon>event</mat-icon>
+              <span><strong> Fecha:</strong> {{ zona.fecha }}</span>
+            </p>
+
+            <p *ngIf="zona.horario" class="info-line">
+              <mat-icon>schedule</mat-icon>
+              <span><strong> Horario:</strong> {{ zona.horario }}</span>
+            </p>
+
+            <p *ngIf="zona.precio" class="info-line">
+              <mat-icon>payments</mat-icon>
+              <span><strong> Precio:</strong> {{ zona.precio }}</span>
+            </p>
           </div>
         </mat-expansion-panel>
       </mat-accordion>

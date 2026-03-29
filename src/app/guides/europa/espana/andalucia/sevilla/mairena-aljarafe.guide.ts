@@ -4,6 +4,21 @@ export const MAIRENA_ALJARAFE_GUIDE = {
   flag: 'cld:europa/espana/andalucia/sevilla/mairena-aljarafe/mairena-aljarafe-flag',
   background: 'cld:europa/espana/andalucia/sevilla/mairena-aljarafe/mairena-aljarafe-flag',
 
+  //Encuadre escritorio
+  bgPos: '50% 65%',
+  //Encuadre Móvil
+  bgPosMobile: '50% 65%',
+  bgDim: 0.10,
+  //Transparencia bandera
+  flagOpacity: 0.12,
+  flagOpacityMobile: 0.18,
+  //Tamaño bandera overlay
+  flagSize: '75%',
+  flagSizeMobile: '50%',
+  //Tamaño del fondo
+  bgSize: 'cover',
+  bgSizeMobile: 'cover',
+  
   descripcion:
   'Municipio del Aljarafe sevillano situado a solo 6 km de Sevilla capital. Mairena del Aljarafe combina historia, zonas verdes, excelente comunicación y una intensa vida cultural y gastronómica dentro del área metropolitana sevillana.',
 
