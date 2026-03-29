@@ -58,8 +58,17 @@
     line-height: 1.65;
   }
   
+  .zone-card {
+    max-width: 100%;
+    padding: 12px;
+  }
+
   .zone-card img {
-    max-height: 260px;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    border-radius: 8px;
+    margin: 12px 0;
   }
 
   .zone-photos img {
@@ -96,6 +105,25 @@
   .guide-page::after {
     opacity: var(--flag-opacity-mobile, var(--flag-opacity, 0.26));
     background-size: var(--flag-size-mobile, var(--flag-size, 80%));
+  }
+
+  .mat-expansion-panel-header {
+    height: auto !important;
+    min-height: 96px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    align-items: center;
+  }
+
+  .mat-expansion-panel-header .mat-content {
+    align-items: center;
+  }
+
+  .mat-expansion-panel-header .mat-expansion-panel-header-title {
+    white-space: normal !important;
+    line-height: 1.3;
+    font-size: 1rem;
+    margin-right: 12px;
   }
 }
 
