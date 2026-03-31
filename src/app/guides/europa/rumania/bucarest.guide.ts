@@ -509,12 +509,6 @@ export const BUCAREST_GUIDE = {
           precio: 'Muy económico (1–3€)'
         },
         {
-          nombre: 'Ensalada de berenjenas',
-          descripcion:
-            'Crema tradicional elaborada con berenjena asada, muy popular en mercados y restaurantes locales.',
-          precio: 'Económico'
-        },
-        {
           nombre: 'Zacuscă',
           descripcion:
             'Pasta vegetal tradicional elaborada con pimientos, berenjenas y tomate, muy típica para untar en pan.',
@@ -536,12 +530,6 @@ export const BUCAREST_GUIDE = {
           precio: 'Económico'
         },
         {
-          nombre: 'Tochitură',
-          descripcion:
-            'Guiso tradicional rumano de carne, contundente y sabroso, muy representativo de la cocina local.',
-          precio: 'Moderado'
-        },
-        {
           nombre: 'Plăcintă',
           descripcion:
             'Pastel o masa rellena, muy popular en la cocina rumana y moldava, con versiones dulces y saladas.',
@@ -561,7 +549,111 @@ export const BUCAREST_GUIDE = {
             'Aguardiente tradicional de frutas, muy presente en la gastronomía y cultura popular de Rumanía.',
           foto: 'cld:europa/rumania/bucarest/palinca',
           precio: 'Según local'
-        }
+        },
+        {
+          nombre: 'Ensalada de berenjenas',
+          descripcion:
+            'Crema tradicional elaborada con berenjena asada, muy popular en mercados y restaurantes locales.',
+          precio: 'Económico'
+        },
+        {
+          nombre: 'Tochitură',
+          descripcion:
+            'Guiso tradicional rumano de carne, contundente y sabroso, muy representativo de la cocina local.',
+          precio: 'Moderado'
+        },
+      ]
+    },
+    {
+      titulo: 'Dónde comer en Bucarest',
+      lugares: [
+        {
+          nombre: 'Caru’ cu Bere',
+          descripcion:
+            'Caru’ cu Bere es, probablemente, el restaurante más emblemático de Bucarest. Situado en pleno casco antiguo, en un espectacular edificio neogótico de 1879, no es solo un restaurante, es una experiencia completa que mezcla historia, gastronomía y cultura rumana.\n\nNada más entrar te envuelve su decoración: madera tallada, vitrales de colores y un ambiente que parece sacado de otra época.\n\n🍽️ Qué probar (imprescindible):\nLos sarmale, el plato más representativo de Rumanía. Se sirven de forma tradicional con mămăligă (polenta), panceta ahumada, crema agria (smântână) y un pimiento picante.\n\n💡 Experiencia TOP: es un plato contundente, sabroso y muy auténtico. Perfecto para entender la gastronomía rumana de verdad.\n\n🍰 Postre recomendado: los papanăși (donas rumanas con queso, nata y mermelada). De los mejores de la ciudad.\n\n🎭 Ambiente:\nPor la noche, el restaurante cobra vida con espectáculos de bailes folclóricos rumanos en directo, lo que convierte la cena en una experiencia cultural completa.\n\n💡 Consejo viajero:\n• Para ambiente tranquilo → ve a mediodía.\n• Para experiencia completa → cena con espectáculo.\n\n💡 IMPORTANTE: es uno de los sitios más demandados de Bucarest, por lo que es muy recomendable reservar con antelación.',
+          horario:
+            'Todos los días: 10:00–24:00\nEspectáculos: desde ~19:30–20:00',
+          precio:
+            '≈ 10–13€ (50–65 RON por los sarmale)\nPrecio general: moderado',
+        },
+        {
+          nombre: 'Hanul lui Manuc',
+          descripcion:
+            'Hanul lui Manuc es la posada en funcionamiento más antigua de Bucarest (1808) y uno de los lugares más especiales para cenar en la ciudad. Situado en pleno casco antiguo, combina historia, arquitectura tradicional y gastronomía rumana en un mismo espacio.\n\n🏛️ Historia y ambiente:\nEl edificio es una auténtica joya arquitectónica, con un gran patio interior rodeado de balcones de madera tallada. Aquí se firmó el Tratado de Bucarest en 1812, lo que lo convierte en un lugar clave en la historia de la ciudad.\n\n🌙 Experiencia:\nCenar en su patio, especialmente por la noche, es una de las experiencias más auténticas de Bucarest. El ambiente, la iluminación y la música hacen que parezca un viaje al pasado.\n\n🎭 Por la noche:\nSuelen tener música en directo y bailes tradicionales rumanos, creando una atmósfera muy similar (pero más tranquila) que Caru’ cu Bere.\n\n🍽️ Qué pedir:\n• Platos tradicionales rumanos\n• Carnes a la brasa\n• Platos de caza (muy recomendados)\n\n💡 Consejo viajero:\nSi buscas una experiencia más tranquila y auténtica que Caru’ cu Bere, este es tu sitio.\n\n💡 Recomendación TOP:\nReserva mesa en el patio interior, especialmente en verano. Es donde está la magia.',
+          horario:
+            'Dom–Jue: 10:00–00:00\nVie–Sáb: 10:00–02:00',
+          precio:
+            '≈ 10–18€ por plato principal (50–90 RON)\nRango: medio-alto',
+        },
+        {
+          nombre: 'LUCA',
+          descripcion:
+            'Las Simigeria LUCA son una auténtica institución en Bucarest. No son una panadería tradicional, sino puestos de street food especializados en covrigi, una especie de pretzel rumano que se sirve siempre caliente y recién hecho.\n\nEs uno de los desayunos y snacks más típicos del país, perfecto para comer algo rápido, barato y muy local mientras recorres la ciudad.\n\n🥨 Qué pedir:\n• Covrigi clásicos (cu susan o cu sare): los más tradicionales, con sésamo o sal.\n• Luca tradicional: relleno de jamón y queso o queso con aceitunas (muy top).\n• Covridog: versión tipo hot dog envuelto en masa de covrig.\n• Covripuici: relleno de pollo, queso y especias.\n• Opciones dulces: manzana, chocolate o cereza.\n\n💡 Experiencia real: siempre hay cola, pero avanza rapidísimo. La rotación es tan alta que te lo dan recién hecho, literalmente quemando 😅.\n\n💡 Consejo viajero: ideal para desayunar antes de empezar el día o para llevarte algo rápido si vas con prisa.\n\n💡 Tip local: acompáñalo con un café para tener el combo completo como un rumano más.',
+          horario:
+            'Lun–Vie: 06:00–21:00 | Fin de semana: 07:00–21:00',
+          precio:
+            'Muy económico: ≈ 0.50€ – 3€ (2–15 RON)',
+        },
+        {
+          nombre: 'Ana Pan',
+          descripcion:
+            'Si Luca es el rey del street food rápido, Ana Pan es la reina de la repostería en Bucarest. Fundada en 1990, es una de las marcas más queridas por los locales para comprar productos horneados de alta calidad.\n\n🍰 Producto estrella:\nEl Cozonac, el pan dulce tradicional rumano (similar al panettone pero más denso y trenzado).\n\n💡 Qué probar:\n• Cozonac de nuez y cacao (el más típico)\n• Versiones con pasas o delicias turcas (rahat)\n\nLa masa es muy esponjosa, con mucho relleno y sabor intenso a mantequilla.\n\n🍩 Otros dulces recomendados:\n• Amandine (pastel de chocolate muy jugoso)\n• Pasca (típico en Pascua, con queso dulce)\n• Plăcinte dulces de manzana o queso\n\n📍 Dónde encontrarlo:\n• Zona Dorobanți (cerca de Primăverii)\n• Victoriei (cerca del Museo del Campesino)\n• Centro (Piața Romană)\n\n💡 Consejo viajero:\nSi quieres llevarte un souvenir gastronómico, el Cozonac es de lo mejor que puedes comprar. Aguanta bien varios días y es muy típico.',
+          horario: '08:00 – 20:00 (aprox.) | Algunos locales hasta 21:00 | Fines de semana cierre algo más temprano',
+          precio: 'Cozonac entero: 14–19€ (70–95 RON) | Porciones individuales disponibles'
+        },
+        {
+          nombre: 'Barrio Primăverii',
+          descripcion:
+            'Si quieres probar la gastronomía rumana en un entorno más elegante y tranquilo, el barrio de Primăverii es uno de los mejores lugares de Bucarest.\n\nAquí la experiencia cambia respecto al centro: menos turismo, mejor producto y restaurantes frecuentados por locales.\n\n🍖 Plato imprescindible en esta zona:\nLa tochitură, uno de los platos más contundentes de la cocina rumana.\n\nSe trata de un guiso de carne de cerdo con salchichas, huevo frito y queso, servido sobre mămăligă (polenta). Es potente, sabroso y muy tradicional.\n\n\n📍 Mejores sitios para probarla:\n\n• Zexe Zahana ⭐ (experiencia premium)\nUno de los restaurantes más prestigiosos de Bucarest.\n\n💡 Concepto:\nReinterpretación de recetas tradicionales de la burguesía rumana en un entorno elegante.\n\n🍲 Imprescindible:\nLa ciorbă de fasole servida en pan (ciorbă în pâine), una de las experiencias más icónicas del país.\n\n💡 Su tochitură utiliza ingredientes de alta calidad con una presentación más cuidada.\n\n• City Grill Primăverii ⭐ (mejor calidad-precio)\nLa opción más equilibrada del barrio.\n\n💡 Experiencia personal:\nAquí probamos zacuscă, ciorbă de văcuță y una pavlova preparada en mesa.\n\nLa tochitură es abundante, fiel a la receta tradicional y perfecta si buscas algo auténtico sin pagar precios elevados.',          
+          horario:
+            'Zexe Zahana: Lun y Mié–Dom 12:00–00:00 | Mar 14:00–00:00\nCity Grill: 08:00–22:00 (hasta 23:00 fines de semana)',
+          precio:
+            'Tochitură: 11–17€ (55–85 RON)\nZexe: medio-alto | City Grill: 10–14€'
+        },
+        {
+          nombre: 'La Plăcinte',
+          descripcion:
+            'La Plăcinte es una de las cadenas más queridas de Bucarest y una parada imprescindible si quieres probar comida tradicional con sabor casero.\n\nOriginaria de Moldavia, este restaurante ofrece una experiencia auténtica, sencilla y muy reconfortante, con recetas que recuerdan a la cocina de la abuela.\n\n🥟 Especialidad imprescindible:\nLas plăcinte, unos pasteles de masa fina rellenos.\n\n📍 Qué probar:\n• Queso con eneldo (la más típica)\n• Patata, carne o calabaza\n• Dulces de cereza o manzana\n\n🍲 Otros platos:\n• Zeamă (sopa moldava)\n• Mămăligă con queso\n• Postre Guguriță\n\n💡 Consejo: acompáñalo con limonada casera o té de frutas del bosque.',
+          horario: 'Todos los días: 10:00 – 22:00 (aprox.)',
+          precio: 'Plăcinte: 5–7€ | Comida completa: 10–14€'
+        },
+        {
+          nombre: 'Ciorbărie',
+          descripcion:
+            'Si quieres probar la cocina rumana más auténtica y reconfortante, Ciorbărie es una parada obligatoria. Esta cadena local está especializada en ciorbă, las sopas tradicionales rumanas, conocidas por su sabor intenso y su toque ligeramente ácido.\n\nEl concepto es tipo fast-casual, pero con comida casera de verdad. Cada día ofrecen entre 8 y 10 sopas diferentes, lo que lo convierte en un sitio perfecto para repetir o probar distintos sabores.\n\n🍲 Experiencia TOP: el goulash aquí se sirve al estilo rumano, como una ciorbă de ternera espesa, con patatas, pimentón y comino. Es contundente, sabroso y perfecto para reponer energía después de un día de turismo.\n\n💡 Cómo se come: acompaña la sopa con smântână (crema agria) y un ardei iute (guindilla picante). Es la forma más auténtica de disfrutarla.\n\n💡 Detalle local: normalmente te incluyen pan rústico gratis, ideal para mojar.\n\n💡 Consejo viajero: el menú cambia cada día, así que puedes consultar sus redes sociales por la mañana para ver qué sopas hay disponibles.\n\nEs una opción perfecta para comer rápido, barato y muy local, lejos de los restaurantes más turísticos.',
+          horario:
+            'Lun–Vie: 11:00–20:00 (o hasta agotar existencias)\nFines de semana: horario reducido según local',
+          precio:
+            'Muy económico: ≈ 4–5€ (18–25 RON por ración)',
+        },
+        {
+          nombre: 'Parque Rey Miguel I',
+          descripcion:
+            'Si estás paseando por el Parque Rey Miguel I (Herăstrău), este es uno de los mejores lugares de Bucarest para hacer una parada gastronómica con vistas al lago.\n\nAquí puedes probar la varză călită, un plato tradicional rumano de col/repollo cocinado lentamente, muy sabroso y reconfortante.\n\n🍽️ Mejores opciones dentro del parque:\n\n1️⃣ Restaurante Pescăruș\nUn clásico de Bucarest fundado en 1938, con una terraza espectacular junto al lago.\n\n💡 Qué pedir:\nVarză călită acompañada de pato (rață pe varză) o costillas.\n\n💡 Experiencia:\nAmbiente elegante pero relajado, ideal para comer tranquilo con vistas.\n\n\n2️⃣ Berăria H\nLa cervecería más grande del sureste de Europa, con un ambiente totalmente distinto.\n\n💡 Qué pedir:\nVarză călită con salchichas o costillas, acompañado de cerveza.\n\n💡 Experiencia:\nAmbiente muy animado, música en directo y rollo festivo.\n\n\n💡 Consejo viajero:\n• Si buscas algo tranquilo → Pescăruș\n• Si quieres ambiente y fiesta → Berăria H\n\nEs una parada perfecta para combinar con el paseo por el parque o después de visitar el Museo Satului.',
+          horario:
+            'Pescăruș: 09:00–23:00 (Vie–Sáb hasta 00:00)\nBerăria H: desde 12:00 hasta 01:00 (hasta 03:00 fines de semana)',
+          precio:
+            '≈ 9–12€ (45–60 RON por plato)',
+        },
+        {
+          nombre: 'Mercado de Obor - Terasa Obor',
+          descripcion:
+            'El Mercado de Obor es el mercado más grande y tradicional de Bucarest y uno de los mejores lugares para vivir la esencia local.\n\nAquí se mezcla todo: puestos de agricultores, productos tradicionales, comida callejera y un ambiente muy auténtico.\n\nPero si hay algo que hace famoso a este lugar, es su zona exterior de parrillas, donde se encuentra Terasa Obor.\n\n\n🔥 Experiencia imprescindible:\nComer mici en Terasa Obor\n\nEs probablemente el sitio más icónico de Bucarest para probar estos famosos rollitos de carne a la parrilla.\n\nEs rápido, caótico y 100% local.\n\n\n🍖 Qué pedir:\n• Mici (3–5 por persona)\n• Mostaza (incluida)\n• Pan\n\n💡 Recomendación TOP:\nNo te vayas sin probar la ensalada de berenjenas (salată de vinete), uno de los sabores más típicos de Rumanía.\n\n💡 Consejos viajeros:\n\n• Mejor ir al mediodía\n• Fines de semana → cola de 15–20 min (avanza rápido)\n• Lleva efectivo para el mercado (aunque Terasa acepta tarjeta)\n\n\n💡 Extra:\nAprovecha para comprar productos locales: quesos, miel, embutidos o fruta a muy buen precio.\n\nEs uno de los lugares más auténticos de toda la ciudad.',         
+          horario:
+            'Mercado: Lun–Vie 07:00–19:00 | Sáb 07:00–18:00 | Dom 07:00–16:00\nTerasa Obor: Lun–Vie 09:00–18:00 | Sáb–Dom 09:00–17:00',
+          precio:
+            'Entrada gratuita | Mici: 1€ aprox. (5–6 RON/unidad) | Muy económico'
+        },
+        {
+          nombre: 'Mercado Amzei y feria del Museo del Campesino Rumano',
+          descripcion:
+            'Si quieres probar zacuscă auténtica en Bucarest, esta es una de las mejores zonas. Muy cerca del Museo del Campesino Rumano tienes varias opciones para encontrar productos tradicionales, especialmente esta famosa pasta vegetal rumana.\n\nLa opción más cómoda es el Mercado Amzei, un mercado céntrico con productos de muy buena calidad. Aquí encontrarás puestos con frutas, verduras, quesos locales y frascos de zacuscă artesanal.\n\n💡 Experiencia TOP: si tu visita coincide en fin de semana, el mejor plan es la feria que se monta en el patio del Museo del Campesino. Productores de todo el país vienen a vender productos caseros, incluyendo diferentes tipos de zacuscă.\n\n💡 Extra: dentro del propio museo suele haber una pequeña tienda con productos tradicionales (miel, mermeladas y zacuscă de calidad).\n\n💡 Recomendación: prueba la zacuscă de vinete (berenjena), la más clásica, o la de ghebe (setas), que es más especial y menos común.\n\n💡 Consejo viajero: si vas entre semana o el museo está cerrado, el Mercado Amzei es la mejor alternativa cercana. Si quieres más variedad todavía, el Mercado de Obor sigue siendo la opción más completa.',
+          horario:
+            'Mercado Amzei:\nLun–Vie: 06:00–21:00 | Sáb: 06:00–19:00 | Dom: 06:00–15:00\n\nFeria del museo (fin de semana):\nVie–Dom: 10:00–18:00\n\nTienda del museo:\nMar–Dom: 10:00–18:00',
+          precio:
+            'Acceso gratuito | Productos económicos–moderados'
+        },
+        
       ]
     },
     {

@@ -9,12 +9,16 @@ import { ImgUrlPipe } from "../../shared/img-url.pipe";
 
 //////////////////////////////////////EUROPA
 ////////////////////ESPAÑA
+//////////ANDALUCIA
 //CADIZ
 import { JEREZ_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/jerez.guide';
 import { TREBUJENA_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/trebujena.guide';
 
 //SEVILLA
 import { MAIRENA_ALJARAFE_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/mairena-aljarafe.guide';
+
+////////////////////ITALIA
+import { ROMA_VATICANO_GUIDE } from '../../guides/europa/italia/roma-vaticano.guide';
 
 ////////////////////RUMANIA
 import { BUCAREST_GUIDE } from '../../guides/europa/rumania/bucarest.guide';
@@ -50,6 +54,7 @@ export class GuideViewerComponent {
     'europa/espana/andalucia/cadiz/jerez-de-la-frontera': JEREZ_GUIDE,
     'europa/espana/andalucia/cadiz/trebujena': TREBUJENA_GUIDE,
     'europa/espana/andalucia/sevilla/mairena-del-aljarafe': MAIRENA_ALJARAFE_GUIDE,
+    'europa/italia/roma-vaticano': ROMA_VATICANO_GUIDE, 
     'europa/rumania/bucarest': BUCAREST_GUIDE,
     'america/sudamerica/brasil/rio-de-janeiro': RIO_DE_JANEIRO_GUIDE
   };
@@ -91,11 +96,10 @@ export class GuideViewerComponent {
 
   /**
    * Agrupa los lugares en días o zonas.
-   * Por ahora usa un simple índice: Día 1, Día 2, ...
    */
   groupByDay(lugares: any[]): { dia: string, lugares: any[] }[] {
     const dias: { dia: string, lugares: any[] }[] = [];
-    const chunkSize = 3; // cuántos lugares por día aprox
+    const chunkSize = 3;
     for (let i = 0; i < lugares.length; i += chunkSize) {
       dias.push({
         dia: `Día ${Math.floor(i / chunkSize) + 1}`,
