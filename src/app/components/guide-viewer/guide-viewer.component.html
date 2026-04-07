@@ -7,12 +7,24 @@
     <!-- Cabecera -->
     <div class="city-header">
       <h1>{{ guide.nombre }}</h1>
-      <img
-        *ngIf="guide.flag"
-        [src]="guide.flag | imgUrl: 600"
-        [alt]="guide.nombre + ' flag'"
+      <div
+        class="city-flags"
+        [class.double-flags]="guide.flag2"
+        >
+        <img
+          *ngIf="guide.flag"
+          [src]="guide.flag | imgUrl: 600"
+          [alt]="guide.nombre + ' flag'"
+          class="city-flag"
+        />
+
+        <img
+        *ngIf="guide.flag2"
+        [src]="guide.flag2 | imgUrl: 600"
+        [alt]="guide.nombre + ' second flag'"
         class="city-flag"
       />
+      </div>
     </div>
 
     <p>{{ guide.descripcion }}</p>
@@ -41,13 +53,15 @@
               *ngIf="zona.foto"
               [src]="zona.foto | imgUrl:1200"
               [alt]="zona.nombre"
-              loading="lazy"
+              [class.no-crop]="zona.noCropGallery"
             />
             <div class="zone-photos" *ngIf="zona.fotos?.length">
               <img
                 *ngFor="let foto of zona.fotos"
                 [src]="foto | imgUrl:1200"
                 [alt]="zona.nombre"
+                class="zone-gallery-photo"
+                [class.no-crop]="zona.noCropGallery"
               />
             </div>
             <p *ngIf="zona.acceso" class="info-line">

@@ -228,7 +228,7 @@ export const TRAVEL_TREE: TravelNode[] = [
         nombre: 'Italia',
         flag: 'https://flagcdn.com/it.svg',
         hijos: [
-          { nombre: 'Roma', path: 'europa/italia/roma-vaticano' },
+          { nombre: 'Roma y Ciudad del Vaticano', path: 'europa/italia/roma-vaticano' },
         ]
       },
       {

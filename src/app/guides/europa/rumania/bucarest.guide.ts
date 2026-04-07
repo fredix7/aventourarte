@@ -20,7 +20,7 @@ export const BUCAREST_GUIDE = {
   bgSizeMobile: 'cover',
 
   descripcion:
-    'Bucarest, capital de Rumanía, combina grandes edificios monumentales, barrios históricos, cafés con encanto, iglesias ortodoxas, palacios y una intensa vida cultural y nocturna. Es una ciudad ideal para mezclar historia, gastronomía, arquitectura y excursiones cercanas.',
+  'Bucarest es una ciudad de contrastes que sorprende mucho más de lo que esperas. A primera vista puede parecer caótica, pero en cuanto empiezas a recorrerla descubres una mezcla muy potente de historia, arquitectura y vida local.\n\nAquí conviven palacios gigantescos del comunismo con iglesias ortodoxas escondidas, edificios de inspiración francesa con barrios más decadentes, y mercados tradicionales con zonas modernas llenas de ambiente.\n\nConocida como la “Pequeña París del Este” por su pasado elegante, Bucarest también muestra una cara más cruda marcada por la época de Ceaușescu, lo que le da una personalidad única.\n\nEs una ciudad que no siempre entra por los ojos a la primera… pero cuanto más la entiendes, más te gusta.\n\nAdemás, es un destino perfecto para combinar cultura, gastronomía muy potente, vida nocturna y excursiones espectaculares a Transilvania.',
 
   infoGeneral: {
     idioma: 'Rumano',
@@ -37,12 +37,12 @@ export const BUCAREST_GUIDE = {
     {
       titulo: 'Historia',
       contenido:
-        'Bucarest ha sido durante siglos el principal centro político, económico y cultural de Rumanía. Su historia mezcla influencias otomanas, francesas, comunistas y modernas, lo que se refleja en su arquitectura y en el contraste entre grandes bulevares, iglesias ortodoxas, palacios y barrios tradicionales.'
+        'La historia de Bucarest es una mezcla de esplendor, destrucción y transformación constante.\n\nSus orígenes se remontan al siglo XV, cuando Vlad Țepeș (Drácula) estableció aquí una de sus cortes. Durante siglos, la ciudad estuvo influenciada por el Imperio Otomano, lo que marcó su desarrollo inicial.\n\nEn el siglo XIX, Bucarest vivió su época dorada. Se modernizó rápidamente, adoptó arquitectura francesa y se convirtió en una ciudad elegante y culturalmente muy activa, ganándose el apodo de la “Pequeña París”.\n\nPero todo cambió en el siglo XX con la llegada del régimen comunista.\n\nBajo Nicolae Ceaușescu, la ciudad sufrió una transformación brutal: barrios históricos enteros fueron demolidos para construir avenidas gigantes y edificios monumentales como el Palacio del Parlamento, uno de los símbolos más extremos del poder comunista.\n\nEn 1989, Bucarest fue el epicentro de la revolución que puso fin a la dictadura. Lugares como la Plaza de la Revolución siguen siendo testigos de ese momento histórico.\n\nHoy, Bucarest es una ciudad en reconstrucción constante, donde conviven todas estas etapas. Y precisamente esa mezcla es lo que la hace tan interesante.'
     },
     {
       titulo: 'Geografía y Clima',
       contenido:
-        'Situada en el sureste de Rumanía, Bucarest tiene un clima continental, con inviernos fríos y veranos cálidos. La primavera y el otoño suelen ser las mejores épocas para disfrutar de la ciudad a pie.'
+        'Bucarest se encuentra en el sureste de Rumanía, en una zona llana atravesada por el río Dâmbovița.\n\nA diferencia de otras capitales europeas, no es una ciudad especialmente compacta, por lo que combina zonas muy caminables (como el centro histórico) con otras más amplias donde conviene usar transporte.\n\nEl clima es continental:\n\n• Veranos: calurosos (puede superar fácilmente los 30°C)\n• Invierno: frío, con temperaturas cercanas a 0°C o bajo cero\n• Primavera y otoño: las mejores épocas para viajar, con temperaturas suaves y ambiente muy agradable\n\n💡 Consejo viajero:\nOrganiza bien los días por zonas para evitar desplazamientos innecesarios. Bucarest se disfruta mucho más cuando agrupas visitas.\n\n💡 Extra:\nMuchas de las mejores experiencias (mercados, parques, terrazas) están fuera del típico circuito turístico.'
     },
     {
       titulo: 'Qué visitar en Bucarest',
@@ -402,7 +402,8 @@ export const BUCAREST_GUIDE = {
               fotos: [
                 'cld:europa/rumania/bucarest/canal-dambovita',
                 'cld:europa/rumania/bucarest/loba-capitolina'
-              ]
+              ],
+              noCropGallery: true
             }
           ]
         },

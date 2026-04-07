@@ -1,3 +1,70 @@
+/* Bienvenida */
+.welcome {
+  text-align: center;
+  padding: 3rem;
+  color: #2c3e50;
+
+  .slogan {
+    font-style: italic;
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+    color: #34495e;
+  }
+}
+
+.welcome-logo {
+  max-width: 200px;
+  margin-bottom: 1rem;
+}
+
+///////////////////////////////////BOTÓN AL TOP////////////////////////////////// 
+.scroll-top {
+  position: fixed;
+  right: 18px;
+  bottom: calc(var(--footer-height) + 6px + env(safe-area-inset-bottom));
+  z-index: 99999;
+
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  border: none;
+
+  display: grid;
+  place-items: center;
+
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #3498db, #2ecc71);
+  color: white;
+
+  box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: floatTravel 3s ease-in-out infinite;
+  pointer-events: auto;
+}
+
+@keyframes floatTravel {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0px); }
+}
+
+.scroll-top:hover {
+  transform: translateY(-6px) scale(1.06);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.34);
+}
+
+.scroll-top-icon {
+  font-size: 26px;
+  transition: transform 0.25s ease;
+}
+
+/* Efecto “despegue” */
+.scroll-top:hover .scroll-top-icon {
+  transform: rotate(-18deg) translateY(-1px);
+}
+///////////////////////////////////////////FIN BOTON AL TOP ////////////////////////////////////
+
 .guide-page {
   position: relative;
   width: 100%;
@@ -51,92 +118,39 @@
   }
 }
 
-/* Móvil */
-@media (max-width: 768px) {
-  .guide-content {
-    padding: 0.75rem;
-  }
+/* Cabecera */
+.city-header {
+  text-align: center;
+  margin-bottom: 20px;
 
-  .guide-content p{
-    font-size: 1.04rem;
-    line-height: 1.65;
+  h1 {
+    font-size: 2.8rem;
+    margin-bottom: 20px;
   }
-  
-  .zone-card {
-    max-width: 100%;
-    width: 100%;
-    padding: 10px;
-    margin: 0 0 20px;
-  }
+}
 
-  .zone-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+.city-flags {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
 
-  .zone-photos {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
+.city-flag {
+  width: 280px;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.35);
+}
 
-  .zone-photos img {
-    width: 100%;
-    height: auto;
-    max-height: 340px;
-    object-fit: contain;
-  }
-
-  .scroll-top {
-    width: 48px;
-    height: 48px;
-    right: 14px;
-    bottom: calc(var(--footer-height) + 14px + env(safe-area-inset-bottom));
-  }
-  
-  .guide-section h2 {
-    font-size: 1.7rem;
-    line-height: 1.35;
-  }
-
-  .item-card img {
-    max-height: 260px;
-  }
-
-  .item-card h3 {
-    margin-top: 5px;
-    font-size: 1.2rem;
-    line-height: 1.4;
-  }
-
-  .guide-page::before {
-    background-position: var(--bg-pos-mobile, var(--bg-pos, 50% 50%));
-    background-size: var(--bg-size-mobile, var(--bg-size, cover));
-  }
-
-  .guide-page::after {
-    opacity: var(--flag-opacity-mobile, var(--flag-opacity, 0.26));
-    background-size: var(--flag-size-mobile, var(--flag-size, 80%));
-  }
-
-  .mat-expansion-panel-header {
-    height: auto !important;
-    min-height: 96px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    align-items: center;
-  }
-
-  .mat-expansion-panel-header .mat-content {
-    align-items: center;
-  }
-
-  .mat-expansion-panel-header .mat-expansion-panel-header-title {
-    white-space: normal !important;
-    line-height: 1.3;
-    font-size: 1rem;
-    margin-right: 12px;
-  }
+.city-flags.double-flags .city-flag {
+  width: 220px;
+  height: 150px;
 }
 
 .guide-content {
@@ -153,24 +167,6 @@
   p {
     font-size: 1.12rem;
     line-height: 1.75;
-  }
-}
-
-/* Cabecera */
-.city-header {
-  text-align: center;
-  margin-bottom: 20px;
-
-  h1 {
-    font-size: 2.8rem;
-    margin-bottom: 10px;
-  }
-
-  .city-flag {
-    margin-top: 12px;
-    width: 280px;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -300,82 +296,131 @@ p {
 
 .zone-photos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
   margin: 14px 0 10px;
+  align-items: stretch;
+}
 
-  img {
+.zone-gallery-photo {
+  width: 100%;
+  height: 380px !important;
+  object-fit: cover !important;
+  border-radius: 8px;
+  display: block;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.zone-gallery-photo.no-crop {
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+
+/////////////////////////////////////////// MÓVIL //////////////////////////////////////////////
+@media (max-width: 768px) {
+  .guide-content {
+    padding: 0.75rem;
+  }
+
+  .guide-content p{
+    font-size: 1.04rem;
+    line-height: 1.65;
+  }
+  
+  .zone-card {
+    max-width: 100%;
     width: 100%;
-    height: 220px;
-    object-fit: cover;
-    border-radius: 8px;
-    display: block;
-    background: rgba(255, 255, 255, 0.35);
+    padding: 10px;
+    margin: 0 0 20px;
   }
-}
 
-//Botón al top
-.scroll-top {
-  position: fixed;
-  right: 18px;
-  bottom: calc(var(--footer-height) + 6px + env(safe-area-inset-bottom));
-  z-index: 99999;
+  .zone-photos {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 
-  width: 52px;
-  height: 52px;
-  border-radius: 999px;
-  border: none;
+  .zone-gallery-photo {
+    width: 100%;
+    height: auto !important;
+    max-height: 340px;
+    object-fit: contain !important;
+  }
 
-  display: grid;
-  place-items: center;
+  .zone-gallery-photo.no-crop {
+    object-fit: contain !important;
+    object-fit: rgba(255, 255, 255, 0.2);
+  }
 
-  cursor: pointer;
+  .zone-photos img {
+    width: 100%;
+    height: auto;
+    max-height: 340px;
+    object-fit: contain;
+  }
 
-  background: linear-gradient(135deg, #3498db, #2ecc71);
-  color: white;
+  .zone-photos img.no-crop {
+    object-fit: contain;
+    background: rgba(255, 255, 255, 0.2);;
+  }
 
-  box-shadow: 0 10px 24px rgba(0,0,0,0.28);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  animation: floatTravel 3s ease-in-out infinite;
-  pointer-events: auto;
-}
+  .city-flag{
+    width: 220px;
+  }
 
-@keyframes floatTravel {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-4px); }
-  100% { transform: translateY(0px); }
-}
+  .city-flags.double-flags .city-flag {
+    width: 140px;
+  }
 
-.scroll-top:hover {
-  transform: translateY(-6px) scale(1.06);
-  box-shadow: 0 14px 30px rgba(0,0,0,0.34);
-}
+  .scroll-top {
+    width: 48px;
+    height: 48px;
+    right: 14px;
+    bottom: calc(var(--footer-height) + 14px + env(safe-area-inset-bottom));
+  }
+  
+  .guide-section h2 {
+    font-size: 1.7rem;
+    line-height: 1.35;
+  }
 
-.scroll-top-icon {
-  font-size: 26px;
-  transition: transform 0.25s ease;
-}
+  .item-card img {
+    max-height: 260px;
+  }
 
-/* Efecto “despegue” */
-.scroll-top:hover .scroll-top-icon {
-  transform: rotate(-18deg) translateY(-1px);
-}
-
-/* Bienvenida */
-.welcome {
-  text-align: center;
-  padding: 3rem;
-  color: #2c3e50;
-
-  .slogan {
-    font-style: italic;
+  .item-card h3 {
+    margin-top: 5px;
     font-size: 1.2rem;
-    margin: 0.5rem 0;
-    color: #34495e;
+    line-height: 1.4;
+  }
+
+  .guide-page::before {
+    background-position: var(--bg-pos-mobile, var(--bg-pos, 50% 50%));
+    background-size: var(--bg-size-mobile, var(--bg-size, cover));
+  }
+
+  .guide-page::after {
+    opacity: var(--flag-opacity-mobile, var(--flag-opacity, 0.26));
+    background-size: var(--flag-size-mobile, var(--flag-size, 80%));
+  }
+
+  .mat-expansion-panel-header {
+    height: auto !important;
+    min-height: 96px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    align-items: center;
+  }
+
+  .mat-expansion-panel-header .mat-content {
+    align-items: center;
+  }
+
+  .mat-expansion-panel-header .mat-expansion-panel-header-title {
+    white-space: normal !important;
+    line-height: 1.3;
+    font-size: 1rem;
+    margin-right: 12px;
   }
 }
-
-.welcome-logo {
-  max-width: 200px;
-  margin-bottom: 1rem;
-}
+///////////////////////////////////////FIN MOVIL////////////////////////////////////////////
