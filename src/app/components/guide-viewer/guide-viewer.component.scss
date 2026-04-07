@@ -122,17 +122,24 @@
 .city-header {
   text-align: center;
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  h1 {
-    font-size: 2.8rem;
-    margin-bottom: 20px;
-  }
+.city-title {
+  font-size: clamp(2.6rem, 5vw, 4.5rem);
+  line-height: 1.05;
+  font-weight: 900;
+  margin: 0 0 20px;
+  max-width: 10ch;
+  text-wrap: balance;
 }
 
 .city-flags {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
   gap: 20px;
   flex-wrap: wrap;
   margin-top: 12px;
@@ -140,8 +147,9 @@
 
 .city-flag {
   width: 280px;
-  height: 180px;
-  object-fit: cover;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
   display: block;
   border-radius: 6px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
@@ -150,7 +158,7 @@
 
 .city-flags.double-flags .city-flag {
   width: 220px;
-  height: 150px;
+  height: auto;
 }
 
 .guide-content {
@@ -312,13 +320,39 @@ p {
 }
 
 .zone-gallery-photo.no-crop {
-  object-fit: cover;
+  object-fit: contain;
   background: rgba(255, 255, 255, 0.2);
 }
 
 
 /////////////////////////////////////////// MÓVIL //////////////////////////////////////////////
 @media (max-width: 768px) {
+  .city-header {
+    margin-bottom: 16px;
+  }
+
+  .city-title {
+    font-size: 2.9rem;
+    line-height: 1.08;
+    max-width: 8ch;
+    margin-bottom: 16px;
+  }
+
+  .city-flags {
+    gap: 16px;
+    align-items: center;
+  }
+
+  .city-flag {
+    width: 220px;
+    height: auto;
+  }
+
+  .city-flags.double-flags .city-flag {
+    width: 140px;
+    height: auto;
+  }
+
   .guide-content {
     padding: 0.75rem;
   }
@@ -349,7 +383,7 @@ p {
 
   .zone-gallery-photo.no-crop {
     object-fit: contain !important;
-    object-fit: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.2);
   }
 
   .zone-photos img {
@@ -362,14 +396,6 @@ p {
   .zone-photos img.no-crop {
     object-fit: contain;
     background: rgba(255, 255, 255, 0.2);;
-  }
-
-  .city-flag{
-    width: 220px;
-  }
-
-  .city-flags.double-flags .city-flag {
-    width: 140px;
   }
 
   .scroll-top {
