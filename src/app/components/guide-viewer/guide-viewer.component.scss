@@ -357,16 +357,26 @@ p {
     padding: 0.75rem;
   }
 
-  .guide-content p{
+  .guide-content p {
     font-size: 1.04rem;
     line-height: 1.65;
   }
-  
+
   .zone-card {
     max-width: 100%;
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin: 0 0 20px;
+  }
+
+  .zone-card > img {
+    width: calc(100% + 24px);
+    max-width: none;
+    margin: 12px 0 12px -12px;
+    border-radius: 12px;
+    display: block;
+    height: auto;
+    object-fit: cover;
   }
 
   .zone-photos {
@@ -375,7 +385,10 @@ p {
   }
 
   .zone-gallery-photo {
-    width: 100%;
+    width: calc(100% + 24px);
+    max-width: none;
+    margin-left: -12px;
+    border-radius: 12px;
     height: auto !important;
     max-height: 340px;
     object-fit: contain !important;
@@ -395,7 +408,7 @@ p {
 
   .zone-photos img.no-crop {
     object-fit: contain;
-    background: rgba(255, 255, 255, 0.2);;
+    background: rgba(255, 255, 255, 0.2);
   }
 
   .scroll-top {
@@ -404,7 +417,7 @@ p {
     right: 14px;
     bottom: calc(var(--footer-height) + 14px + env(safe-area-inset-bottom));
   }
-  
+
   .guide-section h2 {
     font-size: 1.7rem;
     line-height: 1.35;
