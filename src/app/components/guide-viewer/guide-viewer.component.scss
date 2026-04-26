@@ -161,6 +161,23 @@
   height: auto;
 }
 
+.lugar-nombre {
+  position: relative;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.lugar-nombre::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
 .guide-content {
   width: 100%;
   max-width: 1280px;
@@ -267,6 +284,20 @@
       margin: 5px 0;
       color: #333;
     }
+  }
+
+  .item-photos {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .item-gallery-photo {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 12px;
   }
 }
 
