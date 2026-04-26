@@ -40,7 +40,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Centro Cultural Lola Flores',
           descripcion:
             'Una de las mejores formas de empezar a entender Jerez es acercarte a una de sus figuras más universales: Lola Flores. Este espacio cultural, ubicado en la Plaza de Belén, rinde homenaje a su vida, a su arte y a todo lo que representa dentro de la identidad jerezana.\n\nLa visita es muy interactiva y emocional, con vestidos icónicos, joyas, fotografías personales, recuerdos familiares y fragmentos audiovisuales que ayudan a entender por qué Lola Flores no fue solo una artista, sino un símbolo cultural de enorme fuerza.\n\n💃 Experiencia viajera:\nNo es solo un museo biográfico. Es una puerta de entrada al alma popular, artística y flamenca de Jerez.\n\n🎧 Además, la entrada suele incluir una audioguía descargable en el móvil, lo que hace la visita más inmersiva y personal.',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/centro-cultural-lola-flores',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario:
             'Lunes cerrado · Martes a jueves de 10:00 a 14:00 · Viernes y sábados de 10:00 a 14:00 y de 16:00 a 19:00 · Domingos de 10:00 a 14:00',
           precio:
@@ -50,7 +50,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Bodegas Fundador',
           descripcion:
             'Las Bodegas Fundador son una de las grandes visitas imprescindibles de Jerez y un lugar clave para entender la identidad vinícola de la ciudad. Fundadas en 1730, están consideradas las bodegas más antiguas de Jerez y el espacio donde nació el primer brandy español.\n\nRecorrer este complejo histórico es adentrarse en siglos de tradición, arquitectura bodeguera y cultura del vino. Entre sus rincones más espectaculares destaca la famosa Bodega La Mezquita, un espacio monumental de enormes dimensiones cuyos arcos recuerdan visualmente a la Mezquita de Córdoba.\n\n🍷 Experiencia viajera:\nAquí no solo visitas una bodega: entras de lleno en una de las raíces más profundas de Jerez. El aroma de la madera, las botas firmadas por personalidades históricas y la atmósfera de crianza convierten la experiencia en una parada con muchísimo peso dentro de la ruta.\n\nAdemás, según la modalidad elegida, la visita puede completarse con catas de vinos, brandis y experiencias maridadas que elevan mucho el recorrido.',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/bodegas-fundador',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario:
             'Lunes cerrado · Martes a jueves de 11:30 a 14:00 · Viernes de 11:30 a 14:00 y de 18:30 a 21:00 · Sábados de 10:30 a 15:30 y de 18:30 a 21:30 · Domingos cerrado',
           precio:
@@ -70,7 +70,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Bodegas Tío Pepe (González Byass)',
           descripcion:
             'Las Bodegas Tío Pepe son uno de los grandes iconos de Jerez de la Frontera y uno de los complejos bodegueros más visitados de Europa.\n\nSituadas junto al Alcázar y la Catedral, forman casi una pequeña ciudad dentro de la ciudad, con calles emparradas, patios y bodegas históricas donde se respira la esencia del vino de Jerez.\n\nEs una de las visitas más completas para entender la tradición vinícola de la zona y el peso cultural que tiene en la identidad jerezana.\n\n🍷 Experiencia viajera:\nAquí no vienes solo a catar vino, vienes a recorrer un lugar vivo. Pasear por la calle Ciegos, rodeado de botas y parras, es uno de esos momentos que se te quedan.\n\nDestaca la Bodega La Concha, diseñada por Gustave Eiffel, y tradiciones curiosas como la de los ratones bebedores con su copita de vino dulce.\n\nParte del recorrido se realiza en un pequeño tren, lo que hace la experiencia aún más especial y te permite entender la magnitud real del complejo.\n\n✨ Consejo AvenTourArte:\nReserva con antelación y, si puedes, elige una visita con tapas o cata ampliada. La experiencia gana muchísimo.',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/tio-pepe/bodega-tio-pepe',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario:
             'Lunes a viernes: 11:30 – 13:00 y 16:00 – 17:00\nSábados y domingos: 11:00 – 13:00\n\nPases guiados con horarios fijos por idioma.\nSe recomienda reservar con antelación.',
           precio:
@@ -80,7 +80,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Alcázar de Jerez',
           descripcion:
             'El Conjunto Monumental del Alcázar de Jerez es uno de los lugares más importantes que ver en la ciudad y uno de los mejores ejemplos de arquitectura almohade en España.\n\nConstruido en el siglo XII, es una de las pocas fortalezas islámicas que se conservan casi completas, lo que convierte la visita en un auténtico viaje al pasado de Al-Ándalus entre murallas, patios y espacios llenos de historia.\n\nDentro del recinto destacan la mezquita —la única que se conserva del antiguo Jerez islámico—, los baños árabes con sus salas originales y lucernas en forma de estrella, y la Cámara Oscura, situada en la Torre del Homenaje del Palacio de Villavicencio.\n\nA través de un sistema de espejos y lentes, la Cámara Oscura proyecta en tiempo real una imagen de la ciudad sobre una superficie, permitiéndote ver Jerez en movimiento desde una perspectiva única.\n\n🌿 Experiencia viajera:\nPasear por el Alcázar es bajar el ritmo y dejarte llevar por una atmósfera tranquila, casi silenciosa, muy diferente al bullicio del centro. Los jardines, amplios y cuidados, invitan a recorrerlo sin prisas, mientras que la Cámara Oscura añade un punto sorprendente y diferente a la visita.\n\n💡 Consejo AvenTourArte:\nNada más entrar, pregunta por el siguiente pase de la Cámara Oscura, ya que funcionan cada 30 minutos aproximadamente y el aforo es muy limitado (unas 10-15 personas). Ten en cuenta que depende de la luz solar, por lo que en días muy nublados puede no estar disponible. Además, entra temprano porque el Alcázar tiene horario solo de mañana.',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/alcazar-jerez',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario:
             'Lunes a domingo: 08:30 – 14:30\n\nVerano (julio y agosto): posible ampliación en horario de tarde',
           precio:
@@ -90,7 +90,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Plaza del Arenal',
           descripcion:
             'Después del Alcázar, el itinerario desemboca de forma natural en uno de los grandes espacios urbanos de Jerez: la Plaza del Arenal.\n\nAquí se mezclan historia, vida cotidiana y algunos elementos muy reconocibles como la estatua de Primo de Rivera o el edificio de La Alhóndiga con sus arcos.\n\n🏛️ Experiencia viajera:\nEs una plaza para ver y también para sentir. Una de esas zonas donde Jerez se muestra viva, abierta y cotidiana.',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/plaza-arenal',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario: 'Acceso libre',
           precio: 'Gratis'
         },
@@ -98,7 +98,7 @@ export const JEREZ_GUIDE = {
           nombre: 'The Sherry Gallery',
           descripcion:
             'The Sherry Gallery es uno de los espacios más originales y diferentes de Jerez, donde el vino se mezcla con el arte en un entorno único.\n\nUbicado en el Palacio de San Dionisio, en plena Plaza de la Asunción, este centro ofrece una forma distinta de entender la cultura del vino de Jerez, combinando exposición, experiencia sensorial y catas en un entorno muy cuidado.\n\nAquí descubrirás el universo del sherry desde un enfoque moderno: desde la viña y la albariza hasta los distintos tipos de vino, todo acompañado de una selección muy interesante de referencias, muchas de ellas difíciles de encontrar.\n\n🎨 Experiencia viajera:\nEs un sitio que rompe con lo típico. Más íntimo, más moderno y con un enfoque muy visual. Ideal si quieres entender el vino de Jerez sin irte a la bodega clásica.\n\n💡 Consejo AvenTourArte:\nSi puedes, añade la cata. Es donde realmente cobra sentido la visita. Y si te gusta el vino, merece mucho la pena probar opciones VOS o VORS para entender la diferencia de envejecimiento.',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/sherry-gallery',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario:
             'Pases guiados:\n10:00 | 11:30 | 13:00 | 18:00\n\nTodos los días excepto festivos nacionales y algunos locales',
           precio:
@@ -108,7 +108,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Iglesia de San Miguel',
           descripcion:
             'La Iglesia de San Miguel es uno de los monumentos religiosos más impresionantes de Jerez y uno de los grandes símbolos del barrio que lleva su nombre.\n\nDeclarada Bien de Interés Cultural, destaca por su espectacular arquitectura, que mezcla el gótico jerezano con elementos renacentistas y barrocos, reflejando siglos de historia en un solo edificio.\n\nSituada en el corazón del barrio de San Miguel —uno de los grandes focos del flamenco en la ciudad y lugar de nacimiento de Lola Flores—, la visita tiene un valor que va más allá de lo puramente arquitectónico.\n\nEn su interior no te puedes perder el impresionante retablo mayor, considerado uno de los mejores de Andalucía, ni la Capilla del Sagrario, una auténtica joya del barroco local.\n\n🎶 Experiencia viajera:\nAquí no solo visitas una iglesia, visitas parte del alma de Jerez. El entorno, el barrio y la historia flamenca que la rodea hacen que la experiencia tenga un carácter muy especial.\n\n💡 Consejo AvenTourArte:\nDespués de la visita, date un paseo por la plaza y el barrio de San Miguel. Es perfecto para continuar la ruta con algún tabanco y seguir empapándote del ambiente más auténtico.',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/iglesia-san-miguel',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario:
             'Lunes a sábado: 10:00 – 17:30\nDomingos: solo abierto para misas (sin visita turística)',
           precio:
@@ -118,7 +118,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Casa natal de Lola Flores',
           descripcion:
             'La casa natal de Lola Flores se encuentra en el emblemático barrio de San Miguel, uno de los lugares con más alma de Jerez.\n\nAquí nació “La Faraona” el 21 de enero de 1923, convirtiendo esta pequeña vivienda en un punto de referencia para entender sus orígenes y la conexión con el barrio que la vio crecer.\n\nEso sí, es importante saber que la casa es una propiedad privada y no se puede visitar por dentro. Solo es posible ver su fachada, donde una placa conmemorativa recuerda el nacimiento de la artista.\n\n🎶 Experiencia viajera:\nMás que una visita como tal, es una parada simbólica. Estás en el lugar donde empezó todo, en pleno barrio flamenco, lo que le da un valor especial si te interesa la historia de Lola Flores y la cultura jerezana.\n\n💡 Consejo AvenTourArte:\nAprovecha la parada para hacer una mini ruta por el barrio: acércate al monumento a Lola Flores en la Plaza de la Cruz Vieja, visita la Iglesia de San Miguel y termina en algún tabanco cercano para vivir el ambiente real de la zona.',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/casa-lola-flores',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario:
             'Exterior visitable en cualquier momento',
           precio:
@@ -128,7 +128,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Bodegas Álvaro Domecq',
           descripcion:
             'Las Bodegas Álvaro Domecq son una de las firmas con más solera de Jerez, destacando por su enfoque artesanal y su fuerte vínculo con el mundo del caballo y el arte ecuestre.\n\nUbicadas en una antigua bodega del siglo XIX, conservan todo el encanto de la arquitectura tradicional jerezana, con naves de crianza donde el tiempo y el cuidado manual siguen siendo protagonistas.\n\nA diferencia de otras bodegas más grandes, aquí el proceso es más cercano y cuidado, manteniendo técnicas tradicionales como el “cabeceo” manual, lo que se refleja en la calidad de sus vinos y brandis, entre ellos sus reconocidos VORS y el Brandy Duque de Veragua.\n\n🍷 Experiencia viajera:\nEs una visita más íntima y auténtica, ideal si quieres entender el lado más artesanal del vino de Jerez. Todo se siente más cercano, más pausado y más real.\n\n💡 Consejo AvenTourArte:\nReserva con antelación porque las visitas son en grupos reducidos. Si te gusta el mundo del caballo, pregunta por experiencias combinadas: la familia Domecq está muy ligada a la Real Escuela Andaluza del Arte Ecuestre.',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/bodegas-alvaro-domecq',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario:
             'Lunes a jueves: 08:00 – 17:00\nViernes: 08:00 – 15:00\nSábados y domingos: 11:00 – 14:00\n\nVisitas guiadas con reserva previa',
           precio:
@@ -138,7 +138,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Mercado Central de Abastos',
           descripcion:
             'El Mercado Central de Abastos de Jerez es uno de los lugares con más vida de la ciudad y un imprescindible si quieres ver el día a día más auténtico.\n\nUbicado en un edificio histórico de estilo neoclásico de finales del siglo XIX, destaca por su arquitectura y por el ambiente que se genera cada mañana entre puestos, vendedores y vecinos.\n\nAquí encontrarás producto local de primera calidad, especialmente pescado y marisco fresco traído de la costa de Cádiz y Sanlúcar, además de quesos de la Sierra, carnes de retinto, aceitunas y fruta de temporada.\n\n🐟 Experiencia viajera:\nEs el sitio perfecto para entender cómo se vive Jerez más allá del turismo. Ruido, movimiento, producto fresco y ese ambiente tan auténtico que tienen los mercados de toda la vida.\n\n💡 Consejo AvenTourArte:\nVe entre las 09:00 y las 12:00 para verlo en su mejor momento. Y al salir, no te vayas: quédate por la zona, pilla unos churros o una copa de fino en los bares cercanos y vive el auténtico “momento Jerez”.',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/mercado-abastos',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario:
             'Lunes a sábado: 08:00 – 14:45\nDomingos: cerrado',
           precio:
@@ -168,7 +168,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Bodegas Lustau',
           descripcion:
             'Las Bodegas Lustau son una de las grandes referencias del vino de Jerez y una parada obligatoria si quieres profundizar en este mundo.\n\nFundadas en 1896, destacan por su filosofía de “Almacenista”, apostando por vinos de pequeños productores y estilos muy cuidados, lo que les ha valido reconocimiento internacional como una de las mejores bodegas de España.\n\nSus instalaciones son de las más impresionantes de la ciudad, con naves de crianza de techos altísimos y estilo catedralicio. La Bodega Emperatriz Eugenia es uno de los espacios más espectaculares que verás en Jerez.\n\n🍷 Experiencia viajera:\nEs una visita más técnica y completa, ideal si quieres entender de verdad los distintos tipos de vino de Jerez y probar referencias de alto nivel. Aquí se viene a aprender… y a disfrutar.\n\n💡 Consejo AvenTourArte:\nReserva con antelación porque los grupos son reducidos. Y no te vayas sin probar su vermut: es uno de los más famosos de Jerez y perfecto para el aperitivo.',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/bodegas-lustau',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario:
             'Lunes a viernes: 09:30 – 16:00\nSábados: 09:30 – 15:00\nDomingos: cerrado\n\nVisitas guiadas: 10:00 | 11:30 | 13:30',
           precio:
@@ -178,7 +178,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Iglesia y Claustros de Santo Domingo',
           descripcion:
             'El conjunto de la Iglesia y los Claustros de Santo Domingo es uno de los espacios monumentales más importantes de Jerez, situado al final de la Calle Larga, en la Alameda Cristina.\n\nEl Real Convento de Santo Domingo, fundado tras la Reconquista en el siglo XIII, mezcla estilos gótico, renacentista y barroco, destacando por su impresionante fachada y su importancia religiosa dentro de la ciudad.\n\nEn su interior sobresale el retablo mayor y la imagen de la Virgen de la Consolación, copatrona de Jerez y muy querida por los jerezanos.\n\nAnexos a la iglesia se encuentran los Claustros de Santo Domingo, una auténtica joya arquitectónica de estilo gótico y mudéjar. Tras su restauración, hoy funcionan como un espacio cultural donde se celebran exposiciones, ferias y eventos durante todo el año.\n\n🏛️ Experiencia viajera:\nEs uno de esos lugares donde se combinan perfectamente historia y vida actual. Puedes pasar de un templo con siglos de historia a un espacio cultural activo en cuestión de pasos.\n\n💡 Consejo AvenTourArte:\nConsulta si hay alguna exposición en los claustros antes de ir, porque el entorno gana muchísimo con eventos. Y aprovecha la ubicación para continuar la ruta por la Alameda Cristina.',
-          fotos: ['cld:europa/espana/andalucia/cadiz/jerez/iglesia-santo-domingo',
+          fotos: ['cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
             'cld:europa/espana/andalucia/cadiz/jerez/claustro-santo-domingo'
           ],
           horario:
@@ -202,7 +202,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Real Escuela Andaluza del Arte Ecuestre',
           descripcion:
             'La Real Escuela Andaluza del Arte Ecuestre es una de las instituciones más prestigiosas del mundo dedicadas al caballo español y una de las experiencias más únicas que puedes vivir en Jerez.\n\nSu espectáculo más famoso, “Cómo bailan los caballos andaluces”, es un auténtico ballet ecuestre donde los caballos realizan movimientos al ritmo de música española, con jinetes vestidos al estilo del siglo XVIII.\n\nAdemás del espectáculo, el recinto permite visitar espacios muy interesantes como el Palacio del Recreo de las Cadenas, el picadero cubierto donde entrenan los caballos, los museos y las cuadras, donde se aprecia todo el trabajo artesanal detrás de esta tradición.\n\n🐎 Experiencia viajera:\nNo es solo un show, es una tradición viva. Ver cómo se mueven los caballos con esa precisión y elegancia es algo que impresiona incluso si no eres especialmente fan del mundo ecuestre.\n\n💡 Consejo AvenTourArte:\nSi vas al espectáculo, llega con al menos 30-45 minutos de antelación para recorrer las instalaciones con calma. Compra entradas online porque suele llenarse, sobre todo en temporada alta.',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/real-escuela-ecuestre',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario:
             'Visitas (entrenamientos): lunes a sábados: 10:00 – 13:00\nEspectáculo: martes y jueves a las 12:00 (puede ampliarse en temporada alta)\nDomingos: cerrado',
           precio:
@@ -242,7 +242,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Zoobotánico de Jerez',
           descripcion:
             'El Zoobotánico de Jerez es uno de los parques más antiguos y queridos de España, y mucho más que un simple zoológico.\n\nSe trata de un espacio que combina zoológico, jardín botánico y centro de conservación, siendo especialmente reconocido por su trabajo con especies amenazadas como el lince ibérico o el ibis eremita.\n\nA lo largo del recorrido encontrarás una gran variedad de animales, pero también una impresionante colección de árboles y plantas de todo el mundo, lo que convierte la visita en una experiencia muy completa y agradable.\n\n🌿 Experiencia viajera:\nEs un plan perfecto para desconectar del centro y pasar unas horas tranquilas rodeado de naturaleza. Ideal tanto si viajas en familia como si te apetece algo diferente en tu ruta por Jerez.\n\n💡 Consejo AvenTourArte:\nVe con tiempo porque el parque es grande y merece la pena recorrerlo sin prisas. Si vas con niños, el tren del zoo es un acierto. Primavera y otoño son las mejores épocas para disfrutarlo.',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/zoobotanico',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario:
             'Martes a domingo: 10:00 – 19:00\nLunes: cerrado (excepto festivos)\n\nTaquillas cierran una hora antes',
           precio:
@@ -252,7 +252,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Rancho Cortesano (Museo de la Miel)',
           descripcion:
             'El Rancho Cortesano es uno de los planes más originales cerca de Jerez, combinando naturaleza, educación y gastronomía en un entorno rural muy cuidado.\n\nSe trata de una cooperativa apícola que ha convertido sus instalaciones en un centro de agroturismo, donde todo gira en torno al mundo de las abejas y la producción de miel ecológica.\n\nDurante la visita puedes recorrer su museo, conocer cómo viven las abejas, ver las colmenas con traje de apicultor, participar en talleres como el de velas o huerto, y terminar disfrutando de su restaurante con productos de la propia finca.\n\n🍯 Experiencia viajera:\nEs un plan muy diferente a lo típico de Jerez. Tranquilo, educativo y perfecto para desconectar del ritmo urbano, especialmente si viajas en familia.\n\n💡 Consejo AvenTourArte:\nLas actividades suelen empezar sobre las 11:00 (abejas) y 12:30 (huerto), así que organiza bien la mañana. Reserva con antelación tanto las actividades como el restaurante si vas en fin de semana.',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/rancho-cortesano',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario:
             'Lunes a viernes: 08:30 – 14:00\nSábados y domingos: 08:30 – 18:00\n\nHorario sujeto a cambios según temporada',
           precio:
@@ -262,7 +262,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Cartuja de Santa María de la Defensión',
           descripcion:
             'La Cartuja de Santa María de la Defensión es el conjunto monumental más importante de la provincia de Cádiz y uno de los lugares más impresionantes que ver cerca de Jerez.\n\nSituada a las afueras, junto al río Guadalete, este monasterio combina gótico tardío, renacimiento y barroco en un entorno tranquilo y casi aislado que ya de por sí merece la visita.\n\nEntre sus elementos más destacados se encuentran la espectacular portada renacentista de Andrés de Ribera, la impresionante fachada barroca de la iglesia y un interior de gran altura con bóvedas góticas que transmiten una sensación de grandeza y recogimiento.\n\nAunque gran parte de su patrimonio artístico original fue trasladado (como obras de Zurbarán), el conjunto sigue siendo uno de los espacios más impactantes de la zona.\n\n🏛️ Experiencia viajera:\nEs un lugar que impone. Más silencioso, más espiritual y completamente diferente al centro de Jerez. Aquí vienes a desconectar y a disfrutar del patrimonio con calma.\n\n💡 Consejo AvenTourArte:\nTen en cuenta que es un monasterio de clausura, así que la visita está limitada a algunas zonas. Aprovecha para pasar por la tienda de las hermanas, donde venden artesanía hecha a mano de gran calidad.',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/cartuja-jerez',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario:
             'Martes a jueves: 10:00 – 14:00\nViernes y sábados: 10:00 – 14:00 | 16:30 – 18:30\nLunes y domingos: cerrado',
           precio:
@@ -272,7 +272,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Circuito de Jerez - Ángel Nieto',
           descripcion:
             'El Circuito de Jerez - Ángel Nieto es uno de los templos del motor a nivel mundial, conocido como la “Catedral del Motociclismo”.\n\nEs sede habitual del Mundial de MotoGP y punto clave de pruebas para equipos de motos y automovilismo durante todo el año, lo que lo convierte en una visita imprescindible si te gusta la velocidad.\n\nAdemás de los grandes eventos, el circuito ofrece visitas guiadas donde puedes recorrer zonas normalmente restringidas como el paddock, los boxes, la sala de prensa o el podio, además de su museo con motos y vehículos históricos.\n\n🏍️ Experiencia viajera:\nSi coincides con un gran premio, el ambiente es brutal. Miles de aficionados, ruido de motores y una energía única que convierte la experiencia en algo inolvidable.\n\n💡 Consejo AvenTourArte:\nPara MotoGP, planifica todo con antelación (entradas, transporte y horarios). Si vas fuera de eventos, aprovecha los tours guiados para ver el circuito por dentro sin aglomeraciones.',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/circuito-jerez',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario:
             'Visitas guiadas:\nMartes, jueves y sábados\nTurnos: 10:00 y 12:00\n\nEventos según calendario anual',
           precio:
@@ -287,7 +287,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Riñones al Jerez',
           descripcion:
             'Los riñones al Jerez son uno de los platos más emblemáticos de la cocina jerezana y un imprescindible en cualquier ruta de tabancos.\n\nSe trata de un plato tradicional donde el vino de Jerez no es un acompañamiento, sino el auténtico protagonista. Elaborados normalmente con riñones de ternera o cordero, se cocinan lentamente en una salsa intensa a base de Oloroso o Amontillado, creando un sabor profundo y muy característico.\n\nEs una receta de toda la vida, muy ligada al tapeo, que representa a la perfección la identidad gastronómica de la ciudad.\n\n🍽️ Experiencia viajera:\nEs uno de esos platos que definen un destino. Sabor potente, textura melosa y una salsa que pide pan sí o sí. Ideal para acompañar con vino de bota en un tabanco auténtico.\n\n💡 Consejo AvenTourArte:\nPídelo siempre con pan porque la salsa es lo mejor del plato. Y acompáñalo con un Amontillado u Oloroso para vivir la experiencia completa.\n\n📍 Dónde probarlos:\nTabanco El Pasaje\nBar La Moderna\nTabanco San Pablo',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/rinones-jerez',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Tapa: 3,50 € – 5 €\nRación: 10 € – 15 €'
         },
@@ -295,7 +295,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Chicharrones de Jerez',
           descripcion:
             'Los chicharrones en Jerez son prácticamente religión, pero hay que saber que aquí existen dos estilos muy diferentes, y ambos merecen la pena.\n\nPor un lado están los chicharrones “de Cádiz”, típicos de Jerez: carne de cerdo (papada o panceta) cocinada en su propia manteca con especias, prensada y cortada en lonchas finas, casi como un embutido. Se sirven con sal gorda y un toque de limón, y son el clásico de los tabancos.\n\nPor otro lado están los chicharrones fritos, más crujientes y calientes, con ese contraste entre exterior dorado e interior jugoso que los hace irresistibles.\n\n🍽️ Experiencia viajera:\nEs uno de los bocados más auténticos que puedes probar en Jerez. Sencillo, potente y perfecto para acompañar con vino en barra, como manda la tradición.\n\n💡 Consejo AvenTourArte:\nPrueba los dos tipos si puedes, pero no te vayas sin probar los de loncha fina con limón. Y si los ves recién hechos en el mercado… ni te lo pienses.\n\n📍 Dónde probarlos:\nBar La Moderna\nTabanco El Pasaje\nTabanco San Pablo\nVenta Esteban (para los fritos)',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/chicharrones',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Papelina: 4 € – 6 €\nKilo para llevar: 18 € – 24 €'
         },
@@ -303,7 +303,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Berza Jerezana',
           descripcion:
             'La berza jerezana es el plato rey de la gastronomía de Jerez y una auténtica institución del cuchareo andaluz.\n\nSe trata de un guiso contundente de origen campesino que combina legumbres, verduras de temporada y una pringá espectacular, dando como resultado un plato potente, sabroso y muy representativo de la cocina local.\n\nLa base es una mezcla de garbanzos y alubias blancas, acompañadas de verduras como tagarninas (en su mejor época) o acelgas. Pero lo que realmente marca la diferencia es la pringá: tocino, jarrete de ternera, costilla, chorizo y morcilla, todo cocinado lentamente hasta que se deshace.\n\n🍽️ Experiencia viajera:\nEs un plato que no solo se come, se vive. Tradicionalmente se sirve en dos tiempos: primero el caldo con las legumbres y después la pringá aparte, para desmenuzarla con pan y disfrutarla como manda la tradición.\n\n💡 Consejo AvenTourArte:\nNo tengas miedo a mancharte las manos con la pringá… es parte de la experiencia. Y si puedes, prueba la berza de tagarninas en temporada: es otro nivel.\n\n📍 Dónde probarla:\nVenta Esteban\nBar Juanito\nVenta Gabriel\nTabanco El Pasaje (según día)',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/berza-jerezana',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Plato: 8 € – 12 €\nRación completa: 14 € – 18 €'
         },
@@ -311,7 +311,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Rabo de toro',
           descripcion:
             'El rabo de toro es uno de los grandes clásicos de la cocina jerezana, profundamente ligado a la tradición taurina de la ciudad.\n\nSe trata de un guiso de cocción lenta donde la carne queda extremadamente tierna, deshaciéndose prácticamente sola, envuelta en una salsa oscura, brillante y llena de sabor.\n\nEl secreto está en el uso de vinos de Jerez, especialmente Oloroso, junto a un buen sofrito de verduras, que tras horas de cocción dan lugar a una salsa intensa y melosa que es protagonista absoluta del plato.\n\n🍽️ Experiencia viajera:\nEs un plato contundente, de los que se disfrutan sin prisa. Carne tierna, salsa potente y ese momento de mojar pan que se convierte en obligatorio.\n\n💡 Consejo AvenTourArte:\nPídelo siempre como ración (mejor que tapa) y asegúrate de tener pan a mano. Y si ves croquetas de rabo de toro en la carta… ni lo dudes.\n\n📍 Dónde probarlo:\nRestaurante Albores\nBar Juanito\nMesón del Cordero\nVenta Esteban',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/rabo-toro',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Tapa/Media ración: 6 € – 10 €\nRación: 18 € – 25 €'
         },
@@ -319,7 +319,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Ajo Jerezano',
           descripcion:
             'El Ajo Jerezano (o Ajo Caliente) es uno de los platos más auténticos y tradicionales de la cocina de campo de Jerez.\n\nDe origen jornalero, se preparaba en las viñas durante las jornadas de trabajo, siendo una receta humilde pero muy contundente, perfecta para reponer fuerzas.\n\nNo es ni sopa ni puré, sino una emulsión espesa elaborada con pan de telera asentado, ajo majado, tomate, pimiento, aceite de oliva virgen extra y agua hirviendo, que cocina lentamente todos los ingredientes hasta conseguir una textura densa y muy sabrosa.\n\nSe sirve siempre muy caliente y acompañado de sus clásicos “tropezones”: huevo duro picado y pimientos fritos.\n\n🍽️ Experiencia viajera:\nEs un plato que te conecta directamente con el Jerez más rural. Comerlo en una viña o en un mosto es una experiencia totalmente diferente a cualquier restaurante del centro.\n\n💡 Consejo AvenTourArte:\nAcompáñalo siempre con rabanitos para refrescar el paladar y, si puedes, pruébalo en un mosto en temporada: ahí es donde realmente cobra sentido.\n\n📍 Dónde probarlo:\nMosto Tejero\nVenta Esteban\nMosto Santa Teresa\nBar Juanito',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/ajo-jerezano',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Cuenco: 5 € – 8 €'
         },
@@ -327,7 +327,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Papas aliñás',
           descripcion:
             'Las papas aliñás son la tapa fría por excelencia en Jerez y un ejemplo perfecto de cómo la sencillez puede convertirse en algo espectacular.\n\nA primera vista parecen una simple ensalada de patatas, pero su secreto está en los detalles: la patata se aliña en caliente para que absorba el aceite y el vinagre, se utiliza un buen AOVE y, por supuesto, auténtico vinagre de Jerez.\n\nSe acompañan con cebolleta, perejil, huevo duro y, en muchas versiones, un buen trozo de atún o melva por encima.\n\n🍽️ Experiencia viajera:\nEs una tapa que nunca falla. Fresca, sabrosa y perfecta para empezar a tapear con una copa de vino. La típica que pides “para picar”… y acabas disfrutando más de lo esperado.\n\n💡 Consejo AvenTourArte:\nPídelas siempre a temperatura ambiente o ligeramente templadas. Si están frías de nevera, pierden gran parte de su gracia.\n\n📍 Dónde probarlas:\nBar Juanito\nBar La Moderna\nTabanco El Pasaje\nMarisquería Gran Avenida',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/papas-alinas',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Tapa: 2,50 € – 3,50 €\nRación: 7 € – 10 €'
         },
@@ -335,7 +335,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Tortillitas de camarones',
           descripcion:
             'Las tortillitas de camarones son uno de los bocados más finos y crujientes de la gastronomía gaditana, y en Jerez se preparan con un nivel espectacular.\n\nSe trata de una masa muy ligera de harina de trigo y garbanzo, frita hasta quedar prácticamente transparente, con pequeños camarones de la bahía que aportan todo el sabor a mar.\n\nLa clave está en su textura: extremadamente fina, crujiente y bien escurrida de aceite, casi como un encaje comestible.\n\n🍽️ Experiencia viajera:\nEs un bocado ligero pero lleno de sabor. Perfecto para acompañar con vino y seguir tapeando sin llenarte demasiado. De esos platos que desaparecen de la mesa sin darte cuenta.\n\n💡 Consejo AvenTourArte:\nSi no están finas y crujientes… no son buenas. Y pídelas siempre recién hechas: ahí es donde marcan la diferencia.\n\n📍 Dónde probarlas:\nBar Juanito\nRestaurante Albores\nMarisquería Gran Avenida\nFreidurías del centro',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/tortillitas-camarones',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Unidad: 2 € – 3 €\nRación: 10 € – 14 €'
         },
@@ -343,7 +343,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Alcauciles (alcachofas a la jerezana)',
           descripcion:
             'Los alcauciles —como llamamos en Jerez a las alcachofas— son uno de los grandes manjares de la primavera y un plato muy ligado a la cocina de temporada.\n\nLa receta tradicional a la jerezana consiste en un guiso lento y aromático donde el protagonismo es absoluto del producto. Se utilizan los corazones más tiernos, cocinados con un refrito de cebolleta, ajo, guisantes y habitas, y con el toque imprescindible de vino Fino que aporta carácter al plato.\n\nEl resultado es una preparación suave, delicada y llena de matices, muy diferente a otras formas de cocinar la alcachofa.\n\n🍽️ Experiencia viajera:\nEs uno de esos platos que solo tienen sentido en temporada. Textura tierna, sabor fino y una sensación muy “de huerta” que conecta con la cocina más tradicional de la zona.\n\n💡 Consejo AvenTourArte:\nSi estás en Jerez entre marzo y mayo, es obligatorio probarlos. Fuera de temporada pierden mucho. Y si dudas… pide la ración completa, porque se te va a quedar corta.\n\n📍 Dónde probarlos:\nBar Juanito\nRestaurante Albores\nBar Las Banderillas\nVenta Esteban',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/alcauciles',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           fecha:
             'Disponible en temporada (marzo – mayo)\nPrincipalmente en horario de comidas',
           precio:
@@ -353,7 +353,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Aneto jerezano',
           descripcion:
             'El Aneto jerezano es uno de los platos más populares y contundentes de la gastronomía local, una versión a lo grande del clásico San Jacobo o Cordon Bleu.\n\nConsiste en dos grandes filetes de pollo (o cerdo) rellenos de jamón serrano y mucho queso, empanados y fritos hasta quedar crujientes por fuera y muy jugosos por dentro.\n\nPero lo que realmente lo hace especial es la salsa: en Jerez no se sirve seco, sino bañado en salsas potentes como pimienta, Roquefort o reducción de vino Oloroso, que elevan el plato a otro nivel.\n\n🍽️ Experiencia viajera:\nEs un plato para disfrutar sin complejos. Grande, sabroso y perfecto para compartir. Muy típico de comidas familiares o de fin de semana con amigos.\n\n💡 Consejo AvenTourArte:\nPregunta siempre por el tamaño antes de pedirlo… porque muchos Anetos son para dos personas. Y si puedes, compártelo para dejar hueco a más platos.\n\n📍 Dónde probarlo:\nBar El Retiro\nVenta Esteban\nMesón de la Cueva\nBar Parque Atlántico',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/aneto',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Ración: 12 € – 18 € (suele incluir guarnición)'
         },
@@ -361,7 +361,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Menudo gitano',
           descripcion:
             'El menudo gitano es uno de los platos más potentes y auténticos de la cocina jerezana, la versión local de los callos pero con un carácter completamente propio.\n\nSe elabora con callos de ternera y manitas de cerdo, lo que le da esa textura melosa y gelatinosa tan característica, acompañados de garbanzos pequeños que absorben todo el sabor del guiso.\n\nEl secreto está en el aliño: un majado de ajo, pimienta, comino, clavo y, sobre todo, hierbabuena fresca, que aporta ese aroma inconfundible que diferencia al menudo de Jerez de cualquier otro.\n\n🍽️ Experiencia viajera:\nEs un plato intenso, de los que dejan huella. Sabor profundo, textura potente y ese punto especiado que engancha. No es para todos… pero si te gusta, te enamora.\n\n💡 Consejo AvenTourArte:\nSe come muy caliente y sin prisas. Pan obligatorio para la salsa. Si no acabas “pringado”… es que no era un buen menudo.\n\n📍 Dónde probarlo:\nTabanco San Pablo\nBar Las Banderillas\nVenta Esteban\nTabanco El Pasaje',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/menudo-gitano',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Tapa: 3,50 € – 5 €\nRación: 10 € – 14 €'
         },
@@ -369,7 +369,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Arroz con tagarninas',
           descripcion:
             'El arroz con tagarninas es uno de los platos que mejor representa la cocina de campo jerezana, basada en producto silvestre y tradición.\n\nLas tagarninas, un cardo salvaje que crece en las viñas y olivares, aportan un sabor muy característico, ligeramente amargo y vegetal, que define completamente el plato.\n\nEste arroz no es seco tipo paella, sino meloso o caldoso, cocinado lentamente con un sofrito de ajo, comino y pimentón, y servido tradicionalmente en lebrillo de barro. En muchas versiones se acompaña con huevo cuajado o carne como lomo en manteca.\n\n🍽️ Experiencia viajera:\nEs uno de esos platos que conectan directamente con el campo y la vida tradicional. Sabor profundo, textura reconfortante y un punto muy auténtico que no encontrarás fuera de esta zona.\n\n💡 Consejo AvenTourArte:\nSi lo ves fuera de temporada, no será lo mismo. Y si puedes, pruébalo en una venta o mosto: la experiencia cambia completamente.\n\n📍 Dónde probarlo:\nVenta Esteban\nMosto Tejero\nVenta Gabriel\nRestaurante Albores',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/arroz-tagarninas',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           fecha:
             'Disponible en temporada (invierno – primavera)\nPrincipalmente en horario de comidas',
           precio:
@@ -379,7 +379,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Ensaladilla de gambas',
           descripcion:
             'La ensaladilla de gambas es una de las tapas más icónicas de Jerez y, para muchos, el verdadero indicador de la calidad de un bar.\n\nA diferencia de la ensaladilla rusa clásica, aquí se busca una textura extremadamente cremosa, con una mayonesa suave y bien trabajada —a veces enriquecida con el coral de la gamba— donde el marisco es el auténtico protagonista.\n\nLa clave está en el equilibrio: patata bien cocida, gamba de calidad y una mezcla que se funda en la boca sin resultar pesada.\n\n🍽️ Experiencia viajera:\nEs una tapa aparentemente sencilla, pero cuando das con una buena… lo notas al instante. Suave, jugosa y con sabor a mar. Perfecta para empezar cualquier ruta de tapeo.\n\n💡 Consejo AvenTourArte:\nNunca la pidas recién salida de la nevera. Las mejores se sirven a temperatura controlada o se terminan al momento. Y acompáñala siempre con picos para disfrutar el contraste.\n\n📍 Dónde probarla:\nRestaurante Roneo\nBina Bar\nBar La Bota\nVenta Esteban\nBar Maypa\nLa Marea de Marcos\nBar Juanito\nLa Bocacha',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/ensaladilla-gambas',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Tapa: 3 € – 4,50 €\nMedia ración: 7 € – 10 €\nRación: 12 € – 16 €'
         },
@@ -387,7 +387,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Consomé al Jerez',
           descripcion:
             'El consomé al Jerez es uno de los caldos más elegantes y tradicionales de la gastronomía local, un auténtico reconstituyente que se sirve muy caliente y con un aroma inconfundible.\n\nA diferencia de un caldo común, el consomé se elabora mediante un proceso de clarificación que lo deja limpio, brillante y con un sabor profundo. El toque diferencial lo aporta el vino de Jerez —Fino, Amontillado o incluso Palo Cortado— que añade complejidad y ese punto punzante tan característico.\n\nEn muchos sitios tradicionales se sirve con una yema de huevo cruda en el fondo, que se cocina ligeramente al mezclarla con el caldo caliente, aportando aún más textura y sabor.\n\n🍽️ Experiencia viajera:\nEs un plato sencillo pero muy refinado. Perfecto como entrante o para entrar en calor, con ese equilibrio entre ligereza y profundidad que lo hace único.\n\n💡 Consejo AvenTourArte:\nPídelo con su guarnición completa y, si quieres subir el nivel, añade un pequeño chorreón de Amontillado justo antes de beberlo.\n\n📍 Dónde probarlo:\nBar Juanito\nVenta Esteban\nLa Carboná\nRestaurante Albores',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/consome-jerez',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           fecha:
             'Muy típico en meses frescos',
           precio:
@@ -397,7 +397,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Pestiños',
           descripcion:
             'Los pestiños son el dulce más representativo de Jerez, un clásico que aquí se disfruta durante todo el año, aunque brillan especialmente en Navidad y Cuaresma.\n\nSe trata de pequeños bocados fritos, crujientes y muy aromáticos, elaborados con una masa fina que lleva ajonjolí, canela, matalahúva (anís) y un toque de vino de Jerez, lo que les da un sabor muy característico.\n\nUna vez fritos, se presentan bañados en miel —la versión más tradicional— o espolvoreados con azúcar, más ligeros pero igualmente adictivos.\n\n🍽️ Experiencia viajera:\nSon de esos dulces que empiezas a probar “uno solo”… y no puedes parar. Perfectos para acompañar un café o una copa de vino dulce después de comer.\n\n💡 Consejo AvenTourArte:\nFíjate en que sean pequeños y crujientes. Si están blandos o la miel chorrea demasiado, no son de los buenos. Los auténticos deben estar secos por dentro y con ese punto justo de brillo por fuera.\n\n📍 Dónde probarlos:\nPastelería La Rosa de Oro\nConvento de las Reparadoras\nPastelería Las Quince Puertas\nVenta Esteban',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/pestinos',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           horario:
             'Disponible todo el año (más típicos en Navidad y Cuaresma)',
           precio:
@@ -407,7 +407,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Tocino de cielo',
           descripcion:
             'El tocino de cielo es el postre más emblemático de Jerez y uno de los dulces más famosos de España, con un origen ligado directamente al mundo del vino.\n\nNació en los conventos de la ciudad, donde las monjas aprovechaban las yemas de huevo sobrantes de las bodegas —utilizadas para clarificar el vino— para crear este dulce único a base de yema, azúcar y almíbar.\n\nEl resultado es una textura densa pero extremadamente suave, que se deshace en la boca, con un sabor intenso y una capa superior de caramelo tostado que equilibra el conjunto.\n\n🍽️ Experiencia viajera:\nEs el final perfecto para cualquier comida en Jerez. Dulce, elegante y con historia en cada bocado. Un imprescindible absoluto.\n\n💡 Consejo AvenTourArte:\nNo lo confundas con un flan. El auténtico tocino de cielo no lleva leche. Si puedes, acompáñalo con un vino dulce para vivir la experiencia completa.\n\n📍 Dónde probarlo:\nPastelería La Rosa de Oro\nPastelería Jesús\nBar Juanito\nRestaurante Albores',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/tocino-cielo',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Unidad: 2,50 € – 4 €\nTarta: 15 € – 30 €'
         },
@@ -415,7 +415,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Vino Fino',
           descripcion:
             'El Fino es el alma de Jerez, un vino único en el mundo que se caracteriza por su sequedad, frescura y ese aroma punzante tan reconocible.\n\nSu magia ocurre gracias a la “flor”, una capa natural de levaduras que protege el vino dentro de la bota e impide su oxidación, dándole su color pajizo y su carácter ligero pero intenso.\n\nSe trata de un vino vivo, que cambia con el tiempo y que debe consumirse siempre fresco para disfrutarlo en su mejor momento.\n\n🍽️ Experiencia viajera:\nBeber un Fino en Jerez, directamente de la bota en un tabanco, es una de las experiencias más auténticas que puedes vivir en la ciudad. Es cultura, tradición y forma de vida.\n\n💡 Consejo AvenTourArte:\nSiempre muy frío (5º–7º). Si no está frío, no es lo mismo. Y sírvelo en pequeñas cantidades para que no se caliente.\n\n📍 Dónde probarlo:\nTabanco El Pasaje\nTabanco San Pablo\nTabanco Las Banderillas\n\n🍷 Marcas recomendadas:\nTío Pepe\nLa Ina\nPando\nFino Quinta\n\n✨ Extra AvenTourArte:\nSi estás en primavera, busca un “Fino en Rama”. Es la versión más pura, sin filtrar, con más intensidad y carácter.\n\n🥘 Maridaje:\nJamón ibérico\nAceitunas y almendras\nPapas aliñás\nMarisco y frituras',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/fino',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Copa: 1,50 € – 3 €'
         },
@@ -423,7 +423,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Vino Amontillado',
           descripcion:
             'El Amontillado es uno de los vinos más complejos y fascinantes de Jerez, resultado de una doble crianza que lo hace único en el mundo.\n\nComienza su vida como un Fino, bajo el velo de flor (crianza biológica), pero con el tiempo esta desaparece y el vino continúa envejeciendo en contacto con el oxígeno (crianza oxidativa). Esta evolución le aporta un color ámbar intenso y una enorme riqueza aromática.\n\nEn nariz destacan notas de frutos secos como avellana, madera vieja y un punto salino muy elegante. En boca es seco, profundo y con carácter.\n\n🍽️ Experiencia viajera:\nEs un vino para disfrutar sin prisas. Más serio y complejo que el Fino, perfecto para sentarte, conversar y saborear cada sorbo.\n\n💡 Consejo AvenTourArte:\nNo lo bebas muy frío (12º–14º es ideal). Y mejor en copa de vino blanco para apreciar todos sus matices.\n\n📍 Dónde probarlo:\nTabanco Plateros\nLa Carboná\nTabanco El Pasaje\n\n🍷 Marcas recomendadas:\nViña AB\nTío Diego\nDel Duque\nLustau Los Arcos\n\n✨ Extra AvenTourArte:\nEl Amontillado es uno de los pocos vinos que marida perfectamente con alcachofas, uno de los alimentos más difíciles para el vino.\n\n🥘 Maridaje:\nQuesos curados y ahumados\nAlcauciles y espárragos\nCuchareo (menudo, rabo de toro)\nConsomé al Jerez',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/amontillado',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Copa: 2 € – 4 €'
         },
@@ -431,7 +431,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Vino Oloroso',
           descripcion:
             'El Oloroso es uno de los vinos más intensos y estructurados de Jerez, elaborado mediante crianza oxidativa desde el primer momento, sin la protección de la flor.\n\nEste proceso le aporta su característico color caoba oscuro y una complejidad aromática basada en notas de nuez, madera, cuero y especias. En boca es redondo, profundo y con una persistencia muy larga.\n\nEs un vino con cuerpo, pensado para quienes buscan sabores potentes y experiencias más contundentes dentro del mundo del vino de Jerez.\n\n🍽️ Experiencia viajera:\nEs el vino perfecto para sentarte con calma, acompañar platos fuertes y disfrutar de una sobremesa larga. Puro carácter jerezano.\n\n💡 Consejo AvenTourArte:\nNo lo bebas demasiado frío (12º–14º). Dale tiempo en copa para que se abra y puedas apreciar todos sus matices.\n\n📍 Dónde probarlo:\nTabanco San Pablo\nTabanco Plateros\nLas Banderillas\nTabanco El Pasaje\n\n🍷 Marcas recomendadas:\nAlfonso\nDon Gonzalo\nLustau Don Nuño\nRío Viejo\n\n✨ Extra AvenTourArte:\nEs uno de los vinos que mejor acompaña el cuchareo jerezano. Si vas a comer berza o rabo de toro… este es tu vino.\n\n🥘 Maridaje:\nRabo de toro\nBerza jerezana\nMenudo gitano\nQuesos curados\nCarnes rojas y caza',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/oloroso',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Copa: 2 € – 4 €'
         },
@@ -439,7 +439,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Vino Palo Cortado',
           descripcion:
             'El Palo Cortado es el vino más enigmático y exclusivo de Jerez, una auténtica rareza que combina lo mejor de dos mundos.\n\nNace como un vino destinado a ser Fino, pero de forma natural la “flor” desaparece antes de tiempo. El bodeguero, al detectar su potencial especial, decide reconducir su crianza hacia un envejecimiento oxidativo, creando así un vino único.\n\nEl resultado es una mezcla perfecta entre la elegancia aromática del Amontillado y la estructura potente del Oloroso. En nariz aparecen notas de frutos secos, cítricos amargos y madera noble; en boca es seco, complejo y muy persistente.\n\n🍽️ Experiencia viajera:\nEs un vino para momentos especiales. Profundo, elegante y sorprendente. Cada sorbo cuenta una historia diferente.\n\n💡 Consejo AvenTourArte:\nNo lo bebas muy frío (12º–14º) y dale tiempo en copa para que se abra. Es un vino que se descubre poco a poco.\n\n📍 Dónde probarlo:\nTabanco Plateros\nLa Carboná\nTabanco El Pasaje\nRestaurante Albores\n\n🍷 Marcas recomendadas:\nLeonor\nCapuchino\nLustau Península\nPalo Cortado 1767\n\n✨ Extra AvenTourArte:\nEs el vino favorito de muchos expertos porque no se “fabrica” como tal… se encuentra. Cada Palo Cortado es casi una rareza irrepetible.\n\n🥘 Maridaje:\nQuesos muy curados\nMojama y ahumados\nCarnes de caza\nPlatos especiados',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/palo-cortado',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Copa: 3 € – 6 €'
         },
@@ -447,7 +447,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Vino Pedro Ximénez (PX)',
           descripcion:
             'El Pedro Ximénez (PX) es el vino más dulce y seductor de Jerez, elaborado a partir de uvas pasificadas al sol mediante el proceso de “asoleo”, que concentra todos sus azúcares naturales.\n\nEl resultado es un vino denso, oscuro y brillante, con una textura casi de jarabe y un perfil aromático que recuerda a pasas, higos, dátiles, café y chocolate.\n\nEs un vino intenso y envolvente, que se disfruta casi como un postre en sí mismo.\n\n🍽️ Experiencia viajera:\nMás que beberlo, se saborea. Es un final perfecto para cualquier comida o una experiencia en sí misma si lo pruebas con calma.\n\n💡 Consejo AvenTourArte:\nPruébalo solo y también sobre un postre. Un chorrito sobre helado o tocino de cielo es nivel dios.\n\n📍 Dónde probarlo:\nTabanco San Pablo\nTabanco Plateros\nLa Rosa de Oro\n\n🍷 Marcas recomendadas:\nNoé\nNéctar\nVenerable\nLustau San Emilio\n\n✨ Extra AvenTourArte:\nEn Jerez se dice que el PX no se bebe… se come. Si giras la copa, verás cómo “pinta” el cristal por su densidad.\n\n🥘 Maridaje:\nTocino de cielo\nHelados\nChocolate negro\nQuesos azules\nFoie',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/pedro-ximenez',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Copa: 2,50 € – 5 €'
         },
@@ -455,7 +455,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Vino Cream',
           descripcion:
             'El Cream es uno de los vinos más agradables y versátiles de Jerez, resultado de la mezcla de vinos secos de crianza oxidativa (como el Oloroso) con vinos dulces naturales (principalmente Pedro Ximénez).\n\nEste proceso, conocido como “cabeceo”, da lugar a un vino con cuerpo, notas de madera y frutos secos, pero con un dulzor suave y aterciopelado que lo hace muy fácil de beber.\n\nEs un vino equilibrado, redondo y perfecto tanto para iniciarse en los vinos de Jerez como para disfrutar sin complicaciones.\n\n🍽️ Experiencia viajera:\nEs el vino del disfrute fácil. Ideal para una tarde relajada, una charla larga o como aperitivo con algo de picar.\n\n💡 Consejo AvenTourArte:\nPruébalo “on the rocks”: con hielo y una rodaja de naranja. Es la forma más refrescante y típica de tomarlo en Jerez.\n\n📍 Dónde probarlo:\nTabanco El Pasaje\nTabanco San Pablo\nLa Carboná\n\n🍷 Marcas recomendadas:\nHarvey’s Bristol Cream\nCanasta\nSolera 1847\nLustau Capataz Andrés\n\n✨ Extra AvenTourArte:\nEs uno de los vinos más consumidos en Feria y Navidad. Su suavidad lo convierte en un imprescindible en reuniones y celebraciones.\n\n🥘 Maridaje:\nPestiños y repostería\nFruta fresca\nQuesos azules\nFoie y patés',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/cream',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           precio:
             'Copa: 2 € – 4 €'
         },
@@ -463,7 +463,7 @@ export const JEREZ_GUIDE = {
           nombre: 'Mosto de Jerez',
           descripcion:
             'El Mosto de Jerez es el vino joven de la temporada, elaborado a partir de uva Palomino recién fermentada. Es un vino turbio, sin filtrar, con un carácter fresco, afrutado y ligeramente salvaje.\n\nPero en Jerez, el mosto es mucho más que una bebida: es toda una experiencia social. Los “mostos” son antiguos lagares o casas de viña en las afueras donde se sirve este vino acompañado de comida tradicional y ambiente de campo.\n\nSu temporada va de noviembre a mayo, siendo la primavera el momento ideal para disfrutarlo, cuando el vino ya está más asentado pero sigue manteniendo su frescura.\n\n🍽️ Experiencia viajera:\nIr de mosto es una de las experiencias más auténticas que puedes vivir en Jerez. Mesas de madera, comida casera, vino en jarra y un ambiente que mezcla tradición, campo y amigos.\n\n💡 Consejo AvenTourArte:\nVe con tiempo, sin prisa y con hambre. Y cuidado… entra muy fácil, pero sube sin avisar 😏\n\n📍 Dónde vivir la experiencia:\nMosto Tejero\nMosto Santa Teresa\nMosto El Corregidor\nMosto Domi\n\n✨ Extra AvenTourArte:\nEl “mosteo” es casi una tradición sagrada entre los jerezanos.\n\n🥘 Qué pedir sí o sí:\nAjo jerezano\nBerza jerezana\nChicharrones\nRabanitos',
-          foto: 'cld:europa/espana/andalucia/cadiz/jerez/mosto',
+          foto: 'cld:europa/espana/andalucia/cadiz/jerez/jerez-flag',
           fecha:
             'Temporada: noviembre – mayo',
           precio:
