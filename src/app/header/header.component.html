@@ -8,11 +8,12 @@
   <button
     class="menu-toggle"
     type="button"
+    [class.is-open]="menuOpen"
     (click)="toggleMenu()"
     [attr.aria-expanded]="menuOpen"
-    aria-label="Abrir o cerrar menú"
+    aria-label="Abrir o cerrar menu"
   >
-    {{ menuOpen ? '×' : '☰' }}
+    <span class="menu-icon" aria-hidden="true"></span>
   </button>
 
   <div class="backdrop" *ngIf="menuOpen" (click)="menuOpen = false"></div>
