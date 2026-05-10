@@ -1,12 +1,33 @@
 <li class="menu-item" [class.open]="isOpen">
-  <button class="menu-btn" type="button" (click)="onClick(node, $event)">
+  <button
+    *ngIf="node.hijos?.length; else guideLink"
+    class="menu-btn"
+    type="button"
+    (click)="onClick(node, $event)"
+    [attr.aria-expanded]="isOpen"
+  >
     <span *ngIf="node.flag" class="flag-container">
       <img [src]="node.flag" [alt]="node.nombre + ' flag'" class="flag-icon" />
     </span>
 
     <span class="label">{{ node.nombre }}</span>
-    <span *ngIf="node.hijos?.length" class="caret">▸</span>
+    <span class="caret">›</span>
   </button>
+
+  <ng-template #guideLink>
+    <a
+      class="menu-btn"
+      *ngIf="node.path"
+      [routerLink]="'/guia/' + node.path"
+      (click)="onSelected(node)"
+    >
+      <span *ngIf="node.flag" class="flag-container">
+        <img [src]="node.flag" [alt]="node.nombre + ' flag'" class="flag-icon" />
+      </span>
+
+      <span class="label">{{ node.nombre }}</span>
+    </a>
+  </ng-template>
 
   <ul *ngIf="node.hijos?.length" class="submenu">
     <ng-container *ngFor="let child of node.hijos">

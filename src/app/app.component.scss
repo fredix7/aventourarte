@@ -1,5 +1,6 @@
-/* Reset global mínimo */
-:host, body, html {
+:host,
+body,
+html {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -7,32 +8,32 @@
   box-sizing: border-box;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
-/* Layout principal */
 :host {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* ocupa toda la altura de la pantalla */
+  min-height: 100vh;
 }
 
 .app-main {
-  flex: 1; /* ocupa todo el espacio disponible entre header y footer */
+  flex: 1;
   display: flex;
   width: 100%;
 }
 
 .app-body {
   flex: 1;
-  width: 100%;
   display: flex;
-  justify-content: center; /* centra el contenido */
+  width: 100%;
 }
 
 .content {
   flex: 1;
-  max-width: 1200px; /* ancho máximo opcional para no ocupar toda la pantalla */
-  padding: 2rem;
+  width: 100%;
+  min-width: 0;
 }

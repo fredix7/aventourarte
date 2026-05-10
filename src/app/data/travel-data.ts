@@ -54,6 +54,7 @@ export const TRAVEL_TREE: TravelNode[] = [
                   { nombre: 'Cádiz ciudad', path: 'europa/espana/andalucia/cadiz/cadiz-ciudad' },
                   { nombre: 'Grazalema', path: 'europa/espana/andalucia/cadiz/grazalema' },
                   { nombre: 'Jerez de la Frontera', path: 'europa/espana/andalucia/cadiz/jerez-de-la-frontera' },
+                  { nombre: 'San Fernando', path: 'europa/espana/andalucia/cadiz/san-fernando' },
                   { nombre: 'Setenil de las Bodegas', path: 'europa/espana/andalucia/cadiz/setenil-de-las-bodegas' },
                   { nombre: 'Trebujena', path: 'europa/espana/andalucia/cadiz/trebujena' }
                 ]
@@ -72,7 +73,7 @@ export const TRAVEL_TREE: TravelNode[] = [
                 ]
               },
               {
-                nombre: 'Córboda',
+                nombre: 'Córdoba',
                 hijos: [
                   { nombre: 'Córdoba ciudad', path: 'europa/espana/andalucia/cordoba/cordoba-ciudad' },
                 ]
@@ -303,7 +304,7 @@ export const TRAVEL_TREE: TravelNode[] = [
             nombre: 'Estados Unidos',
             flag: 'https://flagcdn.com/us.svg',
             hijos: [
-              { nombre: 'Nueva York', path: 'america/norteamerica/estados-unidos/nueva-york' }
+              { nombre: 'Nueva York', path: 'america/norteamerica/usa/new-york' }
             ]
           },
           {

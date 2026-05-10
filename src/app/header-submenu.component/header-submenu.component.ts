@@ -38,7 +38,14 @@ export class HeaderSubmenuComponent {
       return;
     }
 
-    if (n.path) this.router.navigate(['/guia', n.path]);
+    if (n.path) {
+      this.router.navigateByUrl(`/guia/${n.path}`);
+    }
+
+    this.selected.emit(n);
+  }
+
+  onSelected(n: TravelNode) {
     this.selected.emit(n);
   }
 }

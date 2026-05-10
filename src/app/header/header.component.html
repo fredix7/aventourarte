@@ -1,19 +1,23 @@
-<header class="app-header"> 
+<header class="app-header">
   <div class="logo-container">
-    <a routerLink="/">
+    <a routerLink="/" aria-label="Ir al inicio de AvenTourArte">
       <img src="assets/logo.png" alt="AvenTourArte logo" class="logo-img" />
     </a>
   </div>
 
-  <!-- Botón hamburguesa solo móvil -->
-  <button class="menu-toggle" (click)="toggleMenu()" aria-label="Abrir/cerrar menú">
-    {{ menuOpen ? '✕' : '☰' }}
+  <button
+    class="menu-toggle"
+    type="button"
+    (click)="toggleMenu()"
+    [attr.aria-expanded]="menuOpen"
+    aria-label="Abrir o cerrar menú"
+  >
+    {{ menuOpen ? '×' : '☰' }}
   </button>
 
   <div class="backdrop" *ngIf="menuOpen" (click)="menuOpen = false"></div>
 
-  <!-- Menú principal -->
-  <nav class="main-menu" [class.open]="menuOpen">
+  <nav class="main-menu" [class.open]="menuOpen" aria-label="Destinos">
     <ul>
       <ng-container *ngFor="let continent of treeData">
         <app-header-submenu

@@ -1,4 +1,4 @@
-export const NewYorkGuide = {
+export const NEW_YORK_GUIDE = {
   nombre: 'Nueva York',
   descripcion: `
     La ciudad que nunca duerme. Rascacielos, Central Park, Times Square y
