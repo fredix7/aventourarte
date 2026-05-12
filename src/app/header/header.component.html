@@ -14,11 +14,35 @@
     aria-label="Abrir o cerrar menu"
   >
     <span class="menu-icon" aria-hidden="true"></span>
+    <span class="menu-toggle-text">Destinos</span>
   </button>
+
+  <div class="mobile-destination-strip" aria-label="Destinos destacados">
+    <button class="mobile-strip-main" type="button" (click)="toggleMenu()">
+      Explorar destinos
+    </button>
+
+    <a
+      class="mobile-destination-chip"
+      *ngFor="let destination of quickDestinations"
+      [routerLink]="'/guia/' + destination.path"
+      (click)="closeMenu()"
+    >
+      <span *ngIf="destination.node.flag" class="chip-flag">
+        <img [src]="destination.node.flag" [alt]="destination.node.nombre + ' flag'" />
+      </span>
+      <span>{{ destination.node.nombre }}</span>
+    </a>
+  </div>
 
   <div class="backdrop" *ngIf="menuOpen" (click)="menuOpen = false"></div>
 
   <nav class="main-menu" [class.open]="menuOpen" aria-label="Destinos">
+    <div class="mobile-menu-heading">
+      <p class="mobile-menu-kicker">Explora AvenTourArte</p>
+      <p class="mobile-menu-title">Elige un destino para empezar</p>
+    </div>
+
     <ul>
       <ng-container *ngFor="let continent of treeData">
         <app-header-submenu
