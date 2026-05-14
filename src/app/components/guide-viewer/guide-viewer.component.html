@@ -1,7 +1,7 @@
 <article *ngIf="guide; else emptyState" class="guide-page" [ngStyle]="pageStyle">
   <header class="guide-hero">
     <div class="hero-copy">
-      <span class="eyebrow">Guía AvenTourArte</span>
+      <span class="eyebrow">{{ guideLocationLabel() }}</span>
       <h1 class="city-title">{{ guide.nombre }}</h1>
       <p class="hero-description">{{ guide.descripcion }}</p>
     </div>

@@ -14,33 +14,85 @@
     aria-label="Abrir o cerrar menu"
   >
     <span class="menu-icon" aria-hidden="true"></span>
-    <span class="menu-toggle-text">Destinos</span>
+    <span class="menu-toggle-text">{{ text.destinations }}</span>
   </button>
 
-  <div class="mobile-destination-strip" aria-label="Destinos destacados">
-    <button class="mobile-strip-main" type="button" (click)="toggleMenu()">
-      Explorar destinos
-    </button>
+  <div class="header-actions">
+    <div class="destination-search">
+      <label class="sr-only" for="destination-search">{{ text.searchLabel }}</label>
+      <input
+        id="destination-search"
+        type="search"
+        [value]="searchQuery"
+        (input)="onSearchInput($event)"
+        [placeholder]="text.searchPlaceholder"
+        autocomplete="off"
+      />
 
-    <a
-      class="mobile-destination-chip"
-      *ngFor="let destination of quickDestinations"
-      [routerLink]="'/guia/' + destination.path"
-      (click)="closeMenu()"
-    >
-      <span *ngIf="destination.node.flag" class="chip-flag">
-        <img [src]="destination.node.flag" [alt]="destination.node.nombre + ' flag'" />
-      </span>
-      <span>{{ destination.node.nombre }}</span>
-    </a>
+      <div class="search-results" *ngIf="hasSearchQuery">
+        <a
+          class="search-result"
+          *ngFor="let result of searchResults"
+          [routerLink]="'/guia/' + result.path"
+          (click)="closeMenu()"
+        >
+          <span *ngIf="result.flag" class="result-flag">
+            <img [src]="result.flag" [alt]="result.name + ' flag'" />
+          </span>
+          <span class="result-text">
+            <span class="result-name">{{ result.name }}</span>
+            <span class="result-breadcrumb">{{ result.breadcrumb }}</span>
+          </span>
+        </a>
+
+        <p class="search-empty" *ngIf="!searchResults.length">{{ text.searchEmpty }}</p>
+      </div>
+    </div>
+
+    <div class="language-switcher">
+      <button
+        class="language-toggle"
+        type="button"
+        (click)="toggleLanguageMenu()"
+        [attr.aria-expanded]="languageMenuOpen"
+        [attr.aria-label]="text.languageLabel"
+      >
+        <span class="language-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M3 12h18"></path>
+            <path d="M12 3c2.2 2.4 3.4 5.4 3.4 9s-1.2 6.6-3.4 9"></path>
+            <path d="M12 3c-2.2 2.4-3.4 5.4-3.4 9s1.2 6.6 3.4 9"></path>
+          </svg>
+        </span>
+        <img
+          *ngIf="activeLanguage"
+          class="active-language-flag"
+          [src]="activeLanguage.flag"
+          [alt]="activeLanguage.name"
+        />
+      </button>
+
+      <div class="language-menu" *ngIf="languageMenuOpen">
+        <button
+          type="button"
+          *ngFor="let language of languages"
+          [class.active]="language.code === languageService.currentLanguage()"
+          (click)="selectLanguage(language.code)"
+        >
+          <img [src]="language.flag" [alt]="language.name" />
+          <span>{{ language.label }}</span>
+        </button>
+      </div>
+    </div>
   </div>
 
   <div class="backdrop" *ngIf="menuOpen" (click)="menuOpen = false"></div>
 
   <nav class="main-menu" [class.open]="menuOpen" aria-label="Destinos">
     <div class="mobile-menu-heading">
-      <p class="mobile-menu-kicker">Explora AvenTourArte</p>
-      <p class="mobile-menu-title">Elige un destino para empezar</p>
+      <p class="mobile-menu-kicker">{{ text.exploreKicker }}</p>
+      <p class="mobile-menu-title">{{ text.exploreTitle }}</p>
     </div>
 
     <ul>

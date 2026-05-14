@@ -63,6 +63,16 @@ export class GuideViewerComponent {
     return Boolean(item.acceso || item.fecha || item.horario || item.precio || item.precioOrientativo);
   }
 
+  guideLocationLabel(): string {
+    if (!this.guide?.path) return 'Guía AvenTourArte';
+
+    const segments = this.guide.path.split('/').slice(0, -1);
+    const visibleSegments = segments.filter((segment: string) => !['europa', 'america', 'norteamerica', 'sudamerica'].includes(segment));
+    const locationSegments = visibleSegments.map((segment: string) => this.formatLocationSegment(segment));
+
+    return locationSegments.reverse().join(', ') || 'Guía AvenTourArte';
+  }
+
   sectionIcon(title: string): string {
     const normalizedTitle = title
       .normalize('NFD')
@@ -78,6 +88,24 @@ export class GuideViewerComponent {
     if (normalizedTitle.includes('consejo')) return 'route';
 
     return 'travel_explore';
+  }
+
+  private formatLocationSegment(segment: string): string {
+    const locationNames: Record<string, string> = {
+      espana: 'España',
+      cadiz: 'Cádiz',
+      andalucia: 'Andalucía',
+      sevilla: 'Sevilla',
+      italia: 'Italia',
+      rumania: 'Rumanía',
+      brasil: 'Brasil',
+      usa: 'Estados Unidos'
+    };
+
+    return locationNames[segment] ?? segment
+      .split('-')
+      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ');
   }
 
   private loadGuideFromUrl() {
