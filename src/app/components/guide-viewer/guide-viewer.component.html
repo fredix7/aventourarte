@@ -25,126 +25,154 @@
   <main class="guide-content">
     <app-info-general *ngIf="guide.infoGeneral" [infoGeneral]="guide.infoGeneral"></app-info-general>
 
-    <section *ngFor="let section of guide.secciones || []; let sectionIndex = index" class="guide-section">
-      <div class="section-heading">
-        <span class="section-icon" aria-hidden="true">
-          <mat-icon>{{ sectionIcon(section.titulo) }}</mat-icon>
-        </span>
-        <h2>{{ section.titulo }}</h2>
-      </div>
+    <nav *ngIf="tabs.length" class="guide-tabs" aria-label="Secciones de la guía">
+      <button
+        *ngFor="let tab of tabs; trackBy: trackByTabId"
+        type="button"
+        class="guide-tab"
+        role="tab"
+        [class.active]="tab.id === activeTabId"
+        [attr.aria-selected]="tab.id === activeTabId"
+        [attr.aria-controls]="'guide-tab-panel-' + tab.id"
+        (click)="setActiveTab(tab.id)"
+      >
+        <mat-icon aria-hidden="true">{{ tab.icon }}</mat-icon>
+        <span>{{ tab.label }}</span>
+      </button>
+    </nav>
 
-      <p *ngIf="section.contenido" class="section-content">{{ section.contenido }}</p>
+    <ng-container *ngFor="let tab of tabs; trackBy: trackByTabId">
+      <div
+        *ngIf="tab.id === activeTabId"
+        class="guide-tab-panel"
+        role="tabpanel"
+        [attr.id]="'guide-tab-panel-' + tab.id"
+      >
+        <section
+          *ngFor="let section of tab.sections; trackBy: trackBySectionTitle"
+          class="guide-section"
+        >
+          <div class="section-heading">
+            <span class="section-icon" aria-hidden="true">
+              <mat-icon>{{ sectionIcon(section.titulo) }}</mat-icon>
+            </span>
+            <h2>{{ section.titulo }}</h2>
+          </div>
 
-      <mat-accordion *ngIf="section.itinerario" class="itinerary-accordion">
-        <mat-expansion-panel *ngFor="let day of section.itinerario">
-          <mat-expansion-panel-header>
-            <mat-panel-title>{{ day.dia }}</mat-panel-title>
-          </mat-expansion-panel-header>
+          <p *ngIf="section.contenido" class="section-content">{{ section.contenido }}</p>
 
-          <div class="zone-card" *ngFor="let zona of day.zonas">
-            <div class="card-copy">
-              <h3 class="lugar-nombre">{{ zona.nombre }}</h3>
-              <p>{{ zona.descripcion }}</p>
-            </div>
+          <mat-accordion *ngIf="section.itinerario" class="itinerary-accordion">
+            <mat-expansion-panel *ngFor="let day of section.itinerario">
+              <mat-expansion-panel-header>
+                <mat-panel-title>{{ day.dia }}</mat-panel-title>
+              </mat-expansion-panel-header>
 
-            <figure class="image-frame zone-image" *ngIf="zona.foto">
-              <img
-                [src]="zona.foto | imgUrl: 1400"
-                [alt]="zona.nombre"
-                loading="lazy"
-                [class.no-crop]="zona.noCropGallery"
-              />
-            </figure>
+              <div class="zone-card" *ngFor="let zona of day.zonas">
+                <div class="card-copy">
+                  <h3 class="lugar-nombre">{{ zona.nombre }}</h3>
+                  <p>{{ zona.descripcion }}</p>
+                </div>
 
-            <div class="photo-grid" *ngIf="zona.fotos?.length">
-              <figure class="image-frame" *ngFor="let foto of zona.fotos">
+                <figure class="image-frame zone-image" *ngIf="zona.foto">
+                  <img
+                    [src]="zona.foto | imgUrl: 1400"
+                    [alt]="zona.nombre"
+                    loading="lazy"
+                    [class.no-crop]="zona.noCropGallery"
+                  />
+                </figure>
+
+                <div class="photo-grid" *ngIf="zona.fotos?.length">
+                  <figure class="image-frame" *ngFor="let foto of zona.fotos">
+                    <img
+                      [src]="foto | imgUrl: 1200"
+                      [alt]="zona.nombre"
+                      loading="lazy"
+                      [class.no-crop]="zona.noCropGallery"
+                    />
+                  </figure>
+                </div>
+
+                <div class="detail-list" *ngIf="hasDetails(zona)">
+                  <p *ngIf="zona.acceso" class="info-line">
+                    <mat-icon>badge</mat-icon>
+                    <span><strong>Acceso</strong>{{ zona.acceso }}</span>
+                  </p>
+                  <p *ngIf="zona.fecha" class="info-line">
+                    <mat-icon>event</mat-icon>
+                    <span><strong>Fecha</strong>{{ zona.fecha }}</span>
+                  </p>
+                  <p *ngIf="zona.horario" class="info-line">
+                    <mat-icon>schedule</mat-icon>
+                    <span><strong>Horario</strong>{{ zona.horario }}</span>
+                  </p>
+                  <p *ngIf="zona.precio" class="info-line">
+                    <mat-icon>payments</mat-icon>
+                    <span><strong>Precio</strong>{{ zona.precio }}</span>
+                  </p>
+                  <p *ngIf="zona.precioOrientativo" class="info-line">
+                    <mat-icon>payments</mat-icon>
+                    <span><strong>Precio</strong>{{ zona.precioOrientativo }}</span>
+                  </p>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+
+          <div *ngIf="section.lugares?.length || section.platos?.length" class="card-grid">
+            <article class="item-card" *ngFor="let item of section.lugares || section.platos">
+              <figure class="image-frame item-image" *ngIf="item.foto">
                 <img
-                  [src]="foto | imgUrl: 1200"
-                  [alt]="zona.nombre"
+                  [src]="item.foto | imgUrl: 1200"
+                  [alt]="item.nombre"
                   loading="lazy"
-                  [class.no-crop]="zona.noCropGallery"
+                  [class.no-crop]="item.noCropGallery"
                 />
               </figure>
-            </div>
 
-            <div class="detail-list" *ngIf="hasDetails(zona)">
-              <p *ngIf="zona.acceso" class="info-line">
-                <mat-icon>badge</mat-icon>
-                <span><strong>Acceso</strong>{{ zona.acceso }}</span>
-              </p>
-              <p *ngIf="zona.fecha" class="info-line">
-                <mat-icon>event</mat-icon>
-                <span><strong>Fecha</strong>{{ zona.fecha }}</span>
-              </p>
-              <p *ngIf="zona.horario" class="info-line">
-                <mat-icon>schedule</mat-icon>
-                <span><strong>Horario</strong>{{ zona.horario }}</span>
-              </p>
-              <p *ngIf="zona.precio" class="info-line">
-                <mat-icon>payments</mat-icon>
-                <span><strong>Precio</strong>{{ zona.precio }}</span>
-              </p>
-              <p *ngIf="zona.precioOrientativo" class="info-line">
-                <mat-icon>payments</mat-icon>
-                <span><strong>Precio</strong>{{ zona.precioOrientativo }}</span>
-              </p>
-            </div>
+              <div class="card-copy">
+                <h3>{{ item.nombre }}</h3>
+                <p>{{ item.descripcion }}</p>
+              </div>
+
+              <div class="photo-grid compact" *ngIf="item.fotos?.length">
+                <figure class="image-frame" *ngFor="let foto of item.fotos">
+                  <img
+                    [src]="foto | imgUrl: 1000"
+                    [alt]="item.nombre"
+                    loading="lazy"
+                    [class.no-crop]="item.noCropGallery"
+                  />
+                </figure>
+              </div>
+
+              <div class="detail-list" *ngIf="hasDetails(item)">
+                <p *ngIf="item.acceso" class="info-line">
+                  <mat-icon>badge</mat-icon>
+                  <span><strong>Acceso</strong>{{ item.acceso }}</span>
+                </p>
+                <p *ngIf="item.fecha" class="info-line">
+                  <mat-icon>event</mat-icon>
+                  <span><strong>Fecha</strong>{{ item.fecha }}</span>
+                </p>
+                <p *ngIf="item.horario" class="info-line">
+                  <mat-icon>schedule</mat-icon>
+                  <span><strong>Horario</strong>{{ item.horario }}</span>
+                </p>
+                <p *ngIf="item.precio" class="info-line">
+                  <mat-icon>payments</mat-icon>
+                  <span><strong>Precio</strong>{{ item.precio }}</span>
+                </p>
+                <p *ngIf="item.precioOrientativo" class="info-line">
+                  <mat-icon>payments</mat-icon>
+                  <span><strong>Precio</strong>{{ item.precioOrientativo }}</span>
+                </p>
+              </div>
+            </article>
           </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-
-      <div *ngIf="section.lugares?.length || section.platos?.length" class="card-grid">
-        <article class="item-card" *ngFor="let item of section.lugares || section.platos">
-          <figure class="image-frame item-image" *ngIf="item.foto">
-            <img
-              [src]="item.foto | imgUrl: 1200"
-              [alt]="item.nombre"
-              loading="lazy"
-              [class.no-crop]="item.noCropGallery"
-            />
-          </figure>
-
-          <div class="card-copy">
-            <h3>{{ item.nombre }}</h3>
-            <p>{{ item.descripcion }}</p>
-          </div>
-
-          <div class="photo-grid compact" *ngIf="item.fotos?.length">
-            <figure class="image-frame" *ngFor="let foto of item.fotos">
-              <img
-                [src]="foto | imgUrl: 1000"
-                [alt]="item.nombre"
-                loading="lazy"
-                [class.no-crop]="item.noCropGallery"
-              />
-            </figure>
-          </div>
-
-          <div class="detail-list" *ngIf="hasDetails(item)">
-            <p *ngIf="item.acceso" class="info-line">
-              <mat-icon>badge</mat-icon>
-              <span><strong>Acceso</strong>{{ item.acceso }}</span>
-            </p>
-            <p *ngIf="item.fecha" class="info-line">
-              <mat-icon>event</mat-icon>
-              <span><strong>Fecha</strong>{{ item.fecha }}</span>
-            </p>
-            <p *ngIf="item.horario" class="info-line">
-              <mat-icon>schedule</mat-icon>
-              <span><strong>Horario</strong>{{ item.horario }}</span>
-            </p>
-            <p *ngIf="item.precio" class="info-line">
-              <mat-icon>payments</mat-icon>
-              <span><strong>Precio</strong>{{ item.precio }}</span>
-            </p>
-            <p *ngIf="item.precioOrientativo" class="info-line">
-              <mat-icon>payments</mat-icon>
-              <span><strong>Precio</strong>{{ item.precioOrientativo }}</span>
-            </p>
-          </div>
-        </article>
+        </section>
       </div>
-    </section>
+    </ng-container>
   </main>
 
   <button class="scroll-top" *ngIf="showScrollTop" (click)="scrollToTop()" aria-label="Subir arriba">

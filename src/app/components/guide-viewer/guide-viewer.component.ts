@@ -29,6 +29,8 @@ export class GuideViewerComponent {
   pageStyle: Record<string, string> = {};
   requestedGuidePath: string | null = null;
   showScrollTop = false;
+  activeTabId = '';
+  tabs: { id: string; label: string; icon: string; sections: any[] }[] = [];
 
   private guides: Record<string, any> = {
     'europa/espana/andalucia/cadiz/san-fernando': SAN_FERNANDO_GUIDE,
@@ -63,6 +65,103 @@ export class GuideViewerComponent {
     return Boolean(item.acceso || item.fecha || item.horario || item.precio || item.precioOrientativo);
   }
 
+  buildGuideTabs(): { id: string; label: string; icon: string; sections: any[] }[] {
+    if (!this.guide?.secciones?.length) return [];
+
+    const isSpainGuide = this.guide.path?.includes('/espana/');
+    const tabDefinitions = [
+      {
+        id: 'historia',
+        label: 'Historia',
+        icon: 'history_edu',
+        match: (title: string) => title.includes('historia')
+      },
+      {
+        id: 'geografia-clima',
+        label: 'Geografía y clima',
+        icon: 'terrain',
+        match: (title: string) => title.includes('geografia') || title.includes('clima')
+      },
+      {
+        id: 'que-ver',
+        label: 'Qué ver',
+        icon: 'explore',
+        match: (title: string) =>
+          title.includes('visitar') ||
+          title.includes('ruta') ||
+          title.includes('itinerario') ||
+          title.includes('consejo de ruta')
+      },
+      {
+        id: 'gastronomia',
+        label: 'Gastronomía',
+        icon: 'restaurant_menu',
+        match: (title: string) => title.includes('gastronomia')
+      },
+      {
+        id: 'donde-comer',
+        label: 'Dónde comer',
+        icon: 'restaurant',
+        match: (title: string) => title.includes('donde comer')
+      },
+      {
+        id: 'cultura',
+        label: 'Cultura y vida local',
+        icon: 'groups',
+        match: (title: string) =>
+          title.includes('cultura') || title.includes('vida local') || title.includes('tradiciones')
+      },
+      {
+        id: 'fiestas',
+        label: 'Fiestas y festivos',
+        icon: 'celebration',
+        match: (title: string) =>
+          isSpainGuide && (title.includes('fiesta') || title.includes('festivo'))
+      },
+      {
+        id: 'consejos',
+        label: 'Consejos prácticos',
+        icon: 'tips_and_updates',
+        match: (title: string) =>
+          !isSpainGuide && (title.includes('consejo') || title.includes('practico'))
+      }
+    ];
+
+    const assignedSections = new Set<any>();
+    const tabs = tabDefinitions
+      .map(tab => {
+        const sections = this.guide.secciones.filter((section: any) => {
+          const normalizedTitle = this.normalizeTitle(section.titulo);
+          const matches = tab.match(normalizedTitle);
+          if (matches) assignedSections.add(section);
+          return matches;
+        });
+
+        return { id: tab.id, label: tab.label, icon: tab.icon, sections };
+      })
+      .filter(tab => tab.sections.length);
+
+    const uncategorizedSections = this.guide.secciones.filter((section: any) => !assignedSections.has(section));
+    if (uncategorizedSections.length) {
+      tabs.push({
+        id: 'mas-info',
+        label: 'Más info',
+        icon: 'travel_explore',
+        sections: uncategorizedSections
+      });
+    }
+
+    if (!tabs.some(tab => tab.id === this.activeTabId)) {
+      this.activeTabId = tabs[0]?.id ?? '';
+    }
+
+    return tabs;
+  }
+
+  setActiveTab(tabId: string) {
+    this.activeTabId = tabId;
+  }
+
   guideLocationLabel(): string {
     if (!this.guide?.path) return 'Guía AvenTourArte';
 
@@ -74,10 +173,7 @@ export class GuideViewerComponent {
   }
 
   sectionIcon(title: string): string {
-    const normalizedTitle = title
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase();
+    const normalizedTitle = this.normalizeTitle(title);
 
     if (normalizedTitle.includes('historia')) return 'history_edu';
     if (normalizedTitle.includes('geografia') || normalizedTitle.includes('clima')) return 'terrain';
@@ -88,6 +184,14 @@ export class GuideViewerComponent {
     if (normalizedTitle.includes('consejo')) return 'route';
 
     return 'travel_explore';
+  }
+
+  trackByTabId(_: number, tab: { id: string }): string {
+    return tab.id;
+  }
+
+  trackBySectionTitle(_: number, section: any): string {
+    return section.titulo;
   }
 
   private formatLocationSegment(segment: string): string {
@@ -116,13 +220,24 @@ export class GuideViewerComponent {
     if (placePath && this.guides[placePath]) {
       this.guide = this.guides[placePath];
       this.requestedGuidePath = null;
+      this.activeTabId = '';
       this.applyGuideStyle(this.guide);
+      this.tabs = this.buildGuideTabs();
       return;
     }
 
     this.guide = null;
     this.requestedGuidePath = placePath || null;
     this.pageStyle = {};
+    this.activeTabId = '';
+    this.tabs = [];
+  }
+
+  private normalizeTitle(title: string): string {
+    return (title || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
   }
 
   private applyGuideStyle(guide: any) {
