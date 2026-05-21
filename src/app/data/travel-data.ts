@@ -24,7 +24,6 @@ export const TRAVEL_TREE: TravelNode[] = [
           { nombre: 'Idstein', path: 'europa/alemania/idstein' },
           { nombre: 'Münster', path: 'europa/alemania/munster' },
           { nombre: 'Tréveris/Trier', path: 'europa/alemania/treveris' },
-
         ]
       },
       {
@@ -265,19 +264,11 @@ export const TRAVEL_TREE: TravelNode[] = [
         nombre: 'República Checa',
         flag: 'https://flagcdn.com/cz.svg',
         hijos: [
-          { nombre: 'Praga', path: 'europa/andorra/praga' },
-        ]
-      },
-      {
-        nombre: 'Turquía',
-        flag: 'https://flagcdn.com/tr.svg',
-        hijos: [
-          { nombre: 'Estambul', path: 'europa/turquia/estambul' },
+          { nombre: 'Praga', path: 'europa/republica-checa/praga' },
         ]
       },
     ]
   },
-
   {
     nombre: 'África',
     hijos: [
@@ -293,7 +284,6 @@ export const TRAVEL_TREE: TravelNode[] = [
       }
     ]
   },
-  
   {
     nombre: 'América',
     hijos: [
@@ -320,7 +310,6 @@ export const TRAVEL_TREE: TravelNode[] = [
             ]
           },
         ],
-        
       },
       {
         nombre: 'Centroamérica',
@@ -343,10 +332,17 @@ export const TRAVEL_TREE: TravelNode[] = [
       },
     ]
   },
-
   {
     nombre: 'Asia',
-  
+    hijos: [
+      {
+        nombre: 'Turquía',
+        flag: 'https://flagcdn.com/tr.svg',
+        hijos: [
+          { nombre: 'Estambul', path: 'europa/turquia/estambul' },
+        ]
+      },
+    ],
   }, 
   {
     nombre: 'Oceanía',
