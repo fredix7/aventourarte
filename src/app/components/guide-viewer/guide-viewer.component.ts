@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnDestroy } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -24,13 +24,24 @@ import { NEW_YORK_GUIDE } from '../../guides/america/norteamerica/usa/new-york.g
   templateUrl: './guide-viewer.component.html',
   styleUrls: ['./guide-viewer.component.scss']
 })
-export class GuideViewerComponent {
+export class GuideViewerComponent implements OnDestroy {
   guide: any = null;
   pageStyle: Record<string, string> = {};
   requestedGuidePath: string | null = null;
   showScrollTop = false;
   activeTabId = '';
   tabs: { id: string; label: string; icon: string; sections: any[] }[] = [];
+  expandedPhoto: { src: string; alt: string; gallery: string[]; index: number } | null = null;
+  zoomLevel = 1;
+  panX = 0;
+  panY = 0;
+  isPanning = false;
+
+  private activePointers = new Map<number, { x: number; y: number }>();
+  private dragStart: { x: number; y: number; panX: number; panY: number } | null = null;
+  private pinchStartDistance = 0;
+  private pinchStartZoom = 1;
+  private pointerMoved = false;
 
   private guides: Record<string, any> = {
     'europa/espana/andalucia/cadiz/san-fernando': SAN_FERNANDO_GUIDE,
@@ -52,9 +63,22 @@ export class GuideViewerComponent {
       .subscribe(() => this.loadGuideFromUrl());
   }
 
+  ngOnDestroy() {
+    document.body.style.overflow = '';
+  }
+
   @HostListener('window:scroll')
   onScroll() {
     this.showScrollTop = (window.scrollY || 0) > 350;
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handlePhotoKeys(event: KeyboardEvent) {
+    if (!this.expandedPhoto) return;
+
+    if (event.key === 'Escape') this.closePhoto();
+    if (event.key === 'ArrowLeft') this.previousPhoto();
+    if (event.key === 'ArrowRight') this.nextPhoto();
   }
 
   scrollToTop() {
@@ -162,6 +186,127 @@ export class GuideViewerComponent {
     this.activeTabId = tabId;
   }
 
+  openPhoto(src: string, alt: string, gallery: string[] = [src]) {
+    const cleanGallery = this.uniquePhotos(gallery.length ? gallery : [src]);
+    const index = Math.max(cleanGallery.indexOf(src), 0);
+
+    this.expandedPhoto = { src, alt, gallery: cleanGallery, index };
+    this.resetPhotoTransform();
+    document.body.style.overflow = 'hidden';
+  }
+
+  closePhoto() {
+    this.expandedPhoto = null;
+    this.resetPhotoTransform();
+    document.body.style.overflow = '';
+  }
+
+  closePhotoFromBackdrop(event: Event) {
+    if (event.target === event.currentTarget && !this.pointerMoved) {
+      this.closePhoto();
+    }
+  }
+
+  nextPhoto() {
+    if (!this.expandedPhoto || this.expandedPhoto.gallery.length < 2) return;
+    this.showGalleryPhoto(this.expandedPhoto.index + 1);
+  }
+
+  previousPhoto() {
+    if (!this.expandedPhoto || this.expandedPhoto.gallery.length < 2) return;
+    this.showGalleryPhoto(this.expandedPhoto.index - 1);
+  }
+
+  zoomIn() {
+    this.setZoom(this.zoomLevel + 0.25);
+  }
+
+  zoomOut() {
+    this.setZoom(this.zoomLevel - 0.25);
+  }
+
+  resetZoom() {
+    this.resetPhotoTransform();
+  }
+
+  zoomPhotoWheel(event: WheelEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.setZoom(this.zoomLevel + (event.deltaY < 0 ? 0.18 : -0.18));
+  }
+
+  startLightboxPointer(event: PointerEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    (event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId);
+    this.pointerMoved = false;
+
+    if (this.activePointers.size === 1) {
+      this.isPanning = this.zoomLevel > 1;
+      this.dragStart = { x: event.clientX, y: event.clientY, panX: this.panX, panY: this.panY };
+    }
+
+    if (this.activePointers.size === 2) {
+      this.isPanning = false;
+      this.dragStart = null;
+      this.pinchStartDistance = this.pointerDistance();
+      this.pinchStartZoom = this.zoomLevel;
+    }
+  }
+
+  moveLightboxPointer(event: PointerEvent) {
+    if (!this.activePointers.has(event.pointerId)) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    this.activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+    if (this.activePointers.size === 2 && this.pinchStartDistance > 0) {
+      this.pointerMoved = true;
+      this.setZoom(this.pinchStartZoom * (this.pointerDistance() / this.pinchStartDistance));
+      return;
+    }
+
+    if (!this.dragStart || this.zoomLevel <= 1) return;
+
+    this.isPanning = true;
+    this.pointerMoved = true;
+    this.panX = this.dragStart.panX + event.clientX - this.dragStart.x;
+    this.panY = this.dragStart.panY + event.clientY - this.dragStart.y;
+  }
+
+  endLightboxPointer(event: PointerEvent) {
+    event.stopPropagation();
+    this.activePointers.delete(event.pointerId);
+    this.isPanning = false;
+    this.pinchStartDistance = 0;
+
+    const remainingPointer = [...this.activePointers.values()][0];
+    this.dragStart = remainingPointer
+      ? { x: remainingPointer.x, y: remainingPointer.y, panX: this.panX, panY: this.panY }
+      : null;
+
+    window.setTimeout(() => {
+      this.pointerMoved = false;
+    });
+  }
+
+  galleryFor(primary?: string, photos?: string[]): string[] {
+    return this.uniquePhotos([primary, ...(photos ?? [])].filter(Boolean) as string[]);
+  }
+
+  photoFrameBg(src: string): string {
+    return `url(${this.img.url(src, { w: 900, crop: 'fill' })})`;
+  }
+
+  lightboxImageStyle(): Record<string, string> {
+    return {
+      transform: `translate(${this.panX}px, ${this.panY}px) scale(${this.zoomLevel})`
+    };
+  }
+
   guideLocationLabel(): string {
     if (!this.guide?.path) return 'Guía AvenTourArte';
 
@@ -218,6 +363,7 @@ export class GuideViewerComponent {
     const placePath = routePath ?? decodeURIComponent(cleanUrl.replace(/^\/guia\/?/, '')).replace(/^\/+/, '');
 
     if (placePath && this.guides[placePath]) {
+      this.closePhoto();
       this.guide = this.guides[placePath];
       this.requestedGuidePath = null;
       this.activeTabId = '';
@@ -227,6 +373,7 @@ export class GuideViewerComponent {
     }
 
     this.guide = null;
+    this.closePhoto();
     this.requestedGuidePath = placePath || null;
     this.pageStyle = {};
     this.activeTabId = '';
@@ -238,6 +385,50 @@ export class GuideViewerComponent {
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .toLowerCase();
+  }
+
+  private showGalleryPhoto(index: number) {
+    if (!this.expandedPhoto) return;
+
+    const gallery = this.expandedPhoto.gallery;
+    const nextIndex = (index + gallery.length) % gallery.length;
+    this.expandedPhoto = {
+      ...this.expandedPhoto,
+      src: gallery[nextIndex],
+      index: nextIndex
+    };
+    this.resetPhotoTransform();
+  }
+
+  private uniquePhotos(photos: string[]): string[] {
+    return [...new Set(photos.filter(Boolean))];
+  }
+
+  private setZoom(value: number) {
+    this.zoomLevel = Math.min(Math.max(value, 0.5), 4);
+
+    if (this.zoomLevel <= 1) {
+      this.panX = 0;
+      this.panY = 0;
+    }
+  }
+
+  private resetPhotoTransform() {
+    this.zoomLevel = 1;
+    this.panX = 0;
+    this.panY = 0;
+    this.isPanning = false;
+    this.pointerMoved = false;
+    this.activePointers.clear();
+    this.dragStart = null;
+    this.pinchStartDistance = 0;
+  }
+
+  private pointerDistance(): number {
+    const pointers = [...this.activePointers.values()];
+    if (pointers.length < 2) return 0;
+
+    return Math.hypot(pointers[0].x - pointers[1].x, pointers[0].y - pointers[1].y);
   }
 
   private applyGuideStyle(guide: any) {

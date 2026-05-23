@@ -7,18 +7,20 @@
     </div>
 
     <div class="hero-media" *ngIf="guide.flag || guide.flag2">
-      <img
-        *ngIf="guide.flag"
-        [src]="guide.flag | imgUrl: 900"
-        [alt]="guide.nombre + ' flag'"
-        class="city-flag"
-      />
-      <img
-        *ngIf="guide.flag2"
-        [src]="guide.flag2 | imgUrl: 900"
-        [alt]="guide.nombre + ' second flag'"
-        class="city-flag"
-      />
+      <figure class="flag-frame" *ngIf="guide.flag" [style.--frame-bg]="photoFrameBg(guide.flag)">
+        <img
+          [src]="guide.flag | imgUrl: 900"
+          [alt]="guide.nombre + ' flag'"
+          class="city-flag"
+        />
+      </figure>
+      <figure class="flag-frame" *ngIf="guide.flag2" [style.--frame-bg]="photoFrameBg(guide.flag2)">
+        <img
+          [src]="guide.flag2 | imgUrl: 900"
+          [alt]="guide.nombre + ' second flag'"
+          class="city-flag"
+        />
+      </figure>
     </div>
   </header>
 
@@ -73,7 +75,17 @@
                   <p>{{ zona.descripcion }}</p>
                 </div>
 
-                <figure class="image-frame zone-image" *ngIf="zona.foto">
+                <figure
+                  class="image-frame zone-image zoomable-image"
+                  *ngIf="zona.foto"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Ampliar imagen"
+                  [style.--frame-bg]="photoFrameBg(zona.foto)"
+                  (click)="openPhoto(zona.foto, zona.nombre, galleryFor(zona.foto, zona.fotos))"
+                  (keydown.enter)="openPhoto(zona.foto, zona.nombre, galleryFor(zona.foto, zona.fotos))"
+                  (keydown.space)="openPhoto(zona.foto, zona.nombre, galleryFor(zona.foto, zona.fotos)); $event.preventDefault()"
+                >
                   <img
                     [src]="zona.foto | imgUrl: 1400"
                     [alt]="zona.nombre"
@@ -83,7 +95,17 @@
                 </figure>
 
                 <div class="photo-grid" *ngIf="zona.fotos?.length">
-                  <figure class="image-frame" *ngFor="let foto of zona.fotos">
+                  <figure
+                    class="image-frame zoomable-image"
+                    *ngFor="let foto of zona.fotos"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Ampliar imagen"
+                    [style.--frame-bg]="photoFrameBg(foto)"
+                    (click)="openPhoto(foto, zona.nombre, galleryFor(zona.foto, zona.fotos))"
+                    (keydown.enter)="openPhoto(foto, zona.nombre, galleryFor(zona.foto, zona.fotos))"
+                    (keydown.space)="openPhoto(foto, zona.nombre, galleryFor(zona.foto, zona.fotos)); $event.preventDefault()"
+                  >
                     <img
                       [src]="foto | imgUrl: 1200"
                       [alt]="zona.nombre"
@@ -121,7 +143,17 @@
 
           <div *ngIf="section.lugares?.length || section.platos?.length" class="card-grid">
             <article class="item-card" *ngFor="let item of section.lugares || section.platos">
-              <figure class="image-frame item-image" *ngIf="item.foto">
+              <figure
+                class="image-frame item-image zoomable-image"
+                *ngIf="item.foto"
+                role="button"
+                tabindex="0"
+                aria-label="Ampliar imagen"
+                [style.--frame-bg]="photoFrameBg(item.foto)"
+                (click)="openPhoto(item.foto, item.nombre, galleryFor(item.foto, item.fotos))"
+                (keydown.enter)="openPhoto(item.foto, item.nombre, galleryFor(item.foto, item.fotos))"
+                (keydown.space)="openPhoto(item.foto, item.nombre, galleryFor(item.foto, item.fotos)); $event.preventDefault()"
+              >
                 <img
                   [src]="item.foto | imgUrl: 1200"
                   [alt]="item.nombre"
@@ -136,7 +168,17 @@
               </div>
 
               <div class="photo-grid compact" *ngIf="item.fotos?.length">
-                <figure class="image-frame" *ngFor="let foto of item.fotos">
+                <figure
+                  class="image-frame zoomable-image"
+                  *ngFor="let foto of item.fotos"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Ampliar imagen"
+                  [style.--frame-bg]="photoFrameBg(foto)"
+                  (click)="openPhoto(foto, item.nombre, galleryFor(item.foto, item.fotos))"
+                  (keydown.enter)="openPhoto(foto, item.nombre, galleryFor(item.foto, item.fotos))"
+                  (keydown.space)="openPhoto(foto, item.nombre, galleryFor(item.foto, item.fotos)); $event.preventDefault()"
+                >
                   <img
                     [src]="foto | imgUrl: 1000"
                     [alt]="item.nombre"
@@ -178,6 +220,76 @@
   <button class="scroll-top" *ngIf="showScrollTop" (click)="scrollToTop()" aria-label="Subir arriba">
     <mat-icon class="scroll-top-icon">flight</mat-icon>
   </button>
+
+  <div
+    *ngIf="expandedPhoto"
+    class="photo-lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Imagen ampliada"
+    (click)="closePhotoFromBackdrop($event)"
+  >
+    <button type="button" class="lightbox-close" aria-label="Cerrar imagen" (click)="closePhoto()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <div class="lightbox-toolbar" (click)="$event.stopPropagation()">
+      <button type="button" aria-label="Alejar imagen" (click)="zoomOut()" [disabled]="zoomLevel <= 0.5">
+        <mat-icon>zoom_out</mat-icon>
+      </button>
+      <button type="button" aria-label="Restablecer zoom" (click)="resetZoom()">
+        <span>{{ zoomLevel | percent:'1.0-0' }}</span>
+      </button>
+      <button type="button" aria-label="Ampliar imagen" (click)="zoomIn()" [disabled]="zoomLevel >= 4">
+        <mat-icon>zoom_in</mat-icon>
+      </button>
+    </div>
+
+    <button
+      *ngIf="expandedPhoto.gallery.length > 1"
+      type="button"
+      class="lightbox-nav previous"
+      aria-label="Foto anterior"
+      (click)="previousPhoto(); $event.stopPropagation()"
+    >
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <div
+      class="lightbox-stage"
+      [class.pannable]="zoomLevel > 1"
+      [class.panning]="isPanning"
+      (click)="closePhotoFromBackdrop($event)"
+      (wheel)="zoomPhotoWheel($event)"
+      (pointerdown)="startLightboxPointer($event)"
+      (pointermove)="moveLightboxPointer($event)"
+      (pointerup)="endLightboxPointer($event)"
+      (pointercancel)="endLightboxPointer($event)"
+      (pointerleave)="endLightboxPointer($event)"
+    >
+      <img
+        class="lightbox-image"
+        [src]="expandedPhoto.src | imgUrl: 2200"
+        [alt]="expandedPhoto.alt"
+        [ngStyle]="lightboxImageStyle()"
+        draggable="false"
+      />
+    </div>
+
+    <button
+      *ngIf="expandedPhoto.gallery.length > 1"
+      type="button"
+      class="lightbox-nav next"
+      aria-label="Foto siguiente"
+      (click)="nextPhoto(); $event.stopPropagation()"
+    >
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+
+    <span *ngIf="expandedPhoto.gallery.length > 1" class="lightbox-count">
+      {{ expandedPhoto.index + 1 }} / {{ expandedPhoto.gallery.length }}
+    </span>
+  </div>
 </article>
 
 <ng-template #emptyState>

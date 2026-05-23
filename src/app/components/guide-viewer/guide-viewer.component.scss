@@ -104,14 +104,38 @@
   justify-items: end;
 }
 
-.city-flag {
+.flag-frame {
+  position: relative;
+  display: grid;
+  place-items: center;
   width: min(100%, 320px);
-  max-height: 190px;
-  object-fit: contain;
+  height: 190px;
+  margin: 0;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 6px;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.12);
   box-shadow: 0 12px 34px rgba(12, 23, 32, 0.2);
+}
+
+.flag-frame::before {
+  content: "";
+  position: absolute;
+  inset: -18px;
+  background:
+    linear-gradient(135deg, rgba(18, 58, 90, 0.2), rgba(255, 250, 242, 0.16)),
+    var(--frame-bg, none) center / cover;
+  filter: blur(14px);
+  opacity: 0.64;
+  transform: scale(1.06);
+}
+
+.city-flag {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-height: 190px;
+  object-fit: contain;
 }
 
 .guide-content {
@@ -294,24 +318,51 @@ app-info-general {
 }
 
 .image-frame {
+  position: relative;
   display: grid;
   place-items: center;
   margin: 0;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  background:
-    linear-gradient(135deg, rgba(18, 58, 90, 0.08), rgba(201, 133, 77, 0.08)),
-    rgba(247, 245, 240, 0.72);
+  background: rgba(247, 245, 240, 0.72);
   overflow: hidden;
 }
 
+.image-frame::before {
+  content: "";
+  position: absolute;
+  inset: -18px;
+  background:
+    linear-gradient(135deg, rgba(18, 58, 90, 0.24), rgba(201, 133, 77, 0.2)),
+    var(--frame-bg, none) center / cover;
+  filter: blur(16px);
+  opacity: 0.54;
+  transform: scale(1.05);
+}
+
 .image-frame img {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: 100%;
   min-width: 0;
   min-height: 0;
   object-fit: contain;
+  transition: transform 0.25s ease;
+}
+
+.zoomable-image {
+  cursor: zoom-in;
+}
+
+.zoomable-image:hover img,
+.zoomable-image:focus-visible img {
+  transform: scale(1.045);
+}
+
+.zoomable-image:focus-visible {
+  outline: 3px solid rgba(47, 155, 193, 0.75);
 }
 
 .item-image {
@@ -424,6 +475,130 @@ app-info-general {
   transform: rotate(-18deg) translateY(-1px);
 }
 
+.photo-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: clamp(18px, 4vw, 48px);
+  background: rgba(8, 14, 20, 0.82);
+  cursor: zoom-out;
+}
+
+.lightbox-stage {
+  display: grid;
+  place-items: center;
+  width: min(100%, 1280px);
+  height: min(86vh, 920px);
+  overflow: hidden;
+  overscroll-behavior: contain;
+  touch-action: none;
+  user-select: none;
+}
+
+.lightbox-stage.pannable {
+  cursor: grab;
+}
+
+.lightbox-stage.panning {
+  cursor: grabbing;
+}
+
+.lightbox-image {
+  display: block;
+  max-width: 100%;
+  max-height: 86vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.48);
+  cursor: default;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.lightbox-close,
+.lightbox-nav,
+.lightbox-toolbar button {
+  position: fixed;
+  z-index: 1001;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.46);
+  border-radius: 999px;
+  color: #fffaf2;
+  background: rgba(18, 33, 42, 0.72);
+  cursor: pointer;
+}
+
+.lightbox-close {
+  top: max(18px, env(safe-area-inset-top));
+  right: max(18px, env(safe-area-inset-right));
+}
+
+.lightbox-close:hover,
+.lightbox-close:focus-visible,
+.lightbox-nav:hover,
+.lightbox-nav:focus-visible,
+.lightbox-toolbar button:hover,
+.lightbox-toolbar button:focus-visible {
+  background: rgba(18, 58, 90, 0.92);
+}
+
+.lightbox-toolbar {
+  position: fixed;
+  top: max(18px, env(safe-area-inset-top));
+  left: 50%;
+  z-index: 1001;
+  display: flex;
+  gap: 8px;
+  transform: translateX(-50%);
+}
+
+.lightbox-toolbar button {
+  position: static;
+  font: inherit;
+}
+
+.lightbox-toolbar button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.lightbox-toolbar span {
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.lightbox-nav {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lightbox-nav.previous {
+  left: max(18px, env(safe-area-inset-left));
+}
+
+.lightbox-nav.next {
+  right: max(18px, env(safe-area-inset-right));
+}
+
+.lightbox-count {
+  position: fixed;
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 1001;
+  padding: 7px 12px;
+  border-radius: 999px;
+  color: #fffaf2;
+  background: rgba(18, 33, 42, 0.72);
+  font-size: 0.86rem;
+  font-weight: 850;
+  transform: translateX(-50%);
+}
+
 @keyframes floatTravel {
   0% { transform: translateY(0); }
   50% { transform: translateY(-4px); }
@@ -497,7 +672,12 @@ app-info-general {
   }
 
   .city-flag {
+    max-height: 160px;
+  }
+
+  .flag-frame {
     width: min(260px, 100%);
+    height: 160px;
   }
 
   .guide-content,
