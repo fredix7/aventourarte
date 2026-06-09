@@ -26,6 +26,13 @@ export class HeaderSubmenuComponent {
     return n.path ?? n.nombre;
   }
 
+  nodeIcon(n: TravelNode): string | null {
+    if (n.isCapital) return 'star';
+    if (n.isImportantCity) return 'location_city';
+
+    return null;
+  }
+
   toggleChild(childKey: string) {
     this.openChildKey = (this.openChildKey === childKey) ? null : childKey;
   }

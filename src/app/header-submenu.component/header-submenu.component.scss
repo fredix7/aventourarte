@@ -50,6 +50,19 @@
   border-radius: 2px;
 }
 
+.menu-node-icon {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  color: #f4c95d;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.menu-node-icon.important-city-icon {
+  color: #80d4ff;
+}
+
 .caret {
   margin-left: auto;
 }

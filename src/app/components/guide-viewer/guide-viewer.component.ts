@@ -12,6 +12,7 @@ import { SAN_FERNANDO_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/s
 import { JEREZ_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/jerez.guide';
 import { TREBUJENA_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/trebujena.guide';
 import { MAIRENA_ALJARAFE_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/mairena-aljarafe.guide';
+import { LA_VALETA_GUIDE } from '../../guides/europa/malta/la-valeta.guide';
 import { ROMA_VATICANO_GUIDE } from '../../guides/europa/italia/roma-vaticano.guide';
 import { BUCAREST_GUIDE } from '../../guides/europa/rumania/bucarest.guide';
 import { RIO_DE_JANEIRO_GUIDE } from '../../guides/america/sudamerica/brasil/rio-janeiro.guide';
@@ -49,6 +50,7 @@ export class GuideViewerComponent implements OnDestroy {
     'europa/espana/andalucia/cadiz/trebujena': TREBUJENA_GUIDE,
     'europa/espana/andalucia/sevilla/mairena-del-aljarafe': MAIRENA_ALJARAFE_GUIDE,
     'europa/italia/roma-vaticano': ROMA_VATICANO_GUIDE,
+    'europa/malta/la-valeta': LA_VALETA_GUIDE,
     'europa/rumania/bucarest': BUCAREST_GUIDE,
     'america/norteamerica/estados-unidos/nueva-york': NEW_YORK_GUIDE,
     'america/sudamerica/brasil/rio-de-janeiro': RIO_DE_JANEIRO_GUIDE

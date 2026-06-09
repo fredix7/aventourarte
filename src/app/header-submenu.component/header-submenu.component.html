@@ -10,6 +10,12 @@
       <img [src]="node.flag" [alt]="node.nombre + ' flag'" class="flag-icon" />
     </span>
 
+    <span
+      *ngIf="nodeIcon(node) as icon"
+      class="material-icons menu-node-icon"
+      [class.important-city-icon]="node.isImportantCity"
+      aria-hidden="true"
+    >{{ icon }}</span>
     <span class="label">{{ node.nombre }}</span>
     <span class="caret" aria-hidden="true">›</span>
   </button>
@@ -25,6 +31,12 @@
         <img [src]="node.flag" [alt]="node.nombre + ' flag'" class="flag-icon" />
       </span>
 
+      <span
+        *ngIf="nodeIcon(node) as icon"
+        class="material-icons menu-node-icon"
+        [class.important-city-icon]="node.isImportantCity"
+        aria-hidden="true"
+      >{{ icon }}</span>
       <span class="label">{{ node.nombre }}</span>
     </a>
   </ng-template>
