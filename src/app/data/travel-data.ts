@@ -56,10 +56,11 @@ export const TRAVEL_TREE: TravelNode[] = [
                   { nombre: 'Grazalema', path: 'europa/espana/andalucia/cadiz/grazalema' },
                   { nombre: 'Rota', path: 'europa/espana/andalucia/cadiz/rota' },
                   { nombre: 'Jerez de la Frontera', path: 'europa/espana/andalucia/cadiz/jerez-de-la-frontera', isImportantCity: true },
-                  { nombre: 'San Fernando', path: 'europa/espana/andalucia/cadiz/san-fernando', isImportantCity: true },
+                  { nombre: 'San Fernando', path: 'europa/espana/andalucia/cadiz/san-fernando' },
                   { nombre: 'Sanlúcar de Barrameda', path: 'europa/espana/andalucia/cadiz/sanlucar-de-barrameda' },
                   { nombre: 'Setenil de las Bodegas', path: 'europa/espana/andalucia/cadiz/setenil-de-las-bodegas' },
-                  { nombre: 'Trebujena', path: 'europa/espana/andalucia/cadiz/trebujena' }
+                  { nombre: 'Trebujena', path: 'europa/espana/andalucia/cadiz/trebujena' },
+                  { nombre: 'Vejer de la Frontera', path: 'europa/espana/andalucia/cadiz/vejer-de-la-frontera' },
                 ]
               },
               {
