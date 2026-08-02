@@ -8,6 +8,7 @@ import { InfoGeneralComponent } from '../../info-general.component/info-general.
 import { ImageService } from '../../shared/image.service';
 import { ImgUrlPipe } from '../../shared/img-url.pipe';
 
+import { CADIZ_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/cadiz.guide';
 import { JEREZ_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/jerez.guide';
 import { ROTA_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/rota.guide';
 import { SAN_FERNANDO_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/san-fernando.guide';
@@ -49,6 +50,7 @@ export class GuideViewerComponent implements OnDestroy {
   private pointerMoved = false;
 
   private guides: Record<string, any> = {
+    'europa/espana/andalucia/cadiz/cadiz': CADIZ_GUIDE,
     'europa/espana/andalucia/cadiz/jerez-de-la-frontera': JEREZ_GUIDE,
     'europa/espana/andalucia/cadiz/rota': ROTA_GUIDE,
     'europa/espana/andalucia/cadiz/san-fernando': SAN_FERNANDO_GUIDE,
