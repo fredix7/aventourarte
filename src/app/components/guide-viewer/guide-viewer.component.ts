@@ -98,7 +98,41 @@ export class GuideViewerComponent implements OnDestroy {
   }
 
   hasDetails(item: any): boolean {
-    return Boolean(item.acceso || item.fecha || item.horario || item.precio || item.precioOrientativo);
+    return Boolean(
+      item.acceso ||
+      item.fecha ||
+      item.horario ||
+      item.direccion ||
+      item.telefono ||
+      item.precio ||
+      item.precioOrientativo
+    );
+  }
+
+  mapUrl(item: any): string {
+    if (item.mapaUrl) return item.mapaUrl;
+
+    const query = encodeURIComponent(
+      [item.nombre, item.direccion, this.guide?.nombre].filter(Boolean).join(', ')
+    );
+
+    if (typeof navigator !== 'undefined') {
+      const userAgent = navigator.userAgent || '';
+
+      if (/iPad|iPhone|iPod/.test(userAgent)) {
+        return `https://maps.apple.com/?q=${query}`;
+      }
+
+      if (/Android/i.test(userAgent)) {
+        return `geo:0,0?q=${query}`;
+      }
+    }
+
+    return `https://www.google.com/maps/search/?api=1&query=${query}`;
+  }
+
+  phoneUrl(phone: string): string {
+    return `tel:${phone.replace(/[^\d+]/g, '')}`;
   }
 
   buildGuideTabs(): { id: string; label: string; icon: string; sections: any[] }[] {

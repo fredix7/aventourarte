@@ -128,6 +128,25 @@
                     <mat-icon>schedule</mat-icon>
                     <span><strong>Horario</strong>{{ zona.horario }}</span>
                   </p>
+                  <p *ngIf="zona.direccion" class="info-line contact-line">
+                    <mat-icon>location_on</mat-icon>
+                    <span>
+                      <strong>Dirección</strong>
+                      <a [href]="mapUrl(zona)" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Abrir en el mapa la dirección ' + zona.direccion">
+                        {{ zona.direccion }}
+                        <mat-icon class="external-icon" aria-hidden="true">open_in_new</mat-icon>
+                      </a>
+                    </span>
+                  </p>
+                  <p *ngIf="zona.telefono" class="info-line contact-line">
+                    <mat-icon>phone</mat-icon>
+                    <span>
+                      <strong>Teléfono</strong>
+                      <a [href]="phoneUrl(zona.telefono)" [attr.aria-label]="'Llamar al ' + zona.telefono">
+                        {{ zona.telefono }}
+                      </a>
+                    </span>
+                  </p>
                   <p *ngIf="zona.precio" class="info-line">
                     <mat-icon>payments</mat-icon>
                     <span><strong>Precio</strong>{{ zona.precio }}</span>
@@ -200,6 +219,25 @@
                 <p *ngIf="item.horario" class="info-line">
                   <mat-icon>schedule</mat-icon>
                   <span><strong>Horario</strong>{{ item.horario }}</span>
+                </p>
+                <p *ngIf="item.direccion" class="info-line contact-line">
+                  <mat-icon>location_on</mat-icon>
+                  <span>
+                    <strong>Dirección</strong>
+                    <a [href]="mapUrl(item)" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Abrir en el mapa la dirección ' + item.direccion">
+                      {{ item.direccion }}
+                      <mat-icon class="external-icon" aria-hidden="true">open_in_new</mat-icon>
+                    </a>
+                  </span>
+                </p>
+                <p *ngIf="item.telefono" class="info-line contact-line">
+                  <mat-icon>phone</mat-icon>
+                  <span>
+                    <strong>Teléfono</strong>
+                    <a [href]="phoneUrl(item.telefono)" [attr.aria-label]="'Llamar al ' + item.telefono">
+                      {{ item.telefono }}
+                    </a>
+                  </span>
                 </p>
                 <p *ngIf="item.precio" class="info-line">
                   <mat-icon>payments</mat-icon>

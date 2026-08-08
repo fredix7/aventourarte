@@ -432,6 +432,38 @@ app-info-general {
   text-transform: uppercase;
 }
 
+.contact-line a {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  color: #176b62;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+
+.contact-line a:hover,
+.contact-line a:focus-visible {
+  color: #0d4e48;
+  text-decoration-thickness: 2px;
+}
+
+.contact-line a:focus-visible {
+  border-radius: 3px;
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.contact-line a .external-icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  color: currentColor;
+  font-size: 16px;
+}
+
 :host ::ng-deep .mat-expansion-panel {
   border: 1px solid var(--line);
   border-radius: 8px !important;
