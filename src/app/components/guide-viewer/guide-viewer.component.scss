@@ -87,7 +87,7 @@
 
 .hero-description,
 .section-content,
-.card-copy p {
+.card-copy > p {
   white-space: pre-line;
 }
 
@@ -266,6 +266,160 @@ app-info-general {
   line-height: 1.78;
 }
 
+.allergen-filter {
+  display: grid;
+  gap: 18px;
+  margin: 4px 0 26px;
+  padding: clamp(18px, 3vw, 26px);
+  border: 1px solid rgba(18, 58, 90, 0.2);
+  border-radius: 8px;
+  color: #172b3b;
+  background:
+    linear-gradient(135deg, rgba(238, 247, 248, 0.98), rgba(255, 248, 237, 0.98));
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.72);
+}
+
+.allergen-filter-heading {
+  display: flex;
+  gap: 20px;
+  align-items: start;
+  justify-content: space-between;
+}
+
+.allergen-filter-eyebrow,
+.dish-allergens-label {
+  display: block;
+  color: #557080;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.allergen-filter-heading h3 {
+  margin: 3px 0 5px;
+  font-size: clamp(1.25rem, 2.2vw, 1.65rem);
+  line-height: 1.18;
+}
+
+.allergen-filter-heading p {
+  max-width: 680px;
+  margin: 0;
+  color: #425764;
+  line-height: 1.55;
+}
+
+.clear-allergen-filter,
+.allergen-option {
+  min-height: 44px;
+  border: 1px solid rgba(18, 58, 90, 0.22);
+  border-radius: 999px;
+  color: #203b4d;
+  background: rgba(255, 255, 255, 0.76);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    color 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.clear-allergen-filter {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 6px;
+  align-items: center;
+  padding: 8px 14px;
+}
+
+.clear-allergen-filter mat-icon {
+  width: 19px;
+  height: 19px;
+  font-size: 19px;
+}
+
+.allergen-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.allergen-option {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 7px 13px 7px 7px;
+  text-align: left;
+}
+
+.allergen-option:hover,
+.clear-allergen-filter:hover {
+  border-color: rgba(18, 58, 90, 0.52);
+  transform: translateY(-1px);
+}
+
+.allergen-option.active {
+  color: #fff;
+  border-color: #123a5a;
+  background: linear-gradient(145deg, #123a5a, #226f8f);
+  box-shadow: 0 7px 18px rgba(18, 58, 90, 0.22);
+}
+
+.allergen-option:focus-visible,
+.clear-allergen-filter:focus-visible {
+  outline: 3px solid rgba(201, 133, 77, 0.72);
+  outline-offset: 3px;
+}
+
+.allergen-symbol {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 950;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.allergen-option.active .allergen-symbol {
+  color: #123a5a;
+  border-color: rgba(255, 255, 255, 0.84);
+  background: #fffaf2;
+}
+
+.allergen-filter-feedback {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px solid rgba(18, 58, 90, 0.14);
+  color: #50636e;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.compatible-count {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  color: #176b62;
+  font-weight: 900;
+}
+
+.compatible-count mat-icon {
+  width: 19px;
+  height: 19px;
+  font-size: 19px;
+}
+
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr));
@@ -286,6 +440,32 @@ app-info-general {
   display: grid;
   align-content: start;
   grid-template-rows: auto;
+  transition:
+    opacity 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    transform 0.22s ease;
+}
+
+.item-card.allergen-match {
+  border-color: rgba(23, 107, 98, 0.72);
+  box-shadow:
+    0 18px 38px rgba(23, 107, 98, 0.2),
+    0 0 0 3px rgba(23, 107, 98, 0.13);
+  transform: translateY(-3px);
+}
+
+.item-card.allergen-conflict,
+.item-card.allergen-unknown {
+  opacity: 0.78;
+  filter: saturate(0.8);
+}
+
+.item-card.allergen-conflict:hover,
+.item-card.allergen-conflict:focus-within,
+.item-card.allergen-unknown:hover,
+.item-card.allergen-unknown:focus-within {
+  opacity: 0.94;
 }
 
 .zone-card {
@@ -310,11 +490,122 @@ app-info-general {
   text-wrap: balance;
 }
 
-.card-copy p {
+.card-copy > p {
   margin: 0;
   color: #34424e;
   font-size: 0.98rem;
   line-height: 1.66;
+}
+
+.dish-allergens {
+  display: grid;
+  gap: 9px;
+  margin: 0 -18px 16px;
+  padding: 14px 18px 16px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: rgba(247, 250, 249, 0.82);
+}
+
+.dish-allergen-list,
+.possible-allergens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+}
+
+.dish-allergen-badge {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  min-height: 30px;
+  padding: 3px 9px 3px 4px;
+  border: 1px solid rgba(159, 71, 52, 0.3);
+  border-radius: 999px;
+  color: #713b2f;
+  background: #fff2e8;
+  font-size: 0.76rem;
+  font-weight: 850;
+  line-height: 1.15;
+}
+
+.dish-allergen-badge .allergen-symbol {
+  width: 21px;
+  height: 21px;
+  flex-basis: 21px;
+  font-size: 0.55rem;
+}
+
+.possible-allergens > span:first-child {
+  color: #716046;
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.dish-allergen-badge.possible {
+  color: #6f5725;
+  border-style: dashed;
+  border-color: rgba(140, 105, 35, 0.4);
+  background: #fff8dc;
+}
+
+.no-declared-allergens {
+  color: #176b62;
+  font-size: 0.84rem;
+  font-weight: 850;
+}
+
+.variable-allergens {
+  color: #765b35;
+  font-size: 0.84rem;
+  font-weight: 850;
+}
+
+.variable-profile-note {
+  margin: 1px 0 0;
+  color: #665b4e;
+  font-size: 0.82rem;
+  line-height: 1.42;
+}
+
+.dish-filter-status {
+  display: flex;
+  gap: 7px;
+  align-items: flex-start;
+  margin: 2px 0 0;
+  color: #176b62;
+  font-size: 0.82rem;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+.dish-filter-status mat-icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  font-size: 18px;
+}
+
+.allergen-conflict .dish-filter-status {
+  color: #8a4c2e;
+}
+
+.unknown-profile {
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  color: #665b4e;
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.unknown-profile mat-icon {
+  color: #9a713e;
+}
+
+.unknown-profile strong {
+  display: block;
+  color: #4b4137;
 }
 
 .image-frame {
@@ -749,6 +1040,24 @@ app-info-general {
     gap: 16px;
   }
 
+  .allergen-filter-heading {
+    display: grid;
+  }
+
+  .clear-allergen-filter {
+    justify-self: start;
+  }
+
+  .allergen-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .allergen-option {
+    width: 100%;
+    border-radius: 8px;
+  }
+
   .item-card,
   .zone-card {
     display: flex;
@@ -803,7 +1112,7 @@ app-info-general {
     overflow-wrap: anywhere;
   }
 
-  .card-copy p,
+  .card-copy > p,
   .section-content {
     font-size: 0.96rem;
     line-height: 1.58;
@@ -841,5 +1150,42 @@ app-info-general {
 
   .photo-grid {
     padding: 10px;
+  }
+
+  .allergen-filter {
+    padding: 15px 12px;
+  }
+
+  .allergen-options {
+    gap: 7px;
+  }
+
+  .allergen-option {
+    gap: 6px;
+    padding: 6px;
+    font-size: 0.78rem;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+  }
+
+  .allergen-option .allergen-symbol {
+    width: 26px;
+    height: 26px;
+    flex-basis: 26px;
+  }
+
+  .allergen-filter-feedback {
+    padding-right: 48px;
+  }
+
+  .dish-allergens {
+    margin-inline: -14px;
+    padding-inline: 14px;
+  }
+}
+
+@media (max-width: 340px) {
+  .allergen-options {
+    grid-template-columns: 1fr;
   }
 }

@@ -63,6 +63,54 @@
 
           <p *ngIf="section.contenido" class="section-content">{{ section.contenido }}</p>
 
+          <aside *ngIf="isGastronomySection(section)" class="allergen-filter" aria-labelledby="allergen-filter-title">
+            <div class="allergen-filter-heading">
+              <div>
+                <span class="allergen-filter-eyebrow">Filtro de alérgenos</span>
+                <h3 id="allergen-filter-title">¿Qué necesitas evitar?</h3>
+                <p>Pulsa uno o varios alérgenos. Destacaremos las fichas cuya receta descrita no los incluye.</p>
+              </div>
+
+              <button
+                *ngIf="hasAllergenSelection()"
+                type="button"
+                class="clear-allergen-filter"
+                (click)="clearAllergenSelection()"
+              >
+                <mat-icon aria-hidden="true">restart_alt</mat-icon>
+                Limpiar
+              </button>
+            </div>
+
+            <div class="allergen-options" role="group" aria-label="Alérgenos que necesitas evitar">
+              <button
+                *ngFor="let allergen of allergens"
+                type="button"
+                class="allergen-option"
+                [class.active]="isAllergenSelected(allergen.id)"
+                [attr.aria-pressed]="isAllergenSelected(allergen.id)"
+                [attr.aria-label]="allergen.label + (isAllergenSelected(allergen.id) ? ', seleccionado' : ', no seleccionado')"
+                (click)="toggleAllergen(allergen.id)"
+              >
+                <span class="allergen-symbol" aria-hidden="true">{{ allergen.symbol }}</span>
+                <span>{{ allergen.label }}</span>
+              </button>
+            </div>
+
+            <div class="allergen-filter-feedback" aria-live="polite">
+              <ng-container *ngIf="hasAllergenSelection(); else allergenFilterIdle">
+                <span class="compatible-count">
+                  <mat-icon aria-hidden="true">verified</mat-icon>
+                  {{ compatibleDishCount(section) }} de {{ sectionItems(section).length }} fichas sin coincidencias conocidas
+                </span>
+                <span>Las recetas pueden variar y existir contaminación cruzada. Confirma siempre con el establecimiento.</span>
+              </ng-container>
+              <ng-template #allergenFilterIdle>
+                <span>La información corresponde a la receta descrita, no certifica la elaboración de cada local.</span>
+              </ng-template>
+            </div>
+          </aside>
+
           <mat-accordion *ngIf="section.itinerario" class="itinerary-accordion">
             <mat-expansion-panel *ngFor="let day of section.itinerario">
               <mat-expansion-panel-header>
@@ -147,6 +195,37 @@
                       </a>
                     </span>
                   </p>
+                  <p *ngIf="zona.web" class="info-line contact-line">
+                    <mat-icon>language</mat-icon>
+                    <span>
+                      <strong>Web oficial</strong>
+                      <a
+                        [href]="zona.web"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        [attr.aria-label]="'Abrir la web oficial de ' + zona.nombre"
+                      >
+                        Visitar web
+                        <mat-icon class="external-icon" aria-hidden="true">open_in_new</mat-icon>
+                      </a>
+                    </span>
+                  </p>
+
+                  <p *ngIf="zona.reserva" class="info-line contact-line">
+                    <mat-icon>confirmation_number</mat-icon>
+                    <span>
+                      <strong>Reserva / entradas</strong>
+                      <a
+                        [href]="zona.reserva"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        [attr.aria-label]="'Reservar o comprar entradas para ' + zona.nombre"
+                      >
+                        Reservar
+                        <mat-icon class="external-icon" aria-hidden="true">open_in_new</mat-icon>
+                      </a>
+                    </span>
+                  </p>
                   <p *ngIf="zona.precio" class="info-line">
                     <mat-icon>payments</mat-icon>
                     <span><strong>Precio</strong>{{ zona.precio }}</span>
@@ -161,7 +240,13 @@
           </mat-accordion>
 
           <div *ngIf="section.lugares?.length || section.platos?.length" class="card-grid">
-            <article class="item-card" *ngFor="let item of section.lugares || section.platos">
+            <article
+              class="item-card"
+              *ngFor="let item of section.lugares || section.platos"
+              [class.allergen-match]="isGastronomySection(section) && isCompatibleWithSelectedAllergens(item)"
+              [class.allergen-conflict]="isGastronomySection(section) && hasSelectedAllergen(item)"
+              [class.allergen-unknown]="isGastronomySection(section) && hasUnknownAllergenProfile(item)"
+            >
               <figure
                 class="image-frame item-image zoomable-image"
                 *ngIf="item.foto"
@@ -183,6 +268,72 @@
 
               <div class="card-copy">
                 <h3>{{ item.nombre }}</h3>
+
+                <div
+                  *ngIf="isGastronomySection(section) && dishAllergenProfile(item) as profile"
+                  class="dish-allergens"
+                  [attr.aria-label]="'Información de alérgenos de ' + item.nombre"
+                >
+                <span class="dish-allergens-label">
+                  {{ profile.status === 'variable' ? 'Composición variable' : 'Alérgenos de la receta' }}
+                </span>
+                <div *ngIf="profile.contains.length; else noRecipeAllergens" class="dish-allergen-list">
+                  <span
+                    *ngFor="let allergenId of profile.contains"
+                    class="dish-allergen-badge contains"
+                    [attr.title]="allergenDefinition(allergenId).label"
+                  >
+                    <span class="allergen-symbol" aria-hidden="true">{{ allergenDefinition(allergenId).symbol }}</span>
+                    {{ allergenDefinition(allergenId).label }}
+                  </span>
+                </div>
+                <ng-template #noRecipeAllergens>
+                  <span *ngIf="profile.status !== 'variable'; else variableRecipeAllergens" class="no-declared-allergens">
+                    Sin alérgenos identificados en la receta descrita
+                  </span>
+                  <ng-template #variableRecipeAllergens>
+                    <span class="variable-allergens">No hay una composición única para esta ficha</span>
+                  </ng-template>
+                </ng-template>
+
+                <div *ngIf="profile.possible?.length" class="possible-allergens">
+                  <span>Puede variar:</span>
+                  <span
+                    *ngFor="let allergenId of profile.possible"
+                    class="dish-allergen-badge possible"
+                    [attr.title]="allergenDefinition(allergenId).label"
+                  >
+                    <span class="allergen-symbol" aria-hidden="true">{{ allergenDefinition(allergenId).symbol }}</span>
+                    {{ allergenDefinition(allergenId).label }}
+                  </span>
+                </div>
+
+                <p *ngIf="profile.status === 'variable'" class="variable-profile-note">
+                  La composición cambia según la versión. Consulta los ingredientes antes de pedir.
+                </p>
+
+                <p *ngIf="hasAllergenSelection()" class="dish-filter-status" aria-live="polite">
+                  <ng-container *ngIf="isCompatibleWithSelectedAllergens(item); else dishNotHighlighted">
+                    <mat-icon aria-hidden="true">verified</mat-icon>
+                    No consta tu selección en la receta descrita
+                  </ng-container>
+                  <ng-template #dishNotHighlighted>
+                    <ng-container *ngIf="hasSelectedAllergen(item)">
+                      <mat-icon aria-hidden="true">warning</mat-icon>
+                      Contiene o puede contener parte de tu selección
+                    </ng-container>
+                  </ng-template>
+                </p>
+                </div>
+
+                <div
+                  *ngIf="isGastronomySection(section) && !dishAllergenProfile(item)"
+                  class="dish-allergens unknown-profile"
+                >
+                  <mat-icon aria-hidden="true">help_outline</mat-icon>
+                  <span><strong>Información por confirmar</strong> Consulta ingredientes y trazas antes de pedir.</span>
+                </div>
+
                 <p>{{ item.descripcion }}</p>
               </div>
 
@@ -236,6 +387,37 @@
                     <strong>Teléfono</strong>
                     <a [href]="phoneUrl(item.telefono)" [attr.aria-label]="'Llamar al ' + item.telefono">
                       {{ item.telefono }}
+                    </a>
+                  </span>
+                </p>
+                <p *ngIf="item.web" class="info-line contact-line">
+                  <mat-icon>language</mat-icon>
+                  <span>
+                    <strong>Web oficial</strong>
+                    <a
+                      [href]="item.web"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      [attr.aria-label]="'Abrir la web oficial de ' + item.nombre"
+                    >
+                      Visitar web
+                      <mat-icon class="external-icon" aria-hidden="true">open_in_new</mat-icon>
+                    </a>
+                  </span>
+                </p>
+
+                <p *ngIf="item.reserva" class="info-line contact-line">
+                  <mat-icon>confirmation_number</mat-icon>
+                  <span>
+                    <strong>Reserva / entradas</strong>
+                    <a
+                      [href]="item.reserva"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      [attr.aria-label]="'Reservar o comprar entradas para ' + item.nombre"
+                    >
+                      Reservar
+                      <mat-icon class="external-icon" aria-hidden="true">open_in_new</mat-icon>
                     </a>
                   </span>
                 </p>

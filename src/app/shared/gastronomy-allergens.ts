@@ -1,0 +1,266 @@
+export type AllergenId =
+  | 'gluten'
+  | 'crustaceos'
+  | 'huevo'
+  | 'pescado'
+  | 'cacahuetes'
+  | 'soja'
+  | 'leche'
+  | 'frutos-cascara'
+  | 'apio'
+  | 'mostaza'
+  | 'sesamo'
+  | 'sulfitos'
+  | 'altramuces'
+  | 'moluscos';
+
+export interface AllergenDefinition {
+  id: AllergenId;
+  label: string;
+  shortLabel: string;
+  symbol: string;
+}
+
+export interface DishAllergenProfile {
+  /** Solo los perfiles completos pueden considerarse compatibles con una selección. */
+  status?: 'complete' | 'variable';
+  /** Ingredientes alergénicos propios de la receta tradicional descrita. */
+  contains: AllergenId[];
+  /** Ingredientes que dependen de la variante, el relleno o la preparación. */
+  possible?: AllergenId[];
+}
+
+export const GASTRONOMY_ALLERGENS: readonly AllergenDefinition[] = [
+  { id: 'gluten', label: 'Cereales con gluten', shortLabel: 'Gl', symbol: '🌾' },
+  { id: 'crustaceos', label: 'Crustáceos', shortLabel: 'Cr', symbol: '🦐' },
+  { id: 'huevo', label: 'Huevo', shortLabel: 'Hu', symbol: '🥚' },
+  { id: 'pescado', label: 'Pescado', shortLabel: 'Pe', symbol: '🐟' },
+  { id: 'cacahuetes', label: 'Cacahuetes', shortLabel: 'Ca', symbol: '🥜' },
+  { id: 'soja', label: 'Soja', shortLabel: 'So', symbol: '🌱' },
+  { id: 'leche', label: 'Leche', shortLabel: 'Le', symbol: '🥛' },
+  { id: 'frutos-cascara', label: 'Frutos de cáscara', shortLabel: 'Fr', symbol: '🌰' },
+  { id: 'apio', label: 'Apio', shortLabel: 'Ap', symbol: '🥬' },
+  { id: 'mostaza', label: 'Mostaza', shortLabel: 'Mo', symbol: '🟡' },
+  { id: 'sesamo', label: 'Sésamo', shortLabel: 'Se', symbol: '⚪' },
+  { id: 'sulfitos', label: 'Sulfitos', shortLabel: 'Su', symbol: '🍷' },
+  { id: 'altramuces', label: 'Altramuces', shortLabel: 'Al', symbol: '🌼' },
+  { id: 'moluscos', label: 'Moluscos', shortLabel: 'Ml', symbol: '🐚' }
+];
+
+const complete = (
+  contains: AllergenId[] = [],
+  possible: AllergenId[] = []
+): DishAllergenProfile => ({ status: 'complete', contains, possible });
+
+const variable = (
+  contains: AllergenId[] = [],
+  possible: AllergenId[] = []
+): DishAllergenProfile => ({ status: 'variable', contains, possible });
+
+const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromEntries(
+  ([
+    // Río de Janeiro
+    ['Caipirinha', complete()],
+    ['Picanha (corte de carne brasileña)', complete()],
+    ['Brigadeiro', complete(['leche'], ['soja'])],
+    ['Feijoada', complete()],
+    ['Moqueca', complete([], ['pescado', 'crustaceos', 'moluscos'])],
+    ['Guayaba (fruta local)', complete()],
+
+    // Roma
+    ['Carbonara', complete(['gluten', 'huevo', 'leche'])],
+    ['Cacio e pepe', complete(['gluten', 'leche'])],
+    ['Bucatini all’amatriciana', complete(['gluten', 'leche'])],
+    ['Lasaña', complete(['gluten', 'leche'], ['huevo', 'apio', 'sulfitos'])],
+    ['Pizza romana', variable(['gluten'], ['leche', 'pescado'])],
+    ['Pizza bianca / pizza rossa', complete(['gluten'])],
+    ['Pinsa romana', variable(['gluten'], ['soja', 'leche', 'pescado'])],
+    ['Focaccia', complete(['gluten'])],
+    ['Panini', variable(['gluten'], ['leche'])],
+    ['Supplì', complete(['leche'], ['gluten', 'huevo'])],
+    ['Carciofi alla giudia', complete()],
+    ['Fiori di zucca fritti', complete(['leche', 'pescado'], ['gluten', 'huevo'])],
+    ['Saltimbocca alla romana', complete([], ['sulfitos'])],
+    ['Polpette al sugo', complete(['gluten', 'huevo'], ['leche'])],
+    ['Spritz Aperol', complete(['sulfitos'])],
+    ['Tiramisú', complete(['gluten', 'huevo', 'leche'])],
+    ['Gelato', variable([], ['leche', 'huevo', 'frutos-cascara', 'soja'])],
+
+    // Malta
+    ['🐇 Fenek (Conejo Maltés)', complete([], ['gluten', 'sulfitos'])],
+    ['🐟 Pescado y Marisco Maltés', variable([], ['pescado', 'moluscos', 'crustaceos', 'gluten', 'sulfitos'])],
+    ['🥖 Ftira', complete(['gluten'], ['pescado', 'leche'])],
+    ['🥐 Pastizzi', complete(['gluten'], ['leche'])],
+    ['🥟 Qassatat', variable(['gluten'], ['leche'])],
+    ['🧀 Ġbejna', complete(['leche'], ['gluten'])],
+    ['🍰 Imqaret', complete(['gluten'], ['leche', 'huevo', 'soja'])],
+
+    // Bucarest
+    ['Sarmale', complete([], ['leche'])],
+    ['Mici', complete([], ['mostaza', 'gluten'])],
+    ['Covrigi', complete(['gluten'], ['sesamo', 'leche'])],
+    ['Covrig relleno (Twist)', variable(['gluten'], ['leche'])],
+    ['Zacuscă', complete([], ['gluten'])],
+    ['Ciorbă de fasole', variable([], ['gluten', 'apio'])],
+    ['Varză călită', complete()],
+    ['Plăcintă', variable(['gluten'], ['leche', 'huevo'])],
+    ['Cozonac', variable(['gluten'], ['huevo', 'leche', 'frutos-cascara'])],
+    ['Palinca', complete()],
+    ['Ensalada de berenjenas', variable([], ['gluten', 'huevo', 'mostaza'])],
+    ['Tochitură', variable(['huevo', 'leche'])],
+
+    // Cádiz
+    ['Pescaíto frito', variable(['pescado'], ['gluten', 'moluscos'])],
+    ['Cazón en adobo', complete(['pescado'], ['gluten'])],
+    ['Ortiguillas fritas', complete([], ['gluten'])],
+    ['Tortillitas de camarones', complete(['gluten', 'crustaceos'])],
+    ['Papas aliñás', variable([], ['pescado', 'huevo', 'sulfitos'])],
+    ['Huevas aliñadas', complete(['pescado'], ['sulfitos'])],
+    ['Dobladillo de caballa', complete(['gluten', 'pescado', 'huevo'], ['mostaza'])],
+    ['Caballa con piriñaca', complete(['pescado'], ['sulfitos'])],
+    ['Caballa con babetas o fideos con caballa', complete(['gluten', 'pescado'])],
+    ['Menudo gaditano', variable([], ['gluten'])],
+    ['Papas con choco', complete(['moluscos'], ['sulfitos', 'gluten'])],
+    ['Chicharrones especiales de Cádiz', variable([], ['gluten'])],
+    ['Ropa vieja gaditana', variable([], ['sulfitos', 'pescado'])],
+    ['Carne al toro', complete([], ['sulfitos', 'gluten'])],
+    ['Pollo a la canilla', complete([], ['sulfitos'])],
+    ['Pan de Cádiz o turrón de Cádiz', complete(['huevo', 'frutos-cascara'])],
+    ['Erizos de mar y ostiones del Carnaval', complete(['moluscos'])],
+    ['Panizas y huevos de fraile', variable()],
+
+    // Jerez
+    ['Riñones al Jerez', complete([], ['sulfitos', 'gluten'])],
+    ['Berza jerezana', variable([], ['gluten'])],
+    ['Ajo jerezano o ajo caliente', complete(['gluten'], ['huevo'])],
+    ['Chicharrones de Jerez', variable([], ['gluten'])],
+    ['Alcauciles a la jerezana', complete([], ['sulfitos', 'gluten'])],
+    ['Aneto jerezano', variable([], ['gluten', 'huevo', 'leche', 'sulfitos'])],
+    ['Tocino de cielo', complete(['huevo'])],
+    ['Vinagre de Jerez', complete([], ['sulfitos'])],
+    ['Vino Fino', complete([], ['sulfitos'])],
+    ['Vino Amontillado', complete([], ['sulfitos'])],
+    ['Vino Oloroso', complete([], ['sulfitos'])],
+    ['Vino Palo Cortado', complete([], ['sulfitos'])],
+    ['Vino Pedro Ximénez (PX)', complete([], ['sulfitos'])],
+    ['Vino Cream', complete([], ['sulfitos'])],
+    ['Vino Mosto de Jerez', complete([], ['sulfitos'])],
+    ['Brandy de Jerez', variable()],
+
+    // Rota
+    ['Tomate de Rota', complete()],
+    ['Ajo caliente al estilo del mayeto', complete(['gluten'])],
+    ['Arranque roteño', complete(['gluten'])],
+    ['Berza roteña', variable([], ['apio', 'gluten'])],
+    ['Urta a la roteña', complete(['pescado'], ['sulfitos'])],
+    ['Pizza roteña', variable(['gluten'], ['leche', 'pescado', 'crustaceos', 'huevo'])],
+    ['Mayetito', variable(['huevo', 'frutos-cascara'], ['gluten', 'leche', 'soja'])],
+    ['Tintilla de Rota', complete([], ['sulfitos'])],
+
+    // San Fernando
+    ['Camarón de la Bahía', complete(['crustaceos'])],
+    ['Cañaílla', complete(['moluscos'])],
+    ['Bienmesabe (Cazón en adobo)', complete(['pescado'], ['gluten', 'sulfitos'])],
+    ['Mariscos de la Bahía y Bocas de La Isla', complete(['crustaceos', 'moluscos'])],
+
+    // Sanlúcar
+    ['Langostino de Sanlúcar', complete(['crustaceos'])],
+    ['Tortillitas de Camarones', complete(['gluten', 'crustaceos'])],
+    ['Pescaíto Frito', variable(['pescado'], ['gluten', 'moluscos'])],
+    ['Papas Aliñás', variable([], ['sulfitos', 'pescado'])],
+    ['Salpicón de Marisco', variable([], ['crustaceos', 'moluscos', 'pescado', 'sulfitos'])],
+    ['Ortiguillas Fritas', complete([], ['gluten'])],
+    ['Guisos Marineros', variable([], ['gluten', 'pescado', 'crustaceos', 'moluscos', 'sulfitos'])],
+    ['Sopa de Galeras', variable(['crustaceos'], ['moluscos', 'sulfitos'])],
+    ['Alpisteras de Sanlúcar', complete(['gluten', 'huevo'])],
+    ['Manzanilla de Sanlúcar', complete([], ['sulfitos'])],
+
+    // Trebujena
+    ['Garbanzos como conejo', variable(['gluten'], ['sulfitos'])],
+    ['Ajo caliente o ajo trebujenero', complete(['gluten'], ['huevo'])],
+    ['Potaje de tagarninas', variable(['gluten'])],
+    ['Anguila y angula del Guadalquivir', variable(['pescado'], ['gluten', 'frutos-cascara', 'sulfitos'])],
+    ['Uva Palomino Fino', complete()],
+    ['Mosto de Trebujena', complete([], ['sulfitos'])],
+    ['Trebujito', complete([], ['sulfitos'])],
+    ['Mistela', complete([], ['sulfitos'])],
+
+    // Vejer
+    ['Lomo en manteca', complete([], ['gluten'])],
+    ['Almuerzo campero', complete([], ['sulfitos', 'gluten'])],
+    ['Berza vejeriega', variable([], ['gluten'])],
+    ['Ternera de La Janda y carne retinta', variable([], ['gluten', 'huevo', 'leche', 'sulfitos'])],
+    ['Atún rojo de almadraba', variable(['pescado'])],
+    ['Pan duro', variable([], ['gluten', 'sesamo', 'sulfitos'])],
+    ['Tortas vejeriegas', complete(['gluten'])],
+    ['Rosquetes vejeriegos', complete(['gluten', 'huevo'], ['sesamo'])],
+    ['Vinos de Vejer y Tierra de Cádiz', complete([], ['sulfitos'])],
+
+    // Mairena del Aljarafe
+    ['Mosto del Aljarafe', complete([], ['sulfitos'])],
+    ['Sopeao del Aljarafe', complete(['gluten'])],
+    ['Aliños, picadillos y ensaladas del Aljarafe', variable([], ['pescado', 'huevo', 'crustaceos', 'moluscos'])],
+    ['Aceitunas Manzanilla y Gordal de Sevilla', variable([], ['pescado', 'frutos-cascara'])],
+    ['Caldereta del Aljarafe', variable([], ['sulfitos'])],
+    ['Menudo con garbanzos', variable([], ['gluten'])],
+    ['Carrillada', variable([], ['sulfitos'])],
+    ['Cola de toro', variable([], ['sulfitos', 'gluten', 'huevo', 'leche'])],
+    ['Ropa vieja de puchero', variable()],
+    ['Tostón de sardinas', complete(['gluten', 'pescado'], ['leche'])],
+  ] as [string, DishAllergenProfile][]).map(([name, profile]) => [normalizeDishName(name), profile])
+);
+
+const GUIDE_DISH_ALLERGEN_OVERRIDES: Record<string, DishAllergenProfile> = {
+  [guideDishKey('europa/espana/andalucia/cadiz/cadiz', 'Pescaíto frito')]:
+    variable(['pescado'], ['gluten', 'moluscos']),
+  [guideDishKey('europa/espana/andalucia/cadiz/cadiz', 'Papas aliñás')]:
+    variable([], ['pescado', 'huevo', 'sulfitos']),
+  [guideDishKey('europa/espana/andalucia/cadiz/san-fernando', 'Pescaíto frito')]:
+    variable(['pescado'], ['gluten', 'moluscos', 'sulfitos']),
+  [guideDishKey('europa/espana/andalucia/cadiz/san-fernando', 'Papas aliñás')]:
+    variable([], ['pescado', 'sulfitos']),
+  [guideDishKey('europa/espana/andalucia/cadiz/trebujena', 'Tortillitas de camarones')]:
+    complete(['crustaceos'], ['gluten'])
+};
+
+export function dishAllergenProfile(name: string, guidePath = ''): DishAllergenProfile | null {
+  const guideProfile = GUIDE_DISH_ALLERGEN_OVERRIDES[guideDishKey(guidePath, name)];
+  if (guideProfile) return guideProfile;
+
+  return DISH_ALLERGEN_PROFILES[normalizeDishName(name)] ?? null;
+}
+
+export function profileAvoidsSelectedAllergens(
+  profile: DishAllergenProfile | null,
+  selectedAllergens: Iterable<AllergenId>
+): boolean {
+  const selected = new Set(selectedAllergens);
+  if (!selected.size || !profile || profile.status === 'variable') return false;
+
+  return ![...profile.contains, ...(profile.possible ?? [])]
+    .some(allergenId => selected.has(allergenId));
+}
+
+export function profileHasSelectedAllergen(
+  profile: DishAllergenProfile | null,
+  selectedAllergens: Iterable<AllergenId>
+): boolean {
+  const selected = new Set(selectedAllergens);
+  if (!selected.size || !profile) return false;
+
+  return [...profile.contains, ...(profile.possible ?? [])]
+    .some(allergenId => selected.has(allergenId));
+}
+
+function guideDishKey(guidePath: string, name: string): string {
+  return `${(guidePath || '').toLowerCase()}|${normalizeDishName(name)}`;
+}
+
+function normalizeDishName(name: string): string {
+  return (name || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9]+/g, ' ')
+    .trim()
+    .toLowerCase();
+}

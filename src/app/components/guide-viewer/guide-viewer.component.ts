@@ -7,6 +7,15 @@ import { filter } from 'rxjs';
 import { InfoGeneralComponent } from '../../info-general.component/info-general.component';
 import { ImageService } from '../../shared/image.service';
 import { ImgUrlPipe } from '../../shared/img-url.pipe';
+import {
+  AllergenDefinition,
+  AllergenId,
+  DishAllergenProfile,
+  GASTRONOMY_ALLERGENS,
+  dishAllergenProfile,
+  profileAvoidsSelectedAllergens,
+  profileHasSelectedAllergen
+} from '../../shared/gastronomy-allergens';
 
 import { CADIZ_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/cadiz.guide';
 import { JEREZ_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/jerez.guide';
@@ -37,6 +46,8 @@ export class GuideViewerComponent implements OnDestroy {
   showScrollTop = false;
   activeTabId = '';
   tabs: { id: string; label: string; icon: string; sections: any[] }[] = [];
+  readonly allergens = GASTRONOMY_ALLERGENS;
+  selectedAllergens = new Set<AllergenId>();
   expandedPhoto: { src: string; alt: string; gallery: string[]; index: number } | null = null;
   zoomLevel = 1;
   panX = 0;
@@ -104,12 +115,15 @@ export class GuideViewerComponent implements OnDestroy {
       item.horario ||
       item.direccion ||
       item.telefono ||
+      item.web ||
+      item.reserva ||
       item.precio ||
       item.precioOrientativo
     );
   }
 
   mapUrl(item: any): string {
+    if (item.maps) return item.maps;
     if (item.mapaUrl) return item.mapaUrl;
 
     const query = encodeURIComponent(
@@ -230,6 +244,84 @@ export class GuideViewerComponent implements OnDestroy {
 
   setActiveTab(tabId: string) {
     this.activeTabId = tabId;
+  }
+
+  isGastronomySection(section: any): boolean {
+    return this.normalizeTitle(section?.titulo).includes('gastronomia');
+  }
+
+  toggleAllergen(allergenId: AllergenId) {
+    const nextSelection = new Set(this.selectedAllergens);
+
+    if (nextSelection.has(allergenId)) {
+      nextSelection.delete(allergenId);
+    } else {
+      nextSelection.add(allergenId);
+    }
+
+    this.selectedAllergens = nextSelection;
+  }
+
+  clearAllergenSelection() {
+    this.selectedAllergens = new Set<AllergenId>();
+  }
+
+  isAllergenSelected(allergenId: AllergenId): boolean {
+    return this.selectedAllergens.has(allergenId);
+  }
+
+  hasAllergenSelection(): boolean {
+    return this.selectedAllergens.size > 0;
+  }
+
+  allergenDefinition(allergenId: AllergenId): AllergenDefinition {
+    return this.allergens.find(allergen => allergen.id === allergenId) ?? {
+      id: allergenId,
+      label: allergenId,
+      shortLabel: allergenId.slice(0, 2),
+      symbol: '•'
+    };
+  }
+
+  dishAllergenProfile(item: any): DishAllergenProfile | null {
+    if (Array.isArray(item?.alergenos)) {
+      return {
+        status: item?.perfilAlergenos === 'variable' ? 'variable' : 'complete',
+        contains: item.alergenos,
+        possible: Array.isArray(item?.posiblesAlergenos) ? item.posiblesAlergenos : []
+      };
+    }
+
+    return dishAllergenProfile(item?.nombre ?? '', this.guide?.path ?? '');
+  }
+
+  isCompatibleWithSelectedAllergens(item: any): boolean {
+    if (!this.hasAllergenSelection()) return false;
+
+    const profile = this.dishAllergenProfile(item);
+    return profileAvoidsSelectedAllergens(profile, this.selectedAllergens);
+  }
+
+  hasSelectedAllergen(item: any): boolean {
+    if (!this.hasAllergenSelection()) return false;
+
+    const profile = this.dishAllergenProfile(item);
+    return profileHasSelectedAllergen(profile, this.selectedAllergens);
+  }
+
+  hasUnknownAllergenProfile(item: any): boolean {
+    const profile = this.dishAllergenProfile(item);
+    return this.hasAllergenSelection() && (!profile || profile.status === 'variable');
+  }
+
+  sectionItems(section: any): any[] {
+    return section?.lugares ?? section?.platos ?? [];
+  }
+
+  compatibleDishCount(section: any): number {
+    return this.sectionItems(section)
+      .filter(item => this.isCompatibleWithSelectedAllergens(item))
+      .length;
   }
 
   openPhoto(src: string, alt: string, gallery: string[] = [src]) {
@@ -413,6 +505,7 @@ export class GuideViewerComponent implements OnDestroy {
       this.guide = this.guides[placePath];
       this.requestedGuidePath = null;
       this.activeTabId = '';
+      this.clearAllergenSelection();
       this.applyGuideStyle(this.guide);
       this.tabs = this.buildGuideTabs();
       return;
@@ -423,6 +516,7 @@ export class GuideViewerComponent implements OnDestroy {
     this.requestedGuidePath = placePath || null;
     this.pageStyle = {};
     this.activeTabId = '';
+    this.clearAllergenSelection();
     this.tabs = [];
   }
 
