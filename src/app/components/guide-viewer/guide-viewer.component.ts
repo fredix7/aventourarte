@@ -318,6 +318,10 @@ export class GuideViewerComponent implements OnDestroy {
     return section?.lugares ?? section?.platos ?? [];
   }
 
+  sectionContentGroups(section: any): any[] {
+    return section?.subsecciones?.length ? section.subsecciones : [section];
+  }
+
   compatibleDishCount(section: any): number {
     return this.sectionItems(section)
       .filter(item => this.isCompatibleWithSelectedAllergens(item))
