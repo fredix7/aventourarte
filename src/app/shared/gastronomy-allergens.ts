@@ -113,7 +113,6 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Pescaíto frito', variable(['pescado'], ['gluten', 'moluscos'])],
     ['Cazón en adobo', complete(['pescado'], ['gluten'])],
     ['Ortiguillas fritas', complete([], ['gluten'])],
-    ['Tortillitas de camarones', complete(['gluten', 'crustaceos'])],
     ['Papas aliñás', variable([], ['pescado', 'huevo', 'sulfitos'])],
     ['Huevas aliñadas', complete(['pescado'], ['sulfitos'])],
     ['Dobladillo de caballa', complete(['gluten', 'pescado', 'huevo'], ['mostaza'])],
@@ -183,11 +182,18 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Manzanilla de Sanlúcar', complete([], ['sulfitos'])],
 
     // Trebujena
-    ['Garbanzos como conejo', variable(['gluten'], ['sulfitos'])],
-    ['Ajo caliente o ajo trebujenero', complete(['gluten'], ['huevo'])],
-    ['Potaje de tagarninas', variable(['gluten'])],
-    ['Anguila y angula del Guadalquivir', variable(['pescado'], ['gluten', 'frutos-cascara', 'sulfitos'])],
-    ['Uva Palomino Fino', complete()],
+    ['Garbanzos como conejo', complete([], ['sulfitos'])],
+    ['Ajo caliente o ajo trebujenero', complete(['gluten'])],
+    ['Garbanzos con cardos de aporcar', variable([], ['gluten', 'sulfitos'])],
+    ['Habas en cuero', complete()],
+    ['Papa con asadura', variable([], ['sulfitos'])],
+    ['Papas con alcauciles', complete(['gluten'], ['sulfitos'])],
+    ['Sangre con tomate', variable([], ['sulfitos'])],
+    ['Sopa de tomate', variable(['gluten'], ['huevo'])],
+    ['Albur de estero (lisa de estero)', variable(['pescado'], ['gluten', 'sulfitos'])],
+    ['Espoleá', complete(['gluten', 'leche'])],
+    ['Hornazo de Trebujena', complete(['gluten', 'sesamo'], ['sulfitos'])],
+    ['Castañas con arroz', complete()],
     ['Mosto de Trebujena', complete([], ['sulfitos'])],
     ['Trebujito', complete([], ['sulfitos'])],
     ['Mistela', complete([], ['sulfitos'])],
@@ -225,9 +231,7 @@ const GUIDE_DISH_ALLERGEN_OVERRIDES: Record<string, DishAllergenProfile> = {
   [guideDishKey('europa/espana/andalucia/cadiz/san-fernando', 'Pescaíto frito')]:
     variable(['pescado'], ['gluten', 'moluscos', 'sulfitos']),
   [guideDishKey('europa/espana/andalucia/cadiz/san-fernando', 'Papas aliñás')]:
-    variable([], ['pescado', 'sulfitos']),
-  [guideDishKey('europa/espana/andalucia/cadiz/trebujena', 'Tortillitas de camarones')]:
-    complete(['crustaceos'], ['gluten'])
+    variable([], ['pescado', 'sulfitos'])
 };
 
 export function dishAllergenProfile(name: string, guidePath = ''): DishAllergenProfile | null {
