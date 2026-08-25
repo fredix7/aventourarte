@@ -44,13 +44,14 @@ export class ImageService {
   }
 
   background(src: string | undefined | null, isMobile: boolean, effect?: string): string {
-  const w = isMobile ? 1400 : 2600;
-  return this.url(src, {
-    w,
-    crop: 'scale',
-    quality: 'auto',
-    format: 'auto',
-    dpr: 'auto',
-  });
-}
+    const w = isMobile ? 1400 : 2600;
+    return this.url(src, {
+      w,
+      crop: 'scale',
+      quality: 'auto',
+      format: 'auto',
+      dpr: 'auto',
+      effect,
+    });
+  }
 }

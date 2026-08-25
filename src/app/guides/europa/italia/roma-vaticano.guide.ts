@@ -1,5 +1,5 @@
 export const ROMA_VATICANO_GUIDE = {
-  path: 'europa/italia/roma',
+  path: 'europa/italia/roma-vaticano',
   nombre: 'Roma y Ciudad del Vaticano',
   flag: 'cld:europa/italia/roma/roma-flag',
   flag2: 'cld:europa/italia/roma/vaticano-flag',

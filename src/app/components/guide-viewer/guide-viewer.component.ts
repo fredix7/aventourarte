@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import { filter } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { InfoGeneralComponent } from '../../info-general.component/info-general.component';
 import { ImageService } from '../../shared/image.service';
 import { ImgUrlPipe } from '../../shared/img-url.pipe';
@@ -18,6 +18,7 @@ import {
 } from '../../shared/gastronomy-allergens';
 
 import { CADIZ_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/cadiz.guide';
+import { CHIPIONA_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/chipiona.guide';
 import { JEREZ_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/jerez.guide';
 import { ROTA_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/rota.guide';
 import { SAN_FERNANDO_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/san-fernando.guide';
@@ -31,6 +32,25 @@ import { ROMA_VATICANO_GUIDE } from '../../guides/europa/italia/roma-vaticano.gu
 import { BUCAREST_GUIDE } from '../../guides/europa/rumania/bucarest.guide';
 import { RIO_DE_JANEIRO_GUIDE } from '../../guides/america/sudamerica/brasil/rio-janeiro.guide';
 import { NEW_YORK_GUIDE } from '../../guides/america/norteamerica/usa/new-york.guide';
+
+export const GUIDE_REGISTRY: Readonly<Record<string, any>> = {
+  'europa/espana/andalucia/cadiz/cadiz': CADIZ_GUIDE,
+  'europa/espana/andalucia/cadiz/chipiona': CHIPIONA_GUIDE,
+  'europa/espana/andalucia/cadiz/jerez-de-la-frontera': JEREZ_GUIDE,
+  'europa/espana/andalucia/cadiz/rota': ROTA_GUIDE,
+  'europa/espana/andalucia/cadiz/san-fernando': SAN_FERNANDO_GUIDE,
+  'europa/espana/andalucia/cadiz/sanlucar-de-barrameda': SANLUCAR_BARRAMEDA_GUIDE,
+  'europa/espana/andalucia/cadiz/trebujena': TREBUJENA_GUIDE,
+  'europa/espana/andalucia/cadiz/vejer-de-la-frontera': VEJER_GUIDE,
+
+  'europa/espana/andalucia/sevilla/mairena-del-aljarafe': MAIRENA_ALJARAFE_GUIDE,
+  
+  'europa/italia/roma-vaticano': ROMA_VATICANO_GUIDE,
+  'europa/malta/la-valeta': LA_VALETA_GUIDE,
+  'europa/rumania/bucarest': BUCAREST_GUIDE,
+  'america/norteamerica/usa/new-york': NEW_YORK_GUIDE,
+  'america/sudamerica/brasil/rio-de-janeiro': RIO_DE_JANEIRO_GUIDE
+};
 
 @Component({
   selector: 'app-guide-viewer',
@@ -60,33 +80,21 @@ export class GuideViewerComponent implements OnDestroy {
   private pinchStartZoom = 1;
   private pointerMoved = false;
 
-  private guides: Record<string, any> = {
-    'europa/espana/andalucia/cadiz/cadiz': CADIZ_GUIDE,
-    'europa/espana/andalucia/cadiz/jerez-de-la-frontera': JEREZ_GUIDE,
-    'europa/espana/andalucia/cadiz/rota': ROTA_GUIDE,
-    'europa/espana/andalucia/cadiz/san-fernando': SAN_FERNANDO_GUIDE,
-    'europa/espana/andalucia/cadiz/sanlucar-de-barrameda': SANLUCAR_BARRAMEDA_GUIDE,
-    'europa/espana/andalucia/cadiz/trebujena': TREBUJENA_GUIDE,
-    'europa/espana/andalucia/cadiz/vejer-de-la-frontera': VEJER_GUIDE,
-    
-    'europa/espana/andalucia/sevilla/mairena-del-aljarafe': MAIRENA_ALJARAFE_GUIDE,
-    'europa/italia/roma-vaticano': ROMA_VATICANO_GUIDE,
-    'europa/malta/la-valeta': LA_VALETA_GUIDE,
-    'europa/rumania/bucarest': BUCAREST_GUIDE,
-    'america/norteamerica/estados-unidos/nueva-york': NEW_YORK_GUIDE,
-    'america/sudamerica/brasil/rio-de-janeiro': RIO_DE_JANEIRO_GUIDE
-  };
+  private readonly guides = GUIDE_REGISTRY;
+  private routerEventsSubscription?: Subscription;
 
   constructor(private route: ActivatedRoute, private router: Router, private img: ImageService) {}
 
   ngOnInit() {
     this.loadGuideFromUrl();
-    this.router.events
+    this.routerEventsSubscription?.unsubscribe();
+    this.routerEventsSubscription = this.router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe(() => this.loadGuideFromUrl());
   }
 
   ngOnDestroy() {
+    this.routerEventsSubscription?.unsubscribe();
     document.body.style.overflow = '';
   }
 

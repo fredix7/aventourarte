@@ -113,7 +113,6 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Pescaíto frito', variable(['pescado'], ['gluten', 'moluscos'])],
     ['Cazón en adobo', complete(['pescado'], ['gluten'])],
     ['Ortiguillas fritas', complete([], ['gluten'])],
-    ['Papas aliñás', variable([], ['pescado', 'huevo', 'sulfitos'])],
     ['Huevas aliñadas', complete(['pescado'], ['sulfitos'])],
     ['Dobladillo de caballa', complete(['gluten', 'pescado', 'huevo'], ['mostaza'])],
     ['Caballa con piriñaca', complete(['pescado'], ['sulfitos'])],
@@ -156,6 +155,22 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Mayetito', variable(['huevo', 'frutos-cascara'], ['gluten', 'leche', 'soja'])],
     ['Tintilla de Rota', complete([], ['sulfitos'])],
 
+    // Chipiona
+    ['Moscatel de Chipiona', complete([], ['sulfitos'])],
+    ['Langostinos de Chipiona', complete(['crustaceos'])],
+    ['Galeras y sopa de galeras', variable(['crustaceos'], ['gluten'])],
+    ['Pescados de costa de Chipiona', variable(['pescado'], ['gluten', 'sulfitos'])],
+    ['Corvina al horno', complete(['pescado'], ['sulfitos'])],
+    ['Frituras marineras de Chipiona', variable(['pescado', 'moluscos'], ['gluten', 'sulfitos'])],
+    ['Cazón en tomate o en amarillo', variable(['pescado'], ['gluten', 'sulfitos'])],
+    ['Raya en pimentón', variable(['pescado'], ['gluten', 'sulfitos'])],
+    ['Menudo de choco', variable(['moluscos'], ['gluten', 'sulfitos'])],
+    ['Tomates de Chipiona', complete()],
+    ['Berza chipionera', variable([], ['apio', 'gluten', 'sulfitos'])],
+    ['Carne ibérica al moscatel', variable(['sulfitos'], ['gluten'])],
+    ['Cachitos', variable(['gluten'], ['leche', 'soja', 'mostaza', 'sulfitos'])],
+    ['Poleá con coscorrones', variable(['gluten'], ['leche'])],
+
     // San Fernando
     ['Camarón de la Bahía', complete(['crustaceos'])],
     ['Cañaílla', complete(['moluscos'])],
@@ -173,7 +188,6 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     // Sanlúcar
     ['Langostino de Sanlúcar', complete(['crustaceos'])],
     ['Tortillitas de Camarones', complete(['gluten', 'crustaceos'])],
-    ['Pescaíto Frito', variable(['pescado'], ['gluten', 'moluscos'])],
     ['Papas Aliñás', variable([], ['sulfitos', 'pescado'])],
     ['Salpicón de Marisco', variable([], ['crustaceos', 'moluscos', 'pescado', 'sulfitos'])],
     ['Guisos Marineros', variable([], ['gluten', 'pescado', 'crustaceos', 'moluscos', 'sulfitos'])],

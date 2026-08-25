@@ -53,6 +53,7 @@ export const TRAVEL_TREE: TravelNode[] = [
                 nombre: 'Cádiz',
                 hijos: [
                   { nombre: 'Cádiz', path: 'europa/espana/andalucia/cadiz/cadiz', isCapital: true },
+                  { nombre: 'Chipiona', path: 'europa/espana/andalucia/cadiz/chipiona' },
                   { nombre: 'Grazalema', path: 'europa/espana/andalucia/cadiz/grazalema' },
                   { nombre: 'Rota', path: 'europa/espana/andalucia/cadiz/rota' },
                   { nombre: 'Jerez de la Frontera', path: 'europa/espana/andalucia/cadiz/jerez-de-la-frontera', isImportantCity: true },
