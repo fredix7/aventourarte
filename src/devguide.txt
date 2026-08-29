@@ -2,8 +2,7 @@
 2. Crear el fichero ts dentro de guides... de la ciudad donde irá el contenido de la guía (PONER LA RUTA INDICADA DEL travel.data.ts)
 3. En el guide-viewer.component.ts importar e incluir la guía de la ciudad y en el Records (private guides) 
 
-Para publicar en GitHub Pages: Esto copia developer → gh-pages automáticamente
-ng build --configuration production --base-href /aventourarte/
-npx angular-cli-ghpages --dir=dist/aventourarte/browser
+Para publicar en GitHub Pages con rutas directas y fallback SPA:
+npm run deploy:pages
 
 - Imagenes guardadas en Cloudinary

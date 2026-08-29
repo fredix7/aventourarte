@@ -25,6 +25,11 @@
   </header>
 
   <main class="guide-content">
+    <app-guide-editorial-audit
+      *ngIf="editorialMode"
+      [guide]="guide"
+    ></app-guide-editorial-audit>
+
     <app-info-general *ngIf="guide.infoGeneral" [infoGeneral]="guide.infoGeneral"></app-info-general>
 
     <nav *ngIf="tabs.length" class="guide-tabs" aria-label="Secciones de la guía">

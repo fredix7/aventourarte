@@ -7,6 +7,7 @@ import { filter, Subscription } from 'rxjs';
 import { InfoGeneralComponent } from '../../info-general.component/info-general.component';
 import { ImageService } from '../../shared/image.service';
 import { ImgUrlPipe } from '../../shared/img-url.pipe';
+import { GuideEditorialAuditComponent } from '../guide-editorial-audit/guide-editorial-audit.component';
 import {
   AllergenDefinition,
   AllergenId,
@@ -55,7 +56,14 @@ export const GUIDE_REGISTRY: Readonly<Record<string, any>> = {
 @Component({
   selector: 'app-guide-viewer',
   standalone: true,
-  imports: [CommonModule, InfoGeneralComponent, MatExpansionModule, MatIconModule, ImgUrlPipe],
+  imports: [
+    CommonModule,
+    InfoGeneralComponent,
+    MatExpansionModule,
+    MatIconModule,
+    ImgUrlPipe,
+    GuideEditorialAuditComponent
+  ],
   templateUrl: './guide-viewer.component.html',
   styleUrls: ['./guide-viewer.component.scss']
 })
@@ -63,6 +71,7 @@ export class GuideViewerComponent implements OnDestroy {
   guide: any = null;
   pageStyle: Record<string, string> = {};
   requestedGuidePath: string | null = null;
+  editorialMode = false;
   showScrollTop = false;
   activeTabId = '';
   tabs: { id: string; label: string; icon: string; sections: any[] }[] = [];
@@ -154,7 +163,8 @@ export class GuideViewerComponent implements OnDestroy {
   }
 
   phoneUrl(phone: string): string {
-    return `tel:${phone.replace(/[^\d+]/g, '')}`;
+    const firstPhone = phone.split('/')[0].trim();
+    return `tel:${firstPhone.replace(/[^\d+]/g, '')}`;
   }
 
   buildGuideTabs(): { id: string; label: string; icon: string; sections: any[] }[] {
@@ -508,6 +518,7 @@ export class GuideViewerComponent implements OnDestroy {
   }
 
   private loadGuideFromUrl() {
+    this.editorialMode = this.route.snapshot.queryParamMap.get('editorial') === '1';
     const routePath = this.route.snapshot.paramMap.get('guidePath');
     const cleanUrl = this.router.url.split('?')[0].split('#')[0];
     const placePath = routePath ?? decodeURIComponent(cleanUrl.replace(/^\/guia\/?/, '')).replace(/^\/+/, '');

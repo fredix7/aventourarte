@@ -1,0 +1,85 @@
+<aside class="editorial-audit" data-testid="guide-editorial-audit" aria-labelledby="editorial-audit-title">
+  <header class="audit-header">
+    <div>
+      <span class="audit-eyebrow">Modo editorial · diagnóstico local</span>
+      <h2 id="editorial-audit-title">Revisión visible de {{ guide?.['nombre'] }}</h2>
+      <p>Estas métricas se calculan desde el mismo contenido que utiliza el visor público.</p>
+    </div>
+    <span class="audit-status" [class.blocked]="report.status === 'blocked'">
+      {{ statusLabel() }}
+    </span>
+  </header>
+
+  <div class="audit-metrics">
+    <article>
+      <strong>{{ report.entities.complete }}/{{ report.entities.total }}</strong>
+      <span>fichas con contenido</span>
+      <small>{{ percentage(report.entities.complete, report.entities.total) }} %</small>
+    </article>
+    <article>
+      <strong>{{ report.practical.complete }}/{{ report.practical.total }}</strong>
+      <span>datos prácticos</span>
+      <small>{{ percentage(report.practical.complete, report.practical.total) }} %</small>
+    </article>
+    <article>
+      <strong>{{ report.links.valid }}/{{ report.links.total }}</strong>
+      <span>enlaces válidos</span>
+      <small>formato almacenado</small>
+    </article>
+    <article>
+      <strong>{{ report.allergens.complete }}/{{ report.allergens.total }}</strong>
+      <span>perfiles de alérgenos</span>
+      <small>{{ percentage(report.allergens.complete, report.allergens.total) }} %</small>
+    </article>
+  </div>
+
+  <section class="photo-summary" aria-label="Cobertura visual">
+    <div>
+      <span>Fotos útiles</span>
+      <strong>{{ report.photos.useful }}</strong>
+    </div>
+    <div class="warning">
+      <span>Placeholders</span>
+      <strong>{{ report.photos.placeholder }}</strong>
+    </div>
+    <div class="muted">
+      <span>Sin foto</span>
+      <strong>{{ report.photos.missing }}</strong>
+    </div>
+    <div>
+      <span>Cloudinary</span>
+      <strong>{{ report.cloudinary.uniqueReferences }}</strong>
+      <small>IDs únicos</small>
+    </div>
+  </section>
+
+  <details *ngIf="report.errors.length" class="issue-group error-group" open>
+    <summary>{{ report.errors.length }} correcciones automáticas pendientes</summary>
+    <ul>
+      <li *ngFor="let issue of report.errors; trackBy: trackByIssue">
+        <strong>{{ issue.item }}</strong>
+        <span>{{ issue.detail }}</span>
+        <code>{{ issue.location }}</code>
+      </li>
+    </ul>
+  </details>
+
+  <details *ngIf="report.warnings.length" class="issue-group">
+    <summary>{{ report.warnings.length }} avisos identificados</summary>
+    <ul>
+      <li *ngFor="let issue of report.warnings; trackBy: trackByIssue">
+        <strong>{{ issue.item }}</strong>
+        <span>{{ issue.detail }}</span>
+        <code>{{ issue.location }}</code>
+      </li>
+    </ul>
+  </details>
+
+  <section class="manual-checks">
+    <h3>Qué necesita comprobación humana</h3>
+    <p>
+      Exactitud y vigencia factual, derechos de las fotografías y disponibilidad real de webs externas.
+      Pruebas, build y respuesta del CDN se certifican además en la revisión técnica.
+    </p>
+  </section>
+</aside>

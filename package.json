@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:pages": "ng build --configuration production --base-href /aventourarte/ && node scripts/prepare-github-pages.mjs",
+    "deploy:pages": "npm run build:pages && angular-cli-ghpages --dir=dist/aventourarte/browser",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:aventourarte": "node dist/aventourarte/server/server.mjs"

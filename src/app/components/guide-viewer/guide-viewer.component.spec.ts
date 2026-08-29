@@ -9,16 +9,19 @@ describe('GuideViewerComponent', () => {
   let component: GuideViewerComponent;
   let imageService: jasmine.SpyObj<ImageService>;
   let routePath: string | null;
+  let editorialParam: string | null;
   let routerUrl: string;
   let routerEvents: Subject<NavigationEnd>;
 
-  const setRoute = (path: string | null) => {
+  const setRoute = (path: string | null, editorial = false) => {
     routePath = path;
-    routerUrl = path ? `/guia/${path}` : '/';
+    editorialParam = editorial ? '1' : null;
+    routerUrl = path ? `/guia/${path}${editorial ? '?editorial=1' : ''}` : '/';
   };
 
   beforeEach(() => {
     routePath = null;
+    editorialParam = null;
     routerUrl = '/';
     routerEvents = new Subject<NavigationEnd>();
 
@@ -26,6 +29,9 @@ describe('GuideViewerComponent', () => {
       snapshot: {
         paramMap: {
           get: (name: string) => name === 'guidePath' ? routePath : null
+        },
+        queryParamMap: {
+          get: (name: string) => name === 'editorial' ? editorialParam : null
         }
       }
     } as unknown as ActivatedRoute;
@@ -61,6 +67,16 @@ describe('GuideViewerComponent', () => {
     expect(component.tabs.length).toBeGreaterThan(0);
     expect(component.activeTabId).toBe(component.tabs[0].id);
     expect(imageService.background).toHaveBeenCalled();
+  });
+
+  it('enables the editorial panel only through the explicit query parameter', () => {
+    setRoute('europa/espana/andalucia/cadiz/rota', true);
+    component.ngOnInit();
+    expect(component.editorialMode).toBeTrue();
+
+    setRoute('europa/espana/andalucia/cadiz/rota');
+    routerEvents.next(new NavigationEnd(1, routerUrl, routerUrl));
+    expect(component.editorialMode).toBeFalse();
   });
 
   it('keeps the requested path and shows no guide for an unknown route', () => {
