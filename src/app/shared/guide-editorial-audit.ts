@@ -22,6 +22,7 @@ export interface GuideEditorialAudit {
     useful: number;
     placeholder: number;
     missing: number;
+    notApplicable: number;
   };
   practical: {
     total: number;
@@ -74,14 +75,23 @@ function itemKind(sectionTitle: string, collection: 'lugares' | 'platos' | 'zona
 function collectEditorialItems(guide: any): NormalizedEditorialItem[] {
   const items: NormalizedEditorialItem[] = [];
 
-  const collectSection = (section: any, location: string, inheritedTitle = '') => {
+  const collectSection = (
+    section: any,
+    location: string,
+    inheritedTitle = '',
+    inheritedKind?: EditorialItemKind
+  ) => {
     const sectionTitle = String(section?.titulo ?? inheritedTitle);
+    const detectedKind = itemKind(sectionTitle, 'lugares');
+    const sectionKind = inheritedKind === 'restaurant' || inheritedKind === 'event'
+      ? inheritedKind
+      : detectedKind;
 
     for (const collection of ['lugares', 'platos'] as const) {
       const values = Array.isArray(section?.[collection]) ? section[collection] : [];
       values.forEach((value: any, index: number) => items.push({
         value,
-        kind: itemKind(sectionTitle, collection),
+        kind: collection === 'platos' ? 'dish' : sectionKind,
         location: `${location}.${collection}[${index}]`,
         sectionTitle
       }));
@@ -89,7 +99,7 @@ function collectEditorialItems(guide: any): NormalizedEditorialItem[] {
 
     const subsections = Array.isArray(section?.subsecciones) ? section.subsecciones : [];
     subsections.forEach((subsection: any, index: number) =>
-      collectSection(subsection, `${location}.subsecciones[${index}]`, sectionTitle)
+      collectSection(subsection, `${location}.subsecciones[${index}]`, sectionTitle, sectionKind)
     );
 
     const itinerary = Array.isArray(section?.itinerario) ? section.itinerario : [];
@@ -97,7 +107,7 @@ function collectEditorialItems(guide: any): NormalizedEditorialItem[] {
       const zones = Array.isArray(day?.zonas) ? day.zonas : [];
       zones.forEach((value: any, zoneIndex: number) => items.push({
         value,
-        kind: itemKind(sectionTitle, 'zonas'),
+        kind: sectionKind,
         location: `${location}.itinerario[${dayIndex}].zonas[${zoneIndex}]`,
         sectionTitle
       }));
@@ -190,6 +200,7 @@ export function auditGuideEditorial(guide: any): GuideEditorialAudit {
   let usefulPhotos = 0;
   let placeholderPhotos = 0;
   let missingPhotos = 0;
+  let photosNotApplicable = 0;
   let practicalTotal = 0;
   let practicalComplete = 0;
   let linkTotal = 0;
@@ -221,26 +232,31 @@ export function auditGuideEditorial(guide: any): GuideEditorialAudit {
     cloudinaryReferences.push(...photos.filter(photo => photo.startsWith('cld:')));
     const dedicatedPhotos = photos.filter(photo => !heroReferences.has(photo));
 
-    if (photos.length === 0) {
-      missingPhotos += 1;
-      warnings.push({
-        severity: 'warning',
-        category: 'visual',
-        item: name,
-        location: item.location,
-        detail: 'No tiene fotografía asignada.'
-      });
-    } else if (dedicatedPhotos.length === 0) {
-      placeholderPhotos += 1;
-      warnings.push({
-        severity: 'warning',
-        category: 'visual',
-        item: name,
-        location: item.location,
-        detail: 'Reutiliza una imagen de portada como placeholder.'
-      });
+    const requiresPhoto = item.kind === 'visit' || item.kind === 'dish';
+    if (!requiresPhoto) {
+      photosNotApplicable += 1;
     } else {
-      usefulPhotos += 1;
+      if (photos.length === 0) {
+        missingPhotos += 1;
+        warnings.push({
+          severity: 'warning',
+          category: 'visual',
+          item: name,
+          location: item.location,
+          detail: 'No tiene fotografía asignada.'
+        });
+      } else if (dedicatedPhotos.length === 0) {
+        placeholderPhotos += 1;
+        warnings.push({
+          severity: 'warning',
+          category: 'visual',
+          item: name,
+          location: item.location,
+          detail: 'Reutiliza una imagen de portada como placeholder.'
+        });
+      } else {
+        usefulPhotos += 1;
+      }
     }
 
     if (item.kind !== 'dish') {
@@ -322,10 +338,11 @@ export function auditGuideEditorial(guide: any): GuideEditorialAudit {
     status: errors.length ? 'blocked' : warnings.length ? 'ready-with-warnings' : 'ready',
     entities: { total: items.length, complete: completeEntities },
     photos: {
-      total: items.length,
+      total: usefulPhotos + placeholderPhotos + missingPhotos,
       useful: usefulPhotos,
       placeholder: placeholderPhotos,
-      missing: missingPhotos
+      missing: missingPhotos,
+      notApplicable: photosNotApplicable
     },
     practical: { total: practicalTotal, complete: practicalComplete },
     links: { total: linkTotal, valid: validLinks },

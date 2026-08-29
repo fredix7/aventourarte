@@ -8,16 +8,18 @@ describe('guide editorial audit', () => {
     expect(report.status).toBe('ready-with-warnings');
     expect(report.entities).toEqual({ total: 50, complete: 50 });
     expect(report.photos).toEqual({
-      total: 50,
+      total: 28,
       useful: 15,
       placeholder: 13,
-      missing: 22
+      missing: 0,
+      notApplicable: 22
     });
     expect(report.practical).toEqual({ total: 43, complete: 43 });
     expect(report.links).toEqual({ total: 43, valid: 43 });
     expect(report.allergens).toEqual({ total: 7, complete: 7 });
     expect(report.cloudinary.uniqueReferences).toBe(20);
     expect(report.errors).toEqual([]);
+    expect(report.warnings.length).toBe(13);
   });
 
   it('flattens subsections and itineraries and identifies structural problems', () => {
@@ -61,5 +63,55 @@ describe('guide editorial audit', () => {
     expect(report.photos.missing).toBe(1);
     expect(report.status).toBe('blocked');
     expect(report.errors.some(issue => issue.item === 'Zona sin datos')).toBeTrue();
+  });
+
+  it('does not require photos for restaurants or events in any guide', () => {
+    const report = auditGuideEditorial({
+      path: 'europa/espana/pruebas',
+      nombre: 'Pruebas',
+      descripcion: 'Guía de prueba',
+      secciones: [
+        {
+          titulo: 'Dónde comer',
+          subsecciones: [
+            {
+              titulo: 'Marisquerías',
+              lugares: [
+                {
+                  nombre: 'Restaurante',
+                  descripcion: 'Descripción',
+                  horario: '13:00',
+                  precio: '€€',
+                  direccion: 'Calle 1',
+                  maps: 'https://example.com/restaurante',
+                  telefono: '956000000'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          titulo: 'Fiestas',
+          lugares: [
+            {
+              nombre: 'Fiesta local',
+              descripcion: 'Descripción',
+              fecha: 'Agosto',
+              precio: 'Gratis'
+            }
+          ]
+        }
+      ]
+    });
+
+    expect(report.status).toBe('ready');
+    expect(report.photos).toEqual({
+      total: 0,
+      useful: 0,
+      placeholder: 0,
+      missing: 0,
+      notApplicable: 2
+    });
+    expect(report.warnings).toEqual([]);
   });
 });

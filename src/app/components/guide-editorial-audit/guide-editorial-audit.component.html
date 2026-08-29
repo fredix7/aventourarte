@@ -37,6 +37,7 @@
     <div>
       <span>Fotos útiles</span>
       <strong>{{ report.photos.useful }}</strong>
+      <small>visitas y platos</small>
     </div>
     <div class="warning">
       <span>Placeholders</span>
@@ -45,6 +46,12 @@
     <div class="muted">
       <span>Sin foto</span>
       <strong>{{ report.photos.missing }}</strong>
+      <small>solo visitas y platos</small>
+    </div>
+    <div class="not-applicable">
+      <span>No aplica</span>
+      <strong>{{ report.photos.notApplicable }}</strong>
+      <small>Dónde comer y fiestas</small>
     </div>
     <div>
       <span>Cloudinary</span>
@@ -52,6 +59,11 @@
       <small>IDs únicos</small>
     </div>
   </section>
+
+  <p class="photo-policy">
+    Regla editorial global: las fichas de Dónde comer y Fiestas no requieren fotografía y nunca
+    generan avisos por ausencia de imagen.
+  </p>
 
   <details *ngIf="report.errors.length" class="issue-group error-group" open>
     <summary>{{ report.errors.length }} correcciones automáticas pendientes</summary>

@@ -55,7 +55,7 @@ Append `?editorial=1` to a guide URL to show its audit panel without changing th
 /guia/europa/espana/andalucia/cadiz/rota?editorial=1
 ```
 
-The panel derives content, practical-data, link, allergen, and image-coverage checks from the same guide object rendered by the page. It separates automatic findings from checks that still require a person, such as factual freshness, image rights, and external-site availability. The query parameter is a review aid, not an authentication mechanism.
+The panel derives content, practical-data, link, allergen, and image-coverage checks from the same guide object rendered by the page. Photo coverage applies only to visits and dishes: restaurant and festival entries are reported as not applicable and never produce missing-image warnings. It separates automatic findings from checks that still require a person, such as factual freshness, image rights, and external-site availability. The query parameter is a review aid, not an authentication mechanism.
 
 ### Google Fonts and TLS certificates
 
