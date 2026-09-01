@@ -330,9 +330,9 @@ app-info-general {
   margin-bottom: 24px;
 }
 
-.allergen-filter {
+.gastronomy-filter-panel {
   display: grid;
-  gap: 18px;
+  gap: 20px;
   margin: 4px 0 26px;
   padding: clamp(18px, 3vw, 26px);
   border: 1px solid rgba(18, 58, 90, 0.2);
@@ -343,14 +343,40 @@ app-info-general {
   box-shadow: inset 0 1px rgba(255, 255, 255, 0.72);
 }
 
-.allergen-filter-heading {
+.gastronomy-filter-heading,
+.gastronomy-filter-title,
+.gastronomy-filter-group-heading {
   display: flex;
-  gap: 20px;
+  gap: 14px;
   align-items: start;
   justify-content: space-between;
 }
 
-.allergen-filter-eyebrow,
+.gastronomy-filter-title {
+  justify-content: flex-start;
+}
+
+.gastronomy-filter-heading-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 12px;
+  color: #fff;
+  background: linear-gradient(145deg, #123a5a, #226f8f);
+  box-shadow: 0 8px 20px rgba(18, 58, 90, 0.2);
+}
+
+.gastronomy-filter-heading-icon mat-icon {
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+}
+
+.gastronomy-filter-eyebrow,
+.gastronomy-filter-group-kicker,
+.dish-food-preferences-label,
 .dish-allergens-label {
   display: block;
   color: #557080;
@@ -360,24 +386,25 @@ app-info-general {
   text-transform: uppercase;
 }
 
-.allergen-filter-heading h3 {
+.gastronomy-filter-heading h3 {
   margin: 3px 0 5px;
   font-size: clamp(1.25rem, 2.2vw, 1.65rem);
   line-height: 1.18;
 }
 
-.allergen-filter-heading p {
+.gastronomy-filter-heading p {
   max-width: 680px;
   margin: 0;
   color: #425764;
   line-height: 1.55;
 }
 
-.clear-allergen-filter,
-.allergen-option {
-  min-height: 44px;
+.clear-gastronomy-filter,
+.allergen-option,
+.food-preference-option {
+  min-height: 42px;
   border: 1px solid rgba(18, 58, 90, 0.22);
-  border-radius: 999px;
+  border-radius: 10px;
   color: #203b4d;
   background: rgba(255, 255, 255, 0.76);
   font: inherit;
@@ -391,27 +418,91 @@ app-info-general {
     transform 0.18s ease;
 }
 
-.clear-allergen-filter {
+.clear-gastronomy-filter {
   display: inline-flex;
   flex: 0 0 auto;
   gap: 6px;
   align-items: center;
   padding: 8px 14px;
+  border-radius: 999px;
 }
 
-.clear-allergen-filter mat-icon {
+.clear-gastronomy-filter mat-icon {
   width: 19px;
   height: 19px;
   font-size: 19px;
 }
 
-.allergen-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 9px;
+.gastronomy-filter-grid {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.78fr) minmax(0, 1.55fr);
+  gap: clamp(18px, 3vw, 30px);
+  align-items: start;
 }
 
-.allergen-option {
+.gastronomy-filter-group {
+  min-width: 0;
+}
+
+.allergen-filter-group {
+  padding-left: clamp(18px, 3vw, 30px);
+  border-left: 1px solid rgba(18, 58, 90, 0.15);
+}
+
+.gastronomy-filter-group-heading {
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.gastronomy-filter-group-heading h4 {
+  margin: 2px 0 0;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.selection-hint {
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: #557080;
+  background: rgba(18, 58, 90, 0.07);
+  font-size: 0.7rem;
+  font-weight: 850;
+}
+
+.allergen-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 8px;
+}
+
+.food-preference-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.food-restriction-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.food-restriction-heading {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16px 0 8px;
+  padding-top: 13px;
+  border-top: 1px solid rgba(18, 58, 90, 0.13);
+  color: #425764;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.allergen-option,
+.food-preference-option {
   display: inline-flex;
   gap: 8px;
   align-items: center;
@@ -420,12 +511,14 @@ app-info-general {
 }
 
 .allergen-option:hover,
-.clear-allergen-filter:hover {
+.food-preference-option:hover,
+.clear-gastronomy-filter:hover {
   border-color: rgba(18, 58, 90, 0.52);
   transform: translateY(-1px);
 }
 
-.allergen-option.active {
+.allergen-option.active,
+.food-preference-option.active {
   color: #fff;
   border-color: #123a5a;
   background: linear-gradient(145deg, #123a5a, #226f8f);
@@ -433,12 +526,14 @@ app-info-general {
 }
 
 .allergen-option:focus-visible,
-.clear-allergen-filter:focus-visible {
+.food-preference-option:focus-visible,
+.clear-gastronomy-filter:focus-visible {
   outline: 3px solid rgba(201, 133, 77, 0.72);
   outline-offset: 3px;
 }
 
-.allergen-symbol {
+.allergen-symbol,
+.food-preference-symbol {
   display: inline-grid;
   place-items: center;
   width: 30px;
@@ -446,19 +541,20 @@ app-info-general {
   flex: 0 0 30px;
   border: 1px solid currentColor;
   border-radius: 50%;
-  font-size: 0.7rem;
+  font-size: 1rem;
   font-weight: 950;
   letter-spacing: -0.02em;
   line-height: 1;
 }
 
-.allergen-option.active .allergen-symbol {
+.allergen-option.active .allergen-symbol,
+.food-preference-option.active .food-preference-symbol {
   color: #123a5a;
   border-color: rgba(255, 255, 255, 0.84);
   background: #fffaf2;
 }
 
-.allergen-filter-feedback {
+.gastronomy-filter-feedback {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 16px;
@@ -511,7 +607,7 @@ app-info-general {
     transform 0.22s ease;
 }
 
-.item-card.allergen-match {
+.item-card.gastronomy-match {
   border-color: rgba(23, 107, 98, 0.72);
   box-shadow:
     0 18px 38px rgba(23, 107, 98, 0.2),
@@ -519,16 +615,16 @@ app-info-general {
   transform: translateY(-3px);
 }
 
-.item-card.allergen-conflict,
-.item-card.allergen-unknown {
+.item-card.gastronomy-conflict,
+.item-card.gastronomy-unknown {
   opacity: 0.78;
   filter: saturate(0.8);
 }
 
-.item-card.allergen-conflict:hover,
-.item-card.allergen-conflict:focus-within,
-.item-card.allergen-unknown:hover,
-.item-card.allergen-unknown:focus-within {
+.item-card.gastronomy-conflict:hover,
+.item-card.gastronomy-conflict:focus-within,
+.item-card.gastronomy-unknown:hover,
+.item-card.gastronomy-unknown:focus-within {
   opacity: 0.94;
 }
 
@@ -560,6 +656,42 @@ app-info-general {
   color: #34424e;
   font-size: 0.98rem;
   line-height: 1.66;
+}
+
+.dish-food-preferences {
+  display: grid;
+  gap: 9px;
+  margin: 0 -18px 10px;
+  padding: 14px 18px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: rgba(238, 248, 244, 0.86);
+}
+
+.dish-food-preference-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.dish-food-preference-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 5px 10px;
+  border: 1px solid rgba(23, 107, 98, 0.3);
+  border-radius: 999px;
+  color: #176b62;
+  background: #effaf6;
+  font-size: 0.76rem;
+  font-weight: 850;
+  line-height: 1.15;
+}
+
+.dish-food-preference-badge.alcohol {
+  color: #765b35;
+  border-color: rgba(154, 113, 62, 0.32);
+  background: #fff8e8;
 }
 
 .dish-allergens {
@@ -652,8 +784,12 @@ app-info-general {
   font-size: 18px;
 }
 
-.allergen-conflict .dish-filter-status {
+.gastronomy-conflict .dish-filter-status {
   color: #8a4c2e;
+}
+
+.gastronomy-unknown .dish-filter-status {
+  color: #765b35;
 }
 
 .unknown-profile {
@@ -1113,20 +1249,35 @@ app-info-general {
     gap: 16px;
   }
 
-  .allergen-filter-heading {
+  .gastronomy-filter-heading {
     display: grid;
   }
 
-  .clear-allergen-filter {
+  .clear-gastronomy-filter {
     justify-self: start;
   }
 
-  .allergen-options {
+  .gastronomy-filter-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .allergen-filter-group {
+    padding-top: 18px;
+    padding-left: 0;
+    border-top: 1px solid rgba(18, 58, 90, 0.15);
+    border-left: 0;
+  }
+
+  .allergen-options,
+  .food-preference-options,
+  .food-restriction-options {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .allergen-option {
+  .allergen-option,
+  .food-preference-option {
     width: 100%;
     border-radius: 8px;
   }
@@ -1226,15 +1377,18 @@ app-info-general {
     padding: 10px;
   }
 
-  .allergen-filter {
+  .gastronomy-filter-panel {
     padding: 15px 12px;
   }
 
-  .allergen-options {
+  .allergen-options,
+  .food-preference-options,
+  .food-restriction-options {
     gap: 7px;
   }
 
-  .allergen-option {
+  .allergen-option,
+  .food-preference-option {
     gap: 6px;
     padding: 6px;
     font-size: 0.78rem;
@@ -1242,24 +1396,27 @@ app-info-general {
     overflow-wrap: anywhere;
   }
 
-  .allergen-option .allergen-symbol {
+  .allergen-option .allergen-symbol,
+  .food-preference-option .food-preference-symbol {
     width: 26px;
     height: 26px;
     flex-basis: 26px;
   }
 
-  .allergen-filter-feedback {
+  .gastronomy-filter-feedback {
     padding-right: 48px;
   }
 
-  .dish-allergens {
+  .dish-allergens,
+  .dish-food-preferences {
     margin-inline: -14px;
     padding-inline: 14px;
   }
 }
 
 @media (max-width: 340px) {
-  .allergen-options {
+  .allergen-options,
+  .food-preference-options {
     grid-template-columns: 1fr;
   }
 }

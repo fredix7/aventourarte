@@ -1,4 +1,5 @@
 import { ROTA_GUIDE } from '../guides/europa/espana/andalucia/cadiz/rota.guide';
+import { ALMENSILLA_GUIDE } from '../guides/europa/espana/andalucia/sevilla/almensilla.guide';
 import { auditGuideEditorial } from './guide-editorial-audit';
 
 describe('guide editorial audit', () => {
@@ -20,6 +21,18 @@ describe('guide editorial audit', () => {
     expect(report.cloudinary.uniqueReferences).toBe(20);
     expect(report.errors).toEqual([]);
     expect(report.warnings.length).toBe(13);
+  });
+
+  it('keeps the first Almensilla version reviewable while placeholder images remain', () => {
+    const report = auditGuideEditorial(ALMENSILLA_GUIDE);
+
+    expect(report.status).toBe('ready-with-warnings');
+    expect(report.entities).toEqual({ total: 28, complete: 28 });
+    expect(report.practical).toEqual({ total: 19, complete: 19 });
+    expect(report.allergens).toEqual({ total: 9, complete: 9 });
+    expect(report.errors).toEqual([]);
+    expect(report.warnings.length).toBe(13);
+    expect(report.warnings.every(issue => issue.category === 'visual')).toBeTrue();
   });
 
   it('flattens subsections and itineraries and identifies structural problems', () => {

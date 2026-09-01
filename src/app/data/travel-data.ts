@@ -68,6 +68,7 @@ export const TRAVEL_TREE: TravelNode[] = [
                 nombre: 'Sevilla',
                 hijos: [
                   { nombre: 'Sevilla ciudad', path: 'europa/espana/andalucia/sevilla/sevilla-ciudad', isCapital: true },
+                  { nombre: 'Almensilla', path: 'europa/espana/andalucia/sevilla/almensilla' },
                   { nombre: 'Castilblanco de los Arroyos', path: 'europa/espana/andalucia/sevilla/castilblanco-de-los-arroyos' },
                   { nombre: 'Coria del Río', path: 'europa/espana/andalucia/sevilla/coria-del-rio' },
                   { nombre: 'Isla Mayor', path: 'europa/espana/andalucia/sevilla/isla-mayor' },

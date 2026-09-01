@@ -17,6 +17,14 @@ import {
   profileAvoidsSelectedAllergens,
   profileHasSelectedAllergen
 } from '../../shared/gastronomy-allergens';
+import {
+  DIETARY_PREFERENCES,
+  DietaryPreferenceId,
+  FoodPreferenceFilterResult,
+  FoodPreferenceProfile,
+  evaluateFoodPreferenceProfile,
+  hasFoodPreferenceSelection
+} from '../../shared/gastronomy-preferences';
 
 import { CADIZ_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/cadiz.guide';
 import { CHIPIONA_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/chipiona.guide';
@@ -27,6 +35,7 @@ import { SANLUCAR_BARRAMEDA_GUIDE } from '../../guides/europa/espana/andalucia/c
 import { TREBUJENA_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/trebujena.guide';
 import { VEJER_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/vejer.guide';
 
+import { ALMENSILLA_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/almensilla.guide';
 import { MAIRENA_ALJARAFE_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/mairena-aljarafe.guide';
 import { LA_VALETA_GUIDE } from '../../guides/europa/malta/la-valeta.guide';
 import { ROMA_VATICANO_GUIDE } from '../../guides/europa/italia/roma-vaticano.guide';
@@ -44,6 +53,7 @@ export const GUIDE_REGISTRY: Readonly<Record<string, any>> = {
   'europa/espana/andalucia/cadiz/trebujena': TREBUJENA_GUIDE,
   'europa/espana/andalucia/cadiz/vejer-de-la-frontera': VEJER_GUIDE,
 
+  'europa/espana/andalucia/sevilla/almensilla': ALMENSILLA_GUIDE,
   'europa/espana/andalucia/sevilla/mairena-del-aljarafe': MAIRENA_ALJARAFE_GUIDE,
   
   'europa/italia/roma-vaticano': ROMA_VATICANO_GUIDE,
@@ -76,7 +86,11 @@ export class GuideViewerComponent implements OnDestroy {
   activeTabId = '';
   tabs: { id: string; label: string; icon: string; sections: any[] }[] = [];
   readonly allergens = GASTRONOMY_ALLERGENS;
+  readonly dietaryPreferences = DIETARY_PREFERENCES;
   selectedAllergens = new Set<AllergenId>();
+  selectedDiet: DietaryPreferenceId | null = null;
+  avoidAlcohol = false;
+  avoidPork = false;
   expandedPhoto: { src: string; alt: string; gallery: string[]; index: number } | null = null;
   zoomLevel = 1;
   panX = 0;
@@ -292,6 +306,45 @@ export class GuideViewerComponent implements OnDestroy {
     return this.selectedAllergens.size > 0;
   }
 
+  toggleDietaryPreference(preferenceId: DietaryPreferenceId) {
+    this.selectedDiet = this.selectedDiet === preferenceId ? null : preferenceId;
+  }
+
+  toggleAvoidAlcohol() {
+    this.avoidAlcohol = !this.avoidAlcohol;
+  }
+
+  toggleAvoidPork() {
+    this.avoidPork = !this.avoidPork;
+  }
+
+  clearFoodPreferenceSelection() {
+    this.selectedDiet = null;
+    this.avoidAlcohol = false;
+    this.avoidPork = false;
+  }
+
+  clearGastronomyFilters() {
+    this.clearFoodPreferenceSelection();
+    this.clearAllergenSelection();
+  }
+
+  isDietaryPreferenceSelected(preferenceId: DietaryPreferenceId): boolean {
+    return this.selectedDiet === preferenceId;
+  }
+
+  hasFoodPreferenceSelection(): boolean {
+    return hasFoodPreferenceSelection({
+      diet: this.selectedDiet,
+      avoidAlcohol: this.avoidAlcohol,
+      avoidPork: this.avoidPork
+    });
+  }
+
+  hasGastronomyFilterSelection(): boolean {
+    return this.hasFoodPreferenceSelection() || this.hasAllergenSelection();
+  }
+
   allergenDefinition(allergenId: AllergenId): AllergenDefinition {
     return this.allergens.find(allergen => allergen.id === allergenId) ?? {
       id: allergenId,
@@ -311,6 +364,81 @@ export class GuideViewerComponent implements OnDestroy {
     }
 
     return dishAllergenProfile(item?.nombre ?? '', this.guide?.path ?? '');
+  }
+
+  foodPreferenceProfile(item: any): FoodPreferenceProfile | null {
+    return item?.perfilAlimentario ?? null;
+  }
+
+  dietProfileLabel(profile: FoodPreferenceProfile): string {
+    if (profile.dieta.certeza !== 'confirmado') {
+      return profile.dieta.certeza === 'variable' ? 'Dieta variable' : 'Dieta por confirmar';
+    }
+
+    const labels: Record<string, string> = {
+      vegano: 'Vegano',
+      vegetariano: 'Vegetariano',
+      pescetariano: 'Pescetariano',
+      ninguno: 'Incluye carne'
+    };
+
+    return labels[profile.dieta.compatibilidad] ?? 'Dieta por confirmar';
+  }
+
+  alcoholProfileLabel(profile: FoodPreferenceProfile): string {
+    const labels: Record<FoodPreferenceProfile['alcohol'], string> = {
+      contiene: 'Contiene alcohol',
+      'puede-contener': 'Puede contener alcohol',
+      'no-contiene': 'Sin alcohol en la receta descrita',
+      desconocido: 'Alcohol por confirmar'
+    };
+
+    return labels[profile.alcohol];
+  }
+
+  porkProfileLabel(profile: FoodPreferenceProfile): string {
+    const labels: Record<FoodPreferenceProfile['cerdo'], string> = {
+      contiene: 'Contiene cerdo',
+      'puede-contener': 'Puede contener cerdo',
+      'no-contiene': 'Sin cerdo en la receta descrita',
+      desconocido: 'Cerdo por confirmar'
+    };
+
+    return labels[profile.cerdo];
+  }
+
+  foodPreferenceFilterResult(item: any): FoodPreferenceFilterResult {
+    return evaluateFoodPreferenceProfile(this.foodPreferenceProfile(item), {
+      diet: this.selectedDiet,
+      avoidAlcohol: this.avoidAlcohol,
+      avoidPork: this.avoidPork
+    });
+  }
+
+  gastronomyFilterState(item: any): FoodPreferenceFilterResult {
+    if (!this.hasGastronomyFilterSelection()) return 'neutral';
+
+    const results: FoodPreferenceFilterResult[] = [];
+
+    if (this.hasFoodPreferenceSelection()) {
+      results.push(this.foodPreferenceFilterResult(item));
+    }
+
+    if (this.hasAllergenSelection()) {
+      const allergenProfile = this.dishAllergenProfile(item);
+
+      if (profileHasSelectedAllergen(allergenProfile, this.selectedAllergens)) {
+        results.push('incompatible');
+      } else if (!allergenProfile || allergenProfile.status === 'variable') {
+        results.push('unknown');
+      } else {
+        results.push('compatible');
+      }
+    }
+
+    if (results.includes('incompatible')) return 'incompatible';
+    if (results.includes('unknown')) return 'unknown';
+    return 'compatible';
   }
 
   isCompatibleWithSelectedAllergens(item: any): boolean {
@@ -333,7 +461,8 @@ export class GuideViewerComponent implements OnDestroy {
   }
 
   sectionItems(section: any): any[] {
-    return section?.lugares ?? section?.platos ?? [];
+    return this.sectionContentGroups(section)
+      .flatMap(group => group?.lugares ?? group?.platos ?? []);
   }
 
   sectionContentGroups(section: any): any[] {
@@ -342,7 +471,7 @@ export class GuideViewerComponent implements OnDestroy {
 
   compatibleDishCount(section: any): number {
     return this.sectionItems(section)
-      .filter(item => this.isCompatibleWithSelectedAllergens(item))
+      .filter(item => this.gastronomyFilterState(item) === 'compatible')
       .length;
   }
 
@@ -529,6 +658,7 @@ export class GuideViewerComponent implements OnDestroy {
       this.requestedGuidePath = null;
       this.activeTabId = '';
       this.clearAllergenSelection();
+      this.clearFoodPreferenceSelection();
       this.applyGuideStyle(this.guide);
       this.tabs = this.buildGuideTabs();
       return;
@@ -540,6 +670,7 @@ export class GuideViewerComponent implements OnDestroy {
     this.pageStyle = {};
     this.activeTabId = '';
     this.clearAllergenSelection();
+    this.clearFoodPreferenceSelection();
     this.tabs = [];
   }
 

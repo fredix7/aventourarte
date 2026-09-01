@@ -222,6 +222,17 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Rosquetes vejeriegos', complete(['gluten', 'huevo'], ['sesamo'])],
     ['Vinos de Vejer y Tierra de Cádiz', complete([], ['sulfitos'])],
 
+     // Almensilla
+    ['Aceitunas de mesa de Almensilla', variable([], ['sulfitos'])],
+    ['Pan tostado con aceite de oliva y sardinas de La Tostá', complete(['gluten', 'pescado'], ['sesamo'])],
+    ['Sopeao de Almensilla y piri', variable(['gluten', 'huevo', 'pescado'])],
+    ['Migas con jamón y pasas', complete(['gluten'], ['sulfitos'])],
+    ['Alcauciles rellenos de carne de cerdo', variable([], ['gluten', 'huevo', 'leche', 'sulfitos'])],
+    ['Liebre almensillera: sopa y arroz', variable([], ['gluten', 'huevo', 'sulfitos'])],
+    ['Galletas fritas y rollitos de masa rellenos de flan', variable(['gluten'], ['huevo', 'leche', 'soja'])],
+    ['Repostería de Semana Santa: hojuelas, torrijas, rosquitos, pestiños, rosas y empanadillas', variable(['gluten'], ['huevo', 'leche', 'sesamo', 'sulfitos', 'frutos-cascara'])],
+    ['Mosto de Almensilla', complete([], ['sulfitos'])],
+
     // Mairena del Aljarafe
     ['Mosto del Aljarafe', complete([], ['sulfitos'])],
     ['Sopeao del Aljarafe', complete(['gluten'])],
@@ -233,6 +244,7 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Cola de toro', variable([], ['sulfitos', 'gluten', 'huevo', 'leche'])],
     ['Ropa vieja de puchero', variable()],
     ['Tostón de sardinas', complete(['gluten', 'pescado'], ['leche'])],
+
   ] as [string, DishAllergenProfile][]).map(([name, profile]) => [normalizeDishName(name), profile])
 );
 

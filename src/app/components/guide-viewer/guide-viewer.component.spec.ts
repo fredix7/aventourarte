@@ -169,6 +169,53 @@ describe('GuideViewerComponent', () => {
     expect(component.panX).toBe(0);
     expect(component.panY).toBe(0);
   });
+
+  it('combines dietary, alcohol and allergen filters conservatively in Almensilla', () => {
+    setRoute('europa/espana/andalucia/sevilla/almensilla');
+    component.ngOnInit();
+
+    const gastronomy = component.guide.secciones.find(
+      (section: any) => section.titulo === 'Gastronomía'
+    );
+    const dish = (name: string) => gastronomy.platos.find((item: any) => item.nombre === name);
+
+    component.toggleDietaryPreference('vegetariano');
+    expect(component.gastronomyFilterState(dish('Galletas fritas y rollitos de masa rellenos de flan')))
+      .toBe('compatible');
+    expect(component.gastronomyFilterState(dish('Migas con jamón y pasas')))
+      .toBe('incompatible');
+    expect(component.gastronomyFilterState(dish('Aceitunas de mesa de Almensilla')))
+      .toBe('unknown');
+
+    component.toggleDietaryPreference('pescetariano');
+    component.toggleAllergen('leche');
+    component.toggleAvoidAlcohol();
+    expect(
+      component.gastronomyFilterState(
+        dish('Pan tostado con aceite de oliva y sardinas de La Tostá')
+      )
+    ).toBe('compatible');
+    expect(component.gastronomyFilterState(dish('Mosto de Almensilla')))
+      .toBe('incompatible');
+
+    component.clearGastronomyFilters();
+    expect(component.hasGastronomyFilterSelection()).toBeFalse();
+  });
+
+  it('clears food preference selections when the destination changes', () => {
+    setRoute('europa/espana/andalucia/sevilla/almensilla');
+    component.ngOnInit();
+    component.toggleDietaryPreference('vegano');
+    component.toggleAvoidAlcohol();
+    component.toggleAvoidPork();
+
+    setRoute('europa/espana/andalucia/cadiz/rota');
+    routerEvents.next(new NavigationEnd(1, routerUrl, routerUrl));
+
+    expect(component.selectedDiet).toBeNull();
+    expect(component.avoidAlcohol).toBeFalse();
+    expect(component.avoidPork).toBeFalse();
+  });
 });
 
 describe('GUIDE_REGISTRY', () => {
@@ -189,5 +236,11 @@ describe('GUIDE_REGISTRY', () => {
 
   it('includes the current Chipiona guide', () => {
     expect(GUIDE_REGISTRY['europa/espana/andalucia/cadiz/chipiona']?.nombre).toBe('Chipiona');
+  });
+
+  it('includes the Almensilla guide under Sevilla', () => {
+    expect(GUIDE_REGISTRY['europa/espana/andalucia/sevilla/almensilla']?.nombre).toBe(
+      'Almensilla'
+    );
   });
 });

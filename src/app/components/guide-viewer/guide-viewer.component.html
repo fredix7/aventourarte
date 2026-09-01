@@ -68,50 +68,141 @@
 
           <p *ngIf="section.contenido" class="section-content">{{ section.contenido }}</p>
 
-          <aside *ngIf="isGastronomySection(section)" class="allergen-filter" aria-labelledby="allergen-filter-title">
-            <div class="allergen-filter-heading">
-              <div>
-                <span class="allergen-filter-eyebrow">Filtro de alérgenos</span>
-                <h3 id="allergen-filter-title">¿Qué necesitas evitar?</h3>
-                <p>Pulsa uno o varios alérgenos. Destacaremos las fichas cuya receta descrita no los incluye.</p>
+          <aside
+            *ngIf="isGastronomySection(section)"
+            class="gastronomy-filter-panel"
+            aria-labelledby="gastronomy-filter-title"
+          >
+            <div class="gastronomy-filter-heading">
+              <div class="gastronomy-filter-title">
+                <span class="gastronomy-filter-heading-icon" aria-hidden="true">
+                  <mat-icon>tune</mat-icon>
+                </span>
+                <div>
+                  <span class="gastronomy-filter-eyebrow">Filtros de gastronomía</span>
+                  <h3 id="gastronomy-filter-title">Encuentra platos que encajen contigo</h3>
+                  <p>Combina tu tipo de alimentación con los ingredientes que necesitas evitar.</p>
+                </div>
               </div>
 
               <button
-                *ngIf="hasAllergenSelection()"
+                *ngIf="hasGastronomyFilterSelection()"
                 type="button"
-                class="clear-allergen-filter"
-                (click)="clearAllergenSelection()"
+                class="clear-gastronomy-filter"
+                (click)="clearGastronomyFilters()"
               >
                 <mat-icon aria-hidden="true">restart_alt</mat-icon>
-                Limpiar
+                Limpiar todo
               </button>
             </div>
 
-            <div class="allergen-options" role="group" aria-label="Alérgenos que necesitas evitar">
-              <button
-                *ngFor="let allergen of allergens"
-                type="button"
-                class="allergen-option"
-                [class.active]="isAllergenSelected(allergen.id)"
-                [attr.aria-pressed]="isAllergenSelected(allergen.id)"
-                [attr.aria-label]="allergen.label + (isAllergenSelected(allergen.id) ? ', seleccionado' : ', no seleccionado')"
-                (click)="toggleAllergen(allergen.id)"
+            <div class="gastronomy-filter-grid">
+              <section
+                class="gastronomy-filter-group preference-filter-group"
+                aria-labelledby="food-preference-filter-title"
               >
-                <span class="allergen-symbol" aria-hidden="true">{{ allergen.symbol }}</span>
-                <span>{{ allergen.label }}</span>
-              </button>
+                <div class="gastronomy-filter-group-heading">
+                  <div>
+                    <span class="gastronomy-filter-group-kicker">Tu alimentación</span>
+                    <h4 id="food-preference-filter-title">Tipo de alimentación</h4>
+                  </div>
+                  <span class="selection-hint">Una dieta</span>
+                </div>
+
+                <div
+                  class="food-preference-options"
+                  role="radiogroup"
+                  aria-label="Preferencia alimentaria"
+                >
+                  <button
+                    *ngFor="let preference of dietaryPreferences"
+                    type="button"
+                    role="radio"
+                    class="food-preference-option"
+                    [class.active]="isDietaryPreferenceSelected(preference.id)"
+                    [attr.aria-checked]="isDietaryPreferenceSelected(preference.id)"
+                    (click)="toggleDietaryPreference(preference.id)"
+                  >
+                    <span class="food-preference-symbol" aria-hidden="true">{{ preference.symbol }}</span>
+                    <span>{{ preference.label }}</span>
+                  </button>
+                </div>
+
+                <div class="food-restriction-heading">
+                  <span>También quiero evitar</span>
+                  <span class="selection-hint">Varias opciones</span>
+                </div>
+
+                <div class="food-restriction-options" role="group" aria-label="Ingredientes que quiero evitar">
+                  <button
+                    type="button"
+                    class="food-preference-option"
+                    [class.active]="avoidAlcohol"
+                    [attr.aria-pressed]="avoidAlcohol"
+                    (click)="toggleAvoidAlcohol()"
+                  >
+                    <span class="food-preference-symbol" aria-hidden="true">🍷</span>
+                    <span>Alcohol</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="food-preference-option"
+                    [class.active]="avoidPork"
+                    [attr.aria-pressed]="avoidPork"
+                    (click)="toggleAvoidPork()"
+                  >
+                    <span class="food-preference-symbol" aria-hidden="true">🐖</span>
+                    <span>Cerdo</span>
+                  </button>
+                </div>
+              </section>
+
+              <section
+                class="gastronomy-filter-group allergen-filter-group"
+                aria-labelledby="allergen-filter-title"
+              >
+                <div class="gastronomy-filter-group-heading">
+                  <div>
+                    <span class="gastronomy-filter-group-kicker">Seguridad alimentaria</span>
+                    <h4 id="allergen-filter-title">Alérgenos que quiero evitar</h4>
+                  </div>
+                  <span class="selection-hint">Varias opciones</span>
+                </div>
+
+                <div class="allergen-options" role="group" aria-label="Alérgenos que necesitas evitar">
+                  <button
+                    *ngFor="let allergen of allergens"
+                    type="button"
+                    class="allergen-option"
+                    [class.active]="isAllergenSelected(allergen.id)"
+                    [attr.aria-pressed]="isAllergenSelected(allergen.id)"
+                    [attr.aria-label]="allergen.label + (isAllergenSelected(allergen.id) ? ', seleccionado' : ', no seleccionado')"
+                    (click)="toggleAllergen(allergen.id)"
+                  >
+                    <span class="allergen-symbol" aria-hidden="true">{{ allergen.symbol }}</span>
+                    <span>{{ allergen.label }}</span>
+                  </button>
+                </div>
+              </section>
             </div>
 
-            <div class="allergen-filter-feedback" aria-live="polite">
-              <ng-container *ngIf="hasAllergenSelection(); else allergenFilterIdle">
+            <div class="gastronomy-filter-feedback" aria-live="polite">
+              <ng-container *ngIf="hasGastronomyFilterSelection(); else gastronomyFilterIdle">
                 <span class="compatible-count">
                   <mat-icon aria-hidden="true">verified</mat-icon>
-                  {{ compatibleDishCount(section) }} de {{ sectionItems(section).length }} fichas sin coincidencias conocidas
+                  {{ compatibleDishCount(section) }} de {{ sectionItems(section).length }} fichas
+                  compatibles con todos los filtros activos
                 </span>
-                <span>Las recetas pueden variar y existir contaminación cruzada. Confirma siempre con el establecimiento.</span>
+                <span>
+                  Los datos variables o desconocidos no se consideran compatibles. Confirma siempre
+                  ingredientes y contaminación cruzada con el establecimiento.
+                </span>
               </ng-container>
-              <ng-template #allergenFilterIdle>
-                <span>La información corresponde a la receta descrita, no certifica la elaboración de cada local.</span>
+              <ng-template #gastronomyFilterIdle>
+                <span>
+                  La información corresponde a la receta descrita y no certifica la elaboración de
+                  cada establecimiento.
+                </span>
               </ng-template>
             </div>
           </aside>
@@ -270,9 +361,9 @@
                 <article
                   class="item-card"
                   *ngFor="let item of contentSection.lugares || contentSection.platos"
-                  [class.allergen-match]="isGastronomySection(contentSection) && isCompatibleWithSelectedAllergens(item)"
-                  [class.allergen-conflict]="isGastronomySection(contentSection) && hasSelectedAllergen(item)"
-                  [class.allergen-unknown]="isGastronomySection(contentSection) && hasUnknownAllergenProfile(item)"
+                  [class.gastronomy-match]="isGastronomySection(contentSection) && gastronomyFilterState(item) === 'compatible'"
+                  [class.gastronomy-conflict]="isGastronomySection(contentSection) && gastronomyFilterState(item) === 'incompatible'"
+                  [class.gastronomy-unknown]="isGastronomySection(contentSection) && gastronomyFilterState(item) === 'unknown'"
                 >
                   <figure
                     class="image-frame item-image zoomable-image"
@@ -296,6 +387,38 @@
                   <div class="card-copy">
                     <h4 *ngIf="section.subsecciones?.length">{{ item.nombre }}</h4>
                     <h3 *ngIf="!section.subsecciones?.length">{{ item.nombre }}</h3>
+
+                    <div
+                      *ngIf="isGastronomySection(contentSection) && foodPreferenceProfile(item) as foodProfile; else unknownFoodPreferenceProfile"
+                      class="dish-food-preferences"
+                      [attr.aria-label]="'Preferencias alimentarias de ' + item.nombre"
+                    >
+                      <span class="dish-food-preferences-label">Preferencias alimentarias</span>
+                      <div class="dish-food-preference-list">
+                        <span class="dish-food-preference-badge">
+                          {{ dietProfileLabel(foodProfile) }}
+                        </span>
+                        <span class="dish-food-preference-badge alcohol">
+                          {{ alcoholProfileLabel(foodProfile) }}
+                        </span>
+                        <span class="dish-food-preference-badge restriction">
+                          {{ porkProfileLabel(foodProfile) }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <ng-template #unknownFoodPreferenceProfile>
+                      <div
+                        *ngIf="isGastronomySection(contentSection)"
+                        class="dish-food-preferences unknown-profile"
+                      >
+                        <mat-icon aria-hidden="true">help_outline</mat-icon>
+                        <span>
+                          <strong>Preferencias por confirmar</strong>
+                          No se ha revisado todavía el perfil alimentario de esta ficha.
+                        </span>
+                      </div>
+                    </ng-template>
 
                     <div
                       *ngIf="isGastronomySection(contentSection) && dishAllergenProfile(item) as profile"
@@ -340,18 +463,6 @@
                       La composición cambia según la versión. Consulta los ingredientes antes de pedir.
                     </p>
 
-                    <p *ngIf="hasAllergenSelection()" class="dish-filter-status" aria-live="polite">
-                      <ng-container *ngIf="isCompatibleWithSelectedAllergens(item); else dishNotHighlighted">
-                        <mat-icon aria-hidden="true">verified</mat-icon>
-                        No consta tu selección en la receta descrita
-                      </ng-container>
-                      <ng-template #dishNotHighlighted>
-                        <ng-container *ngIf="hasSelectedAllergen(item)">
-                          <mat-icon aria-hidden="true">warning</mat-icon>
-                          Contiene o puede contener parte de tu selección
-                        </ng-container>
-                      </ng-template>
-                    </p>
                     </div>
 
                     <div
@@ -361,6 +472,27 @@
                       <mat-icon aria-hidden="true">help_outline</mat-icon>
                       <span><strong>Información por confirmar</strong> Consulta ingredientes y trazas antes de pedir.</span>
                     </div>
+
+                    <p
+                      *ngIf="isGastronomySection(contentSection) && hasGastronomyFilterSelection()"
+                      class="dish-filter-status"
+                      aria-live="polite"
+                    >
+                      <ng-container [ngSwitch]="gastronomyFilterState(item)">
+                        <ng-container *ngSwitchCase="'compatible'">
+                          <mat-icon aria-hidden="true">verified</mat-icon>
+                          Compatible según la información confirmada de la receta descrita
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'incompatible'">
+                          <mat-icon aria-hidden="true">warning</mat-icon>
+                          No cumple todos los filtros seleccionados
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'unknown'">
+                          <mat-icon aria-hidden="true">help_outline</mat-icon>
+                          No hay información suficiente para confirmar la compatibilidad
+                        </ng-container>
+                      </ng-container>
+                    </p>
 
                     <p>{{ item.descripcion }}</p>
                   </div>
