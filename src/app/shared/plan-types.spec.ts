@@ -80,18 +80,30 @@ describe('plan types', () => {
     }
   });
 
-  it('keeps ambiguous Coria prices out of the paid category', () => {
+  it('keeps ambiguous Coria access out of the paid category and uses the optional badge', () => {
     const coria = GUIDE_REGISTRY['europa/espana/andalucia/sevilla/coria-del-rio'];
     const places = coria.secciones.find((section: any) => section.titulo.startsWith('Qué visitar')).lugares;
-    const typesOf = (name: string) =>
-      places.find((item: any) => item.nombre === name).tiposPlan;
+    const placeByName = (name: string) =>
+      places.find((item: any) => item.nombre === name);
+    const typesOf = (name: string) => placeByName(name).tiposPlan;
 
     expect(
       typesOf('Centro Cultural de la Villa Pastora Soler y Sala Temática Japonesa Virginio Carvajal Japón')
     ).toEqual(['urbano', 'coste-variable']);
     expect(
       typesOf('Cerro de San Juan y Ermita de San Juan Bautista o de la Vera Cruz')
-    ).toEqual(['naturaleza']);
-    expect(typesOf('Dehesa de la Atalaya (Opcional)')).toEqual(['opcional', 'naturaleza']);
+    ).toEqual(['urbano']);
+
+    const dehesa = placeByName('Dehesa de la Atalaya');
+    expect(dehesa.nombre).not.toContain('(Opcional)');
+    expect(dehesa.tiposPlan).toEqual(['opcional', 'naturaleza']);
+
+    for (const name of [
+      'Centro Cultural de la Villa Pastora Soler y Sala Temática Japonesa Virginio Carvajal Japón',
+      'Cerro de San Juan y Ermita de San Juan Bautista o de la Vera Cruz',
+      'Dehesa de la Atalaya'
+    ]) {
+      expect(typesOf(name)).not.toContain('de-pago');
+    }
   });
 });
