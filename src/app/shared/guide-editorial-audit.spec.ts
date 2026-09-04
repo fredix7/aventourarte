@@ -1,5 +1,6 @@
 import { ROTA_GUIDE } from '../guides/europa/espana/andalucia/cadiz/rota.guide';
 import { ALMENSILLA_GUIDE } from '../guides/europa/espana/andalucia/sevilla/almensilla.guide';
+import { CORIA_GUIDE } from '../guides/europa/espana/andalucia/sevilla/coria.guide';
 import { auditGuideEditorial } from './guide-editorial-audit';
 
 describe('guide editorial audit', () => {
@@ -32,6 +33,25 @@ describe('guide editorial audit', () => {
     expect(report.allergens).toEqual({ total: 9, complete: 9 });
     expect(report.errors).toEqual([]);
     expect(report.warnings.length).toBe(13);
+    expect(report.warnings.every(issue => issue.category === 'visual')).toBeTrue();
+  });
+
+  it('keeps Coria del Río complete while its user-supplied images are pending', () => {
+    const report = auditGuideEditorial(CORIA_GUIDE);
+
+    expect(report.status).toBe('ready-with-warnings');
+    expect(report.entities).toEqual({ total: 43, complete: 43 });
+    expect(report.photos).toEqual({
+      total: 20,
+      useful: 12,
+      placeholder: 8,
+      missing: 0,
+      notApplicable: 23
+    });
+    expect(report.practical).toEqual({ total: 36, complete: 36 });
+    expect(report.allergens).toEqual({ total: 7, complete: 7 });
+    expect(report.errors).toEqual([]);
+    expect(report.warnings.length).toBe(8);
     expect(report.warnings.every(issue => issue.category === 'visual')).toBeTrue();
   });
 

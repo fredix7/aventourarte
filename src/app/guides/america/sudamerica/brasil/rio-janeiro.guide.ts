@@ -44,6 +44,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
           zonas: [
             {
               nombre: 'Praça da República / Campo de Santana',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'También conocido como Campo de Santana, este parque en el Centro Viejo es un oasis verde en plena ciudad. Alberga fauna urbana como agutíes (cutias), patos y pavos reales. Ideal para un paseo relajado tras la llegada a Río.',
               fotos: [
@@ -55,6 +56,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Real Gabinete Português de Leitura',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'Una joya arquitectónica fundada por la comunidad portuguesa. Considerada una de las bibliotecas más bellas del mundo, con estanterías talladas y miles de volúmenes raros.',
               fotos: [
@@ -65,6 +67,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Confiteria Colombo',
+              tiposPlan: ['ruta', 'urbano', 'de-pago'],
               descripcion:
                 'Clásico café literario inaugurado en 1894. Famoso por su decoración art nouveau, sus vitrinas de dulces y su ambiente elegante. Aquí puedes degustar el mejor brigadeiro de Río.',
               fotos: [
@@ -75,6 +78,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Museu do Amanhã',
+              tiposPlan: ['ruta', 'urbano', 'museo', 'de-pago'],
               descripcion:
                 'Museo de ciencia y futuro diseñado por Santiago Calatrava, situado en la zona portuaria. Muestra exposiciones sobre sostenibilidad, cambio climático y el futuro del planeta.',
               fotos: [
@@ -85,6 +89,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Pedra do Sal',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'Lugar histórico de la cultura afro-carioca y cuna de la samba. Cada lunes por la noche hay música en vivo y espectáculos de samba gratuitos en la calle.',
               fotos: [
@@ -100,6 +105,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
           zonas: [
             {
               nombre: 'Tranvía amarillo de Santa Teresa (Bonde)',
+              tiposPlan: ['ruta', 'urbano', 'de-pago'],
               descripcion:
                 'El histórico tranvía amarillo conecta el centro de Río con el barrio de Santa Teresa cruzando los Arcos da Lapa. Es un viaje emblemático con vistas únicas y mucho encanto local.',
               foto: 'assets/rio/rio-bonde.jpg',
@@ -108,6 +114,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Largo dos Guimarães',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'Corazón del barrio bohemio de Santa Teresa, repleto de bares, galerías y cafés artísticos. Ideal para pasear y disfrutar del ambiente relajado y colorido.',
               foto: 'assets/rio/rio-largo-guimaraes.jpg',
@@ -116,6 +123,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Almuerzo en Bar do Mineiro',
+              tiposPlan: ['ruta', 'urbano', 'de-pago'],
               descripcion:
                 'Restaurante icónico de Santa Teresa famoso por su feijoada, platos de Minas Gerais y ambiente acogedor lleno de arte local.',
               foto: 'assets/rio/rio-bar-do-mineiro.jpg',
@@ -124,6 +132,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Parque das Ruínas',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'Centro cultural y mirador ubicado en una antigua mansión restaurada. Ofrece vistas espectaculares de la bahía y el centro de Río.',
               foto: 'assets/rio/rio-parque-ruinas.jpg',
@@ -132,6 +141,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Arcos da Lapa',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'El antiguo acueducto del siglo XVIII es uno de los símbolos más reconocibles de la ciudad. Hoy sostiene la vía del tranvía de Santa Teresa.',
               foto: 'assets/rio/rio-arcos-lapa.jpg',
@@ -140,6 +150,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Escadaria Selarón',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'Colorida escalera de más de 2000 azulejos creada por el artista chileno Jorge Selarón. Representa un homenaje al pueblo brasileño y a la humanidad.',
               foto: 'assets/rio/rio-selaron.jpg',
@@ -148,6 +159,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Cena en Restaurante Nova Capela',
+              tiposPlan: ['ruta', 'urbano', 'de-pago'],
               descripcion:
                 'Clásico restaurante carioca fundado en 1903, ubicado en Lapa. Famoso por su picanha al ajo, cabrito asado y platos tradicionales brasileños. Ideal para cerrar el día con una buena cena en un entorno auténtico y animado.',
               foto: 'assets/rio/rio-nova-capela.jpg',
@@ -161,6 +173,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
           zonas: [
             {
               nombre: 'Catedral de San Sebastián',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'La catedral principal de Río de Janeiro, de estilo neogótico con detalles modernos. Se ubica en el corazón del centro histórico y destaca por su arquitectura religiosa y su relevancia en la vida eclesiástica de la ciudad.',
               foto: 'assets/rio/rio-catedral-san-sebastian.jpg',
@@ -169,6 +182,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Biblioteca Nacional',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'Una de las mayores bibliotecas de América Latina. Alberga una vasta colección de documentos históricos, manuscritos, libros raros y fuentes culturales brasileñas.',
               foto: 'assets/rio/rio-biblioteca-nacional.jpg',
@@ -177,6 +191,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Teatro Municipal de Río',
+              tiposPlan: ['ruta', 'urbano', 'de-pago'],
               descripcion:
                 'Majestuoso teatro de estilo inspirado en la Ópera de París, símbolo cultural de la ciudad. Ofrece visitas guiadas y ocasionalmente espectáculos de música y baile.',
               foto: 'assets/rio/rio-teatro-municipal.jpg',
@@ -185,6 +200,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Palacio Tiradentes',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'Sede simbólica de la Asamblea Legislativa de Río. Ubicado en la Praça XV, es un edificio histórico con importancia política y patrimonial.',
               foto: 'assets/rio/rio-palacio-tiradentes.jpg',
@@ -193,6 +209,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Palacio Imperial / Praça XV (mercadillo)',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'En la Plaza XV de Novembro se encuentra el Paço Imperial, sede cultural con exposiciones y eventos. En los alrededores organizan mercadillos de artesanía y cultura local en días determinados.',
               foto: 'assets/rio/rio-paco-imperial-centro.jpg',
@@ -201,6 +218,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Puerto histórico de la Praça XV y Marina da Glória',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'Zona portuaria tradicional frente a la Praça XV, donde se aprecian las vistas de la Bahía de Guanabara y los ferris que cruzan hacia Niterói. Es ideal para dar un paseo junto al mar y ver el movimiento de barcos deportivos en la cercana Marina da Glória.',
               foto: 'assets/rio/rio-marina-gloria.jpg',
@@ -209,6 +227,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Playa de Copacabana (tarde)',
+              tiposPlan: ['ruta', 'playa', 'gratuito'],
               descripcion:
                 'Para cerrar el día con calma, relájate en la famosa playa de Copacabana. Pasea por la orilla, disfruta del mar, los quioscos y el ambiente carioca al atardecer.',
               foto: 'assets/rio/rio-copacabana-beach.jpg',
@@ -222,6 +241,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
           zonas: [
             {
               nombre: 'Cristo Redentor (Corcovado)',
+              tiposPlan: ['ruta', 'urbano', 'de-pago'],
               descripcion:
                 'Una de las Siete Maravillas del Mundo Moderno. La estatua de 30 metros de altura domina la ciudad desde el monte Corcovado. Se recomienda visitar temprano y en un día despejado para disfrutar de las mejores vistas panorámicas de Río y la bahía.',
               foto: 'assets/rio/rio-cristo-redentor.jpg',
@@ -230,6 +250,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Parque Lage y Mansión Lage',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'Hermoso parque al pie del Corcovado con senderos naturales, grutas, un pequeño acuario y fauna local (capibaras, monos y aves tropicales). En su centro se encuentra una mansión histórica con un café muy popular y vistas al Cristo. Es ideal para relajarse tras la visita al Corcovado.',
               foto: 'assets/rio/rio-parque-lage.jpg',
@@ -238,6 +259,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Almuerzo en Garota de Ipanema',
+              tiposPlan: ['ruta', 'urbano', 'de-pago'],
               descripcion:
                 'Restaurante famoso donde Vinícius de Moraes escribió la célebre canción “Garota de Ipanema”. Ofrece platos típicos brasileños como la picanha a la brasa, feijoada y moqueca, con un ambiente local muy animado. Se recomienda reservar con antelación, especialmente los fines de semana.',
               foto: 'assets/rio/rio-garota-ipanema.jpg',
@@ -246,6 +268,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Playa de Ipanema',
+              tiposPlan: ['ruta', 'playa', 'gratuito'],
               descripcion:
                 'Considerada una de las playas más famosas del mundo, Ipanema ofrece un ambiente joven y cosmopolita. Ideal para disfrutar de la tarde tomando el sol, bañarse en el Atlántico o unirse a los partidos de futvóley locales. No olvides probar una auténtica caipirinha en el quiosco Astor Beach 83, frente al Posto 9.',
               foto: 'assets/rio/rio-ipanema.jpg',
@@ -254,6 +277,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Barrio de Leblon',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'Zona elegante y tranquila contigua a Ipanema, con tiendas, bares y cafeterías frente al mar. Ideal para dar un paseo al final del día antes de subir al mirador.',
               foto: 'assets/rio/rio-leblon.jpg',
@@ -262,6 +286,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Mirador de Arpoador (puesta de sol)',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'Roca entre Ipanema y Copacabana desde la que se contempla una de las puestas de sol más espectaculares de Río, con aplausos colectivos al atardecer. Un cierre perfecto para el día.',
               foto: 'assets/rio/rio-arpoador.jpg',
@@ -275,6 +300,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
           zonas: [
             {
               nombre: 'Tour por la Favela Rocinha',
+              tiposPlan: ['ruta', 'urbano', 'de-pago'],
               descripcion:
                 'Rocinha es la favela más grande de Brasil y una de las más conocidas del mundo. Se puede visitar con guías locales que muestran el día a día de sus habitantes, el arte urbano, los miradores y los proyectos sociales que buscan transformar la comunidad. Se recomienda hacerlo siempre con una agencia oficial o guía certificado.',
               foto: 'assets/rio/rio-rocinha.jpg',
@@ -283,6 +309,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Tour por el Sambódromo Marquês de Sapucaí',
+              tiposPlan: ['ruta', 'urbano', 'de-pago'],
               descripcion:
                 'El Sambódromo es el corazón del Carnaval de Río de Janeiro, donde desfilan las escuelas de samba durante las festividades. Durante el año se pueden realizar visitas guiadas para conocer la historia del carnaval, ver los trajes y carrozas, e incluso participar en talleres de percusión o baile. Ideal para sentir el espíritu del carnaval aunque no sea febrero.',
               foto: 'assets/rio/rio-sambodromo.jpg',
@@ -292,6 +319,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Tour por el Estadio Maracaná',
+              tiposPlan: ['ruta', 'urbano', 'de-pago'],
               descripcion:
                 'Uno de los estadios más emblemáticos del mundo y sede de finales históricas de fútbol. El recorrido incluye acceso al campo, los vestuarios, la sala de prensa y el pequeño museo donde se exhiben camisetas y objetos de leyendas como Pelé y Garrincha. Perfecto para los amantes del fútbol.',
               foto: 'assets/rio/rio-maracana.jpg',
@@ -301,6 +329,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Almuerzo en Garota de Urca',
+              tiposPlan: ['ruta', 'urbano', 'de-pago'],
               descripcion:
                 'Restaurante tradicional frente a la bahía de Guanabara. Famoso por su picanha, pescados frescos y ambiente local relajado. Ideal para disfrutar de una comida con vistas al mar antes de la tarde en la playa.',
               foto: 'assets/rio/rio-garota-urca.jpg',
@@ -309,6 +338,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Praia Vermelha (Playa Roja)',
+              tiposPlan: ['ruta', 'playa', 'gratuito'],
               descripcion:
                 'Pequeña playa al pie del Pan de Azúcar, muy tranquila y con vistas impresionantes a los morros de Urca. Perfecta para descansar, bañarse o disfrutar de una caipirinha antes de subir al teleférico. Desde aquí parte el paseo hacia el Pan de Azúcar.',
               foto: 'assets/rio/rio-praia-vermelha.jpg',
@@ -317,6 +347,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Subida al Pan de Azúcar (Pão de Açúcar) al atardecer',
+              tiposPlan: ['ruta', 'urbano', 'de-pago'],
               descripcion:
                 'Una experiencia imprescindible. El teleférico conecta Praia Vermelha con el Morro da Urca y luego con el Pan de Azúcar. Desde arriba se obtiene una de las vistas más icónicas del mundo, especialmente al atardecer cuando la ciudad se ilumina frente al océano.',
               foto: 'assets/rio/rio-pao-de-acucar-sunset.jpg',
@@ -330,6 +361,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
           zonas: [
             {
               nombre: 'Parque Nacional da Tijuca',
+              tiposPlan: ['ruta', 'naturaleza', 'gratuito'],
               descripcion:
                 'Uno de los mayores bosques urbanos del mundo, el Parque Nacional da Tijuca es un auténtico pulmón verde en el corazón de Río de Janeiro. Está lleno de cascadas, senderos, miradores y fauna tropical (como monos titís, capibaras, tucanes y otras aves entre otras muchas especies). Ideal para disfrutar de la naturaleza sin salir de la ciudad.',
               foto: 'assets/rio/rio-tijuca.jpg',
@@ -338,6 +370,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Cascatinha Taunay',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'Una de las cascadas más bonitas y accesibles del parque, con 35 metros de caída rodeada de vegetación exuberante. Es un punto perfecto para hacer fotos o descansar antes de continuar alguna de las rutas de senderismo cercanas.',
               foto: 'assets/rio/rio-cascatinha-taunay.jpg',
@@ -346,6 +379,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Mirador Vista Chinesa',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'Uno de los puntos panorámicos más impresionantes de Río, con una pagoda de estilo chino construida en el siglo XIX. Desde aquí se puede contemplar el Corcovado, el Pan de Azúcar y las playas de Ipanema y Leblon. Se llega por una carretera escénica entre la selva atlántica.',
               foto: 'assets/rio/rio-vista-chinesa.jpg',
@@ -354,6 +388,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Ruta de Pedra Bonita',
+              tiposPlan: ['ruta', 'urbano', 'gratuito'],
               descripcion:
                 'Sendero muy popular dentro del parque que lleva a una cima desde donde se pueden ver el Pan de Azúcar, la Lagoa Rodrigo de Freitas y la playa de São Conrado. Desde aquí también despegan los parapentes y alas delta que sobrevuelan la costa. Nivel de dificultad moderado (1h30 aprox.).',
               foto: 'assets/rio/rio-pedra-bonita.jpg',
@@ -362,6 +397,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Cena con espectáculo de samba en Rio Scenarium',
+              tiposPlan: ['ruta', 'urbano', 'de-pago'],
               descripcion:
                 'Un clásico absoluto de la vida nocturna carioca. Rio Scenarium es un restaurante y casa de espectáculos ubicada en un antiguo almacén en el barrio de Lapa. Decorado con objetos antiguos y lleno de música en vivo, ofrece una experiencia completa: buena comida brasileña, caipirinhas y samba en directo hasta la madrugada.',
               foto: 'assets/rio/rio-scenarium.jpg',
@@ -375,6 +411,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
           zonas: [
             {
               nombre: 'Ilha Grande – Vila do Abraão',
+              tiposPlan: ['ruta', 'naturaleza', 'de-pago'],
               descripcion:
                 'Principal localidad de Ilha Grande y punto de partida de la mayoría de excursiones. Un lugar encantador sin coches, con calles de arena, posadas y restaurantes frente al mar. Desde aquí parten las rutas y barcos hacia las playas y lagunas más hermosas de la isla.',
               foto: 'assets/rio/ilha-abraao.jpg',
@@ -383,6 +420,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Excursión a Lagoa Azul, Lagoa Verde y Gruta de Acaiá',
+              tiposPlan: ['ruta', 'naturaleza', 'de-pago'],
               descripcion:
                 'Tour en lancha o barco que recorre algunas de las zonas más famosas de Ilha Grande. La Lagoa Azul y la Lagoa Verde destacan por sus aguas cristalinas, ideales para hacer snorkel y avistar peces y delfines. La Gruta de Acaiá es una cueva submarina con un curioso efecto luminoso turquesa.',
               foto: 'assets/rio/ilha-lagoa-azul.jpg',
@@ -391,6 +429,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Praia Lopes Mendes',
+              tiposPlan: ['ruta', 'playa', 'gratuito'],
               descripcion:
                 'Considerada una de las playas más bonitas de Brasil, Lopes Mendes se alcanza tras una caminata de unas 2 horas desde Vila do Abraão o tomando un barco hasta Praia do Pouso y caminando 20 minutos más. Arena blanca, olas perfectas para surfistas y un entorno virgen hacen de esta playa un paraíso natural.',
               foto: 'assets/rio/ilha-lopes-mendes.jpg',
@@ -399,6 +438,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Sendero a Praia da Feiticeira',
+              tiposPlan: ['ruta', 'playa', 'coste-variable'],
               descripcion:
                 'Trilha (sendero) de dificultad moderada que parte desde Vila do Abraão y conduce a una pequeña cascada y a la playa de la Feiticeira, ideal para nadar y relajarse. Se puede combinar con paseo en taxi-boat de regreso.',
               foto: 'assets/rio/ilha-feiticeira.jpg',
@@ -407,6 +447,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Saco do Céu y Freguesia de Santana',
+              tiposPlan: ['ruta', 'urbano', 'de-pago'],
               descripcion:
                 'Pequeñas bahías y pueblos con encanto accesibles por barco o kayak. Saco do Céu es famoso por sus aguas tranquilas y restaurantes sobre el mar. Freguesia de Santana alberga una antigua iglesia colonial y playas perfectas para hacer snorkel.',
               foto: 'assets/rio/ilha-saco-do-ceu.jpg',
@@ -415,6 +456,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Trilha a Dois Rios',
+              tiposPlan: ['ruta', 'naturaleza', 'gratuito'],
               descripcion:
                 'Una de las caminatas más largas de Ilha Grande (cerca de 3 horas desde Abraão), conduce al antiguo pueblo de Dois Rios y su playa paradisíaca. Antiguamente aquí se encontraba una prisión hoy abandonada. Ideal para los amantes del senderismo y la naturaleza salvaje.',
               foto: 'assets/rio/ilha-dois-rios.jpg',
@@ -423,6 +465,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
             },
             {
               nombre: 'Actividades adicionales',
+              tiposPlan: ['ruta', 'urbano', 'de-pago'],
               descripcion:
                 'Además de las excursiones, en Ilha Grande puedes practicar kayak, paddle surf o snorkel cerca de Vila do Abraão. Es un destino ideal para relajarse varios días, disfrutar de mariscos frescos, atardeceres sobre el mar y el ambiente isleño.',
               foto: 'assets/rio/ilha-kayak.jpg',

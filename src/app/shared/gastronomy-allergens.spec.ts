@@ -8,6 +8,7 @@ import { SANLUCAR_BARRAMEDA_GUIDE } from '../guides/europa/espana/andalucia/cadi
 import { TREBUJENA_GUIDE } from '../guides/europa/espana/andalucia/cadiz/trebujena.guide';
 import { VEJER_GUIDE } from '../guides/europa/espana/andalucia/cadiz/vejer.guide';
 import { ALMENSILLA_GUIDE } from '../guides/europa/espana/andalucia/sevilla/almensilla.guide';
+import { CORIA_GUIDE } from '../guides/europa/espana/andalucia/sevilla/coria.guide';
 import { MAIRENA_ALJARAFE_GUIDE } from '../guides/europa/espana/andalucia/sevilla/mairena-aljarafe.guide';
 import { ROMA_VATICANO_GUIDE } from '../guides/europa/italia/roma-vaticano.guide';
 import { LA_VALETA_GUIDE } from '../guides/europa/malta/la-valeta.guide';
@@ -31,6 +32,7 @@ describe('gastronomy allergens', () => {
     TREBUJENA_GUIDE,
     VEJER_GUIDE,
     ALMENSILLA_GUIDE,
+    CORIA_GUIDE,
     MAIRENA_ALJARAFE_GUIDE,
     ROMA_VATICANO_GUIDE,
     LA_VALETA_GUIDE,

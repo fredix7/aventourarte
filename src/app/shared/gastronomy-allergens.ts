@@ -233,8 +233,16 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Repostería de Semana Santa: hojuelas, torrijas, rosquitos, pestiños, rosas y empanadillas', variable(['gluten'], ['huevo', 'leche', 'sesamo', 'sulfitos', 'frutos-cascara'])],
     ['Mosto de Almensilla', complete([], ['sulfitos'])],
 
+    // Coria del Río
+    ['Albures de Coria y sus preparaciones tradicionales', variable(['pescado'], ['gluten', 'crustaceos', 'sulfitos'])],
+    ['Torteritos de albur', variable(['pescado', 'gluten'], ['huevo'])],
+    ['Camarones de Coria', variable(['crustaceos'], ['gluten', 'huevo'])],
+    ['Arroz con cangrejo', variable(['crustaceos'], ['moluscos', 'pescado', 'sulfitos'])],
+    ['Orejitas de Abad', variable(['gluten', 'huevo'], ['sesamo'])],
+    ['Keicho Sake o Sake de Coria', complete(['leche'])],
+    
     // Mairena del Aljarafe
-    ['Mosto del Aljarafe', complete([], ['sulfitos'])],
+    ['Mosto del Aljarafe', variable([], ['sulfitos'])],
     ['Sopeao del Aljarafe', complete(['gluten'])],
     ['Aliños, picadillos y ensaladas del Aljarafe', variable([], ['pescado', 'huevo', 'crustaceos', 'moluscos'])],
     ['Aceitunas Manzanilla y Gordal de Sevilla', variable([], ['pescado', 'frutos-cascara'])],

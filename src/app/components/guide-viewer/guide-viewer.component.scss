@@ -658,6 +658,51 @@ app-info-general {
   line-height: 1.66;
 }
 
+.plan-type-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: -2px 0 13px;
+}
+
+.plan-type-list.is-empty {
+  display: none;
+}
+
+.plan-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 29px;
+  padding: 4px 9px 4px 7px;
+  border: 1px solid rgba(21, 94, 117, 0.25);
+  border-radius: 999px;
+  color: #155e75;
+  background: #ecfeff;
+  font-size: 0.74rem;
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.plan-type-badge[data-plan-group='formato'] {
+  color: #6d4c1f;
+  border-color: rgba(180, 119, 28, 0.3);
+  background: #fff8e6;
+}
+
+.plan-type-badge[data-plan-group='coste'] {
+  color: #176b62;
+  border-color: rgba(23, 107, 98, 0.28);
+  background: #effaf6;
+}
+
+.plan-type-badge mat-icon {
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+}
+
 .dish-food-preferences {
   display: grid;
   gap: 9px;

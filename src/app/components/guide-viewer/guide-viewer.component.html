@@ -216,6 +216,23 @@
               <div class="zone-card" *ngFor="let zona of day.zonas">
                 <div class="card-copy">
                   <h3 class="lugar-nombre">{{ zona.nombre }}</h3>
+                  <div
+                    *ngIf="planTypes(zona) as types"
+                    class="plan-type-list"
+                    [class.is-empty]="!types.length"
+                    [attr.aria-label]="types.length ? 'Tipos de plan de ' + zona.nombre : null"
+                    role="list"
+                  >
+                    <span
+                      *ngFor="let type of types"
+                      class="plan-type-badge"
+                      [attr.data-plan-group]="type.group"
+                      role="listitem"
+                    >
+                      <mat-icon aria-hidden="true">{{ type.icon }}</mat-icon>
+                      {{ type.label }}
+                    </span>
+                  </div>
                   <p>{{ zona.descripcion }}</p>
                 </div>
 
@@ -387,6 +404,24 @@
                   <div class="card-copy">
                     <h4 *ngIf="section.subsecciones?.length">{{ item.nombre }}</h4>
                     <h3 *ngIf="!section.subsecciones?.length">{{ item.nombre }}</h3>
+
+                    <div
+                      *ngIf="planTypes(item) as types"
+                      class="plan-type-list"
+                      [class.is-empty]="!types.length"
+                      [attr.aria-label]="types.length ? 'Tipos de plan de ' + item.nombre : null"
+                      role="list"
+                    >
+                      <span
+                        *ngFor="let type of types"
+                        class="plan-type-badge"
+                        [attr.data-plan-group]="type.group"
+                        role="listitem"
+                      >
+                        <mat-icon aria-hidden="true">{{ type.icon }}</mat-icon>
+                        {{ type.label }}
+                      </span>
+                    </div>
 
                     <div
                       *ngIf="isGastronomySection(contentSection) && foodPreferenceProfile(item) as foodProfile; else unknownFoodPreferenceProfile"

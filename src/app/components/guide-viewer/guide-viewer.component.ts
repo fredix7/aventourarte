@@ -25,6 +25,10 @@ import {
   evaluateFoodPreferenceProfile,
   hasFoodPreferenceSelection
 } from '../../shared/gastronomy-preferences';
+import {
+  PlanTypeDefinition,
+  planTypesFor
+} from '../../shared/plan-types';
 
 import { CADIZ_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/cadiz.guide';
 import { CHIPIONA_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/chipiona.guide';
@@ -36,6 +40,8 @@ import { TREBUJENA_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/treb
 import { VEJER_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/vejer.guide';
 
 import { ALMENSILLA_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/almensilla.guide';
+import { CORIA_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/coria.guide';
+
 import { MAIRENA_ALJARAFE_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/mairena-aljarafe.guide';
 import { LA_VALETA_GUIDE } from '../../guides/europa/malta/la-valeta.guide';
 import { ROMA_VATICANO_GUIDE } from '../../guides/europa/italia/roma-vaticano.guide';
@@ -54,6 +60,7 @@ export const GUIDE_REGISTRY: Readonly<Record<string, any>> = {
   'europa/espana/andalucia/cadiz/vejer-de-la-frontera': VEJER_GUIDE,
 
   'europa/espana/andalucia/sevilla/almensilla': ALMENSILLA_GUIDE,
+  'europa/espana/andalucia/sevilla/coria-del-rio': CORIA_GUIDE,
   'europa/espana/andalucia/sevilla/mairena-del-aljarafe': MAIRENA_ALJARAFE_GUIDE,
   
   'europa/italia/roma-vaticano': ROMA_VATICANO_GUIDE,
@@ -151,6 +158,10 @@ export class GuideViewerComponent implements OnDestroy {
       item.precio ||
       item.precioOrientativo
     );
+  }
+
+  planTypes(item: any): readonly PlanTypeDefinition[] {
+    return planTypesFor(item);
   }
 
   mapUrl(item: any): string {
