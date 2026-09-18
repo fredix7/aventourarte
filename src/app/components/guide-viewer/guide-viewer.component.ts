@@ -1,5 +1,5 @@
 import { Component, HostListener, OnDestroy } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +13,7 @@ import {
   AllergenId,
   DishAllergenProfile,
   GASTRONOMY_ALLERGENS,
-  dishAllergenProfile,
+  resolveDishAllergenProfile,
   profileAvoidsSelectedAllergens,
   profileHasSelectedAllergen
 } from '../../shared/gastronomy-allergens';
@@ -43,13 +43,16 @@ import { ALMENSILLA_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/a
 import { CORIA_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/coria.guide';
 
 import { MAIRENA_ALJARAFE_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/mairena-aljarafe.guide';
-import { LA_VALETA_GUIDE } from '../../guides/europa/malta/la-valeta.guide';
+import { MALTA_GUIDE } from '../../guides/europa/malta/malta.guide';
 import { ROMA_VATICANO_GUIDE } from '../../guides/europa/italia/roma-vaticano.guide';
 import { BUCAREST_GUIDE } from '../../guides/europa/rumania/bucarest.guide';
-import { RIO_DE_JANEIRO_GUIDE } from '../../guides/america/sudamerica/brasil/rio-janeiro.guide';
-import { NEW_YORK_GUIDE } from '../../guides/america/norteamerica/usa/new-york.guide';
+import { COPENHAGUE_GUIDE } from '../../guides/europa/dinamarca/copenhague.guide';
+import { MALMO_GUIDE } from '../../guides/europa/suecia/malmo.guide';
+//import { RIO_DE_JANEIRO_GUIDE } from '../../guides/america/sudamerica/brasil/rio-janeiro.guide';
 
 export const GUIDE_REGISTRY: Readonly<Record<string, any>> = {
+  'europa/dinamarca/copenhague': COPENHAGUE_GUIDE,
+  'europa/suecia/malmo': MALMO_GUIDE,
   'europa/espana/andalucia/cadiz/cadiz': CADIZ_GUIDE,
   'europa/espana/andalucia/cadiz/chipiona': CHIPIONA_GUIDE,
   'europa/espana/andalucia/cadiz/jerez-de-la-frontera': JEREZ_GUIDE,
@@ -64,10 +67,9 @@ export const GUIDE_REGISTRY: Readonly<Record<string, any>> = {
   'europa/espana/andalucia/sevilla/mairena-del-aljarafe': MAIRENA_ALJARAFE_GUIDE,
   
   'europa/italia/roma-vaticano': ROMA_VATICANO_GUIDE,
-  'europa/malta/la-valeta': LA_VALETA_GUIDE,
+  'europa/malta/malta': MALTA_GUIDE,
   'europa/rumania/bucarest': BUCAREST_GUIDE,
-  'america/norteamerica/usa/new-york': NEW_YORK_GUIDE,
-  'america/sudamerica/brasil/rio-de-janeiro': RIO_DE_JANEIRO_GUIDE
+  //'america/sudamerica/brasil/rio-de-janeiro': RIO_DE_JANEIRO_GUIDE
 };
 
 @Component({
@@ -75,6 +77,7 @@ export const GUIDE_REGISTRY: Readonly<Record<string, any>> = {
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink,
     InfoGeneralComponent,
     MatExpansionModule,
     MatIconModule,
@@ -154,6 +157,7 @@ export class GuideViewerComponent implements OnDestroy {
       item.direccion ||
       item.telefono ||
       item.web ||
+      item.guiaRelacionada ||
       item.reserva ||
       item.precio ||
       item.precioOrientativo
@@ -366,15 +370,7 @@ export class GuideViewerComponent implements OnDestroy {
   }
 
   dishAllergenProfile(item: any): DishAllergenProfile | null {
-    if (Array.isArray(item?.alergenos)) {
-      return {
-        status: item?.perfilAlergenos === 'variable' ? 'variable' : 'complete',
-        contains: item.alergenos,
-        possible: Array.isArray(item?.posiblesAlergenos) ? item.posiblesAlergenos : []
-      };
-    }
-
-    return dishAllergenProfile(item?.nombre ?? '', this.guide?.path ?? '');
+    return resolveDishAllergenProfile(item, this.guide?.path ?? '');
   }
 
   foodPreferenceProfile(item: any): FoodPreferenceProfile | null {
@@ -611,8 +607,27 @@ export class GuideViewerComponent implements OnDestroy {
     if (!this.guide?.path) return 'Guía AvenTourArte';
 
     const segments = this.guide.path.split('/').slice(0, -1);
-    const visibleSegments = segments.filter((segment: string) => !['europa', 'america', 'norteamerica', 'sudamerica'].includes(segment));
-    const locationSegments = visibleSegments.map((segment: string) => this.formatLocationSegment(segment));
+
+    const hiddenSegments = new Set([
+      'europa',
+      'africa',
+      'america',
+      'asia',
+      'oceania',
+      'antartida',
+      'caribe',
+      'centroamerica',
+      'norteamerica',
+      'sudamerica'
+    ]);
+
+    const visibleSegments = segments.filter(
+      (segment: string) => !hiddenSegments.has(segment)
+    );
+
+    const locationSegments = visibleSegments.map(
+      (segment: string) => this.formatLocationSegment(segment)
+    );
 
     return locationSegments.reverse().join(', ') || 'Guía AvenTourArte';
   }
@@ -648,7 +663,9 @@ export class GuideViewerComponent implements OnDestroy {
       italia: 'Italia',
       rumania: 'Rumanía',
       brasil: 'Brasil',
-      usa: 'Estados Unidos'
+      usa: 'Estados Unidos',
+      mexico: 'México',
+      turquia: 'Turquía'
     };
 
     return locationNames[segment] ?? segment

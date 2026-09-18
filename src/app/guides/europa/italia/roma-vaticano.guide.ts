@@ -23,7 +23,7 @@ export const ROMA_VATICANO_GUIDE = {
   infoGeneral: {
     idioma: 'Italiano',
     moneda: 'Euro (€)',
-    hora: 'UTC +1 (igual que España)',
+    hora: 'UTC +1 (igual que España peninsular)',
     internet: 'Roaming UE disponible',
     electricidad: '230V – Enchufe tipo C, F y L',
     pasaporte: 'DNI o pasaporte válido',

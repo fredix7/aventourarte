@@ -17,7 +17,7 @@ export const RIO_DE_JANEIRO_GUIDE = {
   infoGeneral: {
     idioma: 'Portugués',
     moneda: 'Real Brasileño (BRL) — 1 € ≈ 6 BRL',
-    hora: 'UTC -3 (−4h respecto a España)',
+    hora: 'UTC -3 (−4h respecto a España peninsular)',
     internet: 'Roaming fuera de la UE. Recomendada eSIM local.',
     electricidad: '127V/220V – Enchufe tipo N',
     pasaporte: 'Requerido',

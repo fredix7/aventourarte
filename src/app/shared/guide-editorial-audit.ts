@@ -1,4 +1,4 @@
-import { dishAllergenProfile } from './gastronomy-allergens';
+import { resolveDishAllergenProfile } from './gastronomy-allergens';
 
 export type EditorialItemKind = 'visit' | 'dish' | 'restaurant' | 'event';
 export type EditorialIssueSeverity = 'error' | 'warning';
@@ -277,7 +277,7 @@ export function auditGuideEditorial(guide: any): GuideEditorialAudit {
 
     if (item.kind === 'dish') {
       allergenTotal += 1;
-      const profile = dishAllergenProfile(name, String(safeGuide.path ?? ''));
+      const profile = resolveDishAllergenProfile(item.value, String(safeGuide.path ?? ''));
       if (profile) {
         allergenComplete += 1;
       } else {

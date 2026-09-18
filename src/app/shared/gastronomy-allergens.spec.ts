@@ -1,43 +1,21 @@
-import { RIO_DE_JANEIRO_GUIDE } from '../guides/america/sudamerica/brasil/rio-janeiro.guide';
-import { CADIZ_GUIDE } from '../guides/europa/espana/andalucia/cadiz/cadiz.guide';
-import { CHIPIONA_GUIDE } from '../guides/europa/espana/andalucia/cadiz/chipiona.guide';
-import { JEREZ_GUIDE } from '../guides/europa/espana/andalucia/cadiz/jerez.guide';
-import { ROTA_GUIDE } from '../guides/europa/espana/andalucia/cadiz/rota.guide';
-import { SAN_FERNANDO_GUIDE } from '../guides/europa/espana/andalucia/cadiz/san-fernando.guide';
-import { SANLUCAR_BARRAMEDA_GUIDE } from '../guides/europa/espana/andalucia/cadiz/sanlucar-barrameda.guide';
-import { TREBUJENA_GUIDE } from '../guides/europa/espana/andalucia/cadiz/trebujena.guide';
-import { VEJER_GUIDE } from '../guides/europa/espana/andalucia/cadiz/vejer.guide';
-import { ALMENSILLA_GUIDE } from '../guides/europa/espana/andalucia/sevilla/almensilla.guide';
-import { CORIA_GUIDE } from '../guides/europa/espana/andalucia/sevilla/coria.guide';
-import { MAIRENA_ALJARAFE_GUIDE } from '../guides/europa/espana/andalucia/sevilla/mairena-aljarafe.guide';
-import { ROMA_VATICANO_GUIDE } from '../guides/europa/italia/roma-vaticano.guide';
-import { LA_VALETA_GUIDE } from '../guides/europa/malta/la-valeta.guide';
-import { BUCAREST_GUIDE } from '../guides/europa/rumania/bucarest.guide';
+import { GUIDE_REGISTRY } from '../components/guide-viewer/guide-viewer.component';
 import {
   GASTRONOMY_ALLERGENS,
   dishAllergenProfile,
+  resolveDishAllergenProfile,
   profileAvoidsSelectedAllergens,
   profileHasSelectedAllergen
 } from './gastronomy-allergens';
 
 describe('gastronomy allergens', () => {
-  const guides: any[] = [
-    RIO_DE_JANEIRO_GUIDE,
-    CADIZ_GUIDE,
-    CHIPIONA_GUIDE,
-    JEREZ_GUIDE,
-    ROTA_GUIDE,
-    SAN_FERNANDO_GUIDE,
-    SANLUCAR_BARRAMEDA_GUIDE,
-    TREBUJENA_GUIDE,
-    VEJER_GUIDE,
-    ALMENSILLA_GUIDE,
-    CORIA_GUIDE,
-    MAIRENA_ALJARAFE_GUIDE,
-    ROMA_VATICANO_GUIDE,
-    LA_VALETA_GUIDE,
-    BUCAREST_GUIDE
+  const collectDishes = (section: any): any[] => [
+    ...(section.platos ?? []),
+    ...(section.subsecciones ?? []).flatMap(collectDishes)
   ];
+  const gastronomyCards = Object.values(GUIDE_REGISTRY).flatMap(guide =>
+    guide.secciones.flatMap(collectDishes)
+      .map((dish: any) => ({ guidePath: guide.path, dish }))
+  );
 
   it('defines the 14 EU allergens without duplicate identifiers', () => {
     expect(GASTRONOMY_ALLERGENS.length).toBe(14);
@@ -45,18 +23,27 @@ describe('gastronomy allergens', () => {
   });
 
   it('has a profile for every published gastronomy card', () => {
-    const gastronomyCards = guides.flatMap(guide =>
-      guide.secciones
-        .filter((section: any) => section.titulo === 'Gastronomía')
-        .flatMap((section: any) => section.platos ?? [])
-        .map((dish: any) => ({ guidePath: guide.path, name: dish.nombre }))
-    );
     const missingProfiles = gastronomyCards.filter(
-      dish => !dishAllergenProfile(dish.name, dish.guidePath)
+      card => !resolveDishAllergenProfile(card.dish, card.guidePath)
     );
 
     expect(gastronomyCards.length).toBeGreaterThan(0);
     expect(missingProfiles).toEqual([]);
+    expect(gastronomyCards.filter(card => card.guidePath === 'europa/dinamarca/copenhague').length)
+      .toBe(11);
+    expect(gastronomyCards.filter(card => card.guidePath === 'europa/suecia/malmo').length)
+      .toBe(6);
+  });
+
+  it('uses valid, distinct allergen identifiers on all published dishes', () => {
+    const validIds = new Set(GASTRONOMY_ALLERGENS.map(allergen => allergen.id));
+    for (const card of gastronomyCards) {
+      const profile = resolveDishAllergenProfile(card.dish, card.guidePath);
+      if (!profile) continue;
+      const ids = [...profile.contains, ...(profile.possible ?? [])];
+      expect(ids.every(id => validIds.has(id))).withContext(card.dish.nombre).toBeTrue();
+      expect(new Set(ids).size).withContext(card.dish.nombre).toBe(ids.length);
+    }
   });
 
   it('normalizes accents and applies guide-specific recipe variants', () => {
@@ -76,6 +63,23 @@ describe('gastronomy allergens', () => {
         'europa/espana/andalucia/cadiz/san-fernando'
       )?.possible
     ).not.toContain('huevo');
+  });
+
+  it('uses the card recipe before the registry and keeps variable recipes uncertain', () => {
+    const profile = resolveDishAllergenProfile({
+      nombre: 'Carbonara',
+      alergenos: ['gluten'],
+      perfilAlergenos: 'variable',
+      posiblesAlergenos: ['leche']
+    });
+
+    expect(profile?.contains).toEqual(['gluten']);
+    expect(profile?.possible).toEqual(['leche']);
+    expect(profileAvoidsSelectedAllergens(profile, ['pescado'])).toBeFalse();
+    expect(profileHasSelectedAllergen(profile, ['leche'])).toBeTrue();
+    expect(resolveDishAllergenProfile({ nombre: 'Carbonara' }))
+      .toEqual(dishAllergenProfile('Carbonara'));
+    expect(resolveDishAllergenProfile(null)).toBeNull();
   });
 
   it('does not highlight variable profiles or recipes with possible matches', () => {

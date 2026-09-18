@@ -277,6 +277,7 @@
                 </div>
 
                 <div class="detail-list" *ngIf="hasDetails(zona)">
+                  <ng-container *ngTemplateOutlet="relatedGuide; context: { $implicit: zona.guiaRelacionada }"></ng-container>
                   <p *ngIf="zona.acceso" class="info-line">
                     <mat-icon>badge</mat-icon>
                     <span><strong>Acceso</strong>{{ zona.acceso }}</span>
@@ -554,6 +555,7 @@
                   </div>
 
                   <div class="detail-list" *ngIf="hasDetails(item)">
+                    <ng-container *ngTemplateOutlet="relatedGuide; context: { $implicit: item.guiaRelacionada }"></ng-container>
                     <p *ngIf="item.acceso" class="info-line">
                       <mat-icon>badge</mat-icon>
                       <span><strong>Acceso</strong>{{ item.acceso }}</span>
@@ -708,6 +710,19 @@
     </span>
   </div>
 </article>
+
+<ng-template #relatedGuide let-related>
+  <p *ngIf="related" class="info-line contact-line">
+    <mat-icon aria-hidden="true">menu_book</mat-icon>
+    <span>
+      <strong>Guía relacionada</strong>
+      <a [routerLink]="'/guia/' + related.path">
+        Ver la guía de {{ related.nombre }}
+        <mat-icon class="external-icon" aria-hidden="true">arrow_forward</mat-icon>
+      </a>
+    </span>
+  </p>
+</ng-template>
 
 <ng-template #emptyState>
   <section *ngIf="requestedGuidePath; else welcome" class="welcome unavailable">

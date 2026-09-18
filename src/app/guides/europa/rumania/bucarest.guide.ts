@@ -25,7 +25,7 @@ export const BUCAREST_GUIDE = {
   infoGeneral: {
     idioma: 'Rumano',
     moneda: 'Leu rumano (RON) — 1 € ≈ 5 RON',
-    hora: 'UTC +2 (+1h respecto a España)',
+    hora: 'UTC +2 (+1h respecto a España peninsular)',
     internet: 'Roaming UE disponible',
     electricidad: '230V – Enchufe tipo C y F',
     pasaporte: 'DNI o pasaporte válido',

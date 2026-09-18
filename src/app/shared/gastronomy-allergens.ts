@@ -59,6 +59,7 @@ const variable = (
 
 const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromEntries(
   ([
+    // Brasil
     // Río de Janeiro
     ['Caipirinha', complete()],
     ['Picanha (corte de carne brasileña)', complete()],
@@ -67,48 +68,24 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Moqueca', complete([], ['pescado', 'crustaceos', 'moluscos'])],
     ['Guayaba (fruta local)', complete()],
 
-    // Roma
-    ['Carbonara', complete(['gluten', 'huevo', 'leche'])],
-    ['Cacio e pepe', complete(['gluten', 'leche'])],
-    ['Bucatini all’amatriciana', complete(['gluten', 'leche'])],
-    ['Lasaña', complete(['gluten', 'leche'], ['huevo', 'apio', 'sulfitos'])],
-    ['Pizza romana', variable(['gluten'], ['leche', 'pescado'])],
-    ['Pizza bianca / pizza rossa', complete(['gluten'])],
-    ['Pinsa romana', variable(['gluten'], ['soja', 'leche', 'pescado'])],
-    ['Focaccia', complete(['gluten'])],
-    ['Panini', variable(['gluten'], ['leche'])],
-    ['Supplì', complete(['leche'], ['gluten', 'huevo'])],
-    ['Carciofi alla giudia', complete()],
-    ['Fiori di zucca fritti', complete(['leche', 'pescado'], ['gluten', 'huevo'])],
-    ['Saltimbocca alla romana', complete([], ['sulfitos'])],
-    ['Polpette al sugo', complete(['gluten', 'huevo'], ['leche'])],
-    ['Spritz Aperol', complete(['sulfitos'])],
-    ['Tiramisú', complete(['gluten', 'huevo', 'leche'])],
-    ['Gelato', variable([], ['leche', 'huevo', 'frutos-cascara', 'soja'])],
+    // Dinamarca
+    // Copenhague
+    ['Smørrebrød · sild, roast beef, æg og rejer, flæskesteg, fiskefilet o leverpostej', variable(['gluten'], ['pescado', 'crustaceos', 'huevo', 'leche', 'mostaza', 'sulfitos'])],
+    ['Stjerneskud', variable(['gluten', 'pescado', 'crustaceos'], ['huevo', 'leche', 'mostaza', 'sulfitos'])],
+    ['Rød pølse y hot dog danés · el clásico del pølsevogn', variable([], ['gluten', 'huevo', 'leche', 'mostaza', 'apio', 'soja', 'sulfitos'])],
+    ['Stegt flæsk med persillesovs', variable(['leche'], ['gluten', 'apio'])],
+    ['Frikadeller', variable(['gluten', 'huevo', 'leche'], ['mostaza', 'apio'])],
+    ['Flæskesteg y flæskestegssandwich', variable([], ['gluten', 'leche', 'huevo', 'mostaza', 'apio', 'sulfitos'])],
+    ['Tarteletter med høns i asparges', variable(['gluten', 'leche'], ['huevo', 'apio'])],
+    ['Wienerbrød · spandauer, kanelsnegl y tebirkes', variable(['gluten', 'leche'], ['huevo', 'frutos-cascara', 'soja'])],
+    ['Flødeboller', variable(['huevo'], ['gluten', 'leche', 'frutos-cascara', 'soja'])],
+    ['Sportskage de La Glace', variable(['gluten', 'huevo', 'leche', 'frutos-cascara'])],
+    ['Cerveza danesa y snaps · Carlsberg, Tuborg y akvavit', variable([], ['gluten'])],
 
-    // Malta
-    ['🐇 Fenek (Conejo Maltés)', complete([], ['gluten', 'sulfitos'])],
-    ['🐟 Pescado y Marisco Maltés', variable([], ['pescado', 'moluscos', 'crustaceos', 'gluten', 'sulfitos'])],
-    ['🥖 Ftira', complete(['gluten'], ['pescado', 'leche'])],
-    ['🥐 Pastizzi', complete(['gluten'], ['leche'])],
-    ['🥟 Qassatat', variable(['gluten'], ['leche'])],
-    ['🧀 Ġbejna', complete(['leche'], ['gluten'])],
-    ['🍰 Imqaret', complete(['gluten'], ['leche', 'huevo', 'soja'])],
 
-    // Bucarest
-    ['Sarmale', complete([], ['leche'])],
-    ['Mici', complete([], ['mostaza', 'gluten'])],
-    ['Covrigi', complete(['gluten'], ['sesamo', 'leche'])],
-    ['Covrig relleno (Twist)', variable(['gluten'], ['leche'])],
-    ['Zacuscă', complete([], ['gluten'])],
-    ['Ciorbă de fasole', variable([], ['gluten', 'apio'])],
-    ['Varză călită', complete()],
-    ['Plăcintă', variable(['gluten'], ['leche', 'huevo'])],
-    ['Cozonac', variable(['gluten'], ['huevo', 'leche', 'frutos-cascara'])],
-    ['Palinca', complete()],
-    ['Ensalada de berenjenas', variable([], ['gluten', 'huevo', 'mostaza'])],
-    ['Tochitură', variable(['huevo', 'leche'])],
-
+    // España
+    // Andalucia
+    // Cádiz provincia
     // Cádiz
     ['Pescaíto frito', variable(['pescado'], ['gluten', 'moluscos'])],
     ['Cazón en adobo', complete(['pescado'], ['gluten'])],
@@ -126,6 +103,22 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Pan de Cádiz o turrón de Cádiz', complete(['huevo', 'frutos-cascara'])],
     ['Erizos de mar y ostiones del Carnaval', complete(['moluscos'])],
     ['Panizas y huevos de fraile', variable()],
+
+    // Chipiona
+    ['Moscatel de Chipiona', complete([], ['sulfitos'])],
+    ['Langostinos de Chipiona', complete(['crustaceos'])],
+    ['Galeras y sopa de galeras', variable(['crustaceos'], ['gluten'])],
+    ['Pescados de costa de Chipiona', variable(['pescado'], ['gluten', 'sulfitos'])],
+    ['Corvina al horno', complete(['pescado'], ['sulfitos'])],
+    ['Frituras marineras de Chipiona', variable(['pescado', 'moluscos'], ['gluten', 'sulfitos'])],
+    ['Cazón en tomate o en amarillo', variable(['pescado'], ['gluten', 'sulfitos'])],
+    ['Raya en pimentón', variable(['pescado'], ['gluten', 'sulfitos'])],
+    ['Menudo de choco', variable(['moluscos'], ['gluten', 'sulfitos'])],
+    ['Tomates de Chipiona', complete()],
+    ['Berza chipionera', variable([], ['apio', 'gluten', 'sulfitos'])],
+    ['Carne ibérica al moscatel', variable(['sulfitos'], ['gluten'])],
+    ['Cachitos', variable(['gluten'], ['leche', 'soja', 'mostaza', 'sulfitos'])],
+    ['Poleá con coscorrones', variable(['gluten'], ['leche'])],
 
     // Jerez
     ['Riñones al Jerez', complete([], ['sulfitos', 'gluten'])],
@@ -153,22 +146,6 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Arroz al Shorty’s', variable(['crustaceos'], ['huevo', 'soja', 'gluten'])],
     ['Mayetito', variable(['huevo', 'frutos-cascara'], ['gluten', 'leche', 'soja'])],
     ['Tintilla de Rota', complete([], ['sulfitos'])],
-
-    // Chipiona
-    ['Moscatel de Chipiona', complete([], ['sulfitos'])],
-    ['Langostinos de Chipiona', complete(['crustaceos'])],
-    ['Galeras y sopa de galeras', variable(['crustaceos'], ['gluten'])],
-    ['Pescados de costa de Chipiona', variable(['pescado'], ['gluten', 'sulfitos'])],
-    ['Corvina al horno', complete(['pescado'], ['sulfitos'])],
-    ['Frituras marineras de Chipiona', variable(['pescado', 'moluscos'], ['gluten', 'sulfitos'])],
-    ['Cazón en tomate o en amarillo', variable(['pescado'], ['gluten', 'sulfitos'])],
-    ['Raya en pimentón', variable(['pescado'], ['gluten', 'sulfitos'])],
-    ['Menudo de choco', variable(['moluscos'], ['gluten', 'sulfitos'])],
-    ['Tomates de Chipiona', complete()],
-    ['Berza chipionera', variable([], ['apio', 'gluten', 'sulfitos'])],
-    ['Carne ibérica al moscatel', variable(['sulfitos'], ['gluten'])],
-    ['Cachitos', variable(['gluten'], ['leche', 'soja', 'mostaza', 'sulfitos'])],
-    ['Poleá con coscorrones', variable(['gluten'], ['leche'])],
 
     // San Fernando
     ['Camarón de la Bahía', complete(['crustaceos'])],
@@ -222,7 +199,8 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Rosquetes vejeriegos', complete(['gluten', 'huevo'], ['sesamo'])],
     ['Vinos de Vejer y Tierra de Cádiz', complete([], ['sulfitos'])],
 
-     // Almensilla
+    // Sevilla provincia
+    // Almensilla
     ['Aceitunas de mesa de Almensilla', variable([], ['sulfitos'])],
     ['Pan tostado con aceite de oliva y sardinas de La Tostá', complete(['gluten', 'pescado'], ['sesamo'])],
     ['Sopeao de Almensilla y piri', variable(['gluten', 'huevo', 'pescado'])],
@@ -253,6 +231,61 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Ropa vieja de puchero', variable()],
     ['Tostón de sardinas', complete(['gluten', 'pescado'], ['leche'])],
 
+    /////////////////////////////////////////////////////////////// FIN ESPAÑA ////////////////////////////////////
+
+    // Italia
+    // Roma
+    ['Carbonara', complete(['gluten', 'huevo', 'leche'])],
+    ['Cacio e pepe', complete(['gluten', 'leche'])],
+    ['Bucatini all’amatriciana', complete(['gluten', 'leche'])],
+    ['Lasaña', complete(['gluten', 'leche'], ['huevo', 'apio', 'sulfitos'])],
+    ['Pizza romana', variable(['gluten'], ['leche', 'pescado'])],
+    ['Pizza bianca / pizza rossa', complete(['gluten'])],
+    ['Pinsa romana', variable(['gluten'], ['soja', 'leche', 'pescado'])],
+    ['Focaccia', complete(['gluten'])],
+    ['Panini', variable(['gluten'], ['leche'])],
+    ['Supplì', complete(['leche'], ['gluten', 'huevo'])],
+    ['Carciofi alla giudia', complete()],
+    ['Fiori di zucca fritti', complete(['leche', 'pescado'], ['gluten', 'huevo'])],
+    ['Saltimbocca alla romana', complete([], ['sulfitos'])],
+    ['Polpette al sugo', complete(['gluten', 'huevo'], ['leche'])],
+    ['Spritz Aperol', complete(['sulfitos'])],
+    ['Tiramisú', complete(['gluten', 'huevo', 'leche'])],
+    ['Gelato', variable([], ['leche', 'huevo', 'frutos-cascara', 'soja'])],
+
+    // Malta
+    ['🐇 Fenek (Conejo Maltés)', complete([], ['gluten', 'sulfitos'])],
+    ['🐟 Pescado y Marisco Maltés', variable([], ['pescado', 'moluscos', 'crustaceos', 'gluten', 'sulfitos'])],
+    ['🥖 Ftira', complete(['gluten'], ['pescado', 'leche'])],
+    ['🥐 Pastizzi', complete(['gluten'], ['leche'])],
+    ['🥟 Qassatat', variable(['gluten'], ['leche'])],
+    ['🧀 Ġbejna', complete(['leche'], ['gluten'])],
+    ['🍰 Imqaret', complete(['gluten'], ['leche', 'huevo', 'soja'])],
+
+    // Rumania
+    // Bucarest
+    ['Sarmale', complete([], ['leche'])],
+    ['Mici', complete([], ['mostaza', 'gluten'])],
+    ['Covrigi', complete(['gluten'], ['sesamo', 'leche'])],
+    ['Covrig relleno (Twist)', variable(['gluten'], ['leche'])],
+    ['Zacuscă', complete([], ['gluten'])],
+    ['Ciorbă de fasole', variable([], ['gluten', 'apio'])],
+    ['Varză călită', complete()],
+    ['Plăcintă', variable(['gluten'], ['leche', 'huevo'])],
+    ['Cozonac', variable(['gluten'], ['huevo', 'leche', 'frutos-cascara'])],
+    ['Palinca', complete()],
+    ['Ensalada de berenjenas', variable([], ['gluten', 'huevo', 'mostaza'])],
+    ['Tochitură', variable(['huevo', 'leche'])],
+
+    // Suecia
+    // Malmö
+    ['Köttbullar — albóndigas suecas', variable(['gluten', 'huevo', 'leche'], ['soja', 'apio', 'mostaza', 'sulfitos'])],
+    ['Äggakaka — torta de huevo de Escania', complete(['gluten', 'huevo', 'leche'])],
+    ['Falafel de Malmö', variable([], ['gluten', 'sesamo', 'leche', 'huevo', 'soja'])],
+    ['Kanelbulle — bollo de canela', variable(['gluten'], ['leche', 'huevo', 'frutos-cascara', 'soja'])],
+    ['Kardemummabulle — bollo de cardamomo', variable(['gluten'], ['leche', 'huevo', 'frutos-cascara', 'soja'])],
+    ['Spettekaka — dulce tradicional de Escania', complete(['huevo'])],
+
   ] as [string, DishAllergenProfile][]).map(([name, profile]) => [normalizeDishName(name), profile])
 );
 
@@ -272,6 +305,24 @@ export function dishAllergenProfile(name: string, guidePath = ''): DishAllergenP
   if (guideProfile) return guideProfile;
 
   return DISH_ALLERGEN_PROFILES[normalizeDishName(name)] ?? null;
+}
+
+/** La ficha y su auditoría deben usar la misma receta y las mismas variantes. */
+export function resolveDishAllergenProfile(item: {
+  nombre?: string;
+  alergenos?: AllergenId[];
+  perfilAlergenos?: string;
+  posiblesAlergenos?: AllergenId[];
+} | null | undefined, guidePath = ''): DishAllergenProfile | null {
+  if (Array.isArray(item?.alergenos)) {
+    return {
+      status: item.perfilAlergenos === 'variable' ? 'variable' : 'complete',
+      contains: item.alergenos,
+      possible: Array.isArray(item.posiblesAlergenos) ? item.posiblesAlergenos : []
+    };
+  }
+
+  return dishAllergenProfile(item?.nombre ?? '', guidePath);
 }
 
 export function profileAvoidsSelectedAllergens(

@@ -4,6 +4,26 @@ import { CORIA_GUIDE } from '../guides/europa/espana/andalucia/sevilla/coria.gui
 import { auditGuideEditorial } from './guide-editorial-audit';
 
 describe('guide editorial audit', () => {
+  it('recognizes allergen profiles stored on new guide cards', () => {
+    const report = auditGuideEditorial({
+      nombre: 'Guía de prueba',
+      descripcion: 'Recetas con composición variable',
+      secciones: [{
+        titulo: 'Gastronomía',
+        platos: [{
+          nombre: 'Receta local sin entrada en el registro',
+          descripcion: 'La preparación cambia según el establecimiento.',
+          alergenos: ['gluten'],
+          perfilAlergenos: 'variable',
+          posiblesAlergenos: ['leche']
+        }]
+      }]
+    });
+
+    expect(report.allergens).toEqual({ total: 1, complete: 1 });
+    expect(report.errors.filter(issue => issue.category === 'allergens')).toEqual([]);
+  });
+
   it('reports the current Rota inventory without relying on global counters', () => {
     const report = auditGuideEditorial(ROTA_GUIDE);
 

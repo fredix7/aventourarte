@@ -25,14 +25,24 @@ export const TRAVEL_TREE: TravelNode[] = [
           { nombre: 'Heidelberg', path: 'europa/alemania/heidelberg' },
           { nombre: 'Idstein', path: 'europa/alemania/idstein' },
           { nombre: 'Münster', path: 'europa/alemania/munster' },
-          { nombre: 'Tréveris/Trier', path: 'europa/alemania/treveris' },
+          { nombre: 'Tréveris/Trier', path: 'europa/alemania/treveris' }
         ]
       },
       {
         nombre: 'Andorra',
         flag: 'https://flagcdn.com/ad.svg',
+        path: 'europa/andorra/andorra'
+      },
+      {
+        nombre: 'Ciudad del Vaticano',
+        flag: 'https://flagcdn.com/va.svg',
+        path: 'europa/italia/roma-vaticano'
+      },
+      {
+        nombre: 'Dinamarca',
+        flag: 'https://flagcdn.com/dk.svg',
         hijos: [
-          { nombre: 'Andorra', path: 'europa/andorra/andorra', isCapital: true },
+          { nombre: 'Copenhague', path: 'europa/dinamarca/copenhague', isCapital: true }
         ]
       },
       {
@@ -43,84 +53,72 @@ export const TRAVEL_TREE: TravelNode[] = [
             nombre: 'Andalucía',
             hijos: [
               {
-                nombre: 'Huelva',
+                nombre: 'Almería',
                 hijos: [
-                  { nombre: 'Huelva ciudad', path: 'europa/espana/andalucia/huelva/huelva-ciudad', isCapital: true },
-                  { nombre: 'Palos de la Frontera', path: 'europa/espana/andalucia/huelva/palos' },
+                  { nombre: 'Almería ciudad', path: 'europa/espana/andalucia/almeria/almeria-ciudad', isCapital: true }
                 ]
               },
               {
                 nombre: 'Cádiz',
                 hijos: [
-                  { nombre: 'Cádiz', path: 'europa/espana/andalucia/cadiz/cadiz', isCapital: true },
+                  { nombre: 'Cádiz ciudad', path: 'europa/espana/andalucia/cadiz/cadiz', isCapital: true },
                   { nombre: 'Chipiona', path: 'europa/espana/andalucia/cadiz/chipiona' },
                   { nombre: 'Grazalema', path: 'europa/espana/andalucia/cadiz/grazalema' },
-                  { nombre: 'Rota', path: 'europa/espana/andalucia/cadiz/rota' },
                   { nombre: 'Jerez de la Frontera', path: 'europa/espana/andalucia/cadiz/jerez-de-la-frontera', isImportantCity: true },
+                  { nombre: 'Rota', path: 'europa/espana/andalucia/cadiz/rota' },
                   { nombre: 'San Fernando', path: 'europa/espana/andalucia/cadiz/san-fernando' },
                   { nombre: 'Sanlúcar de Barrameda', path: 'europa/espana/andalucia/cadiz/sanlucar-de-barrameda' },
                   { nombre: 'Setenil de las Bodegas', path: 'europa/espana/andalucia/cadiz/setenil-de-las-bodegas' },
                   { nombre: 'Trebujena', path: 'europa/espana/andalucia/cadiz/trebujena' },
-                  { nombre: 'Vejer de la Frontera', path: 'europa/espana/andalucia/cadiz/vejer-de-la-frontera' },
+                  { nombre: 'Vejer de la Frontera', path: 'europa/espana/andalucia/cadiz/vejer-de-la-frontera' }
+                ]
+              },
+              {
+                nombre: 'Córdoba',
+                hijos: [
+                  { nombre: 'Córdoba ciudad', path: 'europa/espana/andalucia/cordoba/cordoba-ciudad', isCapital: true }
+                ]
+              },
+              {
+                nombre: 'Granada',
+                hijos: [
+                  { nombre: 'Granada ciudad', path: 'europa/espana/andalucia/granada/granada-ciudad', isCapital: true }
+                ]
+              },
+              {
+                nombre: 'Huelva',
+                hijos: [
+                  { nombre: 'Huelva ciudad', path: 'europa/espana/andalucia/huelva/huelva-ciudad', isCapital: true },
+                  { nombre: 'Palos de la Frontera', path: 'europa/espana/andalucia/huelva/palos' }
+                ]
+              },
+              {
+                nombre: 'Jaén',
+                hijos: [
+                  { nombre: 'Jaén ciudad', path: 'europa/espana/andalucia/jaen/jaen-ciudad', isCapital: true }
+                ]
+              },
+              {
+                nombre: 'Málaga',
+                hijos: [
+                  { nombre: 'Málaga ciudad', path: 'europa/espana/andalucia/malaga/malaga-ciudad', isCapital: true }
                 ]
               },
               {
                 nombre: 'Sevilla',
                 hijos: [
-                  { nombre: 'Sevilla ciudad', path: 'europa/espana/andalucia/sevilla/sevilla-ciudad', isCapital: true },
                   { nombre: 'Almensilla', path: 'europa/espana/andalucia/sevilla/almensilla' },
                   { nombre: 'Castilblanco de los Arroyos', path: 'europa/espana/andalucia/sevilla/castilblanco-de-los-arroyos' },
                   { nombre: 'Coria del Río', path: 'europa/espana/andalucia/sevilla/coria-del-rio' },
                   { nombre: 'Isla Mayor', path: 'europa/espana/andalucia/sevilla/isla-mayor' },
                   { nombre: 'Mairena del Aljarafe', path: 'europa/espana/andalucia/sevilla/mairena-del-aljarafe' },
                   { nombre: 'Palomares del Río', path: 'europa/espana/andalucia/sevilla/palomares-del-rio' },
-                  { nombre: 'El Real de la Jara', path: 'europa/espana/andalucia/sevilla/real-de-la-jara' },
+                  { nombre: 'Real de la Jara, El', path: 'europa/espana/andalucia/sevilla/real-de-la-jara' },
                   { nombre: 'Santiponce', path: 'europa/espana/andalucia/sevilla/santiponce' },
+                  { nombre: 'Sevilla ciudad', path: 'europa/espana/andalucia/sevilla/sevilla-ciudad', isCapital: true }
                 ]
-              },
-              {
-                nombre: 'Córdoba',
-                hijos: [
-                  { nombre: 'Córdoba ciudad', path: 'europa/espana/andalucia/cordoba/cordoba-ciudad', isCapital: true },
-                ]
-              },
-              {
-                nombre: 'Málaga',
-                hijos: [
-                  { nombre: 'Málaga ciudad', path: 'europa/espana/andalucia/malaga/malaga-ciudad', isCapital: true },
-                ]
-              },
-              {
-                nombre: 'Jaén',
-                hijos: [
-                  { nombre: 'Jaén ciudad', path: 'europa/espana/andalucia/jaen/jaen-ciudad', isCapital: true },
-                ]
-              },
-              {
-                nombre: 'Granada',
-                hijos: [
-                  { nombre: 'Granada ciudad', path: 'europa/espana/andalucia/granada/granada-ciudad', isCapital: true },
-                ]
-              },
-              {
-                nombre: 'Almería',
-                hijos: [
-                  { nombre: 'Almería ciudad', path: 'europa/espana/andalucia/almeria/almeria-ciudad', isCapital: true },
-                ]
-              },
+              }
             ]
-          },
-          {
-            nombre: 'Islas Baleares',
-            hijos: [
-                  { nombre: 'Mallorca', path: 'europa/espana/baleares/mallorca' },
-                ]
-          },
-          {
-            nombre: 'Islas Canarias',
-            hijos: [
-                  { nombre: 'Tenerife', path: 'europa/espana/canarias/tenerife' },
-                ]
           },
           {
             nombre: 'Cataluña',
@@ -128,16 +126,41 @@ export const TRAVEL_TREE: TravelNode[] = [
               {
                 nombre: 'Gerona',
                 hijos: [
-                  { nombre: 'Gerona', path: 'europa/espana/cataluna/gerona/gerona-ciudad', isCapital: true },
+                  { nombre: 'Gerona ciudad', path: 'europa/espana/cataluna/gerona/gerona-ciudad', isCapital: true }
                 ]
               }
             ]
           },
           {
+            nombre: 'Ceuta',
+            hijos: [
+              { nombre: 'Ceuta ciudad', path: 'europa/espana/ceuta/ceuta-ciudad' }
+            ]
+          },
+          {
+            nombre: 'Comunidad de Madrid',
+            hijos: [
+              { nombre: 'Madrid', path: 'europa/espana/madrid/madrid-ciudad', isCapital: true }
+            ]
+          },
+          {
             nombre: 'Extremadura',
             hijos: [
-              { nombre: 'Mérida', path: 'europa/espana/extremadura/merida/merida-ciudad', isCapital: true },
-              { nombre: 'Badajoz', path: 'europa/espana/extremadura/badajoz/badajoz-ciudad', isImportantCity: true },
+              {
+                nombre: 'Badajoz',
+                hijos: [
+                  {
+                    nombre: 'Badajoz ciudad',
+                    path: 'europa/espana/extremadura/badajoz/badajoz-ciudad',
+                    isCapital: true
+                  },
+                  {
+                    nombre: 'Mérida',
+                    path: 'europa/espana/extremadura/badajoz/merida',
+                    isCapital: true
+                  },
+                ]
+              },
               {
                 nombre: 'Cáceres',
                 hijos: [
@@ -163,22 +186,34 @@ export const TRAVEL_TREE: TravelNode[] = [
             ]
           },
           {
-            nombre: 'Comunidad Madrid',
+            nombre: 'Islas Baleares',
             hijos: [
-              { nombre: 'Madrid', path: 'europa/espana/madrid/madrid-ciudad', isCapital: true },
+                  { nombre: 'Mallorca', path: 'europa/espana/baleares/mallorca' }
+                ]
+          },
+          {
+            nombre: 'Islas Canarias',
+            hijos: [
+                  { nombre: 'Tenerife', path: 'europa/espana/canarias/tenerife' }
+                ]
+          },
+          {
+            nombre: 'La Rioja',
+            hijos: [
+              { nombre: 'Logroño', path: 'europa/espana/rioja/logrono', isCapital: true }
             ]
           },
           {
             nombre: 'Murcia',
             hijos: [
-              { nombre: 'Murcia', path: 'europa/espana/murcia/murcia-ciudad', isCapital: true },
               { nombre: 'Cartagena', path: 'europa/espana/murcia/cartagena', isImportantCity: true },
+              { nombre: 'Murcia ciudad', path: 'europa/espana/murcia/murcia-ciudad', isCapital: true }
             ]
           },
           {
             nombre: 'Navarra',
             hijos: [
-              { nombre: 'Pamplona', path: 'europa/espana/murcia/murcia-ciudad', isCapital: true },
+              { nombre: 'Pamplona', path: 'europa/espana/navarra/pamplona', isCapital: true }
             ]
           },
           {
@@ -187,99 +222,94 @@ export const TRAVEL_TREE: TravelNode[] = [
               {
                 nombre: 'Álava',
                 hijos: [
-                  { nombre: 'Vitoria-Gasteiz', path: 'europa/espana/pais-vasco/alava/vitoria', isCapital: true },
+                  { nombre: 'Vitoria-Gasteiz', path: 'europa/espana/pais-vasco/alava/vitoria', isCapital: true }
                 ]
               },
               {
                 nombre: 'Guipúzcoa',
                 hijos: [
-                  { nombre: 'San Sebastián/Donostia', path: 'europa/espana/pais-vasco/guipuzcoa/san-sebastian', isCapital: true },
+                  { nombre: 'San Sebastián/Donostia', path: 'europa/espana/pais-vasco/guipuzcoa/san-sebastian', isCapital: true }
                 ]
               },
               {
                 nombre: 'Vizcaya',
                 hijos: [
-                  { nombre: 'Bilbao', path: 'europa/espana/pais-vasco/vizcaya/bilbao', isCapital: true },
+                  { nombre: 'Bilbao', path: 'europa/espana/pais-vasco/vizcaya/bilbao', isCapital: true }
                 ]
               }
             ]
-          },
-          {
-            nombre: 'La Rioja',
-            hijos: [
-              { nombre: 'Logroño', path: 'europa/espana/rioja/logrono', isCapital: true },
-            ]
-          },
-          {
-            nombre: 'Ceuta',
-            hijos: [
-              { nombre: 'Ceuta', path: 'europa/espana/ceuta/ceuta-ciudad', isCapital: true },
-            ]
-          },
+          }
         ]
       },
       {
         nombre: 'Gibraltar',
         flag: 'https://flagcdn.com/gi.svg',
-        hijos: [
-          { nombre: 'Gibraltar', path: 'europa/gibraltar/gibraltar', isCapital: true },
-        ]
+        path: 'europa/gibraltar/gibraltar'
       },
       {
         nombre: 'Irlanda',
         flag: 'https://flagcdn.com/ie.svg',
         hijos: [
-          { nombre: 'Dublin', path: 'europa/irlanda/dublin', isCapital: true },
+          { nombre: 'Dublín', path: 'europa/irlanda/dublin', isCapital: true }
         ]
       },
       {
         nombre: 'Italia',
         flag: 'https://flagcdn.com/it.svg',
         hijos: [
-          { nombre: 'Roma y Ciudad del Vaticano', path: 'europa/italia/roma-vaticano', isCapital: true },
+          {
+            nombre: 'Roma',
+            path: 'europa/italia/roma-vaticano',
+            isCapital: true
+          }
         ]
       },
       {
         nombre: 'Malta',
         flag: 'https://flagcdn.com/mt.svg',
-        hijos: [
-          { nombre: 'La Valeta', path: 'europa/malta/la-valeta', isCapital: true },
-        ]
+        path: 'europa/malta/malta'
       },
       {
         nombre: 'Países Bajos',
         flag: 'https://flagcdn.com/nl.svg',
         hijos: [
-          { nombre: 'Ámsterdam', path: 'europa/paises-bajos/amsterdam', isCapital: true },
-        ]
-      },
-      {
-        nombre: 'Portugal',
-        flag: 'https://flagcdn.com/pt.svg',
-        hijos: [
-          { nombre: 'Lisboa', path: 'europa/portugal/lisboa', isCapital: true },
-        ]
-      },
-      {
-        nombre: 'Rumania',
-        flag: 'https://flagcdn.com/ro.svg',
-        hijos: [
-          { nombre: 'Bucarest', path: 'europa/rumania/bucarest', isCapital: true },
+          { nombre: 'Ámsterdam', path: 'europa/paises-bajos/amsterdam', isCapital: true }
         ]
       },
       {
         nombre: 'Polonia',
         flag: 'https://flagcdn.com/pl.svg',
         hijos: [
-          { nombre: 'Varsovia', path: 'europa/polonia/varsovia', isCapital: true },
           { nombre: 'Cracovia', path: 'europa/polonia/cracovia', isImportantCity: true },
+          { nombre: 'Varsovia', path: 'europa/polonia/varsovia', isCapital: true }
+        ]
+      },
+      {
+        nombre: 'Portugal',
+        flag: 'https://flagcdn.com/pt.svg',
+        hijos: [
+          { nombre: 'Lisboa', path: 'europa/portugal/lisboa', isCapital: true }
         ]
       },
       {
         nombre: 'República Checa',
         flag: 'https://flagcdn.com/cz.svg',
         hijos: [
-          { nombre: 'Praga', path: 'europa/republica-checa/praga', isCapital: true },
+          { nombre: 'Praga', path: 'europa/republica-checa/praga', isCapital: true }
+        ]
+      },
+      {
+        nombre: 'Rumania',
+        flag: 'https://flagcdn.com/ro.svg',
+        hijos: [
+          { nombre: 'Bucarest', path: 'europa/rumania/bucarest', isCapital: true }
+        ]
+      },
+      {
+        nombre: 'Suecia',
+        flag: 'https://flagcdn.com/se.svg',
+        hijos: [
+          { nombre: 'Malmö', path: 'europa/suecia/malmo', isImportantCity: true }
         ]
       },
     ]
@@ -291,10 +321,10 @@ export const TRAVEL_TREE: TravelNode[] = [
         nombre: 'Marruecos',
         flag: 'https://flagcdn.com/ma.svg',
         hijos: [
-          { nombre: 'Tánger', path: 'africa/marruecos/tanger', isImportantCity: true },
           { nombre: 'Asilah/Arcila', path: 'africa/marruecos/asilah' },
-          { nombre: 'Tetuán', path: 'africa/marruecos/tetuan', isImportantCity: true }, 
-          { nombre: 'Chefchaouen/Chauen', path: 'africa/marruecos/chefchaouen' }
+          { nombre: 'Chefchaouen/Chauen', path: 'africa/marruecos/chefchaouen' },
+          { nombre: 'Tánger', path: 'africa/marruecos/tanger', isImportantCity: true },
+          { nombre: 'Tetuán', path: 'africa/marruecos/tetuan', isImportantCity: true }
         ]
       }
     ]
@@ -302,6 +332,18 @@ export const TRAVEL_TREE: TravelNode[] = [
   {
     nombre: 'América',
     hijos: [
+      {
+        nombre: 'Caribe',
+        hijos: [
+          
+        ]
+      },
+      {
+        nombre: 'Centroamérica',
+        hijos: [
+          
+        ]
+      },
       {
         nombre: 'Norteamérica',
         hijos: [
@@ -317,20 +359,12 @@ export const TRAVEL_TREE: TravelNode[] = [
             flag: 'https://flagcdn.com/mx.svg',
             hijos: [
               {
-              nombre: 'Riviera Maya',
-                hijos: [
-                  { nombre: 'Cancún', path: 'america/norteamerica/mexico/riviera-maya/cancun', isImportantCity: true }
-                ]
-              } 
+                nombre: 'Riviera Maya',
+                path: 'america/norteamerica/mexico/riviera-maya'
+              }
             ]
-          },
+          }
         ],
-      },
-      {
-        nombre: 'Centroamérica',
-        hijos: [
-          // añadir ciudades si quieres
-        ]
       },
       {
         nombre: 'Sudamérica',
@@ -354,7 +388,7 @@ export const TRAVEL_TREE: TravelNode[] = [
         nombre: 'Turquía',
         flag: 'https://flagcdn.com/tr.svg',
         hijos: [
-          { nombre: 'Estambul', path: 'europa/turquia/estambul', isImportantCity: true },
+          { nombre: 'Estambul', path: 'asia/turquia/estambul', isImportantCity: true }
         ]
       },
     ],

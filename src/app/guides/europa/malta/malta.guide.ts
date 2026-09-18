@@ -1,5 +1,5 @@
-export const LA_VALETA_GUIDE = {
-  path: 'europa/malta/la-valeta',
+export const MALTA_GUIDE = {
+  path: 'europa/malta/malta',
   nombre: 'La Valeta',
   flag: 'cld:europa/malta/la-valeta-flag',
   background: 'cld:europa/malta/malta-flag',
@@ -23,7 +23,7 @@ export const LA_VALETA_GUIDE = {
   infoGeneral: {
     idioma: 'Maltés e inglés',
     moneda: 'Euro (€)',
-    hora: 'UTC +1 (igual que España)',
+    hora: 'UTC +1 (igual que España peninsular)',
     internet: 'Roaming UE disponible',
     electricidad: '230V – Enchufe tipo G (británico)',
     pasaporte: 'DNI o pasaporte válido',

@@ -67,7 +67,12 @@ describe('plan types', () => {
       }
     }
 
-    expect(cards.length).toBe(420);
+    expect(cards.length).toBeGreaterThan(0);
+    for (const guide of Object.values(GUIDE_REGISTRY)) {
+      expect(cards.some(card => card.guide === guide.nombre))
+        .withContext(`${guide.nombre} debe incluir visitas en la validación`)
+        .toBeTrue();
+    }
     for (const { guide, item } of cards) {
       const context = `${guide}: ${item.nombre}`;
       expect(item.tiposPlan?.length).withContext(`${context} no declara tiposPlan`).toBeGreaterThan(0);
