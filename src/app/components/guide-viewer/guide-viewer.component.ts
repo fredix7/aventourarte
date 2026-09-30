@@ -8,6 +8,8 @@ import { InfoGeneralComponent } from '../../info-general.component/info-general.
 import { ImageService } from '../../shared/image.service';
 import { ImgUrlPipe } from '../../shared/img-url.pipe';
 import { GuideEditorialAuditComponent } from '../guide-editorial-audit/guide-editorial-audit.component';
+import { PlanFilterComponent } from '../plan-filter/plan-filter.component';
+import { filterPlanSections, sectionPlanItems } from '../../shared/plan-filter';
 import {
   AllergenDefinition,
   AllergenId,
@@ -26,7 +28,9 @@ import {
   hasFoodPreferenceSelection
 } from '../../shared/gastronomy-preferences';
 import {
+  PLAN_TYPES,
   PlanTypeDefinition,
+  PlanTypeId,
   planTypesFor
 } from '../../shared/plan-types';
 
@@ -82,7 +86,8 @@ export const GUIDE_REGISTRY: Readonly<Record<string, any>> = {
     MatExpansionModule,
     MatIconModule,
     ImgUrlPipe,
-    GuideEditorialAuditComponent
+    GuideEditorialAuditComponent,
+    PlanFilterComponent
   ],
   templateUrl: './guide-viewer.component.html',
   styleUrls: ['./guide-viewer.component.scss']
@@ -95,6 +100,11 @@ export class GuideViewerComponent implements OnDestroy {
   showScrollTop = false;
   activeTabId = '';
   tabs: { id: string; label: string; icon: string; sections: any[] }[] = [];
+  selectedPlanTypes: ReadonlySet<PlanTypeId> = new Set();
+  availablePlanTypes: readonly PlanTypeDefinition[] = [];
+  visiblePlanSections: any[] = [];
+  totalPlanCount = 0;
+  matchingPlanCount = 0;
   readonly allergens = GASTRONOMY_ALLERGENS;
   readonly dietaryPreferences = DIETARY_PREFERENCES;
   selectedAllergens = new Set<AllergenId>();
@@ -166,6 +176,41 @@ export class GuideViewerComponent implements OnDestroy {
 
   planTypes(item: any): readonly PlanTypeDefinition[] {
     return planTypesFor(item);
+  }
+
+  togglePlanType(typeId: PlanTypeId) {
+    if (!this.availablePlanTypes.some(type => type.id === typeId)) return;
+    const nextSelection = new Set(this.selectedPlanTypes);
+    if (nextSelection.has(typeId)) nextSelection.delete(typeId);
+    else nextSelection.add(typeId);
+    this.selectedPlanTypes = nextSelection;
+    this.updateVisiblePlans();
+  }
+
+  clearPlanFilters() {
+    this.selectedPlanTypes = new Set();
+    this.updateVisiblePlans();
+  }
+
+  private initializePlanFilters() {
+    const sections = this.tabs.find(tab => tab.id === 'que-ver')?.sections ?? [];
+    const items = sections.flatMap(section => sectionPlanItems(section));
+    const availableIds = new Set(items.flatMap(item => item.tiposPlan ?? []));
+    this.availablePlanTypes = PLAN_TYPES.filter(type => availableIds.has(type.id));
+    this.totalPlanCount = items.length;
+    this.clearPlanFilters();
+  }
+
+  private updateVisiblePlans() {
+    const sections = this.tabs.find(tab => tab.id === 'que-ver')?.sections ?? [];
+    this.visiblePlanSections = filterPlanSections(sections, this.selectedPlanTypes);
+    this.matchingPlanCount = this.visiblePlanSections.reduce(
+      (total, section) => total + sectionPlanItems(section).length, 0
+    );
+  }
+
+  trackByDayName(_index: number, day: any): string {
+    return day.dia;
   }
 
   mapUrl(item: any): string {
@@ -689,6 +734,7 @@ export class GuideViewerComponent implements OnDestroy {
       this.clearFoodPreferenceSelection();
       this.applyGuideStyle(this.guide);
       this.tabs = this.buildGuideTabs();
+      this.initializePlanFilters();
       return;
     }
 
@@ -700,6 +746,7 @@ export class GuideViewerComponent implements OnDestroy {
     this.clearAllergenSelection();
     this.clearFoodPreferenceSelection();
     this.tabs = [];
+    this.initializePlanFilters();
   }
 
   private normalizeTitle(title: string): string {

@@ -136,6 +136,19 @@ function isValidWebUrl(value: string): boolean {
   }
 }
 
+function isValidStoredLink(link: { field: string; value: string }): boolean {
+  if (isValidWebUrl(link.value)) return true;
+  if (link.field !== 'reserva') return false;
+
+  try {
+    const url = new URL(link.value);
+    return url.protocol === 'mailto:'
+      && /^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/.test(decodeURIComponent(url.pathname));
+  } catch {
+    return false;
+  }
+}
+
 function collectStoredLinks(item: any): { field: string; value: string }[] {
   return ['web', 'reserva', 'maps', 'mapaUrl']
     .filter(field => nonEmpty(item?.[field]))
@@ -293,7 +306,7 @@ export function auditGuideEditorial(guide: any): GuideEditorialAudit {
 
     for (const link of collectStoredLinks(item.value)) {
       linkTotal += 1;
-      if (!isValidWebUrl(link.value)) {
+      if (!isValidStoredLink(link)) {
         errors.push({
           severity: 'error',
           category: 'links',
@@ -305,7 +318,7 @@ export function auditGuideEditorial(guide: any): GuideEditorialAudit {
       }
 
       validLinks += 1;
-      if (new URL(link.value).protocol !== 'https:') {
+      if (new URL(link.value).protocol === 'http:') {
         warnings.push({
           severity: 'warning',
           category: 'links',

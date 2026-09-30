@@ -82,6 +82,9 @@ describe('plan types', () => {
       expect(item.tiposPlan.every((id: string) => validIds.has(id as PlanTypeId)))
         .withContext(`${context} contiene un tipo desconocido`)
         .toBeTrue();
+      expect(item.tiposPlan.filter((id: PlanTypeId) => id === 'ruta' || id === 'opcional').length)
+        .withContext(`${context} debe ser ruta principal o plan opcional, nunca ambos`)
+        .toBe(1);
     }
   });
 
@@ -94,10 +97,10 @@ describe('plan types', () => {
 
     expect(
       typesOf('Centro Cultural de la Villa Pastora Soler y Sala Temática Japonesa Virginio Carvajal Japón')
-    ).toEqual(['urbano', 'coste-variable']);
+    ).toEqual(['ruta', 'urbano', 'coste-variable']);
     expect(
       typesOf('Cerro de San Juan y Ermita de San Juan Bautista o de la Vera Cruz')
-    ).toEqual(['urbano']);
+    ).toEqual(['ruta', 'urbano']);
 
     const dehesa = placeByName('Dehesa de la Atalaya');
     expect(dehesa.nombre).not.toContain('(Opcional)');

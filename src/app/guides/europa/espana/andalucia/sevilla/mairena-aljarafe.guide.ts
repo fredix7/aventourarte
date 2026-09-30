@@ -49,7 +49,7 @@ export const MAIRENA_ALJARAFE_GUIDE = {
       lugares: [
         {
           nombre: 'Iglesia Parroquial de San Ildefonso',
-          tiposPlan: ['urbano', 'gratuito'],
+          tiposPlan: ['ruta', 'urbano', 'gratuito'],
           descripcion:
             'La ruta por Mairena del Aljarafe comienza en la Plaza Blas Infante, dentro del casco histórico, donde se encuentra su principal templo religioso: la Iglesia Parroquial de San Ildefonso.\n\nEl edificio tiene su origen en una primitiva capilla de trazado mudéjar documentada en el siglo XVI. Inicialmente dependió de la iglesia de Palomares del Río y fue ampliándose con el crecimiento de la población, hasta adoptar entre 1640 y 1674 una estructura de tres naves.\n\nLa nave central termina en un ábside poligonal presidido por la imagen de Nuestra Señora de las Mercedes. En los espacios laterales se distribuyen las capillas de Nuestra Señora de los Dolores, Nuestra Señora del Rosario y la Capilla Sacramental, mientras que la Hermandad del Rocío ocupa el antiguo baptisterio.\n\nEl templo está dedicado a San Ildefonso, patrón de Mairena del Aljarafe, y continúa siendo uno de los principales centros de la vida religiosa, cofrade y festiva del municipio.\n\n⛪ Experiencia viajera:\nSu arquitectura permite descubrir la Mairena anterior a la expansión metropolitana: una pequeña población organizada alrededor de su iglesia, sus hermandades y las calles del casco antiguo.\n\n💡 Consejo AvenTourArte:\nLa apertura depende principalmente de las misas, los cultos y la actividad parroquial. Acude poco antes de una celebración, entra con discreción y evita recorrer el templo durante los oficios religiosos.',
           foto:
@@ -63,7 +63,7 @@ export const MAIRENA_ALJARAFE_GUIDE = {
         },
         {
           nombre: 'Arco de la Prusiana',
-          tiposPlan: ['urbano', 'gratuito'],
+          tiposPlan: ['ruta', 'urbano', 'gratuito'],
           descripcion:
             'Desde la Plaza Blas Infante, la ruta continúa por las calles del casco antiguo hasta la confluencia de Zurraque y Guadalquivir, donde se conserva el Arco de la Prusiana.\n\nEs el único vestigio arquitectónico que permanece de la antigua Hacienda La Prusiana, una construcción del siglo XVIII organizada alrededor de un gran patio, con el caserío y las dependencias agrícolas distribuidos en torno a él.\n\nTras la demolición de la hacienda, sus terrenos fueron ocupados por la urbanización La Prusiana y la antigua portada quedó como recuerdo del conjunto desaparecido. El elemento actual fue reconstruido manteniendo su arco rebajado, las pequeñas cornisas y el remate de almenas.\n\nEn el frente se conserva un escudo nobiliario de piedra con la inscripción «Año de 1772», uno de los detalles que permiten relacionar el arco con la antigua finca.\n\n🏛️ Experiencia viajera:\nEs una parada breve, pero ayuda a comprender cuánto cambió Mairena con la desaparición de sus antiguas haciendas y la expansión de los nuevos barrios residenciales.\n\n💡 Consejo AvenTourArte:\nObsérvalo desde ambos lados para apreciar mejor su estructura y el contraste entre la antigua portada rural y las viviendas que hoy la rodean. Al estar integrado en la vía pública, conviene visitar el entorno con respeto y sin obstaculizar el paso.',
           foto:
@@ -77,7 +77,7 @@ export const MAIRENA_ALJARAFE_GUIDE = {
         },
         {
           nombre: 'Hacienda Porzuna',
-          tiposPlan: ['urbano', 'coste-variable'],
+          tiposPlan: ['ruta', 'urbano', 'coste-variable'],
           descripcion:
             'Desde el Arco de la Prusiana, la ruta abandona el casco antiguo y se dirige hacia el entorno verde de Porzuna, donde se conserva una de las construcciones rurales más representativas de Mairena del Aljarafe: la Hacienda Porzuna.\n\nEl caserío presenta la organización característica de las antiguas haciendas olivareras del Aljarafe. Una portada sencilla, rematada por una espadaña y tres almenillas, conduce a un patio irregular alrededor del cual se distribuían la vivienda del capataz, el señorío con su jardín y huerto y las distintas dependencias agrícolas.\n\nA un lado se encontraba el antiguo molino aceitero, comunicado con otro patio de labor. Sobre este conjunto se eleva la torre de contrapeso, cubierta con tejado a dos aguas y decorada con tres almenillas y una cruz de Lorena, uno de los elementos arquitectónicos más reconocibles de la hacienda.\n\nEl lugar conserva además testimonios de una ocupación mucho más antigua. En su subsuelo se han identificado sótanos posiblemente pertenecientes a época andalusí, mientras que distintas intervenciones realizadas frente al caserío han documentado estratos romanos y musulmanes con abundantes restos cerámicos.\n\nActualmente el conjunto está restaurado y alberga dependencias municipales vinculadas al empleo y la formación. También puede utilizarse como escenario de cursos, talleres y actividades culturales, por lo que su acceso interior depende de la programación y del funcionamiento administrativo.\n\n🏡 Experiencia viajera:\nLa hacienda permite reconocer la Mairena agrícola que existía antes de la expansión residencial. Sus patios, el antiguo molino y la torre de contrapeso ayudan a comprender cómo se organizaban las explotaciones dedicadas históricamente al olivar.\n\n💡 Consejo AvenTourArte:\nContempla primero el conjunto desde el exterior y continúa después por el Parque Periurbano Porzuna, que rodea la hacienda. Para acceder a alguna dependencia interior, consulta previamente si existe una actividad, curso o apertura programada.',
           foto:
@@ -91,7 +91,7 @@ export const MAIRENA_ALJARAFE_GUIDE = {
         },
         {
           nombre: 'Parque Periurbano Porzuna',
-          tiposPlan: ['urbano', 'gratuito'],
+          tiposPlan: ['ruta', 'urbano', 'gratuito'],
           descripcion:
             'Al salir de la Hacienda Porzuna, la ruta continúa por el espacio natural que la rodea: el Parque Periurbano Porzuna, el principal enclave protegido de Mairena del Aljarafe.\n\nDeclarado parque periurbano en 1999, ocupa algo más de veinte hectáreas y recrea parte del bosque mediterráneo que caracterizó antiguamente buena parte del Aljarafe. Su diseño combina especies autóctonas, como la encina y el acebuche, con criterios de jardinería sostenible.\n\nEl recinto cuenta con senderos, itinerario botánico, recorrido deportivo, zona biosaludable, parques infantiles, área canina, mesas de picnic y espacios de descanso. También conserva pequeñas zonas húmedas que favorecen la presencia de aves, murciélagos y otra fauna ligada al parque.\n\nNo está permitido encender fuego ni realizar barbacoas, una medida necesaria para proteger la vegetación y reducir el riesgo de incendios.\n\n🌿 Experiencia viajera:\nEl paseo permite alejarse durante un rato del paisaje residencial y descubrir una imagen más natural del antiguo Aljarafe. La cercanía de la hacienda refuerza además la relación histórica entre este espacio, el olivar y la explotación agrícola del territorio.\n\n💡 Consejo AvenTourArte:\nRecórrelo por la mañana o al final de la tarde, especialmente durante los meses más calurosos. Respeta los senderos, utiliza las papeleras y evita molestar a la fauna o abandonar residuos.',
           foto:
@@ -105,7 +105,7 @@ export const MAIRENA_ALJARAFE_GUIDE = {
         },
         {
           nombre: 'Parque Central',
-          tiposPlan: ['urbano', 'gratuito'],
+          tiposPlan: ['ruta', 'urbano', 'gratuito'],
           descripcion:
             'Desde el Parque Periurbano Porzuna, la ruta continúa hacia el Parque Central, uno de los principales espacios verdes urbanos y de convivencia de Mairena del Aljarafe.\n\nSu primera fase ocupa aproximadamente cuatro hectáreas y fue diseñada como punto de encuentro entre distintos barrios y generaciones. Cuenta con amplias zonas ajardinadas, paseos peatonales, carril bici y espacios destinados al descanso, el deporte y el ocio familiar.\n\nEl parque se organiza en varias áreas temáticas dedicadas a juegos infantiles, actividad deportiva, perros y merenderos. Entre sus elementos más reconocibles se encuentran dos tirolinas, una gran estructura infantil con toboganes, la Plaza de la Memoria y el Paseo de los Alcores.\n\nEl proyecto también recuperó el cauce del arroyo estacional Porzuna y reforzó la conexión peatonal y ciclista entre diferentes zonas del municipio. A lo largo del año puede acoger actividades culturales, deportivas y familiares organizadas por el Ayuntamiento.\n\n🌿 Experiencia viajera:\nA diferencia del carácter más natural del Parque Porzuna, el Parque Central permite conocer la Mairena contemporánea y cotidiana: familias, deportistas, paseantes y vecinos compartiendo un gran espacio público al aire libre.\n\n💡 Consejo AvenTourArte:\nVisítalo al final de la tarde, especialmente durante los meses calurosos. Consulta también la agenda municipal, ya que algunos fines de semana puede albergar ferias, espectáculos y actividades especiales.',
           foto:
@@ -121,7 +121,7 @@ export const MAIRENA_ALJARAFE_GUIDE = {
         },
         {
           nombre: 'El Equilibrista de Rolando Campos',
-          tiposPlan: ['urbano', 'gratuito'],
+          tiposPlan: ['ruta', 'urbano', 'gratuito'],
           descripcion:
             'Desde el Parque Central, la ruta continúa hacia el entorno de Ciudad Expo, donde se encuentra una de las obras de arte público más representativas de la Mairena contemporánea: El Equilibrista.\n\nLa escultura fue creada por el artista mairenero Rolando Campos y representa una figura humana suspendida en una posición de equilibrio. Realizada en bronce y con más de dos metros de altura, se apoya sobre una elevada peana metálica construida por el herrero Jorge Vázquez Consuegra.\n\nDesde 2015 forma parte del paisaje urbano del bulevar de Ciudad Expo, acercando el arte contemporáneo a un espacio cotidiano transitado por vecinos, usuarios del Metro y visitantes.\n\nLa postura de la figura invita a observar la tensión entre movimiento, estabilidad y vacío. Más que imponer un significado único, la obra permite que cada persona interprete ese equilibrio desde su propia perspectiva.\n\n🎨 Experiencia viajera:\nLa escultura muestra una cara diferente de Mairena del Aljarafe: la de una ciudad moderna que incorpora la creación de artistas locales a sus espacios públicos.\n\n💡 Consejo AvenTourArte:\nRodéala para observar cómo cambia la silueta según el ángulo. Su ubicación en el bulevar de Ciudad Expo permite continuar fácilmente hacia Metromar o regresar mediante la cercana estación de Metro.',
           foto:

@@ -1,0 +1,55 @@
+<section class="plan-filter" aria-labelledby="plan-filter-title">
+  <header class="plan-filter-heading">
+    <div>
+      <span class="plan-filter-eyebrow"><mat-icon aria-hidden="true">explore</mat-icon> A tu manera</span>
+      <h2 id="plan-filter-title">¿Qué te apetece descubrir?</h2>
+      <p>Elige tus tipos de plan y encuentra tu próxima parada.</p>
+    </div>
+    <button
+      type="button"
+      class="plan-filter-clear"
+      [disabled]="!selected.size"
+      (click)="clearFilters.emit()"
+    >
+      <mat-icon aria-hidden="true">restart_alt</mat-icon>
+      Limpiar filtros
+    </button>
+  </header>
+
+  <div class="plan-filter-groups">
+    <div
+      *ngFor="let group of groups; trackBy: trackById"
+      class="plan-filter-group"
+      role="group"
+      [attr.aria-labelledby]="'plan-group-' + group.id"
+      [attr.data-plan-group]="group.id"
+    >
+      <h3 [id]="'plan-group-' + group.id"><span aria-hidden="true">{{ group.number }}</span>{{ group.label }}</h3>
+      <div class="plan-filter-options">
+        <button
+          *ngFor="let type of group.types; trackBy: trackById"
+          type="button"
+          class="plan-filter-option"
+          [class.is-selected]="selected.has(type.id)"
+          [attr.aria-pressed]="selected.has(type.id)"
+          (click)="toggleType.emit(type.id)"
+        >
+          <mat-icon aria-hidden="true">{{ type.icon }}</mat-icon>
+          <span>{{ type.filterLabel || type.label }}</span>
+          <mat-icon class="option-check" aria-hidden="true">{{ selected.has(type.id) ? 'check_circle' : 'add' }}</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <p class="plan-filter-hint">Puedes elegir varias opciones: se suman dentro de cada grupo y se combinan entre grupos.</p>
+
+  <div class="plan-filter-result" role="status" aria-live="polite" aria-atomic="true">
+    <span class="plan-filter-count"><strong>{{ matching }}</strong> de {{ total }} planes</span>
+    <span class="plan-filter-summary">{{ summary || 'Toda la guía, todas las posibilidades' }}</span>
+    <span *ngIf="selected.size && matching === 0" class="plan-filter-empty">
+      <mat-icon aria-hidden="true">travel_explore</mat-icon>
+      <span><strong>Tu próxima parada aún está por descubrir</strong>Prueba otra combinación o limpia los filtros para volver a ver todos los planes.</span>
+    </span>
+  </div>
+</section>

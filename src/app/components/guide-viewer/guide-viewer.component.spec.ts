@@ -3,6 +3,8 @@ import { Subject } from 'rxjs';
 
 import { TravelNode, TRAVEL_TREE } from '../../data/travel-data';
 import { ImageService } from '../../shared/image.service';
+import { sectionPlanItems } from '../../shared/plan-filter';
+import { matchesPlanTypes } from '../../shared/plan-types';
 import { GUIDE_REGISTRY, GuideViewerComponent } from './guide-viewer.component';
 
 describe('GuideViewerComponent', () => {
@@ -215,6 +217,89 @@ describe('GuideViewerComponent', () => {
     expect(component.selectedDiet).toBeNull();
     expect(component.avoidAlcohol).toBeFalse();
     expect(component.avoidPork).toBeFalse();
+  });
+
+  it('filters the Nordic itinerary and nested visits while leaving other tabs intact', () => {
+    setRoute('europa/dinamarca/copenhague');
+    component.ngOnInit();
+    const originalGuide = JSON.stringify(component.guide);
+    const originalTabs = component.tabs;
+    const options = component.availablePlanTypes;
+    component.togglePlanType('playa');
+    component.togglePlanType('gratuito');
+
+    const visible = component.visiblePlanSections.flatMap(sectionPlanItems);
+    expect(visible.length).toBeGreaterThan(0);
+    expect(visible.every(item => item.tiposPlan?.includes('playa') && item.tiposPlan.includes('gratuito'))).toBeTrue();
+    expect(component.matchingPlanCount).toBe(visible.length);
+    expect(component.matchingPlanCount).toBeLessThan(component.totalPlanCount);
+    expect(component.availablePlanTypes).toBe(options);
+    expect(component.tabs).toBe(originalTabs);
+    expect(JSON.stringify(component.guide)).toBe(originalGuide);
+
+    component.setActiveTab('gastronomia');
+    component.toggleAllergen('leche');
+    component.setActiveTab('que-ver');
+    expect([...component.selectedPlanTypes]).toEqual(['playa', 'gratuito']);
+    component.clearPlanFilters();
+    expect(component.selectedAllergens.has('leche')).toBeTrue();
+    expect(component.matchingPlanCount).toBe(component.totalPlanCount);
+    expect(component.visiblePlanSections).toBe(originalTabs.find(tab => tab.id === 'que-ver')!.sections);
+  });
+
+  it('separates Chipiona main route from optional plans and combines both without losing visits', () => {
+    setRoute('europa/espana/andalucia/cadiz/chipiona');
+    component.ngOnInit();
+    expect(component.totalPlanCount).toBe(23);
+    expect(component.availablePlanTypes.filter(type => type.group === 'recorrido').map(type => type.id))
+      .toEqual(['ruta', 'opcional']);
+
+    component.togglePlanType('ruta');
+    const main = component.visiblePlanSections.flatMap(sectionPlanItems);
+    expect(component.matchingPlanCount).toBe(15);
+    expect(main.some(item => item.nombre?.startsWith('Faro de Chipiona'))).toBeTrue();
+    expect(main.some(item => item.nombre === 'Santuario de Nuestra Señora de Regla')).toBeTrue();
+
+    component.togglePlanType('opcional');
+    expect(component.matchingPlanCount).toBe(23);
+    component.togglePlanType('ruta');
+    const optional = component.visiblePlanSections.flatMap(sectionPlanItems);
+    expect(component.matchingPlanCount).toBe(8);
+    expect(optional.some(item => item.nombre === 'Bodega César Florido')).toBeTrue();
+    expect(optional.some(item => main.includes(item))).toBeFalse();
+  });
+
+  it('resets the plan selection and available types on destination changes and unknown routes', () => {
+    setRoute('europa/dinamarca/copenhague');
+    component.ngOnInit();
+    component.togglePlanType('playa');
+    setRoute('europa/suecia/malmo');
+    routerEvents.next(new NavigationEnd(1, routerUrl, routerUrl));
+    expect(component.selectedPlanTypes.size).toBe(0);
+    expect(component.matchingPlanCount).toBe(component.totalPlanCount);
+
+    setRoute('no-existe');
+    routerEvents.next(new NavigationEnd(2, routerUrl, routerUrl));
+    expect(component.availablePlanTypes).toEqual([]);
+    expect(component.visiblePlanSections).toEqual([]);
+    expect(component.totalPlanCount).toBe(0);
+  });
+
+  it('keeps counts and results consistent for every available filter in every published guide', () => {
+    for (const path of Object.keys(GUIDE_REGISTRY)) {
+      setRoute(path);
+      component.ngOnInit();
+      const originalSections = component.tabs.find(tab => tab.id === 'que-ver')?.sections ?? [];
+      const allItems = originalSections.flatMap(sectionPlanItems);
+      expect(component.totalPlanCount).withContext(path).toBe(allItems.length);
+      for (const type of component.availablePlanTypes) {
+        component.togglePlanType(type.id);
+        const expected = allItems.filter(item => matchesPlanTypes(item, new Set([type.id])));
+        expect(component.visiblePlanSections.flatMap(sectionPlanItems)).withContext(`${path}: ${type.id}`).toEqual(expected);
+        expect(component.matchingPlanCount).toBe(expected.length);
+        component.togglePlanType(type.id);
+      }
+    }
   });
 });
 

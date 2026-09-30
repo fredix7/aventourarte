@@ -1,9 +1,39 @@
 import { ROTA_GUIDE } from '../guides/europa/espana/andalucia/cadiz/rota.guide';
 import { ALMENSILLA_GUIDE } from '../guides/europa/espana/andalucia/sevilla/almensilla.guide';
 import { CORIA_GUIDE } from '../guides/europa/espana/andalucia/sevilla/coria.guide';
+import { CHIPIONA_GUIDE } from '../guides/europa/espana/andalucia/cadiz/chipiona.guide';
 import { auditGuideEditorial } from './guide-editorial-audit';
 
 describe('guide editorial audit', () => {
+  it('accepts email reservations without treating them as insecure HTTP links', () => {
+    const report = auditGuideEditorial(CHIPIONA_GUIDE);
+    expect(report.status).toBe('ready-with-warnings');
+    expect(report.errors).toEqual([]);
+    expect(report.links.valid).toBe(report.links.total);
+    expect(report.warnings.every(issue => issue.category === 'visual')).toBeTrue();
+  });
+
+  it('rejects malformed email reservations and non-web protocols in website fields', () => {
+    const report = auditGuideEditorial({
+      nombre: 'Prueba de enlaces',
+      descripcion: 'Validación por tipo de enlace',
+      secciones: [{ titulo: 'Qué visitar', lugares: [
+        { nombre: 'Correo vacío', reserva: 'mailto:' },
+        { nombre: 'Correo incorrecto', reserva: 'mailto:sin-arroba' },
+        { nombre: 'Correo con espacios', reserva: 'mailto:mal%20correo@example.com' },
+        { nombre: 'Web con correo', web: 'mailto:reservas@example.com' },
+        { nombre: 'Protocolo no admitido', reserva: 'javascript:alert(1)' },
+        { nombre: 'Web HTTP', web: 'http://example.com' },
+        { nombre: 'Reserva por correo', reserva: 'mailto:reservas@example.com?subject=Mesa%20para%20dos' }
+      ] }]
+    });
+    expect(report.errors.filter(issue => issue.category === 'links').map(issue => issue.item)).toEqual([
+      'Correo vacío', 'Correo incorrecto', 'Correo con espacios', 'Web con correo', 'Protocolo no admitido'
+    ]);
+    expect(report.warnings.filter(issue => issue.category === 'links').map(issue => issue.item)).toEqual(['Web HTTP']);
+    expect(report.links).toEqual({ total: 7, valid: 2 });
+  });
+
   it('recognizes allergen profiles stored on new guide cards', () => {
     const report = auditGuideEditorial({
       nombre: 'Guía de prueba',

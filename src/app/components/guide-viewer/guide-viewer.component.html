@@ -55,8 +55,18 @@
         role="tabpanel"
         [attr.id]="'guide-tab-panel-' + tab.id"
       >
+        <app-plan-filter
+          *ngIf="tab.id === 'que-ver' && availablePlanTypes.length"
+          [availableTypes]="availablePlanTypes"
+          [selected]="selectedPlanTypes"
+          [total]="totalPlanCount"
+          [matching]="matchingPlanCount"
+          (toggleType)="togglePlanType($event)"
+          (clearFilters)="clearPlanFilters()"
+        ></app-plan-filter>
+
         <section
-          *ngFor="let section of tab.sections; trackBy: trackBySectionTitle"
+          *ngFor="let section of (tab.id === 'que-ver' ? visiblePlanSections : tab.sections); trackBy: trackBySectionTitle"
           class="guide-section"
         >
           <div class="section-heading">
@@ -207,8 +217,12 @@
             </div>
           </aside>
 
-          <mat-accordion *ngIf="section.itinerario" class="itinerary-accordion">
-            <mat-expansion-panel *ngFor="let day of section.itinerario">
+          <p *ngIf="tab.id === 'que-ver' && selectedPlanTypes.size && section.itinerario?.length" class="plan-itinerary-notice">
+            <mat-icon aria-hidden="true">filter_alt</mat-icon>
+            Itinerario filtrado: solo se muestran las paradas que encajan con tu selección. Se mantiene el orden original de los días.
+          </p>
+          <mat-accordion *ngIf="section.itinerario?.length" class="itinerary-accordion">
+            <mat-expansion-panel *ngFor="let day of section.itinerario; trackBy: trackByDayName">
               <mat-expansion-panel-header>
                 <mat-panel-title>{{ day.dia }}</mat-panel-title>
               </mat-expansion-panel-header>
@@ -355,7 +369,7 @@
 
           <div [class.route-groups]="section.subsecciones?.length">
             <div
-              *ngFor="let contentSection of sectionContentGroups(section)"
+              *ngFor="let contentSection of sectionContentGroups(section); trackBy: trackBySectionTitle"
               [class.route-group]="section.subsecciones?.length"
             >
               <div *ngIf="section.subsecciones?.length" class="route-group-heading">

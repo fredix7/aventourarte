@@ -665,6 +665,21 @@ app-info-general {
   margin: -2px 0 13px;
 }
 
+.plan-itinerary-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-left: 3px solid #176b62;
+  border-radius: 4px;
+  color: #284e47;
+  background: #edf4ef;
+  font-size: .88rem;
+  line-height: 1.6;
+
+  mat-icon { flex-shrink: 0; }
+}
+
 .plan-type-list.is-empty {
   display: none;
 }
@@ -685,7 +700,7 @@ app-info-general {
   letter-spacing: 0.01em;
 }
 
-.plan-type-badge[data-plan-group='formato'] {
+.plan-type-badge[data-plan-group='recorrido'] {
   color: #6d4c1f;
   border-color: rgba(180, 119, 28, 0.3);
   background: #fff8e6;

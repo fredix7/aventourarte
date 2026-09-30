@@ -106,19 +106,11 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
 
     // Chipiona
     ['Moscatel de Chipiona', complete([], ['sulfitos'])],
-    ['Langostinos de Chipiona', complete(['crustaceos'])],
-    ['Galeras y sopa de galeras', variable(['crustaceos'], ['gluten'])],
-    ['Pescados de costa de Chipiona', variable(['pescado'], ['gluten', 'sulfitos'])],
-    ['Corvina al horno', complete(['pescado'], ['sulfitos'])],
-    ['Frituras marineras de Chipiona', variable(['pescado', 'moluscos'], ['gluten', 'sulfitos'])],
-    ['Cazón en tomate o en amarillo', variable(['pescado'], ['gluten', 'sulfitos'])],
-    ['Raya en pimentón', variable(['pescado'], ['gluten', 'sulfitos'])],
-    ['Menudo de choco', variable(['moluscos'], ['gluten', 'sulfitos'])],
-    ['Tomates de Chipiona', complete()],
+    ['Sopa de galeras de Chipiona', variable(['crustaceos', 'gluten'], ['sulfitos'])],
     ['Berza chipionera', variable([], ['apio', 'gluten', 'sulfitos'])],
-    ['Carne ibérica al moscatel', variable(['sulfitos'], ['gluten'])],
+    ['Carne ibérica al moscatel', variable([], ['sulfitos', 'gluten'])],
     ['Cachitos', variable(['gluten'], ['leche', 'soja', 'mostaza', 'sulfitos'])],
-    ['Poleá con coscorrones', variable(['gluten'], ['leche'])],
+    ['Helado de moscatel con pasas', variable(['leche'], ['sulfitos', 'huevo'])],
 
     // Jerez
     ['Riñones al Jerez', complete([], ['sulfitos', 'gluten'])],
