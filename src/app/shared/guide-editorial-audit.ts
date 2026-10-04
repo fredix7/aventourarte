@@ -142,6 +142,10 @@ function isValidStoredLink(link: { field: string; value: string }): boolean {
 
   try {
     const url = new URL(link.value);
+    if (url.protocol === 'tel:') {
+      return !url.search && !url.hash
+        && /^\+?[0-9]{7,15}$/.test(decodeURIComponent(url.pathname));
+    }
     return url.protocol === 'mailto:'
       && /^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/.test(decodeURIComponent(url.pathname));
   } catch {

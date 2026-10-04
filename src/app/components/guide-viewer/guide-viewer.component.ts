@@ -27,6 +27,7 @@ import {
   evaluateFoodPreferenceProfile,
   hasFoodPreferenceSelection
 } from '../../shared/gastronomy-preferences';
+import { assessGastronomyMatch, GastronomyMatch } from '../../shared/gastronomy-matches';
 import {
   PLAN_TYPES,
   PlanTypeDefinition,
@@ -468,29 +469,59 @@ export class GuideViewerComponent implements OnDestroy {
   }
 
   gastronomyFilterState(item: any): FoodPreferenceFilterResult {
-    if (!this.hasGastronomyFilterSelection()) return 'neutral';
+    return this.gastronomyMatch(item).state;
+  }
 
-    const results: FoodPreferenceFilterResult[] = [];
+  gastronomyMatch(item: any): GastronomyMatch {
+    return assessGastronomyMatch(
+      this.foodPreferenceProfile(item),
+      this.dishAllergenProfile(item),
+      { diet: this.selectedDiet, avoidAlcohol: this.avoidAlcohol, avoidPork: this.avoidPork },
+      this.selectedAllergens
+    );
+  }
 
-    if (this.hasFoodPreferenceSelection()) {
-      results.push(this.foodPreferenceFilterResult(item));
-    }
+  contentItems(group: any, prioritizeGastronomy = false): any[] {
+    const items = group?.lugares ?? group?.platos ?? [];
+    if (!prioritizeGastronomy || !this.hasGastronomyFilterSelection()) return items;
 
-    if (this.hasAllergenSelection()) {
-      const allergenProfile = this.dishAllergenProfile(item);
+    const rank: Record<FoodPreferenceFilterResult, number> = {
+      compatible: 0, unknown: 1, incompatible: 2, neutral: 3
+    };
+    return items.map((item: any, index: number) => ({
+      item, index, rank: rank[this.gastronomyFilterState(item)]
+    })).sort((a: any, b: any) => a.rank - b.rank || a.index - b.index)
+      .map((entry: any) => entry.item);
+  }
 
-      if (profileHasSelectedAllergen(allergenProfile, this.selectedAllergens)) {
-        results.push('incompatible');
-      } else if (!allergenProfile || allergenProfile.status === 'variable') {
-        results.push('unknown');
-      } else {
-        results.push('compatible');
-      }
-    }
+  gastronomySummary(section: any) {
+    const matches = this.sectionItems(section).map(item => ({ item, ...this.gastronomyMatch(item) }));
+    const compatible = matches.filter(match => match.state === 'compatible');
+    return {
+      compatible: compatible.length,
+      unknown: matches.filter(match => match.state === 'unknown').length,
+      incompatible: matches.filter(match => match.state === 'incompatible').length,
+      picks: compatible.slice(0, 3).map(match => match.item)
+    };
+  }
 
-    if (results.includes('incompatible')) return 'incompatible';
-    if (results.includes('unknown')) return 'unknown';
-    return 'compatible';
+  dishAnchor(section: any, item: any): string {
+    const sectionIndex = this.guide?.secciones?.indexOf(section) ?? -1;
+    return `gastronomy-dish-${sectionIndex}-${this.sectionItems(section).indexOf(item)}`;
+  }
+
+  focusDish(section: any, item: any) {
+    const card = document.getElementById(this.dishAnchor(section, item));
+    if (!card) return;
+    card.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+      block: 'start'
+    });
+    card.focus({ preventScroll: true });
+  }
+
+  trackByItem(_: number, item: any): any {
+    return item;
   }
 
   isCompatibleWithSelectedAllergens(item: any): boolean {

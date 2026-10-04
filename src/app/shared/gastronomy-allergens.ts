@@ -131,12 +131,12 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Brandy de Jerez', variable()],
 
     // Rota
-    ['Arranque roteño', complete(['gluten'])],
-    ['Berza roteña', variable([], ['apio'])],
     ['Urta a la roteña', complete(['pescado'], ['sulfitos'])],
-    ['Pizza roteña', variable(['gluten', 'leche'], ['pescado', 'crustaceos', 'huevo'])],
-    ['Arroz al Shorty’s', variable(['crustaceos'], ['huevo', 'soja', 'gluten'])],
-    ['Mayetito', variable(['huevo', 'frutos-cascara'], ['gluten', 'leche', 'soja'])],
+    ['Arranque roteño', complete(['gluten'])],
+    ['Berza roteña', variable([], ['apio', 'gluten', 'sulfitos'])],
+    ['Pizza roteña', variable(['gluten', 'leche'], ['huevo', 'pescado', 'crustaceos'])],
+    ['Arroz al Shorty’s', variable(['crustaceos', 'soja'], ['gluten', 'huevo'])],
+    ['Mayetito', complete(['huevo', 'frutos-cascara'], ['gluten', 'leche', 'soja'])],
     ['Tintilla de Rota', complete([], ['sulfitos'])],
 
     // San Fernando

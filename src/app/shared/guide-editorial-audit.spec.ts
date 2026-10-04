@@ -34,6 +34,27 @@ describe('guide editorial audit', () => {
     expect(report.links).toEqual({ total: 7, valid: 2 });
   });
 
+  it('accepts telephone reservations while rejecting malformed numbers and telephone websites', () => {
+    const report = auditGuideEditorial({
+      nombre: 'Reservas por teléfono',
+      path: 'pruebas/reservas',
+      descripcion: 'Validación de enlaces telefónicos',
+      secciones: [{ titulo: 'Qué visitar', lugares: [
+        { nombre: 'Bodega', reserva: 'tel:+34956810203' },
+        { nombre: 'Centro', reserva: 'tel:956846161' },
+        { nombre: 'Número vacío', reserva: 'tel:' },
+        { nombre: 'Texto', reserva: 'tel:consultar' },
+        { nombre: 'Número incompleto', reserva: 'tel:123' },
+        { nombre: 'Número con consulta', reserva: 'tel:+34956810203?redirect=example.com' },
+        { nombre: 'Web con teléfono', web: 'tel:+34956810203' }
+      ] }]
+    });
+    expect(report.errors.filter(issue => issue.category === 'links').map(issue => issue.item)).toEqual([
+      'Número vacío', 'Texto', 'Número incompleto', 'Número con consulta', 'Web con teléfono'
+    ]);
+    expect(report.links).toEqual({ total: 7, valid: 2 });
+  });
+
   it('recognizes allergen profiles stored on new guide cards', () => {
     const report = auditGuideEditorial({
       nombre: 'Guía de prueba',
@@ -60,16 +81,16 @@ describe('guide editorial audit', () => {
     expect(report.status).toBe('ready-with-warnings');
     expect(report.entities).toEqual({ total: 50, complete: 50 });
     expect(report.photos).toEqual({
-      total: 28,
-      useful: 15,
+      total: 29,
+      useful: 16,
       placeholder: 13,
       missing: 0,
-      notApplicable: 22
+      notApplicable: 21
     });
     expect(report.practical).toEqual({ total: 43, complete: 43 });
-    expect(report.links).toEqual({ total: 43, valid: 43 });
+    expect(report.links).toEqual({ total: 61, valid: 61 });
     expect(report.allergens).toEqual({ total: 7, complete: 7 });
-    expect(report.cloudinary.uniqueReferences).toBe(20);
+    expect(report.cloudinary.uniqueReferences).toBe(21);
     expect(report.errors).toEqual([]);
     expect(report.warnings.length).toBe(13);
   });

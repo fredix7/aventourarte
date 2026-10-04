@@ -219,6 +219,78 @@ describe('GuideViewerComponent', () => {
     expect(component.avoidPork).toBeFalse();
   });
 
+  it('prioritizes confirmed matches, then unknown recipes, without changing editorial data', () => {
+    setRoute('europa/espana/andalucia/sevilla/almensilla');
+    component.ngOnInit();
+    const section = component.guide.secciones.find((section: any) => section.titulo === 'Gastronomía');
+    const original = [...section.platos];
+    component.toggleDietaryPreference('vegetariano');
+
+    const sorted = component.contentItems(section, true);
+    const expected = ['compatible', 'unknown', 'incompatible'].flatMap(state =>
+      original.filter(item => component.gastronomyFilterState(item) === state)
+    );
+    expect(sorted).toEqual(expected);
+    expect(sorted.length).toBe(original.length);
+    expect(section.platos).toEqual(original);
+    expect(component.contentItems(section)).toBe(section.platos);
+
+    component.clearGastronomyFilters();
+    expect(component.contentItems(section, true)).toBe(section.platos);
+  });
+
+  it('keeps subsections intact and counts their combined results and quick picks', () => {
+    const food = (compatibilidad: 'vegano' | 'ninguno') => ({
+      dieta: { certeza: 'confirmado', compatibilidad }, alcohol: 'no-contiene', cerdo: 'no-contiene'
+    });
+    const conflict = { nombre: 'Carne', perfilAlimentario: food('ninguno') };
+    const matchA = { nombre: 'Verduras A', perfilAlimentario: food('vegano') };
+    const matchB = { nombre: 'Verduras B', perfilAlimentario: food('vegano') };
+    const unknown = { nombre: 'Receta variable' };
+    const section = { titulo: 'Gastronomía', subsecciones: [
+      { titulo: 'Cocina local', platos: [conflict, matchA] },
+      { titulo: 'Dulces', platos: [unknown, matchB] }
+    ] };
+    component.guide = { secciones: [section] };
+    component.toggleDietaryPreference('vegano');
+
+    expect(component.contentItems(section.subsecciones[0], true)).toEqual([matchA, conflict]);
+    expect(component.contentItems(section.subsecciones[1], true)).toEqual([matchB, unknown]);
+    expect(component.gastronomySummary(section)).toEqual({
+      compatible: 2, unknown: 1, incompatible: 1, picks: [matchA, matchB]
+    });
+    const anchor = component.dishAnchor(section, matchA);
+    component.clearGastronomyFilters();
+    expect(component.dishAnchor(section, matchA)).toBe(anchor);
+    expect(component.dishAnchor(section, matchA)).not.toBe(component.dishAnchor(section, matchB));
+  });
+
+  it('reports zero confirmed matches without suggesting unknown recipes are compatible', () => {
+    component.toggleDietaryPreference('vegano');
+    expect(component.gastronomySummary({ platos: [{ nombre: 'Sin datos' }] })).toEqual({
+      compatible: 0, unknown: 1, incompatible: 0, picks: []
+    });
+  });
+
+  it('moves keyboard focus to a quick pick and respects reduced motion', () => {
+    const item = { nombre: 'Plato' };
+    const section = { platos: [item] };
+    component.guide = { secciones: [section] };
+    const card = document.createElement('article');
+    card.id = component.dishAnchor(section, item);
+    card.tabIndex = -1;
+    document.body.appendChild(card);
+    const scroll = spyOn(card, 'scrollIntoView');
+    (window.matchMedia as jasmine.Spy).and.returnValue({ matches: true });
+    try {
+      component.focusDish(section, item);
+      expect(scroll).toHaveBeenCalledWith({ behavior: 'instant', block: 'start' });
+      expect(document.activeElement).toBe(card);
+    } finally {
+      card.remove();
+    }
+  });
+
   it('filters the Nordic itinerary and nested visits while leaving other tabs intact', () => {
     setRoute('europa/dinamarca/copenhague');
     component.ngOnInit();
