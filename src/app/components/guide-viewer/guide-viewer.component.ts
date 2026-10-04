@@ -510,6 +510,13 @@ export class GuideViewerComponent implements OnDestroy {
     return `gastronomy-dish-${sectionIndex}-${this.sectionItems(section).indexOf(item)}`;
   }
 
+  dishLabelIds(section: any, item: any): string {
+    const anchor = this.dishAnchor(section, item);
+    return this.hasGastronomyFilterSelection()
+      ? `${anchor}-title ${anchor}-status`
+      : `${anchor}-title`;
+  }
+
   focusDish(section: any, item: any) {
     const card = document.getElementById(this.dishAnchor(section, item));
     if (!card) return;

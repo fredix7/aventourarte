@@ -225,7 +225,8 @@
                   <span>Ve directamente a un plato compatible</span>
                   <div class="quick-pick-list">
                     <button *ngFor="let pick of summary.picks; trackBy: trackByItem" type="button"
-                      class="quick-pick" [attr.aria-label]="'Ver ' + pick.nombre" (click)="focusDish(section, pick)">
+                      class="quick-pick" [attr.aria-label]="'Ver ficha de ' + pick.nombre + ', compatible con tus filtros'"
+                      [attr.aria-controls]="dishAnchor(section, pick)" (click)="focusDish(section, pick)">
                       <span>{{ pick.nombre }}</span><mat-icon aria-hidden="true">arrow_downward</mat-icon>
                     </button>
                   </div>
@@ -427,6 +428,7 @@
                   class="item-card"
                   *ngFor="let item of contentItems(contentSection, isGastronomySection(section)); trackBy: trackByItem"
                   [attr.id]="isGastronomySection(section) ? dishAnchor(section, item) : null"
+                  [attr.aria-labelledby]="isGastronomySection(section) ? dishLabelIds(section, item) : null"
                   [attr.tabindex]="isGastronomySection(section) ? -1 : null"
                   [class.gastronomy-match]="isGastronomySection(section) && gastronomyFilterState(item) === 'compatible'"
                   [class.gastronomy-conflict]="isGastronomySection(section) && gastronomyFilterState(item) === 'incompatible'"
@@ -436,24 +438,26 @@
                     <div *ngIf="gastronomyMatch(item) as match" class="dish-match-banner" [ngSwitch]="match.state">
                       <ng-container *ngSwitchCase="'compatible'">
                         <mat-icon aria-hidden="true">check_circle</mat-icon>
-                        <div><strong>Compatible con tus filtros</strong><span>Según la receta descrita</span></div>
+                        <div><strong [attr.id]="dishAnchor(section, item) + '-status'">Compatible con tus filtros</strong><span>Según la receta descrita</span></div>
                       </ng-container>
                       <ng-container *ngSwitchCase="'unknown'">
                         <mat-icon aria-hidden="true">help_outline</mat-icon>
-                        <div><strong>Por confirmar</strong><span>Necesitamos más información sobre la receta</span></div>
+                        <div><strong [attr.id]="dishAnchor(section, item) + '-status'">Por confirmar</strong><span>Necesitamos más información sobre la receta</span></div>
                       </ng-container>
                       <ng-container *ngSwitchCase="'incompatible'">
                         <mat-icon aria-hidden="true">block</mat-icon>
-                        <div><strong>No encaja con tus filtros</strong><span>Revisa los ingredientes antes de elegir</span></div>
+                        <div><strong [attr.id]="dishAnchor(section, item) + '-status'">No encaja con tus filtros</strong><span>Revisa los ingredientes antes de elegir</span></div>
                       </ng-container>
                     </div>
                   </ng-container>
                   <figure
                     class="image-frame item-image zoomable-image"
                     *ngIf="item.foto"
+                    [attr.id]="isGastronomySection(section) ? dishAnchor(section, item) + '-image' : null"
                     role="button"
                     tabindex="0"
                     aria-label="Ampliar imagen"
+                    [attr.aria-labelledby]="isGastronomySection(section) ? dishAnchor(section, item) + '-image ' + dishLabelIds(section, item) : null"
                     [style.--frame-bg]="photoFrameBg(item.foto)"
                     (click)="openPhoto(item.foto, item.nombre, galleryFor(item.foto, item.fotos))"
                     (keydown.enter)="openPhoto(item.foto, item.nombre, galleryFor(item.foto, item.fotos))"
@@ -468,8 +472,8 @@
                   </figure>
 
                   <div class="card-copy">
-                    <h4 *ngIf="section.subsecciones?.length">{{ item.nombre }}</h4>
-                    <h3 *ngIf="!section.subsecciones?.length">{{ item.nombre }}</h3>
+                    <h4 *ngIf="section.subsecciones?.length" [attr.id]="isGastronomySection(section) ? dishAnchor(section, item) + '-title' : null">{{ item.nombre }}</h4>
+                    <h3 *ngIf="!section.subsecciones?.length" [attr.id]="isGastronomySection(section) ? dishAnchor(section, item) + '-title' : null">{{ item.nombre }}</h3>
 
                     <ng-container *ngIf="isGastronomySection(section) && hasGastronomyFilterSelection()">
                       <ng-container *ngIf="gastronomyMatch(item) as match">
