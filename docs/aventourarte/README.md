@@ -2,9 +2,11 @@
 
 ## Objetivo
 
-Reunir la documentación de la fábrica de agentes: restricciones de proceso, futuras reglas editoriales, decisiones, referencias aprobadas y comprobaciones de calidad.
+Reunir la documentación de la fábrica de agentes: restricciones de proceso, reglas editoriales, decisiones, referencias aprobadas y comprobaciones de calidad.
 
-Esta primera versión es un esqueleto documental. Las únicas reglas ACTIVE son las diez restricciones de proceso de [AGENTS.md](../../AGENTS.md). No hay todavía una estructura editorial oficial ni una guía completa aprobada como plantilla.
+[AGENTS.md](../../AGENTS.md) contiene las restricciones generales de proceso ACTIVE. Existen además decisiones editoriales, de investigación y de QA ACTIVE documentadas en `docs/aventourarte/rules/`, el [registro de decisiones](decisions/decision-log.md) y la [checklist de QA](qa/checklist.md).
+
+El registro de decisiones es la fuente autoritativa del estado ACTIVE / SUPERSEDED / PENDING de cada decisión. No todas las decisiones están cerradas: las reglas PENDING siguen sin ser normativas. No hay todavía una guía completa aprobada como plantilla.
 
 ## Lectura y navegación
 
@@ -32,7 +34,7 @@ Los hechos recogidos en los documentos de reglas describen el estado observado e
 
 ## PENDING — Definición de la fábrica
 
-- Estructura editorial oficial y contratos de contenido.
-- Reglas específicas, criterios de investigación y criterios concretos de QA.
+- Aspectos de estructura editorial y contratos de contenido aún pendientes según el registro de decisiones y las reglas específicas.
+- Aspectos de reglas editoriales, investigación e implementación y operación de QA que continúan PENDING en sus documentos correspondientes.
 - Referencias aprobadas y alcance de cada aprobación.
 - Roles de agentes y flujo de trabajo.

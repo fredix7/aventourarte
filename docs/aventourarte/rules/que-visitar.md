@@ -75,8 +75,9 @@ Cuando los campos estén presentes, el orden editorial oficial es:
 - `foto` representa una imagen individual.
 - `fotos` representa una galería.
 - No inventar referencias de imagen.
-- Las reglas de Cloudinary y convenciones concretas de imagen continúan en [Imágenes y Cloudinary](imagenes-cloudinary.md), cuyas decisiones siguen PENDING.
+- Las imágenes deben seguir las [reglas ACTIVE de Imágenes y Cloudinary](imagenes-cloudinary.md#active--reglas-oficiales), que ya regulan el formato general de referencias Cloudinary, la correspondencia real de la imagen y los placeholders.
 - La coexistencia oficial de `foto` y `fotos` permanece PENDING.
+- La obligatoriedad exacta de tener imagen según el tipo de lugar permanece PENDING, al igual que los casos especiales como `noCropGallery`.
 
 ### horario
 
@@ -115,6 +116,7 @@ Cuando los campos estén presentes, el orden editorial oficial es:
 - `acceso`.
 - `noCropGallery`.
 - Coexistencia oficial de `foto` y `fotos`.
+- Obligatoriedad exacta de tener imagen según el tipo de lugar.
 - Obligatoriedad exacta de horario y precio según el tipo de lugar.
 - Formato estándar de horario y precio.
 - Casos de acceso libre, visitas concertadas o apertura irregular.
