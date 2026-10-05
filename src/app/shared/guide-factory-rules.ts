@@ -116,7 +116,7 @@ const VISIT_PROPERTY_ORDER = new Map<string, number>([
 ]);
 const VALID_PLAN_TYPES = new Set<string>(PLAN_TYPES.map(type => type.id));
 
-/** Valida solo lugares directos de Qué visitar; el ámbito lo establece el llamador. */
+/** Valida lugares de Qué visitar y de sus subsecciones inmediatas; el llamador establece el ámbito. */
 export function validateSpanishMunicipalVisitCards(guide: unknown): FactoryQaIssue[] {
   return validateVisitCardsInScope(guide, () => true);
 }
@@ -134,40 +134,57 @@ function validateVisitCardsInScope(
 ): FactoryQaIssue[] {
   const issues: FactoryQaIssue[] = [];
   (sectionsOf(guide) ?? []).forEach((section, sectionIndex) => {
-    if (sectionRole(section) !== 'que visitar'
-      || !isRecord(section) || !Array.isArray(section['lugares'])) return;
-
-    section['lugares'].forEach((item: unknown, itemIndex: number) => {
-      if (!isRecord(item)) return;
-      const location = `secciones[${sectionIndex}].lugares[${itemIndex}]`;
-      const label = typeof item['nombre'] === 'string' ? { item: item['nombre'] } : {};
-      const types = item['tiposPlan'];
-      if (isInScope(`${location}.tiposPlan`) && (!Object.prototype.hasOwnProperty.call(item, 'tiposPlan')
-        || !Array.isArray(types) || types.length === 0
-        || !Array.from(types).every(type => typeof type === 'string' && VALID_PLAN_TYPES.has(type)))) {
-        issues.push({
-          severity: 'ERROR', category: 'visit', location: `${location}.tiposPlan`, ...label,
-          detail: 'La ficha debe declarar tiposPlan como un array no vacío de valores del catálogo vigente.'
-        });
-      }
-
-      if (!isInScope(location)) return;
-      let previousRank = -1;
-      for (const key of Object.keys(item)) {
-        const rank = VISIT_PROPERTY_ORDER.get(key);
-        if (rank === undefined) continue;
-        if (rank < previousRank) {
-          issues.push({
-            severity: 'ERROR', category: 'visit', location, ...label,
-            detail: 'Las propiedades presentes de la ficha no respetan el orden canónico de Qué visitar.'
-          });
-          break;
-        }
-        previousRank = rank;
-      }
+    if (sectionRole(section) !== 'que visitar' || !isRecord(section)) return;
+    const sectionLocation = `secciones[${sectionIndex}]`;
+    if (Array.isArray(section['lugares'])) {
+      section['lugares'].forEach((item: unknown, itemIndex: number) =>
+        validateVisitCardInScope(item, `${sectionLocation}.lugares[${itemIndex}]`, isInScope, issues)
+      );
+    }
+    if (!Array.isArray(section['subsecciones'])) return;
+    section['subsecciones'].forEach((subsection: unknown, subsectionIndex: number) => {
+      if (!isRecord(subsection) || !Array.isArray(subsection['lugares'])) return;
+      subsection['lugares'].forEach((item: unknown, itemIndex: number) =>
+        validateVisitCardInScope(item,
+          `${sectionLocation}.subsecciones[${subsectionIndex}].lugares[${itemIndex}]`, isInScope, issues)
+      );
     });
   });
   return issues;
+}
+
+function validateVisitCardInScope(
+  item: unknown,
+  location: string,
+  isInScope: (location: string) => boolean,
+  issues: FactoryQaIssue[]
+): void {
+  if (!isRecord(item)) return;
+  const label = typeof item['nombre'] === 'string' ? { item: item['nombre'] } : {};
+  const types = item['tiposPlan'];
+  if (isInScope(`${location}.tiposPlan`) && (!Object.prototype.hasOwnProperty.call(item, 'tiposPlan')
+    || !Array.isArray(types) || types.length === 0
+    || !Array.from(types).every(type => typeof type === 'string' && VALID_PLAN_TYPES.has(type)))) {
+    issues.push({
+      severity: 'ERROR', category: 'visit', location: `${location}.tiposPlan`, ...label,
+      detail: 'La ficha debe declarar tiposPlan como un array no vacío de valores del catálogo vigente.'
+    });
+  }
+
+  if (!isInScope(location)) return;
+  let previousRank = -1;
+  for (const key of Object.keys(item)) {
+    const rank = VISIT_PROPERTY_ORDER.get(key);
+    if (rank === undefined) continue;
+    if (rank < previousRank) {
+      issues.push({
+        severity: 'ERROR', category: 'visit', location, ...label,
+        detail: 'Las propiedades presentes de la ficha no respetan el orden canónico de Qué visitar.'
+      });
+      break;
+    }
+    previousRank = rank;
+  }
 }
 
 const FESTIVAL_PROPERTY_ORDER = new Map<string, number>([

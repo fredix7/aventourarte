@@ -1,4 +1,5 @@
 import { buildFactoryQaResult } from './guide-factory-qa';
+import type { FactoryQaIssue } from './guide-factory-qa';
 import type { FactoryReviewContext } from './guide-factory-context';
 import {
   validateSpanishMunicipalSectionOrder,
@@ -267,11 +268,13 @@ describe('validateSpanishMunicipalVisitCards', () => {
     ]);
   });
 
-  it('ignores subsections and itineraries while validating direct lugares', () => {
+  it('checks immediate subsections but ignores itineraries while validating direct lugares', () => {
     expect(validateSpanishMunicipalVisitCards({ secciones: [{
       titulo: 'Qué visitar en Rota', lugares: [{ tiposPlan: ['ruta'] }],
       subsecciones: [{ lugares: [{}] }], itinerario: [{ zonas: [{}] }]
-    }] })).toEqual([]);
+    }] })).toEqual([jasmine.objectContaining({
+      category: 'visit', location: 'secciones[0].subsecciones[0].lugares[0].tiposPlan'
+    })]);
   });
 
   it('does not mutate frozen cards, collections or property order', () => {
@@ -567,13 +570,17 @@ describe('scoped Spanish municipal rules', () => {
         expect(scoped(guide, fullGuide)).toEqual([]);
       }
     });
-    it(`does not expand structural coverage for ${scoped.name}`, () => {
+    it(`keeps the permitted structural coverage for ${scoped.name}`, () => {
       const guide = { secciones: [
         { titulo: 'Qué visitar', subsecciones: [{ lugares: [badVisit()] }], itinerario: [{ zonas: [badVisit()] }] },
         { titulo: 'Dónde comer', subsecciones: [{ lugares: [{ foto: '', descripcion: badDescription }] }] },
         { titulo: 'Fiestas y Festivos Principales', itinerario: [{ lugares: [badFestival()] }] }
       ] };
-      expect(scoped(guide, fullGuide)).toEqual([]);
+      const nested = 'secciones[0].subsecciones[0].lugares[0]';
+      expect(scoped(guide, fullGuide)).toEqual(scoped === validateSpanishMunicipalVisitCardsScoped ? [
+        jasmine.objectContaining({ category: 'visit', location: `${nested}.tiposPlan` }),
+        jasmine.objectContaining({ category: 'visit', location: nested })
+      ] : []);
     });
   }
 
@@ -745,6 +752,150 @@ describe('scoped Spanish municipal rules', () => {
       expect(JSON.stringify(guide)).toBe(before);
     });
   }
+});
+
+describe('municipal visit cards in immediate subsections', () => {
+  const full = validateSpanishMunicipalVisitCards;
+  const scoped = validateSpanishMunicipalVisitCardsScoped;
+  const targets = (...locations: string[]): FactoryReviewContext => ({ scope: 'targets', targets: locations });
+  const badCard = () => ({ web: 'https://example.org', maps: 'https://example.org/map' });
+  const direct = 'secciones[0].lugares[0]';
+  const nested = 'secciones[0].subsecciones[0].lugares[0]';
+  const expected = (location: string): FactoryQaIssue[] => [
+    { severity: 'ERROR', category: 'visit', location: `${location}.tiposPlan`,
+      detail: 'La ficha debe declarar tiposPlan como un array no vacío de valores del catálogo vigente.' },
+    { severity: 'ERROR', category: 'visit', location,
+      detail: 'Las propiedades presentes de la ficha no respetan el orden canónico de Qué visitar.' }
+  ];
+  const mixedGuide = () => ({ secciones: [{ titulo: 'Qué visitar en Destino', lugares: [badCard()],
+    subsecciones: [{ lugares: [badCard(), badCard()] }, { lugares: [badCard()] }]
+  }] });
+
+  it('preserves the exact direct issue array and validates immediate nested cards', () => {
+    expect(full({ secciones: [{ titulo: 'Qué visitar', lugares: [badCard()] }] })).toEqual(expected(direct));
+    expect(full({ secciones: [{ titulo: 'Qué visitar', subsecciones: [{ lugares: [badCard()] }] }] }))
+      .toEqual(expected(nested));
+  });
+  it('visits direct places first, then subsections and their places in original order', () => {
+    expect(full(mixedGuide())).toEqual([
+      ...expected(direct), ...expected(nested),
+      ...expected('secciones[0].subsecciones[0].lugares[1]'),
+      ...expected('secciones[0].subsecciones[1].lugares[0]')
+    ]);
+  });
+  it('keeps original section order ahead of the next section direct places', () => {
+    expect(full({ secciones: [
+      { titulo: 'Qué visitar', subsecciones: [{ lugares: [badCard()] }] },
+      { titulo: 'Qué visitar en Otro destino', lugares: [badCard()] }
+    ] })).toEqual([...expected(nested), ...expected('secciones[1].lugares[0]')]);
+  });
+  for (const [index, lugares] of [undefined, null, false, 'invalid', {}].entries()) {
+    it(`does not let missing or malformed direct places block subsections: ${index}`, () => {
+      expect(full({ secciones: [{ titulo: 'Qué visitar', lugares, subsecciones: [{ lugares: [badCard()] }] }] }))
+        .toEqual(expected(nested));
+    });
+  }
+  for (const [index, subsecciones] of [undefined, null, false, 'invalid', {}].entries()) {
+    it(`ignores malformed subsection collections without losing direct places: ${index}`, () => {
+      expect(full({ secciones: [{ titulo: 'Qué visitar', lugares: [badCard()], subsecciones }] }))
+        .toEqual(expected(direct));
+    });
+  }
+  it('ignores malformed subsections, collections and cards without compacting indices', () => {
+    const subsecciones = [null, undefined, false, 3, 'invalid', [], {}, { lugares: {} },
+      { lugares: [null, undefined, 1, false, 'invalid', [], badCard()] }];
+    const guide = { secciones: [{ titulo: 'Qué visitar', subsecciones }] };
+    expect(() => full(guide)).not.toThrow();
+    expect(full(guide)).toEqual(expected('secciones[0].subsecciones[8].lugares[6]'));
+  });
+  it('does not descend into second-level subsections, itineraries, zones or card collections', () => {
+    const ignored = { lugares: [badCard()] };
+    const guide = { secciones: [{ titulo: 'Qué visitar', itinerario: [ignored], zonas: [ignored],
+      subsecciones: [{ lugares: [{ tiposPlan: ['ruta'], subsecciones: [ignored] }],
+        subsecciones: [ignored], itinerario: [ignored], zonas: [ignored] }]
+    }] };
+    expect(full(guide)).toEqual([]);
+    expect(scoped(guide, targets('secciones[0]'))).toEqual([]);
+  });
+  it('does not inspect places of subsections outside recognized visit sections', () => {
+    for (const titulo of ['Historia', 'Dónde comer', 'Qué visitar con más tiempo', 'Otra sección']) {
+      expect(full({ secciones: [{ titulo, subsecciones: [{ lugares: [badCard()] }] }] })).toEqual([]);
+    }
+  });
+  it('preserves nested typesPlan validation, own-property semantics and issue item', () => {
+    for (const tiposPlan of [null, [], ['inventado'], [42], Array(1)]) {
+      const card = { nombre: 'Visita', tiposPlan };
+      expect(full({ secciones: [{ titulo: 'Qué visitar', subsecciones: [{ lugares: [card] }] }] }))
+        .toEqual([{ ...expected(nested)[0], item: 'Visita' }]);
+    }
+    const inherited = Object.create({ tiposPlan: ['ruta'] });
+    expect(full({ secciones: [{ titulo: 'Qué visitar', subsecciones: [{ lugares: [inherited] }] }] }))
+      .toEqual([expected(nested)[0]]);
+  });
+  it('preserves inherited collections and ignores unknown fields and historical mapaUrl in card order', () => {
+    const card = { mapaUrl: 'historical', nombre: 'Visita', tiposPlan: ['ruta'], acceso: 'especial',
+      descripcion: 'Descripción', fotos: ['local'], foto: 'local', noCropGallery: true, maps: 'map' };
+    const subsection = Object.create({ lugares: [card] });
+    const section = Object.assign(Object.create({ subsecciones: [subsection] }), { titulo: 'Qué visitar' });
+    expect(full({ secciones: [section] })).toEqual([]);
+  });
+  it('selects direct and nested cards with a section target and matches full-guide arrays exactly', () => {
+    const guide = mixedGuide();
+    expect(scoped(guide, targets('secciones[0]'))).toEqual(full(guide));
+    expect(scoped(guide, { scope: 'guide' })).toEqual(full(guide));
+  });
+  for (const target of ['secciones[0].subsecciones[0]', 'secciones[0].subsecciones[0].lugares']) {
+    it(`selects only the immediate subsection places with ${target}`, () => {
+      expect(scoped(mixedGuide(), targets(target))).toEqual([
+        ...expected(nested), ...expected('secciones[0].subsecciones[0].lugares[1]')
+      ]);
+    });
+  }
+  it('excludes subsection zero when subsection one is selected', () => {
+    expect(scoped(mixedGuide(), targets('secciones[0].subsecciones[1]')))
+      .toEqual(expected('secciones[0].subsecciones[1].lugares[0]'));
+  });
+  it('checks both rules for an exact nested card and only types for its exact tiposPlan', () => {
+    expect(scoped(mixedGuide(), targets(nested))).toEqual(expected(nested));
+    expect(scoped(mixedGuide(), targets(`${nested}.tiposPlan`))).toEqual([expected(nested)[0]]);
+  });
+  for (const field of ['maps', 'descripcion', 'web', 'foto', 'nombre', 'reserva', 'tiposPlan[0]']) {
+    it(`does not promote nested ${field} to its card or typesPlan`, () => {
+      expect(scoped(mixedGuide(), targets(`${nested}.${field}`))).toEqual([]);
+    });
+  }
+  it('keeps direct places and nested places in separate scope branches', () => {
+    expect(scoped(mixedGuide(), targets('secciones[0].lugares'))).toEqual(expected(direct));
+  });
+  it('does not duplicate overlapping targets and selects nothing for empty targets', () => {
+    const guide = mixedGuide();
+    expect(scoped(guide, targets('secciones[0]', 'secciones[0].subsecciones[0]', nested,
+      `${nested}.tiposPlan`, nested))).toEqual(full(guide));
+    expect(scoped(guide, targets())).toEqual([]);
+  });
+  it('validates shared references at each location, preserving frozen sparse arrays and indices 2/20', () => {
+    const card = Object.freeze(badCard());
+    const lugares: unknown[] = Array(21);
+    lugares[2] = card; lugares[20] = card;
+    const subsection = Object.freeze({ lugares: Object.freeze(lugares) });
+    const subsecciones: unknown[] = Array(21);
+    subsecciones[2] = subsection; subsecciones[20] = subsection;
+    const secciones: unknown[] = Array(3);
+    secciones[2] = Object.freeze({ titulo: 'Qué visitar', subsecciones: Object.freeze(subsecciones) });
+    const guide = Object.freeze({ secciones: Object.freeze(secciones) });
+    const before = JSON.stringify(guide);
+    expect(full(guide)).toEqual([2, 20].flatMap(s => [2, 20].flatMap(i =>
+      expected(`secciones[2].subsecciones[${s}].lugares[${i}]`))));
+    for (const s of [2, 20]) {
+      for (const i of [2, 20]) {
+        const location = `secciones[2].subsecciones[${s}].lugares[${i}]`;
+        const context = Object.freeze({ scope: 'targets' as const, targets: Object.freeze([location]) });
+        expect(scoped(guide, context)).toEqual(expected(location));
+      }
+    }
+    expect(scoped(guide, Object.freeze({ scope: 'guide' as const }))).toEqual(full(guide));
+    expect(JSON.stringify(guide)).toBe(before);
+  });
 });
 
 describe('validateGastronomyFoodProfiles', () => {

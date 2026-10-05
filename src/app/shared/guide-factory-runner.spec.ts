@@ -224,6 +224,42 @@ describe('runFactoryQa', () => {
     expect(runFactoryQa(guide, targets('secciones'), 'generic').issues).toEqual([]);
   });
 
+  it('checks municipal visit cards under a subsection target without including sibling subsections', () => {
+    const guide = { secciones: [{ titulo: 'Qué visitar', subsecciones: [
+      { lugares: [{}] }, { lugares: [{}] }
+    ] }] };
+    expect(runFactoryQa(guide, targets('secciones[0].subsecciones[0]'), 'spanish-municipal').issues)
+      .toEqual([jasmine.objectContaining({ category: 'visit',
+        location: 'secciones[0].subsecciones[0].lugares[0].tiposPlan' })]);
+  });
+  it('checks typesPlan before order for an exact municipal nested card target', () => {
+    const guide = { secciones: [{ titulo: 'Qué visitar', subsecciones: [{ lugares: [
+      { web: 'https://example.org', maps: 'https://example.org/map' }, {}
+    ] }] }] };
+    const location = 'secciones[0].subsecciones[0].lugares[0]';
+    expect(runFactoryQa(guide, targets(location), 'spanish-municipal').issues).toEqual([
+      jasmine.objectContaining({ category: 'visit', location: `${location}.tiposPlan` }),
+      jasmine.objectContaining({ category: 'visit', location })
+    ]);
+  });
+  it('checks only the technical URL for nested maps without promoting municipal card review', () => {
+    const guide = { secciones: [{ titulo: 'Qué visitar', subsecciones: [{ lugares: [
+      { web: 'https://example.org', maps: '/relative' }
+    ] }] }] };
+    const location = 'secciones[0].subsecciones[0].lugares[0].maps';
+    expect(runFactoryQa(guide, targets(location), 'spanish-municipal').issues)
+      .toEqual([jasmine.objectContaining({ category: 'technical-url', location })]);
+  });
+  it('does not execute municipal visits for generic guides with immediate subsections', () => {
+    const guide = { secciones: [{ titulo: 'Qué visitar', subsecciones: [{ lugares: [
+      { web: 'https://example.org', maps: 'https://example.org/map' }
+    ] }] }] };
+    for (const context of [fullGuide, targets('secciones[0].subsecciones[0]'),
+      targets('secciones[0].subsecciones[0].lugares[0]')]) {
+      expect(runFactoryQa(guide, context, 'generic').issues).toEqual([]);
+    }
+  });
+
   const invalidContexts: unknown[] = [undefined, null, [], 'guide', 42, {}, { scope: 'unknown' },
     { scope: 'targets' }, { scope: 'targets', targets: null }, { scope: 'targets', targets: 'web' },
     { scope: 'targets', targets: {} }, { scope: 'targets', targets: [42] },
