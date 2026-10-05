@@ -403,6 +403,69 @@ export function validateGuideTechnicalUrls(
   return issues;
 }
 
+/** Comprueba referencias de imagen propias sin imponer cobertura ni verificar recursos. */
+export function validateGuideImageReferences(
+  guide: unknown,
+  context: FactoryReviewContext
+): FactoryQaIssue[] {
+  const issues: FactoryQaIssue[] = [];
+  const ancestors = new WeakSet<object>();
+  const childLocation = (parent: string, field: string) => parent ? `${parent}.${field}` : field;
+  const isValidReference = (value: unknown): boolean => {
+    if (typeof value !== 'string' || !value.trim()) return false;
+    if (!value.startsWith('cld:')) return true;
+    return value.slice(4).replace(/^\/+/, '').trim().length > 0;
+  };
+  const report = (object: Record<string, unknown>, location: string, detail: string): void => {
+    issues.push({
+      severity: 'ERROR',
+      category: 'technical-image',
+      location,
+      ...(typeof object['nombre'] === 'string' ? { item: object['nombre'] } : {}),
+      detail
+    });
+  };
+  const visit = (object: unknown, location: string): void => {
+    if (!isRecord(object) || ancestors.has(object)) return;
+    ancestors.add(object);
+    const fields = location === '' ? ['foto', 'flag', 'flag2', 'background'] : ['foto'];
+    for (const field of fields) {
+      if (!Object.prototype.hasOwnProperty.call(object, field)) continue;
+      const propertyLocation = childLocation(location, field);
+      if (!isFactoryLocationInScope(context, propertyLocation)) continue;
+      const value = object[field];
+      if (value === null || value === undefined || isValidReference(value)) continue;
+      report(object, propertyLocation, 'La referencia de imagen proporcionada no es técnicamente válida.');
+    }
+    if (Object.prototype.hasOwnProperty.call(object, 'fotos')) {
+      const photos = object['fotos'];
+      const propertyLocation = childLocation(location, 'fotos');
+      if (photos !== null && photos !== undefined) {
+        if (Array.isArray(photos)) {
+          photos.forEach((value: unknown, index: number) => {
+            const elementLocation = `${propertyLocation}[${index}]`;
+            if (isFactoryLocationInScope(context, elementLocation) && !isValidReference(value)) {
+              report(object, elementLocation, 'La referencia de imagen proporcionada no es técnicamente válida.');
+            }
+          });
+        } else if (isFactoryLocationInScope(context, propertyLocation)) {
+          report(object, propertyLocation, 'La galería proporcionada debe ser un array de referencias de imagen.');
+        }
+      }
+    }
+    for (const collection of EDITORIAL_COLLECTIONS) {
+      const values = object[collection];
+      if (!Array.isArray(values)) continue;
+      values.forEach((value: unknown, index: number) =>
+        visit(value, `${childLocation(location, collection)}[${index}]`)
+      );
+    }
+    ancestors.delete(object);
+  };
+  visit(guide, '');
+  return issues;
+}
+
 export function validateSpanishMunicipalGuideRules(guide: unknown): FactoryQaIssue[] {
   return [
     ...validateSpanishMunicipalSectionOrder(guide),

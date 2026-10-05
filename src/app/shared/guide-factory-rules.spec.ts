@@ -9,7 +9,8 @@ import {
   validateSpanishMunicipalGuideRules,
   validateGastronomyFoodProfiles,
   validatePublishedInternalLanguage,
-  validateGuideTechnicalUrls
+  validateGuideTechnicalUrls,
+  validateGuideImageReferences
 } from './guide-factory-rules';
 
 const municipalGuide = () => ({
@@ -1238,6 +1239,260 @@ describe('validateGuideTechnicalUrls', () => {
     expect(validateGuideTechnicalUrls(guide, targets())).toEqual([]);
     for (const value of [undefined, null, {}, { scope: 'desconocido' }]) {
       expect(validateGuideTechnicalUrls(guide, value as FactoryReviewContext)).toEqual([]);
+    }
+  });
+});
+
+describe('validateGuideImageReferences', () => {
+  const context: FactoryReviewContext = { scope: 'guide' };
+  const targets = (...locations: string[]): FactoryReviewContext => ({ scope: 'targets', targets: locations });
+  const individualFields = ['foto', 'flag', 'flag2', 'background'] as const;
+  const validReferences = [
+    'cld:europa/espana/andalucia/cadiz/cadiz/cadiz-flag',
+    'cld:/guides/chipiona/faro', 'cld:////guides/chipiona/faro',
+    'assets/images/faro.jpg', 'https://example.org/image', 'http://example.org/image',
+    'referencia histórica sin extensión', 'CLD:', ' cld:', 'cld:carpeta/imagen con espacios'
+  ];
+  const invalidReferences = ['', ' \t\n ', 'cld:', 'cld:/', 'cld:///', 'cld:////',
+    'cld:   ', 'cld:/// \t ', 42, true, [], {}, () => 'imagen', Symbol('imagen')];
+
+  for (const field of individualFields) {
+    for (const [index, value] of validReferences.entries()) {
+      it(`accepts individual ${field} reference ${index} using resolver semantics`, () => {
+        expect(validateGuideImageReferences({ [field]: value }, context)).toEqual([]);
+      });
+    }
+    for (const [index, value] of invalidReferences.entries()) {
+      it(`reports exactly one technical image error for invalid ${field} reference ${index}`, () => {
+        const issues = validateGuideImageReferences({ [field]: value }, context);
+        expect(issues.length).toBe(1);
+        expect(issues[0]).toEqual(jasmine.objectContaining({
+          severity: 'ERROR', category: 'technical-image', location: field
+        }));
+      });
+    }
+    for (const value of [null, undefined]) {
+      it(`ignores own ${field} with ${value}`, () => {
+        expect(validateGuideImageReferences({ [field]: value }, context)).toEqual([]);
+      });
+    }
+    it(`ignores inherited ${field}`, () => {
+      expect(validateGuideImageReferences(Object.create({ [field]: '' }), context)).toEqual([]);
+    });
+  }
+
+  it('does not require photo or visual metadata fields', () => {
+    expect(validateGuideImageReferences({ secciones: [{ lugares: [{}], platos: [{}] }] }, context)).toEqual([]);
+  });
+  for (const photos of [[], ['cld:guides/faro'], validReferences, ['cld:guides/faro', 'cld:guides/faro']]) {
+    it(`accepts a gallery with ${photos.length} references without minimum or duplicate checks`, () => {
+      expect(validateGuideImageReferences({ fotos: photos }, context)).toEqual([]);
+    });
+  }
+  for (const [index, value] of [...invalidReferences, null, undefined].entries()) {
+    it(`reports invalid gallery element ${index} at its original index`, () => {
+      const issues = validateGuideImageReferences({ fotos: ['cld:valid', 'local', value] }, context);
+      expect(issues.length).toBe(1);
+      expect(issues[0]).toEqual(jasmine.objectContaining({
+        severity: 'ERROR', category: 'technical-image', location: 'fotos[2]'
+      }));
+    });
+  }
+  for (const [index, value] of ['', 'cld:valid', 42, false, {}, () => [], Symbol('galería')].entries()) {
+    it(`rejects non-array fotos value ${index} once at the gallery property`, () => {
+      const issues = validateGuideImageReferences({ fotos: value }, context);
+      expect(issues.length).toBe(1);
+      expect(issues[0].location).toBe('fotos');
+    });
+  }
+  for (const value of [null, undefined]) {
+    it(`ignores own fotos with ${value}`, () => {
+      expect(validateGuideImageReferences({ fotos: value }, context)).toEqual([]);
+    });
+  }
+  it('ignores inherited fotos', () => {
+    expect(validateGuideImageReferences(Object.create({ fotos: [''] }), context)).toEqual([]);
+  });
+  it('reports separate invalid elements and preserves sparse array indices', () => {
+    const photos: unknown[] = [];
+    photos[2] = '';
+    photos[20] = 'cld:////';
+    expect(validateGuideImageReferences({ fotos: photos }, context).map(issue => issue.location))
+      .toEqual(['fotos[2]', 'fotos[20]']);
+  });
+  it('allows foto and fotos together without deciding their editorial coexistence', () => {
+    expect(validateGuideImageReferences({ foto: 'cld:valid', fotos: ['local'] }, context)).toEqual([]);
+  });
+
+  const scopedGuide = () => ({
+    foto: '', fotos: [''], flag: '',
+    secciones: [
+      { foto: '', lugares: [{ nombre: 'Lugar', foto: '', fotos: ['', 'cld:'] }, { foto: '' }] },
+      { platos: [{ foto: '' }] }
+    ]
+  });
+  it('visits all references in explicit guide scope', () => {
+    expect(validateGuideImageReferences(scopedGuide(), context).map(issue => issue.location)).toEqual([
+      'foto', 'flag', 'fotos[0]', 'secciones[0].foto', 'secciones[0].lugares[0].foto',
+      'secciones[0].lugares[0].fotos[0]', 'secciones[0].lugares[0].fotos[1]',
+      'secciones[0].lugares[1].foto', 'secciones[1].platos[0].foto'
+    ]);
+  });
+  it('limits section targets to that section and descendants', () => {
+    expect(validateGuideImageReferences(scopedGuide(), targets('secciones[0]')).map(issue => issue.location)).toEqual([
+      'secciones[0].foto', 'secciones[0].lugares[0].foto', 'secciones[0].lugares[0].fotos[0]',
+      'secciones[0].lugares[0].fotos[1]', 'secciones[0].lugares[1].foto'
+    ]);
+  });
+  it('limits card targets to that card and excludes siblings', () => {
+    expect(validateGuideImageReferences(scopedGuide(), targets('secciones[0].lugares[0]')).map(issue => issue.location))
+      .toEqual(['secciones[0].lugares[0].foto', 'secciones[0].lugares[0].fotos[0]', 'secciones[0].lugares[0].fotos[1]']);
+  });
+  it('limits a foto target to exactly that property', () => {
+    const location = 'secciones[0].lugares[0].foto';
+    expect(validateGuideImageReferences(scopedGuide(), targets(location)).map(issue => issue.location)).toEqual([location]);
+  });
+  it('includes gallery elements when targeting fotos', () => {
+    expect(validateGuideImageReferences(scopedGuide(), targets('secciones[0].lugares[0].fotos')).map(issue => issue.location))
+      .toEqual(['secciones[0].lugares[0].fotos[0]', 'secciones[0].lugares[0].fotos[1]']);
+  });
+  for (const index of [0, 1]) {
+    it(`reaches fotos[${index}] without including its sibling or promoting to its parent`, () => {
+      const location = `secciones[0].lugares[0].fotos[${index}]`;
+      expect(validateGuideImageReferences(scopedGuide(), targets(location)).map(issue => issue.location)).toEqual([location]);
+    });
+  }
+  it('does not promote an element target to a malformed gallery parent', () => {
+    const guide = { secciones: [{ lugares: [{ fotos: 'no es un array' }] }] };
+    expect(validateGuideImageReferences(guide, targets('secciones[0].lugares[0].fotos[0]'))).toEqual([]);
+    expect(validateGuideImageReferences(guide, targets('secciones[0].lugares[0].fotos')).map(issue => issue.location))
+      .toEqual(['secciones[0].lugares[0].fotos']);
+  });
+  it('reaches a deep gallery element through ancestors outside scope', () => {
+    const guide = { secciones: [{ subsecciones: [{ itinerario: [{ zonas: [{ fotos: ['', ''] }] }] }] }] };
+    const location = 'secciones[0].subsecciones[0].itinerario[0].zonas[0].fotos[1]';
+    expect(validateGuideImageReferences(guide, targets(location)).map(issue => issue.location)).toEqual([location]);
+  });
+  it('distinguishes both card and gallery indices 2 and 20', () => {
+    const lugares = Array.from({ length: 21 }, () => ({ foto: '', fotos: Array(21).fill('') }));
+    const guide = { lugares };
+    for (const index of [2, 20]) {
+      expect(validateGuideImageReferences(guide, targets(`lugares[${index}].foto`)).map(issue => issue.location))
+        .toEqual([`lugares[${index}].foto`]);
+      expect(validateGuideImageReferences(guide, targets(`lugares[${index}].fotos[${index}]`)).map(issue => issue.location))
+        .toEqual([`lugares[${index}].fotos[${index}]`]);
+    }
+  });
+
+  it('retains indices across known collections despite malformed entries', () => {
+    const guide = { secciones: [null, [], {
+      lugares: [false, { foto: '' }], platos: [null, 'texto', { fotos: ['local', 'cld:'] }],
+      subsecciones: [42, { foto: '' }],
+      itinerario: [null, { foto: '', zonas: [[], null, { fotos: ['', 'local'] }] }]
+    }] };
+    expect(validateGuideImageReferences(guide, context).map(issue => issue.location)).toEqual([
+      'secciones[2].lugares[1].foto', 'secciones[2].platos[2].fotos[1]',
+      'secciones[2].subsecciones[1].foto', 'secciones[2].itinerario[1].foto',
+      'secciones[2].itinerario[1].zonas[2].fotos[0]'
+    ]);
+  });
+  for (const collection of ['secciones', 'lugares', 'platos', 'subsecciones', 'itinerario', 'zonas']) {
+    it(`inspects foto and fotos in the known collection ${collection}`, () => {
+      expect(validateGuideImageReferences({ [collection]: [{ foto: '', fotos: [''] }] }, context)
+        .map(issue => issue.location)).toEqual([`${collection}[0].foto`, `${collection}[0].fotos[0]`]);
+    });
+    it(`ignores nested visual metadata in ${collection}`, () => {
+      expect(validateGuideImageReferences({ [collection]: [{ flag: '', flag2: '', background: '' }] }, context)).toEqual([]);
+    });
+    for (const value of [null, undefined, 42, 'texto', { foto: '' }]) {
+      it(`ignores malformed ${collection} collection of type ${typeof value}`, () => {
+        expect(validateGuideImageReferences({ [collection]: value }, context)).toEqual([]);
+      });
+    }
+  }
+  for (const field of ['flag', 'flag2', 'background']) {
+    it(`respects exact root metadata target ${field}`, () => {
+      expect(validateGuideImageReferences({ flag: '', flag2: '', background: '', foto: '' }, targets(field))
+        .map(issue => issue.location)).toEqual([field]);
+    });
+    it(`ignores ${field} targeted inside a card`, () => {
+      expect(validateGuideImageReferences({ lugares: [{ [field]: '' }] }, targets(`lugares[0].${field}`))).toEqual([]);
+    });
+  }
+
+  for (const field of ['guiaRelacionada', 'infoGeneral', 'perfilAlimentario', 'alergenos', 'desconocido']) {
+    it(`does not traverse ${field} or known collections hidden inside it`, () => {
+      const hidden = { foto: '', fotos: [''], flag: '', flag2: '', background: '',
+        lugares: [{ foto: '', fotos: [''] }] };
+      expect(validateGuideImageReferences({ [field]: hidden, lugares: [{ [field]: hidden }] }, context)).toEqual([]);
+    });
+  }
+  it('ignores visual positioning and sizing and other arbitrary strings', () => {
+    expect(validateGuideImageReferences({ bgPos: [], bgPosMobile: {}, bgSize: 42, bgSizeMobile: false,
+      flagSize: 'cld:', flagSizeMobile: '', descripcion: 'cld:', web: 'cld:',
+      lugares: [{ bgPos: '', flagSize: '' }] }, context)).toEqual([]);
+  });
+  for (const guide of [null, undefined, true, 42, 'texto', [], [{ foto: '' }]]) {
+    it(`ignores malformed guide of type ${typeof guide} without throwing`, () => {
+      expect(() => validateGuideImageReferences(guide, context)).not.toThrow();
+      expect(validateGuideImageReferences(guide, context)).toEqual([]);
+    });
+  }
+  it('does not mutate frozen guides, objects, collections or galleries', () => {
+    const fotos = Object.freeze(['cld:/valid', 'cld:']);
+    const card = Object.freeze({ nombre: 'Lugar', foto: 'local', fotos });
+    const lugares = Object.freeze([card]);
+    const guide = Object.freeze({ flag: 'cld:////valid', secciones: Object.freeze([Object.freeze({ lugares })]) });
+    const before = JSON.stringify(guide);
+    expect(validateGuideImageReferences(guide, context).map(issue => issue.location))
+      .toEqual(['secciones[0].lugares[0].fotos[1]']);
+    expect(JSON.stringify(guide)).toBe(before);
+    expect(guide.secciones[0].lugares).toBe(lugares);
+    expect(card.fotos).toBe(fotos);
+  });
+  it('reports each invalid location once using the current string name without exposing the reference', () => {
+    const secret = 'cld:////   ';
+    const issues = validateGuideImageReferences({ nombre: 'Guía', flag: secret, flag2: secret, background: secret,
+      lugares: [{ nombre: 'Lugar', foto: secret, fotos: [secret, ''] }] }, context);
+    expect(issues.map(issue => issue.location)).toEqual([
+      'flag', 'flag2', 'background', 'lugares[0].foto', 'lugares[0].fotos[0]', 'lugares[0].fotos[1]'
+    ]);
+    expect(issues.map(issue => issue.item)).toEqual(['Guía', 'Guía', 'Guía', 'Lugar', 'Lugar', 'Lugar']);
+    for (const issue of issues) {
+      expect(issue.severity).toBe('ERROR');
+      expect(issue.category).toBe('technical-image');
+      expect(issue.detail).not.toContain(secret);
+    }
+  });
+  it('does not coerce non-string names or use parent names for unnamed objects', () => {
+    const issues = validateGuideImageReferences({ nombre: 42, flag: '',
+      lugares: [{ nombre: false, foto: '' }, { fotos: [''] }] }, context);
+    expect(issues.length).toBe(3);
+    expect(issues.every(issue => !Object.prototype.hasOwnProperty.call(issue, 'item'))).toBeTrue();
+    const unnamed = validateGuideImageReferences({ nombre: 'Guía', lugares: [{ foto: '' }] }, context);
+    expect(unnamed[0].item).toBeUndefined();
+  });
+  it('handles cycles while visiting shared objects at each distinct location', () => {
+    const card: { foto: string; zonas?: unknown[] } = { foto: '' };
+    card.zonas = [card];
+    expect(validateGuideImageReferences({ lugares: [card, card] }, context).map(issue => issue.location))
+      .toEqual(['lugares[0].foto', 'lugares[1].foto']);
+  });
+  it('does not duplicate the section prohibition rule', () => {
+    const guide = guideWithCard('Dónde comer en Rota', { foto: 'local' });
+    expect(validateGuideImageReferences(guide, context)).toEqual([]);
+    expect(validateSpanishMunicipalForbiddenImages(guide).length).toBe(1);
+  });
+  it('keeps the municipal combined validator independent', () => {
+    const guide = { ...municipalGuide(), flag: 'cld:', foto: '', fotos: ['cld:'] };
+    expect(validateSpanishMunicipalGuideRules(guide)).toEqual([]);
+    expect(validateGuideImageReferences(guide, context).length).toBe(3);
+  });
+  it('has no implicit guide scope for empty targets or absent or malformed contexts', () => {
+    const guide = { foto: '', fotos: [''], flag: '' };
+    expect(validateGuideImageReferences(guide, targets())).toEqual([]);
+    for (const value of [undefined, null, {}, { scope: 'desconocido' }]) {
+      expect(validateGuideImageReferences(guide, value as FactoryReviewContext)).toEqual([]);
     }
   });
 });
