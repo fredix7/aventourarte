@@ -4,6 +4,7 @@ import {
   validateSpanishMunicipalForbiddenImages,
   validateSpanishMunicipalVisitCards,
   validateSpanishMunicipalFestivalCards,
+  validateSpanishMunicipalRestaurantEditorialBlocks,
   validateSpanishMunicipalGuideRules
 } from './guide-factory-rules';
 
@@ -377,6 +378,136 @@ describe('validateSpanishMunicipalFestivalCards', () => {
   });
 });
 
+describe('validateSpanishMunicipalRestaurantEditorialBlocks', () => {
+  const request = '🍴 Qué pedir sí o sí:';
+  const experience = '🧭 Experiencia viajera:';
+  const advice = '💡 Consejo AvenTourArte:';
+  const validateText = (descripcion: unknown) => validateSpanishMunicipalRestaurantEditorialBlocks(
+    guideWithCard('Dónde comer en Rota', { nombre: 'Establecimiento', descripcion })
+  );
+
+  const validSequences = [
+    [], [request], [experience], [advice], [request, advice],
+    [experience, advice], [request, experience], [request, experience, advice]
+  ];
+  validSequences.forEach((sequence, index) => {
+    it(`accepts optional blocks in valid sequence ${index + 1}`, () => {
+      expect(validateText(sequence.length ? sequence.join('\nTexto\n') : 'Texto sin bloques')).toEqual([]);
+    });
+  });
+
+  const invalidSequences = [
+    [advice, request], [experience, request], [advice, experience], [request, advice, experience]
+  ];
+  invalidSequences.forEach((sequence, index) => {
+    it(`reports one order error for invalid sequence ${index + 1}`, () => {
+      expect(validateText(sequence.join('\n'))).toEqual([jasmine.objectContaining({
+        severity: 'ERROR', category: 'restaurant', item: 'Establecimiento',
+        location: 'secciones[0].lugares[0].descripcion', detail: jasmine.stringMatching('orden')
+      })]);
+    });
+  });
+
+  [request, experience, advice].forEach(marker => {
+    it(`reports a duplicate of ${marker}`, () => {
+      expect(validateText(`${marker}\nTexto\n${marker}`)).toEqual([jasmine.objectContaining({
+        severity: 'ERROR', category: 'restaurant', detail: jasmine.stringMatching('duplicados')
+      })]);
+    });
+  });
+
+  it('reports only one duplicate issue when several markers are repeated', () => {
+    expect(validateText([request, request, experience, experience, advice, advice].join('\n')))
+      .toEqual([jasmine.objectContaining({ severity: 'ERROR', detail: jasmine.stringMatching('duplicados') })]);
+  });
+
+  it('reports both order and duplicate errors when both conditions occur', () => {
+    const issues = validateText([advice, request, request].join('\n'));
+    expect(issues).toEqual([
+      jasmine.objectContaining({ severity: 'ERROR', detail: jasmine.stringMatching('orden') }),
+      jasmine.objectContaining({ severity: 'ERROR', detail: jasmine.stringMatching('duplicados') })
+    ]);
+  });
+
+  it('ignores ordinary text before, between and after markers', () => {
+    expect(validateText(`Introducción ${request}\n- Plato\n${experience}\nTexto\n${advice} Consejo. Final.`))
+      .toEqual([]);
+  });
+
+  it('does not recognize non-exact variants as official markers', () => {
+    const variants = [
+      'Qué pedir sí o sí:', 'Experiencia viajera:', 'Consejo AvenTourArte:',
+      '🍴 Qué pedir:', '🧭 Experiencia de viaje:', '💡 Consejo Aventourarte:',
+      '🍴 Que pedir si o si:', '🧭 experiencia viajera:', '💡 Travel tip:',
+      '🍴 Qué pedir sí o sí', '🍴 Qué pedir sí o sí :'
+    ];
+    for (const variant of variants) {
+      expect(validateText(`${advice}\n${variant}\n${variant}`)).toEqual([]);
+    }
+  });
+
+  it('does not require a string or nonempty description', () => {
+    for (const descripcion of [undefined, null, 1, false, {}, [], '', '  ']) {
+      expect(validateText(descripcion)).toEqual([]);
+    }
+    expect(validateSpanishMunicipalRestaurantEditorialBlocks(guideWithCard('Dónde comer en Rota', {})))
+      .toEqual([]);
+  });
+
+  it('returns no issues when the restaurant section is absent', () => {
+    for (const guide of [null, undefined, {}, { secciones: {} }, { secciones: [] },
+      guideWithCard('Cultura y Vida Local', { descripcion: `${advice}\n${request}` })]) {
+      expect(validateSpanishMunicipalRestaurantEditorialBlocks(guide)).toEqual([]);
+    }
+  });
+
+  it('returns no issues for missing or invalid lugares', () => {
+    for (const lugares of [undefined, null, {}, 'Establecimientos', 1]) {
+      expect(validateSpanishMunicipalRestaurantEditorialBlocks({
+        secciones: [{ titulo: 'Dónde comer en Rota', lugares }]
+      })).toEqual([]);
+    }
+    expect(validateSpanishMunicipalRestaurantEditorialBlocks({ secciones: [{ titulo: 'Dónde comer en Rota' }] }))
+      .toEqual([]);
+  });
+
+  it('ignores malformed cards without throwing and locates later errors', () => {
+    const guide = { secciones: [null, { titulo: 'Dónde comer en Rota', lugares: [
+      null, undefined, false, 1, 'Establecimiento', [], {}, { descripcion: `${advice}\n${request}` }
+    ] }] };
+    expect(() => validateSpanishMunicipalRestaurantEditorialBlocks(guide)).not.toThrow();
+    expect(validateSpanishMunicipalRestaurantEditorialBlocks(guide)).toEqual([
+      jasmine.objectContaining({ severity: 'ERROR', location: 'secciones[1].lugares[7].descripcion' })
+    ]);
+  });
+
+  it('does not mutate frozen guides, arrays or descriptions', () => {
+    const guide = Object.freeze({ secciones: Object.freeze([
+      Object.freeze({ titulo: 'Dónde comer en Rota', lugares: Object.freeze([
+        Object.freeze({ descripcion: `${advice}\n${request}\n${request}` })
+      ]) })
+    ]) });
+    const before = JSON.stringify(guide);
+    expect(validateSpanishMunicipalRestaurantEditorialBlocks(guide).length).toBe(2);
+    validateSpanishMunicipalGuideRules(guide);
+    expect(JSON.stringify(guide)).toBe(before);
+  });
+
+  it('does not validate images', () => {
+    expect(validateSpanishMunicipalRestaurantEditorialBlocks(guideWithCard('Dónde comer en Rota', {
+      foto: 'image', fotos: ['image'], descripcion: request
+    }))).toEqual([]);
+  });
+
+  it('analyzes only descriptions of direct lugares', () => {
+    const invalid = `${advice}\n${request}`;
+    expect(validateSpanishMunicipalRestaurantEditorialBlocks({ secciones: [{
+      titulo: 'Dónde comer en Rota', contenido: invalid, lugares: [{ nombre: invalid, contenido: invalid }],
+      subsecciones: [{ lugares: [{ descripcion: invalid }] }], platos: [{ descripcion: invalid }]
+    }] })).toEqual([]);
+  });
+});
+
 describe('validateSpanishMunicipalGuideRules', () => {
   it('returns structure issues before image issues', () => {
     const guide = guideWithCard('Dónde comer en Rota', { foto: 'image' });
@@ -415,6 +546,25 @@ describe('validateSpanishMunicipalGuideRules', () => {
       ...validateSpanishMunicipalFestivalCards(guide)
     ]);
     expect(issues.map(issue => issue.category)).toEqual(['structure', 'images', 'visit', 'festival']);
+  });
+
+  it('returns structure, images, visits, festivals and restaurant blocks in that order', () => {
+    const guide = { secciones: [
+      { titulo: 'Dónde comer en Rota', lugares: [{
+        foto: 'image', descripcion: '💡 Consejo AvenTourArte:\n🍴 Qué pedir sí o sí:'
+      }] },
+      { titulo: 'Fiestas y Festivos Principales', lugares: [{ fecha: 'Agosto', nombre: 'Fiesta' }] },
+      { titulo: 'Qué visitar en Rota', lugares: [{}] }
+    ] };
+    const issues = validateSpanishMunicipalGuideRules(guide);
+    expect(issues).toEqual([
+      ...validateSpanishMunicipalSectionOrder(guide),
+      ...validateSpanishMunicipalForbiddenImages(guide),
+      ...validateSpanishMunicipalVisitCards(guide),
+      ...validateSpanishMunicipalFestivalCards(guide),
+      ...validateSpanishMunicipalRestaurantEditorialBlocks(guide)
+    ]);
+    expect(issues.map(issue => issue.category)).toEqual(['structure', 'images', 'visit', 'festival', 'restaurant']);
   });
 
   it('keeps image and festival order errors in their respective validators', () => {

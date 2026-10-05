@@ -164,11 +164,62 @@ export function validateSpanishMunicipalFestivalCards(guide: unknown): FactoryQa
   return issues;
 }
 
+const RESTAURANT_EDITORIAL_MARKERS = [
+  '🍴 Qué pedir sí o sí:',
+  '🧭 Experiencia viajera:',
+  '💡 Consejo AvenTourArte:'
+] as const;
+
+/** Valida solo el orden y las repeticiones de marcadores exactos en descripcion. */
+export function validateSpanishMunicipalRestaurantEditorialBlocks(guide: unknown): FactoryQaIssue[] {
+  const issues: FactoryQaIssue[] = [];
+  (sectionsOf(guide) ?? []).forEach((section, sectionIndex) => {
+    if (sectionRole(section) !== 'donde comer'
+      || !isRecord(section) || !Array.isArray(section['lugares'])) return;
+
+    section['lugares'].forEach((item: unknown, itemIndex: number) => {
+      if (!isRecord(item) || typeof item['descripcion'] !== 'string') return;
+      const description = item['descripcion'];
+      const occurrences: { position: number; rank: number }[] = [];
+      let duplicated = false;
+      RESTAURANT_EDITORIAL_MARKERS.forEach((marker, rank) => {
+        let count = 0;
+        let position = description.indexOf(marker);
+        while (position !== -1) {
+          occurrences.push({ position, rank });
+          count += 1;
+          position = description.indexOf(marker, position + marker.length);
+        }
+        if (count > 1) duplicated = true;
+      });
+      occurrences.sort((a, b) => a.position - b.position);
+      const location = `secciones[${sectionIndex}].lugares[${itemIndex}].descripcion`;
+      const label = typeof item['nombre'] === 'string' ? { item: item['nombre'] } : {};
+      if (occurrences.some((occurrence, index) =>
+        index > 0 && occurrence.rank < occurrences[index - 1].rank
+      )) {
+        issues.push({
+          severity: 'ERROR', category: 'restaurant', location, ...label,
+          detail: 'Los bloques editoriales presentes de Dónde comer no respetan el orden oficial.'
+        });
+      }
+      if (duplicated) {
+        issues.push({
+          severity: 'ERROR', category: 'restaurant', location, ...label,
+          detail: 'La descripción contiene marcadores editoriales oficiales duplicados.'
+        });
+      }
+    });
+  });
+  return issues;
+}
+
 export function validateSpanishMunicipalGuideRules(guide: unknown): FactoryQaIssue[] {
   return [
     ...validateSpanishMunicipalSectionOrder(guide),
     ...validateSpanishMunicipalForbiddenImages(guide),
     ...validateSpanishMunicipalVisitCards(guide),
-    ...validateSpanishMunicipalFestivalCards(guide)
+    ...validateSpanishMunicipalFestivalCards(guide),
+    ...validateSpanishMunicipalRestaurantEditorialBlocks(guide)
   ];
 }
