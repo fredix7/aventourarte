@@ -64,6 +64,20 @@ export function validateSpanishMunicipalSectionOrder(guide: unknown): FactoryQaI
 
 /** Comprueba las fichas de lugares de Dónde comer y Fiestas, sin inferir el ámbito. */
 export function validateSpanishMunicipalForbiddenImages(guide: unknown): FactoryQaIssue[] {
+  return validateForbiddenImagesInScope(guide, () => true);
+}
+
+export function validateSpanishMunicipalForbiddenImagesScoped(
+  guide: unknown,
+  context: FactoryReviewContext
+): FactoryQaIssue[] {
+  return validateForbiddenImagesInScope(guide, location => isFactoryLocationInScope(context, location));
+}
+
+function validateForbiddenImagesInScope(
+  guide: unknown,
+  isInScope: (location: string) => boolean
+): FactoryQaIssue[] {
   const issues: FactoryQaIssue[] = [];
   const sections = sectionsOf(guide) ?? [];
   sections.forEach((section, sectionIndex) => {
@@ -76,9 +90,15 @@ export function validateSpanishMunicipalForbiddenImages(guide: unknown): Factory
       if (!Object.prototype.hasOwnProperty.call(item, 'foto')
         && !Object.prototype.hasOwnProperty.call(item, 'fotos')) return;
 
+      const cardLocation = `secciones[${sectionIndex}].lugares[${itemIndex}]`;
+      const location = isInScope(cardLocation) ? cardLocation
+        : ['foto', 'fotos'].filter(field => Object.prototype.hasOwnProperty.call(item, field))
+          .map(field => `${cardLocation}.${field}`).find(isInScope);
+      if (location === undefined) return;
+
       issues.push({
         severity: 'ERROR', category: 'images',
-        location: `secciones[${sectionIndex}].lugares[${itemIndex}]`,
+        location,
         ...(typeof item['nombre'] === 'string' ? { item: item['nombre'] } : {}),
         detail: role === 'donde comer'
           ? 'Las fichas de Dónde comer no deben incluir foto ni fotos.'
@@ -98,6 +118,20 @@ const VALID_PLAN_TYPES = new Set<string>(PLAN_TYPES.map(type => type.id));
 
 /** Valida solo lugares directos de Qué visitar; el ámbito lo establece el llamador. */
 export function validateSpanishMunicipalVisitCards(guide: unknown): FactoryQaIssue[] {
+  return validateVisitCardsInScope(guide, () => true);
+}
+
+export function validateSpanishMunicipalVisitCardsScoped(
+  guide: unknown,
+  context: FactoryReviewContext
+): FactoryQaIssue[] {
+  return validateVisitCardsInScope(guide, location => isFactoryLocationInScope(context, location));
+}
+
+function validateVisitCardsInScope(
+  guide: unknown,
+  isInScope: (location: string) => boolean
+): FactoryQaIssue[] {
   const issues: FactoryQaIssue[] = [];
   (sectionsOf(guide) ?? []).forEach((section, sectionIndex) => {
     if (sectionRole(section) !== 'que visitar'
@@ -108,15 +142,16 @@ export function validateSpanishMunicipalVisitCards(guide: unknown): FactoryQaIss
       const location = `secciones[${sectionIndex}].lugares[${itemIndex}]`;
       const label = typeof item['nombre'] === 'string' ? { item: item['nombre'] } : {};
       const types = item['tiposPlan'];
-      if (!Object.prototype.hasOwnProperty.call(item, 'tiposPlan')
+      if (isInScope(`${location}.tiposPlan`) && (!Object.prototype.hasOwnProperty.call(item, 'tiposPlan')
         || !Array.isArray(types) || types.length === 0
-        || !Array.from(types).every(type => typeof type === 'string' && VALID_PLAN_TYPES.has(type))) {
+        || !Array.from(types).every(type => typeof type === 'string' && VALID_PLAN_TYPES.has(type)))) {
         issues.push({
           severity: 'ERROR', category: 'visit', location: `${location}.tiposPlan`, ...label,
           detail: 'La ficha debe declarar tiposPlan como un array no vacío de valores del catálogo vigente.'
         });
       }
 
+      if (!isInScope(location)) return;
       let previousRank = -1;
       for (const key of Object.keys(item)) {
         const rank = VISIT_PROPERTY_ORDER.get(key);
@@ -141,6 +176,20 @@ const FESTIVAL_PROPERTY_ORDER = new Map<string, number>([
 
 /** Comprueba solo el orden de lugares directos de Fiestas; no exige campos. */
 export function validateSpanishMunicipalFestivalCards(guide: unknown): FactoryQaIssue[] {
+  return validateFestivalCardsInScope(guide, () => true);
+}
+
+export function validateSpanishMunicipalFestivalCardsScoped(
+  guide: unknown,
+  context: FactoryReviewContext
+): FactoryQaIssue[] {
+  return validateFestivalCardsInScope(guide, location => isFactoryLocationInScope(context, location));
+}
+
+function validateFestivalCardsInScope(
+  guide: unknown,
+  isInScope: (location: string) => boolean
+): FactoryQaIssue[] {
   const issues: FactoryQaIssue[] = [];
   (sectionsOf(guide) ?? []).forEach((section, sectionIndex) => {
     if (sectionRole(section) !== 'fiestas y festivos principales'
@@ -148,6 +197,7 @@ export function validateSpanishMunicipalFestivalCards(guide: unknown): FactoryQa
 
     section['lugares'].forEach((item: unknown, itemIndex: number) => {
       if (!isRecord(item)) return;
+      if (!isInScope(`secciones[${sectionIndex}].lugares[${itemIndex}]`)) return;
       let previousRank = -1;
       for (const key of Object.keys(item)) {
         const rank = FESTIVAL_PROPERTY_ORDER.get(key);
@@ -176,6 +226,20 @@ const RESTAURANT_EDITORIAL_MARKERS = [
 
 /** Valida solo el orden y las repeticiones de marcadores exactos en descripcion. */
 export function validateSpanishMunicipalRestaurantEditorialBlocks(guide: unknown): FactoryQaIssue[] {
+  return validateRestaurantBlocksInScope(guide, () => true);
+}
+
+export function validateSpanishMunicipalRestaurantEditorialBlocksScoped(
+  guide: unknown,
+  context: FactoryReviewContext
+): FactoryQaIssue[] {
+  return validateRestaurantBlocksInScope(guide, location => isFactoryLocationInScope(context, location));
+}
+
+function validateRestaurantBlocksInScope(
+  guide: unknown,
+  isInScope: (location: string) => boolean
+): FactoryQaIssue[] {
   const issues: FactoryQaIssue[] = [];
   (sectionsOf(guide) ?? []).forEach((section, sectionIndex) => {
     if (sectionRole(section) !== 'donde comer'
@@ -183,6 +247,7 @@ export function validateSpanishMunicipalRestaurantEditorialBlocks(guide: unknown
 
     section['lugares'].forEach((item: unknown, itemIndex: number) => {
       if (!isRecord(item) || typeof item['descripcion'] !== 'string') return;
+      if (!isInScope(`secciones[${sectionIndex}].lugares[${itemIndex}].descripcion`)) return;
       const description = item['descripcion'];
       const occurrences: { position: number; rank: number }[] = [];
       let duplicated = false;
@@ -464,6 +529,18 @@ export function validateGuideImageReferences(
   };
   visit(guide, '');
   return issues;
+}
+
+export function validateSpanishMunicipalTargetRules(
+  guide: unknown,
+  context: Extract<FactoryReviewContext, { scope: 'targets' }>
+): FactoryQaIssue[] {
+  return [
+    ...validateSpanishMunicipalForbiddenImagesScoped(guide, context),
+    ...validateSpanishMunicipalVisitCardsScoped(guide, context),
+    ...validateSpanishMunicipalFestivalCardsScoped(guide, context),
+    ...validateSpanishMunicipalRestaurantEditorialBlocksScoped(guide, context)
+  ];
 }
 
 export function validateSpanishMunicipalGuideRules(guide: unknown): FactoryQaIssue[] {

@@ -4,6 +4,7 @@ import type { FactoryQaIssue, FactoryQaResult } from './guide-factory-qa';
 import { buildFactoryQaResult } from './guide-factory-qa';
 import {
   validateSpanishMunicipalGuideRules,
+  validateSpanishMunicipalTargetRules,
   validateGastronomyFoodProfiles,
   validatePublishedInternalLanguage,
   validateGuideTechnicalUrls,
@@ -41,9 +42,12 @@ export function runFactoryQa(
   }
 
   const issues: FactoryQaIssue[] = [];
-  // El combinado municipal actual no respeta targets; solo se ejecuta para guía completa.
-  if (ruleSet === 'spanish-municipal' && context.scope === 'guide') {
-    issues.push(...validateSpanishMunicipalGuideRules(guide));
+  if (ruleSet === 'spanish-municipal') {
+    if (context.scope === 'guide') {
+      issues.push(...validateSpanishMunicipalGuideRules(guide));
+    } else {
+      issues.push(...validateSpanishMunicipalTargetRules(guide, context));
+    }
   }
   issues.push(
     ...validateGastronomyFoodProfiles(guide, context),

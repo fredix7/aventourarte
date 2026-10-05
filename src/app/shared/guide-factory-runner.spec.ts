@@ -51,10 +51,15 @@ describe('runFactoryQa', () => {
     expect(runFactoryQa(municipalGuide(), fullGuide, 'spanish-municipal').status).toBe('APROBADA');
   });
   for (const ruleSet of ruleSets) {
-    it(`omits all municipal rules for ${ruleSet} targets, including selected cards`, () => {
+    it(`selects municipal target rules only for the municipal rule set: ${ruleSet}`, () => {
       const guide = { secciones: [{ titulo: 'Dónde comer en Destino', lugares: [{ foto: 'local',
         descripcion: '💡 Consejo AvenTourArte:\n🍴 Qué pedir sí o sí:' }] }] };
-      expect(runFactoryQa(guide, targets('secciones[0].lugares[0]'), ruleSet).issues).toEqual([]);
+      const issues = runFactoryQa(guide, targets('secciones[0].lugares[0]'), ruleSet).issues;
+      if (ruleSet === 'generic') {
+        expect(issues).toEqual([]);
+      } else {
+        expect(issues.map(issue => issue.category)).toEqual(['images', 'restaurant']);
+      }
     });
     it(`limits all four scoped validators to a dish target for ${ruleSet}`, () => {
       const badDish = () => ({ descripcion: phrase, maps: '/relativa', fotos: ['cld:'] });
@@ -144,6 +149,79 @@ describe('runFactoryQa', () => {
     const related = runFactoryQa(guide, fullGuide, 'spanish-municipal').issues
       .filter(issue => issue.location === 'secciones[0].lugares[0].descripcion');
     expect(related.map(issue => issue.category)).toEqual(['restaurant', 'internal-language']);
+  });
+
+  it('applies tiposPlan and card order only to the selected municipal visit card', () => {
+    const guide = { secciones: [{ titulo: 'Qué visitar en Destino', lugares: [
+      { web: 'https://example.org', maps: 'https://example.org/mapa' },
+      { web: 'https://example.org', maps: 'https://example.org/mapa' }
+    ] }] };
+    const result = runFactoryQa(guide, targets('secciones[0].lugares[1]'), 'spanish-municipal');
+    expect(result.issues.map(issue => issue.location))
+      .toEqual(['secciones[0].lugares[1].tiposPlan', 'secciones[0].lugares[1]']);
+    expect(result.issues.map(issue => issue.category)).toEqual(['visit', 'visit']);
+    expect(result.counts.errors).toBe(2);
+  });
+  it('does not pull historical visit types or order into an exact maps target', () => {
+    const guide = { secciones: [{ titulo: 'Qué visitar', lugares: [{ web: 'https://example.org', maps: '/relativa' }] }] };
+    const result = runFactoryQa(guide, targets('secciones[0].lugares[0].maps'), 'spanish-municipal');
+    expect(result.issues).toEqual([jasmine.objectContaining({
+      category: 'technical-url', location: 'secciones[0].lugares[0].maps'
+    })]);
+  });
+  it('checks selected restaurant description blocks without checking historical images', () => {
+    const guide = { secciones: [{ titulo: 'Dónde comer', lugares: [{ foto: 'local',
+      descripcion: '💡 Consejo AvenTourArte:\n🍴 Qué pedir sí o sí:' }] }] };
+    expect(runFactoryQa(guide, targets('secciones[0].lugares[0].descripcion'), 'spanish-municipal').issues)
+      .toEqual([jasmine.objectContaining({ category: 'restaurant', location: 'secciones[0].lugares[0].descripcion' })]);
+  });
+  it('retains editorial and technical image errors separately for a selected restaurant photo', () => {
+    const guide = { secciones: [{ titulo: 'Dónde comer', lugares: [{ foto: 'cld:' }] }] };
+    const location = 'secciones[0].lugares[0].foto';
+    const result = runFactoryQa(guide, targets(location), 'spanish-municipal');
+    expect(result.issues.map(issue => issue.category)).toEqual(['images', 'technical-image']);
+    expect(result.issues.map(issue => issue.location)).toEqual([location, location]);
+  });
+  it('detects a technically valid but editorially prohibited photo', () => {
+    const guide = { secciones: [{ titulo: 'Dónde comer', lugares: [{ foto: 'cld:existing-reference' }] }] };
+    expect(runFactoryQa(guide, targets('secciones[0].lugares[0].foto'), 'spanish-municipal').issues
+      .map(issue => issue.category)).toEqual(['images']);
+  });
+  it('does not promote a restaurant gallery element target to the image prohibition', () => {
+    const guide = { secciones: [{ titulo: 'Dónde comer', lugares: [{ fotos: ['cld:', ''] }] }] };
+    expect(runFactoryQa(guide, targets('secciones[0].lugares[0].fotos[0]'), 'spanish-municipal').issues)
+      .toEqual([jasmine.objectContaining({ category: 'technical-image', location: 'secciones[0].lugares[0].fotos[0]' })]);
+  });
+  it('checks festival order for a card target but not a fecha target', () => {
+    const guide = { secciones: [{ titulo: 'Fiestas y Festivos Principales', lugares: [{ fecha: 'Agosto', nombre: 'Fiesta' }] }] };
+    expect(runFactoryQa(guide, targets('secciones[0].lugares[0]'), 'spanish-municipal').issues)
+      .toEqual([jasmine.objectContaining({ category: 'festival', location: 'secciones[0].lugares[0]' })]);
+    expect(runFactoryQa(guide, targets('secciones[0].lugares[0].fecha'), 'spanish-municipal').issues).toEqual([]);
+  });
+  it('never applies global section order even when targets selects all sections', () => {
+    expect(runFactoryQa({ secciones: [{ titulo: 'Historia' }] }, targets('secciones'), 'spanish-municipal').issues).toEqual([]);
+    expect(runFactoryQa({}, targets('secciones'), 'spanish-municipal').issues).toEqual([]);
+  });
+  it('keeps municipal target groups before the four generic groups without duplicating overlaps', () => {
+    const guide = { secciones: [
+      { titulo: 'Qué visitar', lugares: [{}] },
+      { titulo: 'Gastronomía', platos: [{ descripcion: phrase, web: '/relativa', foto: 'cld:' }] },
+      { titulo: 'Dónde comer', lugares: [{ foto: 'local', descripcion: '💡 Consejo AvenTourArte:\n🍴 Qué pedir sí o sí:' }] },
+      { titulo: 'Fiestas y Festivos Principales', lugares: [{ fecha: 'Agosto', nombre: 'Fiesta' }] }
+    ] };
+    const context = targets('secciones', 'secciones[0]', 'secciones[0].lugares[0]');
+    const result = runFactoryQa(guide, context, 'spanish-municipal');
+    expect(result.issues.map(issue => issue.category)).toEqual([
+      'images', 'visit', 'festival', 'restaurant', 'gastronomy', 'internal-language', 'technical-url', 'technical-image'
+    ]);
+    expect(result.counts.errors).toBe(8);
+    expect(runFactoryQa(guide, context, 'spanish-municipal')).toEqual(result);
+  });
+  it('keeps generic section targets free of municipal rules', () => {
+    const guide = { secciones: [{ titulo: 'Qué visitar', lugares: [{}] },
+      { titulo: 'Dónde comer', lugares: [{ foto: 'local', descripcion: '💡 Consejo AvenTourArte:\n🍴 Qué pedir sí o sí:' }] },
+      { titulo: 'Fiestas y Festivos Principales', lugares: [{ fecha: 'Agosto', nombre: 'Fiesta' }] }] };
+    expect(runFactoryQa(guide, targets('secciones'), 'generic').issues).toEqual([]);
   });
 
   const invalidContexts: unknown[] = [undefined, null, [], 'guide', 42, {}, { scope: 'unknown' },

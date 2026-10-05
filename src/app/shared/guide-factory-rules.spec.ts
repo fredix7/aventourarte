@@ -3,9 +3,14 @@ import type { FactoryReviewContext } from './guide-factory-context';
 import {
   validateSpanishMunicipalSectionOrder,
   validateSpanishMunicipalForbiddenImages,
+  validateSpanishMunicipalForbiddenImagesScoped,
   validateSpanishMunicipalVisitCards,
+  validateSpanishMunicipalVisitCardsScoped,
   validateSpanishMunicipalFestivalCards,
+  validateSpanishMunicipalFestivalCardsScoped,
   validateSpanishMunicipalRestaurantEditorialBlocks,
+  validateSpanishMunicipalRestaurantEditorialBlocksScoped,
+  validateSpanishMunicipalTargetRules,
   validateSpanishMunicipalGuideRules,
   validateGastronomyFoodProfiles,
   validatePublishedInternalLanguage,
@@ -511,6 +516,235 @@ describe('validateSpanishMunicipalRestaurantEditorialBlocks', () => {
       subsecciones: [{ lugares: [{ descripcion: invalid }] }], platos: [{ descripcion: invalid }]
     }] })).toEqual([]);
   });
+});
+
+describe('scoped Spanish municipal rules', () => {
+  const fullGuide: FactoryReviewContext = { scope: 'guide' };
+  const targets = (...locations: string[]): Extract<FactoryReviewContext, { scope: 'targets' }> =>
+    ({ scope: 'targets', targets: locations });
+  const cardLocation = 'secciones[0].lugares[0]';
+  const guideWithCards = (titulo: string, lugares: unknown[]) => ({ secciones: [{ titulo, lugares }] });
+  const badVisit = () => ({ web: 'https://example.org', maps: 'https://example.org/mapa' });
+  const badFestival = () => ({ fecha: 'Agosto', nombre: 'Fiesta' });
+  const badDescription = '💡 Consejo AvenTourArte:\n🍴 Qué pedir sí o sí:\n🍴 Qué pedir sí o sí:';
+  const mixedGuide = () => ({ secciones: [
+    { titulo: 'Qué visitar en Destino', lugares: [badVisit(), badVisit()] },
+    { titulo: 'Dónde comer en Destino', lugares: [{ nombre: 'Bar', foto: null, descripcion: badDescription }] },
+    { titulo: 'Fiestas y Festivos Principales', lugares: [{ ...badFestival(), fotos: [] }] }
+  ] });
+  const pairs = [
+    [validateSpanishMunicipalForbiddenImagesScoped, validateSpanishMunicipalForbiddenImages],
+    [validateSpanishMunicipalVisitCardsScoped, validateSpanishMunicipalVisitCards],
+    [validateSpanishMunicipalFestivalCardsScoped, validateSpanishMunicipalFestivalCards],
+    [validateSpanishMunicipalRestaurantEditorialBlocksScoped, validateSpanishMunicipalRestaurantEditorialBlocks]
+  ] as const;
+
+  for (const [scoped, full] of pairs) {
+    it(`preserves the complete full-guide issue array for ${scoped.name}`, () => {
+      const guide = mixedGuide();
+      expect(full(guide).length).toBeGreaterThan(0);
+      expect(scoped(guide, fullGuide)).toEqual(full(guide));
+    });
+    it(`selects nothing with empty targets for ${scoped.name}`, () => {
+      expect(scoped(mixedGuide(), targets())).toEqual([]);
+    });
+    it(`does not create implicit scope for ${scoped.name}`, () => {
+      expect(scoped(mixedGuide(), undefined as unknown as FactoryReviewContext)).toEqual([]);
+    });
+    it(`retains full-guide inherited property semantics for ${scoped.name}`, () => {
+      const guide = { secciones: [
+        { titulo: 'Qué visitar en Destino', lugares: [Object.assign(Object.create({ tiposPlan: ['ruta'] }), badVisit())] },
+        { titulo: 'Dónde comer en Destino', lugares: [Object.create({ foto: '', descripcion: badDescription })] },
+        { titulo: 'Fiestas y Festivos Principales', lugares: [Object.assign(Object.create({ foto: '' }), badFestival())] }
+      ] };
+      expect(scoped(guide, fullGuide)).toEqual(full(guide));
+    });
+    it(`ignores malformed guides and collections for ${scoped.name}`, () => {
+      for (const guide of [null, undefined, 42, 'texto', [], {}, { secciones: {} },
+        { secciones: [null, [], { titulo: 'Qué visitar', lugares: {} },
+          { titulo: 'Dónde comer', lugares: 'texto' }, { titulo: 'Fiestas y Festivos Principales', lugares: null }] }]) {
+        expect(() => scoped(guide, fullGuide)).not.toThrow();
+        expect(scoped(guide, fullGuide)).toEqual([]);
+      }
+    });
+    it(`does not expand structural coverage for ${scoped.name}`, () => {
+      const guide = { secciones: [
+        { titulo: 'Qué visitar', subsecciones: [{ lugares: [badVisit()] }], itinerario: [{ zonas: [badVisit()] }] },
+        { titulo: 'Dónde comer', subsecciones: [{ lugares: [{ foto: '', descripcion: badDescription }] }] },
+        { titulo: 'Fiestas y Festivos Principales', itinerario: [{ lugares: [badFestival()] }] }
+      ] };
+      expect(scoped(guide, fullGuide)).toEqual([]);
+    });
+  }
+
+  for (const title of ['Dónde comer en Destino', 'Fiestas y Festivos Principales']) {
+    for (const target of ['secciones[0]', 'secciones[0].lugares', cardLocation]) {
+      it(`checks both image properties in ${title} under ${target} with one card issue`, () => {
+        const guide = guideWithCards(title, [{ nombre: 'Ficha', foto: 'local', fotos: ['local'] }, { foto: 'local' }]);
+        const issues = validateSpanishMunicipalForbiddenImagesScoped(guide, targets(target));
+        const expected = target === cardLocation ? [cardLocation] : [cardLocation, 'secciones[0].lugares[1]'];
+        expect(issues.map(issue => issue.location)).toEqual(expected);
+        expect(issues[0]).toEqual(validateSpanishMunicipalForbiddenImages(guide)[0]);
+      });
+    }
+    for (const field of ['foto', 'fotos']) {
+      it(`uses the exact selected ${field} location in ${title}`, () => {
+        const guide = guideWithCards(title, [{ nombre: 'Ficha', foto: '', fotos: [] }]);
+        expect(validateSpanishMunicipalForbiddenImagesScoped(guide, targets(`${cardLocation}.${field}`)))
+          .toEqual([{ ...validateSpanishMunicipalForbiddenImages(guide)[0], location: `${cardLocation}.${field}` }]);
+      });
+    }
+  }
+  it('prioritizes foto over fotos regardless of target order with one issue per card', () => {
+    const guide = guideWithCards('Dónde comer', [{ foto: '', fotos: [] }]);
+    expect(validateSpanishMunicipalForbiddenImagesScoped(guide,
+      targets(`${cardLocation}.fotos`, `${cardLocation}.foto`)).map(issue => issue.location)).toEqual([`${cardLocation}.foto`]);
+  });
+  it('selects fotos when foto is absent, inherited or outside scope', () => {
+    for (const card of [{ fotos: [] }, Object.assign(Object.create({ foto: '' }), { fotos: [] }), { foto: '', fotos: [] }]) {
+      expect(validateSpanishMunicipalForbiddenImagesScoped(guideWithCards('Dónde comer', [card]),
+        targets(`${cardLocation}.fotos`)).map(issue => issue.location)).toEqual([`${cardLocation}.fotos`]);
+    }
+  });
+  for (const field of ['fotos[0]', 'descripcion', 'maps', 'web', 'reserva']) {
+    it(`does not activate forbidden images for ${field}`, () => {
+      expect(validateSpanishMunicipalForbiddenImagesScoped(guideWithCards('Dónde comer', [{ foto: '', fotos: [''] }]),
+        targets(`${cardLocation}.${field}`))).toEqual([]);
+    });
+  }
+  it('ignores inherited images for card and property targets', () => {
+    const guide = guideWithCards('Dónde comer', [Object.create({ foto: '', fotos: [''] })]);
+    expect(validateSpanishMunicipalForbiddenImagesScoped(guide, targets(cardLocation))).toEqual([]);
+    expect(validateSpanishMunicipalForbiddenImagesScoped(guide, targets(`${cardLocation}.foto`, `${cardLocation}.fotos`)))
+      .toEqual([]);
+  });
+  for (const [index, value] of [null, undefined, '', [], 'local'].entries()) {
+    it(`keeps own image presence prohibited regardless of value ${index}`, () => {
+      for (const field of ['foto', 'fotos']) {
+        expect(validateSpanishMunicipalForbiddenImagesScoped(guideWithCards('Dónde comer', [{ [field]: value }]),
+          targets(`${cardLocation}.${field}`)).length).toBe(1);
+      }
+    });
+  }
+
+  for (const target of ['secciones[0]', 'secciones[0].lugares', cardLocation]) {
+    it(`checks visit plan types before property order under ${target}`, () => {
+      const guide = guideWithCards('Qué visitar en Destino', [badVisit(), badVisit()]);
+      const issues = validateSpanishMunicipalVisitCardsScoped(guide, targets(target));
+      const expected = [ `${cardLocation}.tiposPlan`, cardLocation ];
+      if (target !== cardLocation) expected.push('secciones[0].lugares[1].tiposPlan', 'secciones[0].lugares[1]');
+      expect(issues.map(issue => issue.location)).toEqual(expected);
+      expect(issues[0]).toEqual(validateSpanishMunicipalVisitCards(guide)[0]);
+    });
+  }
+  it('checks missing tiposPlan alone for its exact target without checking card order', () => {
+    const guide = guideWithCards('Qué visitar', [badVisit()]);
+    expect(validateSpanishMunicipalVisitCardsScoped(guide, targets(`${cardLocation}.tiposPlan`)))
+      .toEqual([validateSpanishMunicipalVisitCards(guide)[0]]);
+  });
+  for (const [index, value] of [null, 'ruta', [], ['inventado'], [42], Array(1)].entries()) {
+    it(`retains tiposPlan validation for invalid value ${index}`, () => {
+      expect(validateSpanishMunicipalVisitCardsScoped(guideWithCards('Qué visitar', [{ tiposPlan: value }]),
+        targets(`${cardLocation}.tiposPlan`)).length).toBe(1);
+    });
+  }
+  it('does not accept inherited tiposPlan as an explicit declaration', () => {
+    expect(validateSpanishMunicipalVisitCardsScoped(guideWithCards('Qué visitar', [Object.create({ tiposPlan: ['ruta'] })]),
+      targets(`${cardLocation}.tiposPlan`)).length).toBe(1);
+  });
+  for (const field of ['maps', 'web', 'foto', 'descripcion', 'nombre', 'tiposPlan[0]']) {
+    it(`does not promote visit property target ${field} to plan types or card order`, () => {
+      expect(validateSpanishMunicipalVisitCardsScoped(guideWithCards('Qué visitar', [badVisit()]),
+        targets(`${cardLocation}.${field}`))).toEqual([]);
+    });
+  }
+  it('retains unknown fields, historical mapaUrl and equal foto/fotos ranks', () => {
+    const card = { mapaUrl: 'histórico', nombre: 'Lugar', tiposPlan: ['ruta'], especial: true,
+      descripcion: 'Descripción', fotos: ['local'], foto: 'local', web: 'https://example.org' };
+    expect(validateSpanishMunicipalVisitCardsScoped(guideWithCards('Qué visitar', [card]), targets(cardLocation))).toEqual([]);
+  });
+
+  for (const target of ['secciones[0]', 'secciones[0].lugares', cardLocation]) {
+    it(`checks festival order under ${target} and excludes unselected siblings`, () => {
+      const issues = validateSpanishMunicipalFestivalCardsScoped(
+        guideWithCards('Fiestas y Festivos Principales', [badFestival(), badFestival()]), targets(target));
+      expect(issues.map(issue => issue.location))
+        .toEqual(target === cardLocation ? [cardLocation] : [cardLocation, 'secciones[0].lugares[1]']);
+    });
+  }
+  for (const field of ['nombre', 'descripcion', 'fecha', 'precio']) {
+    it(`does not activate festival card order for individual ${field}`, () => {
+      expect(validateSpanishMunicipalFestivalCardsScoped(guideWithCards('Fiestas y Festivos Principales', [badFestival()]),
+        targets(`${cardLocation}.${field}`))).toEqual([]);
+    });
+  }
+  it('does not require any festival field and keeps precio optional', () => {
+    expect(validateSpanishMunicipalFestivalCardsScoped(guideWithCards('Fiestas y Festivos Principales',
+      [{}, { nombre: 'Fiesta', fecha: 'Agosto' }, { descripcion: 'Descripción', fecha: 'Agosto' }]),
+    targets('secciones[0]'))).toEqual([]);
+  });
+
+  for (const target of ['secciones[0]', 'secciones[0].lugares', cardLocation, `${cardLocation}.descripcion`]) {
+    it(`checks restaurant order before duplication under ${target}`, () => {
+      const guide = guideWithCards('Dónde comer', [{ descripcion: badDescription }, { descripcion: badDescription }]);
+      const issues = validateSpanishMunicipalRestaurantEditorialBlocksScoped(guide, targets(target));
+      const full = validateSpanishMunicipalRestaurantEditorialBlocks(guide);
+      expect(issues).toEqual(target === 'secciones[0]' || target === 'secciones[0].lugares' ? full : full.slice(0, 2));
+      expect(issues[0].detail).toContain('orden');
+      expect(issues[1].detail).toContain('duplicados');
+    });
+  }
+  for (const field of ['maps', 'web', 'foto', 'reserva', 'descripcion.hijo']) {
+    it(`does not activate restaurant blocks for ${field}`, () => {
+      expect(validateSpanishMunicipalRestaurantEditorialBlocksScoped(guideWithCards('Dónde comer', [{ descripcion: badDescription }]),
+        targets(`${cardLocation}.${field}`))).toEqual([]);
+    });
+  }
+  it('preserves optional blocks and exact matching and inherited descriptions', () => {
+    expect(validateSpanishMunicipalRestaurantEditorialBlocksScoped(guideWithCards('Dónde comer',
+      [{}, { descripcion: '💡 Consejo AvenTourArte:\nQué pedir sí o sí:' }]), targets('secciones[0]'))).toEqual([]);
+    const guide = guideWithCards('Dónde comer', [Object.create({ descripcion: badDescription })]);
+    expect(validateSpanishMunicipalRestaurantEditorialBlocksScoped(guide, targets(`${cardLocation}.descripcion`)))
+      .toEqual(validateSpanishMunicipalRestaurantEditorialBlocks(guide));
+  });
+
+  it('composes municipal targets deterministically without global structure or duplicated overlapping targets', () => {
+    const guide = mixedGuide();
+    const context = targets('secciones', 'secciones[0]', cardLocation, `${cardLocation}.tiposPlan`, 'secciones');
+    const issues = validateSpanishMunicipalTargetRules(guide, context);
+    expect(issues.map(issue => issue.category)).toEqual([
+      'images', 'images', 'visit', 'visit', 'visit', 'visit', 'festival', 'restaurant', 'restaurant'
+    ]);
+    expect(issues).toEqual([
+      ...validateSpanishMunicipalForbiddenImages(guide), ...validateSpanishMunicipalVisitCards(guide),
+      ...validateSpanishMunicipalFestivalCards(guide), ...validateSpanishMunicipalRestaurantEditorialBlocks(guide)
+    ]);
+    expect(issues.every(issue => issue.category !== 'structure')).toBeTrue();
+    expect(validateSpanishMunicipalTargetRules(guide, context)).toEqual(issues);
+    expect(validateSpanishMunicipalTargetRules(guide, targets())).toEqual([]);
+  });
+  for (const [scoped, full] of pairs) {
+    it(`retains indices and malformed entries without mutation for ${scoped.name}`, () => {
+      const card = Object.freeze({ ...badVisit(), fecha: 'Agosto', nombre: 'Ficha', foto: null, descripcion: badDescription });
+      const lugares: unknown[] = Array(21);
+      lugares[0] = null; lugares[1] = []; lugares[2] = card; lugares[20] = card;
+      const guide = Object.freeze({ secciones: Object.freeze([null, Object.freeze({
+        titulo: scoped === validateSpanishMunicipalVisitCardsScoped ? 'Qué visitar'
+          : scoped === validateSpanishMunicipalFestivalCardsScoped ? 'Fiestas y Festivos Principales' : 'Dónde comer',
+        lugares: Object.freeze(lugares)
+      })]) });
+      const before = JSON.stringify(guide);
+      expect(scoped(guide, fullGuide)).toEqual(full(guide));
+      for (const index of [2, 20]) {
+        const location = `secciones[1].lugares[${index}]`;
+        const context = Object.freeze(targets(location));
+        const issues = scoped(guide, context);
+        expect(issues.length).toBeGreaterThan(0);
+        expect(issues.every(issue => issue.location === location || issue.location?.startsWith(`${location}.`))).toBeTrue();
+      }
+      expect(JSON.stringify(guide)).toBe(before);
+    });
+  }
 });
 
 describe('validateGastronomyFoodProfiles', () => {
