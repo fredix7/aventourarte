@@ -346,6 +346,63 @@ export function validatePublishedInternalLanguage(
   return issues;
 }
 
+/** Valida referencias almacenadas propias, solo dentro del alcance explícito. */
+export function validateGuideTechnicalUrls(
+  guide: unknown,
+  context: FactoryReviewContext
+): FactoryQaIssue[] {
+  const issues: FactoryQaIssue[] = [];
+  const ancestors = new WeakSet<object>();
+  const childLocation = (parent: string, field: string) => parent ? `${parent}.${field}` : field;
+  const isValidReference = (value: unknown, field: string): boolean => {
+    if (typeof value !== 'string' || !value.trim()) return false;
+    try {
+      const url = new URL(value);
+      if (url.protocol === 'http:' || url.protocol === 'https:') return true;
+      if (field !== 'reserva') return false;
+      if (url.protocol === 'tel:') {
+        return !/\s/.test(value) && !value.includes('?') && !value.includes('#')
+          && !url.search && !url.hash
+          && /^\+?[0-9]{7,15}$/.test(decodeURIComponent(url.pathname));
+      }
+      if (url.protocol === 'mailto:') {
+        return /^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/.test(decodeURIComponent(url.pathname));
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  };
+  const visit = (object: unknown, location: string): void => {
+    if (!isRecord(object) || ancestors.has(object)) return;
+    ancestors.add(object);
+    for (const field of ['web', 'reserva', 'maps', 'mapaUrl'] as const) {
+      if (!Object.prototype.hasOwnProperty.call(object, field)) continue;
+      const propertyLocation = childLocation(location, field);
+      if (!isFactoryLocationInScope(context, propertyLocation)) continue;
+      const value = object[field];
+      if (value === null || value === undefined || isValidReference(value, field)) continue;
+      issues.push({
+        severity: 'ERROR',
+        category: 'technical-url',
+        location: propertyLocation,
+        ...(typeof object['nombre'] === 'string' ? { item: object['nombre'] } : {}),
+        detail: 'La referencia proporcionada no es una URL técnica válida para este campo.'
+      });
+    }
+    for (const collection of EDITORIAL_COLLECTIONS) {
+      const values = object[collection];
+      if (!Array.isArray(values)) continue;
+      values.forEach((value: unknown, index: number) =>
+        visit(value, `${childLocation(location, collection)}[${index}]`)
+      );
+    }
+    ancestors.delete(object);
+  };
+  visit(guide, '');
+  return issues;
+}
+
 export function validateSpanishMunicipalGuideRules(guide: unknown): FactoryQaIssue[] {
   return [
     ...validateSpanishMunicipalSectionOrder(guide),

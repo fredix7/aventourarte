@@ -8,7 +8,8 @@ import {
   validateSpanishMunicipalRestaurantEditorialBlocks,
   validateSpanishMunicipalGuideRules,
   validateGastronomyFoodProfiles,
-  validatePublishedInternalLanguage
+  validatePublishedInternalLanguage,
+  validateGuideTechnicalUrls
 } from './guide-factory-rules';
 
 const municipalGuide = () => ({
@@ -979,6 +980,265 @@ describe('validatePublishedInternalLanguage', () => {
     const guide = { ...municipalGuide(), descripcion: phrase };
     expect(validatePublishedInternalLanguage(guide, fullGuide).length).toBe(1);
     expect(validateSpanishMunicipalGuideRules(guide)).toEqual([]);
+  });
+});
+
+describe('validateGuideTechnicalUrls', () => {
+  const context: FactoryReviewContext = { scope: 'guide' };
+  const fields = ['web', 'reserva', 'maps', 'mapaUrl'] as const;
+  const targets = (...locations: string[]): FactoryReviewContext => ({ scope: 'targets', targets: locations });
+
+  for (const field of fields) {
+    for (const value of ['https://example.org/recurso', 'http://example.org/recurso']) {
+      it(`accepts ${value} in ${field} without warnings`, () => {
+        expect(validateGuideTechnicalUrls({ [field]: value }, context)).toEqual([]);
+      });
+    }
+    for (const value of [null, undefined]) {
+      it(`ignores own ${field} with ${value}`, () => {
+        expect(validateGuideTechnicalUrls({ [field]: value }, context)).toEqual([]);
+      });
+    }
+    for (const value of ['', ' \t\n ', 42, false, [], {}, Symbol('url'), () => 'https://example.org']) {
+      it(`reports one error for unusable ${field} value ${typeof value}`, () => {
+        const issues = validateGuideTechnicalUrls({ [field]: value }, context);
+        expect(issues.length).toBe(1);
+        expect(issues[0]).toEqual(jasmine.objectContaining({
+          severity: 'ERROR', category: 'technical-url', location: field
+        }));
+      });
+    }
+    for (const value of ['/relativa', 'texto cualquiera', 'https://', '//example.org',
+      'ftp://example.org', 'file:///recurso', 'javascript:alert(1)', 'data:text/plain,contenido']) {
+      it(`rejects ${value} in ${field}`, () => {
+        expect(validateGuideTechnicalUrls({ [field]: value }, context).length).toBe(1);
+      });
+    }
+    it(`ignores inherited ${field}`, () => {
+      expect(validateGuideTechnicalUrls(Object.create({ [field]: 'inválido' }), context)).toEqual([]);
+    });
+  }
+
+  it('does not require any link properties', () => {
+    expect(validateGuideTechnicalUrls({ secciones: [{ lugares: [{}] }] }, context)).toEqual([]);
+  });
+
+  for (const field of ['web', 'maps', 'mapaUrl'] as const) {
+    for (const value of ['tel:956123456', 'mailto:reservas@example.org']) {
+      it(`rejects ${value} outside reserva in ${field}`, () => {
+        expect(validateGuideTechnicalUrls({ [field]: value }, context).length).toBe(1);
+      });
+    }
+  }
+
+  for (const value of [
+    'https://www.google.com/maps/place/Monumento',
+    'https://www.google.com/maps/search/?api=1&query=Monumento',
+    'https://maps.google.com/?q=36.6,-6.3',
+    'https://maps.app.goo.gl/referencia',
+    'https://goo.gl/maps/referencia',
+    'https://www.google.com/maps?cid=123456',
+    'https://www.google.com/maps/@36.6,-6.3,15z',
+    'https://www.google.com/maps/search/?api=1&query=Monumento&query_place_id=identificador',
+    'http://maps.google.com/?q=Monumento',
+    'https://example.org/mapa',
+    'https://www.google.com/maps/dir/Origen/Destino'
+  ]) {
+    it(`accepts the technical maps reference ${value}`, () => {
+      expect(validateGuideTechnicalUrls({ maps: value }, context)).toEqual([]);
+    });
+  }
+
+  it('does not penalize or migrate mapaUrl, or require maps', () => {
+    const guide = Object.freeze({ mapaUrl: 'https://example.org/mapa' });
+    expect(validateGuideTechnicalUrls(guide, context)).toEqual([]);
+    expect(Object.keys(guide)).toEqual(['mapaUrl']);
+    expect(guide.mapaUrl).toBe('https://example.org/mapa');
+  });
+
+  for (const value of ['https://www.instagram.com/establecimiento', 'https://www.facebook.com/establecimiento']) {
+    it(`does not judge officiality of ${value}`, () => {
+      expect(validateGuideTechnicalUrls({ web: value }, context)).toEqual([]);
+    });
+  }
+
+  it('accepts a contact page without certifying direct reservation', () => {
+    expect(validateGuideTechnicalUrls({ reserva: 'https://example.org/contacto' }, context)).toEqual([]);
+  });
+
+  for (const value of ['tel:956123456', 'tel:+34956123456', 'tel:1234567', 'tel:+123456789012345',
+    'tel:%2B34956123456', 'tel:%39%35%36%31%32%33%34%35%36']) {
+    it(`accepts compatible reservation phone ${value}`, () => {
+      expect(validateGuideTechnicalUrls({ reserva: value }, context)).toEqual([]);
+    });
+  }
+  for (const value of ['tel:123456', 'tel:1234567890123456', 'tel:', 'tel:956 123456',
+    'tel:956-123456', 'tel:(956)123456', 'tel:956123456?ext=1', 'tel:956123456#ext',
+    'tel:956123456?', 'tel:956123456#', 'tel:956123456texto', 'tel:++34956123456',
+    'tel:956\t123456', 'tel:956\n123456', 'tel:956%20123456', 'tel:%ZZ']) {
+    it(`rejects invalid reservation phone ${JSON.stringify(value)}`, () => {
+      expect(validateGuideTechnicalUrls({ reserva: value }, context).length).toBe(1);
+    });
+  }
+
+  for (const value of ['mailto:reservas@example.org', 'mailto:reservas@example.org?subject=Reserva&body=Hola',
+    'mailto:reservas%40example.org', 'mailto:reservas@example.org#referencia']) {
+    it(`preserves auditor mailto compatibility for ${value}`, () => {
+      expect(validateGuideTechnicalUrls({ reserva: value }, context)).toEqual([]);
+    });
+  }
+  for (const value of ['mailto:', 'mailto:reservas', 'mailto:reservas@example',
+    'mailto:uno@example.org,dos@example.org', 'mailto:uno@example.org;dos@example.org',
+    'mailto:%20reservas@example.org', 'mailto:<reservas@example.org>', 'mailto:%ZZ@example.org',
+    'mailto:?subject=Reserva', 'sms:956123456']) {
+    it(`rejects invalid reservation recipient or protocol ${value}`, () => {
+      expect(validateGuideTechnicalUrls({ reserva: value }, context).length).toBe(1);
+    });
+  }
+
+  const scopedGuide = () => ({
+    web: 'inválida',
+    secciones: [
+      { web: 'inválida', lugares: [{ nombre: 'Primero', maps: 'inválido', reserva: 'inválida' }, { web: 'inválida' }] },
+      { platos: [{ web: 'inválida' }] }
+    ]
+  });
+
+  it('visits all stored references in guide scope', () => {
+    expect(validateGuideTechnicalUrls(scopedGuide(), context).map(issue => issue.location)).toEqual([
+      'web', 'secciones[0].web', 'secciones[0].lugares[0].reserva',
+      'secciones[0].lugares[0].maps', 'secciones[0].lugares[1].web', 'secciones[1].platos[0].web'
+    ]);
+  });
+  it('limits section scope to its properties and descendants', () => {
+    expect(validateGuideTechnicalUrls(scopedGuide(), targets('secciones[0]')).map(issue => issue.location)).toEqual([
+      'secciones[0].web', 'secciones[0].lugares[0].reserva',
+      'secciones[0].lugares[0].maps', 'secciones[0].lugares[1].web'
+    ]);
+  });
+  it('limits card scope and excludes sibling cards', () => {
+    expect(validateGuideTechnicalUrls(scopedGuide(), targets('secciones[0].lugares[0]')).map(issue => issue.location))
+      .toEqual(['secciones[0].lugares[0].reserva', 'secciones[0].lugares[0].maps']);
+  });
+  it('checks only the targeted property, reaching it through out-of-scope ancestors', () => {
+    expect(validateGuideTechnicalUrls(scopedGuide(), targets('secciones[0].lugares[0].maps')).map(issue => issue.location))
+      .toEqual(['secciones[0].lugares[0].maps']);
+  });
+  it('does not inspect a sibling target with no stored references', () => {
+    expect(validateGuideTechnicalUrls(scopedGuide(), targets('secciones[0].lugares[0].nombre'))).toEqual([]);
+  });
+  it('distinguishes indices 2 and 20', () => {
+    const lugares = Array.from({ length: 21 }, () => ({ maps: 'inválido' }));
+    const guide = { secciones: [{ lugares }] };
+    expect(validateGuideTechnicalUrls(guide, targets('secciones[0].lugares[2]')).map(issue => issue.location))
+      .toEqual(['secciones[0].lugares[2].maps']);
+    expect(validateGuideTechnicalUrls(guide, targets('secciones[0].lugares[20]')).map(issue => issue.location))
+      .toEqual(['secciones[0].lugares[20].maps']);
+  });
+  it('reaches a deep property without pruning ancestors', () => {
+    const guide = { secciones: [{ subsecciones: [{ lugares: [{ web: 'inválida', maps: 'inválido' }] }] }] };
+    const location = 'secciones[0].subsecciones[0].lugares[0].web';
+    expect(validateGuideTechnicalUrls(guide, targets(location)).map(issue => issue.location)).toEqual([location]);
+  });
+  it('includes card descendants in card scope', () => {
+    const guide = { lugares: [{ web: 'inválida', zonas: [{ maps: 'inválido' }] }, { web: 'inválida' }] };
+    expect(validateGuideTechnicalUrls(guide, targets('lugares[0]')).map(issue => issue.location))
+      .toEqual(['lugares[0].web', 'lugares[0].zonas[0].maps']);
+  });
+
+  it('retains original indices across every known collection and malformed entries', () => {
+    const guide = {
+      web: 'inválida',
+      secciones: [null, 42, {
+        lugares: [false, { maps: 'inválido' }],
+        platos: [null, [], { web: 'inválida' }],
+        subsecciones: [{ lugares: [null, 'texto', { mapaUrl: 'inválido' }] }],
+        itinerario: [null, { reserva: 'inválida', zonas: [null, { maps: 'inválido' }] }]
+      }]
+    };
+    expect(validateGuideTechnicalUrls(guide, context).map(issue => issue.location)).toEqual([
+      'web', 'secciones[2].lugares[1].maps', 'secciones[2].platos[2].web',
+      'secciones[2].subsecciones[0].lugares[2].mapaUrl', 'secciones[2].itinerario[1].reserva',
+      'secciones[2].itinerario[1].zonas[1].maps'
+    ]);
+  });
+  for (const collection of ['secciones', 'lugares', 'platos', 'subsecciones', 'itinerario', 'zonas']) {
+    it(`allows the known collection ${collection} at the root`, () => {
+      expect(validateGuideTechnicalUrls({ [collection]: [{ web: 'inválida' }] }, context).map(issue => issue.location))
+        .toEqual([`${collection}[0].web`]);
+    });
+    for (const value of [null, undefined, 42, 'texto', { web: 'inválida' }]) {
+      it(`ignores malformed ${collection} collection of type ${typeof value}`, () => {
+        expect(validateGuideTechnicalUrls({ [collection]: value }, context)).toEqual([]);
+      });
+    }
+  }
+
+  for (const field of ['guiaRelacionada', 'infoGeneral', 'perfilAlimentario', 'alergenos', 'desconocido']) {
+    it(`does not walk ${field} or collections hidden inside it`, () => {
+      const hidden = { web: 'inválida', reserva: 'inválida', maps: 'inválido', mapaUrl: 'inválido',
+        secciones: [{ lugares: [{ maps: 'inválido' }] }] };
+      const guide = { [field]: hidden, lugares: [{ [field]: hidden }] };
+      expect(validateGuideTechnicalUrls(guide, context)).toEqual([]);
+    });
+  }
+  it('does not inspect arbitrary strings, phone numbers, or image references', () => {
+    expect(validateGuideTechnicalUrls({ descripcion: 'https://', telefono: 'inválido', foto: 'inválida',
+      fotos: ['inválida'], contenido: 'reserva: inválida' }, context)).toEqual([]);
+  });
+
+  for (const guide of [null, undefined, true, 42, 'texto', [], [{ web: 'inválida' }]]) {
+    it(`ignores malformed guide of type ${typeof guide}`, () => {
+      expect(() => validateGuideTechnicalUrls(guide, context)).not.toThrow();
+      expect(validateGuideTechnicalUrls(guide, context)).toEqual([]);
+    });
+  }
+  it('does not mutate frozen objects or arrays', () => {
+    const card = Object.freeze({ nombre: 'Lugar', maps: 'inválido', mapaUrl: 'https://example.org' });
+    const lugares = Object.freeze([card]);
+    const section = Object.freeze({ lugares });
+    const guide = Object.freeze({ secciones: Object.freeze([section]) });
+    const before = JSON.stringify(guide);
+    expect(validateGuideTechnicalUrls(guide, context).length).toBe(1);
+    expect(JSON.stringify(guide)).toBe(before);
+    expect(guide.secciones[0].lugares).toBe(lugares);
+    expect(lugares[0]).toBe(card);
+  });
+  it('uses the current object string name and reports each property once without exposing the value', () => {
+    const secret = 'valor privado inválido';
+    const issues = validateGuideTechnicalUrls({ nombre: 'Lugar', web: secret, reserva: secret,
+      maps: secret, mapaUrl: secret }, context);
+    expect(issues.map(issue => issue.location)).toEqual(['web', 'reserva', 'maps', 'mapaUrl']);
+    for (const issue of issues) {
+      expect(issue.severity).toBe('ERROR');
+      expect(issue.category).toBe('technical-url');
+      expect(issue.item).toBe('Lugar');
+      expect(issue.detail).not.toContain(secret);
+    }
+  });
+  it('does not inherit a parent item name or coerce a non-string name', () => {
+    const issues = validateGuideTechnicalUrls({ nombre: 'Guía', lugares: [{ nombre: 42, web: 'inválida' },
+      { maps: 'inválido' }] }, context);
+    expect(issues.length).toBe(2);
+    expect(issues.every(issue => !Object.prototype.hasOwnProperty.call(issue, 'item'))).toBeTrue();
+  });
+  it('handles cycles and visits shared objects at each distinct location', () => {
+    const card: { web: string; zonas?: unknown[] } = { web: 'inválida' };
+    card.zonas = [card];
+    expect(validateGuideTechnicalUrls({ lugares: [card, card] }, context).map(issue => issue.location))
+      .toEqual(['lugares[0].web', 'lugares[1].web']);
+  });
+  it('leaves the municipal combined validator independent of technical URLs', () => {
+    const guide = { ...municipalGuide(), web: 'inválida', maps: 'inválido', reserva: 'inválida', mapaUrl: 'inválido' };
+    expect(validateSpanishMunicipalGuideRules(guide)).toEqual([]);
+    expect(validateGuideTechnicalUrls(guide, context).length).toBe(4);
+  });
+  it('does not assume guide scope for empty targets or malformed or absent context', () => {
+    const guide = { web: 'inválida' };
+    expect(validateGuideTechnicalUrls(guide, targets())).toEqual([]);
+    for (const value of [undefined, null, {}, { scope: 'desconocido' }]) {
+      expect(validateGuideTechnicalUrls(guide, value as FactoryReviewContext)).toEqual([]);
+    }
   });
 });
 
