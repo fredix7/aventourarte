@@ -2,6 +2,7 @@ import { buildFactoryQaResult } from './guide-factory-qa';
 import {
   validateSpanishMunicipalSectionOrder,
   validateSpanishMunicipalForbiddenImages,
+  validateSpanishMunicipalVisitCards,
   validateSpanishMunicipalGuideRules
 } from './guide-factory-rules';
 
@@ -140,6 +141,139 @@ describe('validateSpanishMunicipalForbiddenImages', () => {
   });
 });
 
+describe('validateSpanishMunicipalVisitCards', () => {
+  const validateCard = (card: unknown) => validateSpanishMunicipalVisitCards(
+    guideWithCard('Qué visitar en Rota', card)
+  );
+
+  it('accepts an explicitly declared valid plan type', () => {
+    expect(validateCard({ nombre: 'Visita', tiposPlan: ['ruta'], descripcion: 'Descripción' })).toEqual([]);
+  });
+
+  it('requires tiposPlan without inferring it from price or description', () => {
+    expect(validateCard({ nombre: 'Museo', descripcion: 'Ruta urbana gratuita', precio: 'Gratis' }))
+      .toEqual([jasmine.objectContaining({ severity: 'ERROR', location: 'secciones[0].lugares[0].tiposPlan' })]);
+  });
+
+  it('rejects tiposPlan values that are not arrays', () => {
+    for (const tiposPlan of [null, undefined, 'ruta', {}, 1]) {
+      expect(validateCard({ tiposPlan })).toEqual([jasmine.objectContaining({ severity: 'ERROR' })]);
+    }
+  });
+
+  it('rejects an empty tiposPlan array', () => {
+    expect(validateCard({ tiposPlan: [] })).toEqual([jasmine.objectContaining({ severity: 'ERROR' })]);
+  });
+
+  it('rejects unknown or malformed plan types including sparse arrays', () => {
+    for (const tiposPlan of [['ruta', 'inventado'], [null], [12], ['RUTA'], new Array(1)]) {
+      expect(validateCard({ tiposPlan })).toEqual([jasmine.objectContaining({ severity: 'ERROR' })]);
+    }
+  });
+
+  it('accepts several valid types from the existing catalog', () => {
+    expect(validateCard({ tiposPlan: ['ruta', 'museo', 'de-pago'] })).toEqual([]);
+  });
+
+  it('does not accept inherited tiposPlan as an explicit declaration', () => {
+    const card = Object.assign(Object.create({ tiposPlan: ['ruta'] }), { nombre: 'Visita' });
+    expect(validateCard(card)).toEqual([jasmine.objectContaining({ severity: 'ERROR' })]);
+  });
+
+  it('accepts all canonical properties in order', () => {
+    expect(validateCard({
+      nombre: 'Visita', tiposPlan: ['ruta'], descripcion: 'Descripción', foto: 'image',
+      horario: 'Horario', precio: 'Precio', direccion: 'Dirección', maps: 'Mapa',
+      telefono: 'Teléfono', web: 'Web', reserva: 'Reserva'
+    })).toEqual([]);
+  });
+
+  it('accepts missing optional properties while preserving relative order', () => {
+    expect(validateCard({ tiposPlan: ['ruta'], web: 'Web' })).toEqual([]);
+  });
+
+  it('reports address before price as a property order error', () => {
+    expect(validateCard({ tiposPlan: ['ruta'], direccion: 'Dirección', precio: 'Precio' }))
+      .toEqual([jasmine.objectContaining({ severity: 'ERROR', location: 'secciones[0].lugares[0]' })]);
+  });
+
+  it('reports website before maps as a property order error', () => {
+    expect(validateCard({ tiposPlan: ['ruta'], web: 'Web', maps: 'Mapa' }))
+      .toEqual([jasmine.objectContaining({ severity: 'ERROR' })]);
+  });
+
+  it('emits only one order issue for multiple ordering mistakes', () => {
+    expect(validateCard({ tiposPlan: ['ruta'], web: 'Web', maps: 'Mapa', direccion: 'Dirección', precio: 'Precio' }))
+      .toEqual([jasmine.objectContaining({ severity: 'ERROR', location: 'secciones[0].lugares[0]' })]);
+  });
+
+  for (const field of ['foto', 'fotos'] as const) {
+    it(`accepts ${field} in the image position`, () => {
+      expect(validateCard({ tiposPlan: ['ruta'], descripcion: 'Descripción', [field]: 'image', precio: 'Precio' }))
+        .toEqual([]);
+    });
+  }
+
+  it('assigns foto and fotos the same rank without deciding coexistence', () => {
+    for (const images of [{ foto: 'image', fotos: ['image'] }, { fotos: ['image'], foto: 'image' }]) {
+      expect(validateCard({ tiposPlan: ['ruta'], descripcion: 'Descripción', ...images, horario: 'Horario' }))
+        .toEqual([]);
+    }
+  });
+
+  it('ignores special properties interleaved between canonical fields', () => {
+    expect(validateCard({
+      nombre: 'Visita', tiposPlan: ['ruta'], descripcion: 'Descripción', acceso: 'Acceso',
+      horario: 'Horario', duracion: 'Duración', precio: 'Precio', noCropGallery: true,
+      direccion: 'Dirección', guiaRelacionada: 'Ruta', maps: 'Mapa', otroCampo: 'Especial'
+    })).toEqual([]);
+  });
+
+  it('ignores historical mapaUrl in the preferred property sequence', () => {
+    expect(validateCard({ mapaUrl: 'Mapa histórico', nombre: 'Visita', tiposPlan: ['ruta'], precio: 'Precio' }))
+      .toEqual([]);
+  });
+
+  it('returns no issues when the visit section is absent', () => {
+    for (const guide of [null, undefined, {}, { secciones: [] }, guideWithCard('Dónde comer en Rota', {})]) {
+      expect(validateSpanishMunicipalVisitCards(guide)).toEqual([]);
+    }
+  });
+
+  it('returns no issues for absent or invalid lugares', () => {
+    for (const lugares of [undefined, null, {}, 'Visitas']) {
+      expect(validateSpanishMunicipalVisitCards({ secciones: [{ titulo: 'Qué visitar en Rota', lugares }] }))
+        .toEqual([]);
+    }
+  });
+
+  it('tolerates malformed cards and still validates subsequent objects', () => {
+    const guide = { secciones: [{ titulo: 'Qué visitar en Rota', lugares: [null, undefined, 1, 'Visita', [], {}] }] };
+    expect(() => validateSpanishMunicipalVisitCards(guide)).not.toThrow();
+    expect(validateSpanishMunicipalVisitCards(guide)).toEqual([
+      jasmine.objectContaining({ severity: 'ERROR', location: 'secciones[0].lugares[5].tiposPlan' })
+    ]);
+  });
+
+  it('ignores subsections and itineraries while validating direct lugares', () => {
+    expect(validateSpanishMunicipalVisitCards({ secciones: [{
+      titulo: 'Qué visitar en Rota', lugares: [{ tiposPlan: ['ruta'] }],
+      subsecciones: [{ lugares: [{}] }], itinerario: [{ zonas: [{}] }]
+    }] })).toEqual([]);
+  });
+
+  it('does not mutate frozen cards, collections or property order', () => {
+    const card = Object.freeze({ tiposPlan: Object.freeze(['ruta']), web: 'Web', maps: 'Mapa' });
+    const guide = Object.freeze({ secciones: Object.freeze([
+      Object.freeze({ titulo: 'Qué visitar en Rota', lugares: Object.freeze([card]) })
+    ]) });
+    const before = JSON.stringify(guide);
+    expect(validateSpanishMunicipalVisitCards(guide).length).toBe(1);
+    validateSpanishMunicipalGuideRules(guide);
+    expect(JSON.stringify(guide)).toBe(before);
+  });
+});
+
 describe('validateSpanishMunicipalGuideRules', () => {
   it('returns structure issues before image issues', () => {
     const guide = guideWithCard('Dónde comer en Rota', { foto: 'image' });
@@ -149,6 +283,20 @@ describe('validateSpanishMunicipalGuideRules', () => {
       ...validateSpanishMunicipalForbiddenImages(guide)
     ]);
     expect(issues.map(issue => issue.category)).toEqual(['structure', 'images']);
+  });
+
+  it('returns structure, forbidden image and visit issues in that order', () => {
+    const guide = { secciones: [
+      { titulo: 'Qué visitar en Rota', lugares: [{}] },
+      { titulo: 'Dónde comer en Rota', lugares: [{ foto: 'image' }] }
+    ] };
+    const issues = validateSpanishMunicipalGuideRules(guide);
+    expect(issues).toEqual([
+      ...validateSpanishMunicipalSectionOrder(guide),
+      ...validateSpanishMunicipalForbiddenImages(guide),
+      ...validateSpanishMunicipalVisitCards(guide)
+    ]);
+    expect(issues.map(issue => issue.category)).toEqual(['structure', 'images', 'visit']);
   });
 
   it('does not mutate the guide or its arrays in any validator', () => {

@@ -1,4 +1,5 @@
 import type { FactoryQaIssue } from './guide-factory-qa';
+import { PLAN_TYPES } from './plan-types';
 
 const SECTION_ORDER = [
   'historia',
@@ -84,9 +85,56 @@ export function validateSpanishMunicipalForbiddenImages(guide: unknown): Factory
   return issues;
 }
 
+const VISIT_PROPERTY_ORDER = new Map<string, number>([
+  ['nombre', 0], ['tiposPlan', 1], ['descripcion', 2],
+  ['foto', 3], ['fotos', 3], ['horario', 4], ['precio', 5],
+  ['direccion', 6], ['maps', 7], ['telefono', 8], ['web', 9], ['reserva', 10]
+]);
+const VALID_PLAN_TYPES = new Set<string>(PLAN_TYPES.map(type => type.id));
+
+/** Valida solo lugares directos de Qué visitar; el ámbito lo establece el llamador. */
+export function validateSpanishMunicipalVisitCards(guide: unknown): FactoryQaIssue[] {
+  const issues: FactoryQaIssue[] = [];
+  (sectionsOf(guide) ?? []).forEach((section, sectionIndex) => {
+    if (sectionRole(section) !== 'que visitar'
+      || !isRecord(section) || !Array.isArray(section['lugares'])) return;
+
+    section['lugares'].forEach((item: unknown, itemIndex: number) => {
+      if (!isRecord(item)) return;
+      const location = `secciones[${sectionIndex}].lugares[${itemIndex}]`;
+      const label = typeof item['nombre'] === 'string' ? { item: item['nombre'] } : {};
+      const types = item['tiposPlan'];
+      if (!Object.prototype.hasOwnProperty.call(item, 'tiposPlan')
+        || !Array.isArray(types) || types.length === 0
+        || !Array.from(types).every(type => typeof type === 'string' && VALID_PLAN_TYPES.has(type))) {
+        issues.push({
+          severity: 'ERROR', category: 'visit', location: `${location}.tiposPlan`, ...label,
+          detail: 'La ficha debe declarar tiposPlan como un array no vacío de valores del catálogo vigente.'
+        });
+      }
+
+      let previousRank = -1;
+      for (const key of Object.keys(item)) {
+        const rank = VISIT_PROPERTY_ORDER.get(key);
+        if (rank === undefined) continue;
+        if (rank < previousRank) {
+          issues.push({
+            severity: 'ERROR', category: 'visit', location, ...label,
+            detail: 'Las propiedades presentes de la ficha no respetan el orden canónico de Qué visitar.'
+          });
+          break;
+        }
+        previousRank = rank;
+      }
+    });
+  });
+  return issues;
+}
+
 export function validateSpanishMunicipalGuideRules(guide: unknown): FactoryQaIssue[] {
   return [
     ...validateSpanishMunicipalSectionOrder(guide),
-    ...validateSpanishMunicipalForbiddenImages(guide)
+    ...validateSpanishMunicipalForbiddenImages(guide),
+    ...validateSpanishMunicipalVisitCards(guide)
   ];
 }
