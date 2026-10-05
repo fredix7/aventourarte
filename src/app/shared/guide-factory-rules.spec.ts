@@ -3,6 +3,7 @@ import {
   validateSpanishMunicipalSectionOrder,
   validateSpanishMunicipalForbiddenImages,
   validateSpanishMunicipalVisitCards,
+  validateSpanishMunicipalFestivalCards,
   validateSpanishMunicipalGuideRules
 } from './guide-factory-rules';
 
@@ -274,6 +275,108 @@ describe('validateSpanishMunicipalVisitCards', () => {
   });
 });
 
+describe('validateSpanishMunicipalFestivalCards', () => {
+  const validateCard = (card: unknown) => validateSpanishMunicipalFestivalCards(
+    guideWithCard('Fiestas y Festivos Principales', card)
+  );
+
+  const orderedCards = [
+    { nombre: 'Fiesta', descripcion: 'Descripción', fecha: 'Agosto', precio: 'Precio' },
+    { nombre: 'Fiesta', descripcion: 'Descripción', fecha: 'Agosto' },
+    { nombre: 'Fiesta', fecha: 'Agosto' },
+    { descripcion: 'Descripción', fecha: 'Agosto' }
+  ];
+  orderedCards.forEach((card, index) => {
+    it(`accepts ordered present fields in example ${index + 1}`, () => {
+      expect(validateCard(card)).toEqual([]);
+    });
+  });
+
+  it('reports description after date as one order error', () => {
+    expect(validateCard({ nombre: 'Fiesta', fecha: 'Agosto', descripcion: 'Descripción' })).toEqual([
+      jasmine.objectContaining({
+        severity: 'ERROR', category: 'festival', item: 'Fiesta', location: 'secciones[0].lugares[0]'
+      })
+    ]);
+  });
+
+  it('reports price before date as one order error', () => {
+    expect(validateCard({ precio: 'Precio', fecha: 'Agosto' })).toEqual([
+      jasmine.objectContaining({ severity: 'ERROR', category: 'festival' })
+    ]);
+  });
+
+  it('emits only one order issue for multiple ordering mistakes', () => {
+    expect(validateCard({ precio: 'Precio', fecha: 'Agosto', descripcion: 'Descripción', nombre: 'Fiesta' }))
+      .toEqual([jasmine.objectContaining({ severity: 'ERROR', category: 'festival' })]);
+  });
+
+  it('ignores unknown properties interleaved between recognized fields', () => {
+    expect(validateCard({
+      nombre: 'Fiesta', especial: true, descripcion: 'Descripción', maps: 'Mapa',
+      fecha: 'Agosto', otroCampo: 'Otro', precio: 'Precio'
+    })).toEqual([]);
+  });
+
+  it('does not validate foto or fotos', () => {
+    expect(validateCard({ foto: 'image', nombre: 'Fiesta', fotos: ['image'], fecha: 'Agosto' })).toEqual([]);
+  });
+
+  it('does not require any recognized field or validate its value', () => {
+    for (const card of [{}, { nombre: null }, { descripcion: 1 }, { fecha: 'Sin formato' }, { precio: undefined }]) {
+      expect(validateCard(card)).toEqual([]);
+    }
+  });
+
+  it('returns no issues when the festival section is absent', () => {
+    for (const guide of [null, undefined, {}, { secciones: {} }, { secciones: [] },
+      guideWithCard('Cultura y Vida Local', { fecha: 'Agosto', nombre: 'Tradición' })]) {
+      expect(validateSpanishMunicipalFestivalCards(guide)).toEqual([]);
+    }
+  });
+
+  it('returns no issues for absent or invalid lugares', () => {
+    for (const lugares of [undefined, null, {}, 'Fiestas', 1]) {
+      expect(validateSpanishMunicipalFestivalCards({
+        secciones: [{ titulo: 'Fiestas y Festivos Principales', lugares }]
+      })).toEqual([]);
+    }
+    expect(validateSpanishMunicipalFestivalCards({ secciones: [{ titulo: 'Fiestas y Festivos Principales' }] }))
+      .toEqual([]);
+  });
+
+  it('ignores malformed cards without throwing and locates subsequent errors', () => {
+    const guide = { secciones: [null, { titulo: 7 }, {
+      titulo: 'Fiestas y Festivos Principales',
+      lugares: [null, undefined, 'Fiesta', 1, false, [], {}, { fecha: 'Agosto', nombre: 'Fiesta' }]
+    }] };
+    expect(() => validateSpanishMunicipalFestivalCards(guide)).not.toThrow();
+    expect(validateSpanishMunicipalFestivalCards(guide)).toEqual([
+      jasmine.objectContaining({ severity: 'ERROR', location: 'secciones[2].lugares[7]' })
+    ]);
+  });
+
+  it('does not inspect other collections or nested festival cards', () => {
+    expect(validateSpanishMunicipalFestivalCards({ secciones: [{
+      titulo: 'Fiestas y Festivos Principales',
+      lugares: [{}], subsecciones: [{ lugares: [{ fecha: 'Agosto', nombre: 'Fiesta' }] }],
+      platos: [{ fecha: 'Agosto', nombre: 'Fiesta' }]
+    }] })).toEqual([]);
+  });
+
+  it('does not mutate frozen guides, cards or arrays', () => {
+    const guide = Object.freeze({ secciones: Object.freeze([
+      Object.freeze({ titulo: 'Fiestas y Festivos Principales', lugares: Object.freeze([
+        Object.freeze({ fecha: 'Agosto', nombre: 'Fiesta', fotos: Object.freeze(['image']) })
+      ]) })
+    ]) });
+    const before = JSON.stringify(guide);
+    expect(validateSpanishMunicipalFestivalCards(guide).length).toBe(1);
+    validateSpanishMunicipalGuideRules(guide);
+    expect(JSON.stringify(guide)).toBe(before);
+  });
+});
+
 describe('validateSpanishMunicipalGuideRules', () => {
   it('returns structure issues before image issues', () => {
     const guide = guideWithCard('Dónde comer en Rota', { foto: 'image' });
@@ -297,6 +400,39 @@ describe('validateSpanishMunicipalGuideRules', () => {
       ...validateSpanishMunicipalVisitCards(guide)
     ]);
     expect(issues.map(issue => issue.category)).toEqual(['structure', 'images', 'visit']);
+  });
+
+  it('returns structure, images, visits and festivals in that order', () => {
+    const guide = { secciones: [
+      { titulo: 'Fiestas y Festivos Principales', lugares: [{ fecha: 'Agosto', nombre: 'Fiesta', foto: 'image' }] },
+      { titulo: 'Qué visitar en Rota', lugares: [{}] }
+    ] };
+    const issues = validateSpanishMunicipalGuideRules(guide);
+    expect(issues).toEqual([
+      ...validateSpanishMunicipalSectionOrder(guide),
+      ...validateSpanishMunicipalForbiddenImages(guide),
+      ...validateSpanishMunicipalVisitCards(guide),
+      ...validateSpanishMunicipalFestivalCards(guide)
+    ]);
+    expect(issues.map(issue => issue.category)).toEqual(['structure', 'images', 'visit', 'festival']);
+  });
+
+  it('keeps image and festival order errors in their respective validators', () => {
+    const sections: unknown[] = [...municipalGuide().secciones];
+    sections[6] = { titulo: 'Fiestas y Festivos Principales', lugares: [
+      { nombre: 'Fiesta', fecha: 'Agosto', descripcion: 'Descripción', foto: 'image', fotos: ['image'] }
+    ] };
+    const guide = { secciones: sections };
+    expect(validateSpanishMunicipalForbiddenImages(guide)).toEqual([
+      jasmine.objectContaining({ severity: 'ERROR', category: 'images' })
+    ]);
+    expect(validateSpanishMunicipalFestivalCards(guide)).toEqual([
+      jasmine.objectContaining({ severity: 'ERROR', category: 'festival' })
+    ]);
+    expect(validateSpanishMunicipalGuideRules(guide)).toEqual([
+      ...validateSpanishMunicipalForbiddenImages(guide),
+      ...validateSpanishMunicipalFestivalCards(guide)
+    ]);
   });
 
   it('does not mutate the guide or its arrays in any validator', () => {

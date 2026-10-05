@@ -131,10 +131,44 @@ export function validateSpanishMunicipalVisitCards(guide: unknown): FactoryQaIss
   return issues;
 }
 
+const FESTIVAL_PROPERTY_ORDER = new Map<string, number>([
+  ['nombre', 0], ['descripcion', 1], ['fecha', 2], ['precio', 3]
+]);
+
+/** Comprueba solo el orden de lugares directos de Fiestas; no exige campos. */
+export function validateSpanishMunicipalFestivalCards(guide: unknown): FactoryQaIssue[] {
+  const issues: FactoryQaIssue[] = [];
+  (sectionsOf(guide) ?? []).forEach((section, sectionIndex) => {
+    if (sectionRole(section) !== 'fiestas y festivos principales'
+      || !isRecord(section) || !Array.isArray(section['lugares'])) return;
+
+    section['lugares'].forEach((item: unknown, itemIndex: number) => {
+      if (!isRecord(item)) return;
+      let previousRank = -1;
+      for (const key of Object.keys(item)) {
+        const rank = FESTIVAL_PROPERTY_ORDER.get(key);
+        if (rank === undefined) continue;
+        if (rank < previousRank) {
+          issues.push({
+            severity: 'ERROR', category: 'festival',
+            location: `secciones[${sectionIndex}].lugares[${itemIndex}]`,
+            ...(typeof item['nombre'] === 'string' ? { item: item['nombre'] } : {}),
+            detail: 'Las propiedades presentes de la ficha no respetan el orden canónico de Fiestas y Festivos Principales.'
+          });
+          break;
+        }
+        previousRank = rank;
+      }
+    });
+  });
+  return issues;
+}
+
 export function validateSpanishMunicipalGuideRules(guide: unknown): FactoryQaIssue[] {
   return [
     ...validateSpanishMunicipalSectionOrder(guide),
     ...validateSpanishMunicipalForbiddenImages(guide),
-    ...validateSpanishMunicipalVisitCards(guide)
+    ...validateSpanishMunicipalVisitCards(guide),
+    ...validateSpanishMunicipalFestivalCards(guide)
   ];
 }
