@@ -30,6 +30,8 @@ Coordinator, Researcher y Fixer/Editor son roles futuros mencionados conceptualm
 
 ## Estado operativo
 
-La existencia de un documento de rol no implica que exista un canal ejecutable para ese agente. Actualmente no existe un canal reutilizable/autorizado para que el QA Reviewer invoque `executeFactoryQa()` fuera de los tests.
+Factory QA Reviewer sigue **DEFINED / NOT YET OPERATIONAL**. Su cadena técnica está implementada y probada de extremo a extremo: canal JSON, launcher controlado y adapter MCP local por stdio. La operación estructurada prevista es `factory_qa_review`, con `guidePath` exacto y `context` explícito, y puede producir resultados QA actuales reales mediante `executeFactoryQa()`.
 
-La definición del Reviewer está lista; su ejecución operativa queda pendiente. La infraestructura futura deberá reforzar su acceso de solo lectura mediante permisos efectivos, no únicamente mediante instrucciones.
+La tool chain está lista (**TOOL CHAIN READY**); esto describe la infraestructura, no un nuevo estado formal del rol ni una autorización de publicación. La activación del agente autónomo depende de verificar la superficie real de herramientas de la plataforma: todavía no está acreditada la ausencia efectiva de shell, editor/write, git, web/browser, delegación y otras tools incompatibles. Las annotations MCP y el prompt no constituyen enforcement suficiente. La prueba final de aislamiento de sesión permanece pendiente.
+
+Mientras ese aislamiento no esté demostrado, el contrato del Reviewer puede utilizarse como rol lógico de presentación sobre resultados de `factory_qa_review` dentro de una futura orquestación/Coordinator. Esto no significa que Coordinator exista ya ni define su contrato.

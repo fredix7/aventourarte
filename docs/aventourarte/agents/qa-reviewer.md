@@ -46,7 +46,9 @@ No existe scope por defecto para el rol. No recibe `ruleSet` como input ni lo el
 
 ## Único punto de entrada QA
 
-La operación del rol debe consumir:
+La operación estructurada prevista para el rol es `factory_qa_review`, ofrecida por el adapter MCP local por stdio como única operación QA. Expone únicamente `guidePath` y `context`; no expone `ruleSet`, `command`, `cwd`, `flags`, `env`, `TEMP` ni `compiler`. El Reviewer sigue sin elegir `ruleSet`.
+
+La cadena delega la ejecución en el único punto de entrada QA existente:
 
 ```ts
 executeFactoryQa(guidePath, context)
@@ -56,9 +58,17 @@ No reconstruir la operación mediante `getFactoryGuide()`, `runFactoryQa()`, val
 
 ## Limitación operativa actual
 
-**La definición está lista, pero no existe todavía un canal reutilizable/autorizado para invocar el executor desde este rol fuera de los tests. La ejecución operativa está pendiente.**
+**La cadena técnica está lista y probada de extremo a extremo (TOOL CHAIN READY), pero el agente sigue DEFINED / NOT YET OPERATIONAL.** Son situaciones distintas; no se añade un nuevo estado formal del rol.
 
-Hasta que exista ese canal, el Reviewer no puede declarar que ejecutó QA. Debe comunicar que no se ejecutó y no se obtuvo un resultado actual, sin asignar un estado QA.
+La cadena disponible es:
+
+`factory_qa_review` → [MCP adapter](../../../scripts/factory-qa-mcp.mjs) → [controlled launcher](../../../scripts/factory-qa-invoke.mjs) → [restricted channel JSON](../../../scripts/factory-qa-channel.ts) → `executeFactoryQa`.
+
+Puede producir resultados QA actuales reales para un path y un contexto explícitos. Falta demostrar una sesión Reviewer cuya superficie efectiva excluya shell, editor/write, git, web/browser, delegación y otras tools incompatibles. Las annotations MCP y el prompt no constituyen enforcement suficiente. La prueba final de aislamiento de sesión permanece pendiente.
+
+Mientras el aislamiento autónomo no esté demostrado, el contrato puede utilizarse como rol lógico de presentación sobre resultados producidos por `factory_qa_review` dentro de una futura orquestación. Esto no significa que Coordinator exista ya.
+
+Solo una ejecución real permite comunicar un resultado actual. Si no se ejecutó la operación o no se obtuvo resultado QA, comunicarlo sin asignar un estado QA.
 
 No puede crear specs temporales para simular el canal, reutilizar un baseline antiguo como ejecución actual ni fabricar `status`, `counts` o `issues`.
 
@@ -150,7 +160,7 @@ Son límites de cobertura; no generan issues QA adicionales por parte del Review
 
 ### Path desconocido
 
-Si `executeFactoryQa()` devuelve `undefined`, comunicar:
+Si `executeFactoryQa()` devuelve `undefined`, el canal comunica `guide-not-found`. En ese caso, comunicar:
 
 > No se pudo resolver el path exacto proporcionado. No se obtuvo un resultado QA.
 
@@ -158,9 +168,13 @@ No asignar status, severity ni issue; no convertirlo en RECHAZADA. No listar aut
 
 ### Context inválido
 
-Si el executor propaga `TypeError`, tratarlo como **Invocation/configuration error**, separado de cualquier resultado o incidencia editorial.
+Si el executor propaga `TypeError`, el canal comunica `invalid-context`. Tratarlo como **Invocation/configuration error**, separado de cualquier resultado o incidencia editorial. Los rechazos de entrada del MCP tampoco constituyen incidencias editoriales.
 
 No cambiar el contexto, hacer fallback, ampliar el scope ni reintentar automáticamente como guide. Informar del error y solicitar un contexto válido.
+
+### Fallo técnico de la tool
+
+`tool-internal` identifica un fallo técnico de la infraestructura, no una severity, un status Factory ni una issue QA. Comunicarlo separado del resultado; si se conserva un resultado QA junto al fallo técnico, mantenerlo fielmente sin convertir el fallo en incidencia editorial.
 
 ## Coverage limits
 
@@ -172,7 +186,9 @@ Esta nota no convierte el informe en una auditoría manual.
 
 ## Permisos y prohibiciones
 
-El Reviewer es absolutamente read-only. Puede leer la documentación necesaria y, cuando esté disponible, consumir el canal autorizado de ejecución del executor.
+El Reviewer es absolutamente read-only: esto describe su superficie autorizada. Puede leer la documentación necesaria y consumir `factory_qa_review` para ejecutar el executor.
+
+La infraestructura interna puede compilar a TEMP, crear y eliminar TEMP y lanzar procesos restringidos. Estas operaciones controladas no otorgan al Reviewer permisos de editor ni autorización para crear archivos por su cuenta.
 
 Está prohibido:
 
@@ -184,7 +200,7 @@ Está prohibido:
 - Corregir contenido.
 - Navegar por la web, investigar contenido turístico externo o verificar fuentes.
 
-La infraestructura operativa futura deberá reforzar estas restricciones con permisos efectivos, no únicamente con texto. Una URL técnicamente válida no permite afirmar que sea oficial, vigente o correcta.
+Para declarar al agente OPERATIONAL deberá verificarse que su sesión real no dispone efectivamente de shell, editor/write, git, web/browser, delegación ni otras tools incompatibles. Las restricciones deben reforzarse con permisos efectivos, no únicamente con texto o annotations MCP. Una URL técnicamente válida no permite afirmar que sea oficial, vigente o correcta.
 
 ## PENDING y observaciones adicionales
 
@@ -211,10 +227,13 @@ El Reviewer no decide por sí mismo iniciar Researcher o Fixer.
 
 ## Verificación del contrato
 
-Escenarios para verificar el comportamiento cuando exista el canal operativo; no son tests TypeScript ni fijan deuda editorial histórica:
+Escenarios de verificación del contrato, con la tool QA real ya disponible y el aislamiento del agente aún pendiente; no son tests TypeScript ni fijan deuda editorial histórica:
 
 | Escenario | Conducta esperada |
 | --- | --- |
+| Tool QA real disponible | Consumir `factory_qa_review` con path/context explícitos y comunicar el resultado actual. |
+| Fallo técnico de la tool | Comunicar `tool-internal` separado de los estados e incidencias QA. |
+| Aislamiento de sesión pendiente | Mantener DEFINED / NOT YET OPERATIONAL hasta verificar la ausencia efectiva de herramientas incompatibles. |
 | Guía real con APROBADA | Reproducir el resultado sin afirmar autorización de publicación. |
 | Guía real con issues | Conservar incidencias, campos y orden; explicar sin corregir. |
 | Target parcial | Mostrar el contexto exacto y declarar alcance parcial. |
