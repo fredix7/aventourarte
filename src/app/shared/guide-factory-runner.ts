@@ -5,6 +5,7 @@ import { buildFactoryQaResult } from './guide-factory-qa';
 import {
   validateSpanishMunicipalGuideRules,
   validateSpanishMunicipalTargetRules,
+  validateGuideItineraryStructure,
   validateGastronomyFoodProfiles,
   validatePublishedInternalLanguage,
   validateGuideTechnicalUrls,
@@ -48,6 +49,9 @@ export function runFactoryQa(
     } else {
       issues.push(...validateSpanishMunicipalTargetRules(guide, context));
     }
+  } else {
+    // EDIT-012 es internacional: itinerary precede a las cuatro reglas transversales.
+    issues.push(...validateGuideItineraryStructure(guide, context));
   }
   issues.push(
     ...validateGastronomyFoodProfiles(guide, context),

@@ -260,6 +260,54 @@ describe('runFactoryQa', () => {
     }
   });
 
+  it('runs international itinerary before gastronomy, language, URLs and images for generic guide scope', () => {
+    const guide = { secciones: [
+      { titulo: 'Qué visitar', itinerario: [{ dia: '', zonas: [{ nombre: 'Visita', descripcion: 'Visita', tiposPlan: ['ruta'] }] }] },
+      ...genericIssuesGuide().secciones
+    ] };
+    const result = runFactoryQa(guide, fullGuide, 'generic');
+    expect(result.issues.map(issue => issue.category))
+      .toEqual(['itinerary', 'gastronomy', 'internal-language', 'technical-url', 'technical-image']);
+    expect(result.issues[0].location).toBe('secciones[0].itinerario[0].dia');
+    expect(result.counts.errors).toBe(5);
+  });
+  it('runs itinerary structure for generic itinerary targets without including other sections', () => {
+    const guide = { secciones: [{ titulo: 'Qué visitar', itinerario: [{ zonas: [] }] },
+      ...genericIssuesGuide().secciones] };
+    const result = runFactoryQa(guide, targets('secciones[0].itinerario'), 'generic');
+    expect(result.issues.map(issue => issue.category)).toEqual(['itinerary', 'itinerary']);
+    expect(result.issues.map(issue => issue.location))
+      .toEqual(['secciones[0].itinerario[0].dia', 'secciones[0].itinerario[0].zonas']);
+  });
+  it('checks a generic zone maps target technically without promoting itinerary structure', () => {
+    const guide = { secciones: [{ titulo: 'Qué visitar', itinerario: [{ zonas: [{ maps: '/relative' }] }] }] };
+    const location = 'secciones[0].itinerario[0].zonas[0].maps';
+    expect(runFactoryQa(guide, targets(location), 'generic').issues).toEqual([
+      jasmine.objectContaining({ severity: 'ERROR', category: 'technical-url', location })
+    ]);
+  });
+  it('does not apply international EDIT-012 to municipal guide or target reviews', () => {
+    const guide = { secciones: municipalGuide().secciones.map((section, index) =>
+      index === 2 ? { ...section, itinerario: [{ dia: '', zonas: [{}] }] } : section) };
+    for (const context of [fullGuide, targets('secciones[2].itinerario')]) {
+      expect(runFactoryQa(guide, context, 'spanish-municipal').issues).toEqual([]);
+    }
+    expect(runFactoryQa(guide, fullGuide, 'generic').issues.length).toBe(4);
+  });
+  it('preserves municipal results and ordering when an international-style malformed itinerary is present', () => {
+    const original = { secciones: [{ titulo: 'Qué visitar', lugares: [{}] },
+      ...genericIssuesGuide().secciones] };
+    const withItinerary = { secciones: [{ ...original.secciones[0], itinerario: null },
+      ...original.secciones.slice(1)] };
+    for (const context of [fullGuide, targets('secciones')]) {
+      expect(runFactoryQa(withItinerary, context, 'spanish-municipal'))
+        .toEqual(runFactoryQa(original, context, 'spanish-municipal'));
+    }
+  });
+  it('does not introduce an international-itinerary ruleset', () => {
+    expect(() => runFactoryQa({}, fullGuide, 'international-itinerary' as FactoryQaRuleSet)).toThrowError(TypeError);
+  });
+
   const invalidContexts: unknown[] = [undefined, null, [], 'guide', 42, {}, { scope: 'unknown' },
     { scope: 'targets' }, { scope: 'targets', targets: null }, { scope: 'targets', targets: 'web' },
     { scope: 'targets', targets: {} }, { scope: 'targets', targets: [42] },

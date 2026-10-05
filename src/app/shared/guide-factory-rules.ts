@@ -116,6 +116,74 @@ const VISIT_PROPERTY_ORDER = new Map<string, number>([
 ]);
 const VALID_PLAN_TYPES = new Set<string>(PLAN_TYPES.map(type => type.id));
 
+/** Contrato opcional de EDIT-012; el llamador establece el ámbito internacional. */
+export function validateGuideItineraryStructure(
+  guide: unknown,
+  context: FactoryReviewContext
+): FactoryQaIssue[] {
+  const issues: FactoryQaIssue[] = [];
+  const owns = (object: object, field: PropertyKey) => Object.prototype.hasOwnProperty.call(object, field);
+  const report = (location: string, detail: string, item?: string): void => {
+    if (!isFactoryLocationInScope(context, location)) return;
+    issues.push({ severity: 'ERROR', category: 'itinerary', location,
+      ...(item !== undefined ? { item } : {}), detail });
+  };
+  const nonEmptyString = (value: unknown): value is string => typeof value === 'string' && !!value.trim();
+
+  (sectionsOf(guide) ?? []).forEach((section, sectionIndex) => {
+    // Reutiliza la normalización existente sin ampliar la semántica municipal.
+    if (!isRecord(section) || (sectionRole(section) !== 'que visitar'
+      && !/^que visitar (?:de|en\/de) .+$/.test(sectionTitle(section))) || !owns(section, 'itinerario')) return;
+    const itineraryLocation = `secciones[${sectionIndex}].itinerario`;
+    const itinerary = section['itinerario'];
+    if (!Array.isArray(itinerary)) {
+      report(itineraryLocation, 'itinerario debe ser un array.');
+      return;
+    }
+    // Un itinerario vacío es válido; solo se examinan índices propios materializados.
+    itinerary.forEach((entry: unknown, entryIndex: number) => {
+      if (!owns(itinerary, entryIndex)) return;
+      const entryLocation = `${itineraryLocation}[${entryIndex}]`;
+      if (!isRecord(entry)) {
+        report(entryLocation, 'La entrada de itinerario debe ser un objeto.');
+        return;
+      }
+      if (!owns(entry, 'dia') || !nonEmptyString(entry['dia'])) {
+        report(`${entryLocation}.dia`, 'dia debe ser un string no vacío.');
+      }
+      const zonesLocation = `${entryLocation}.zonas`;
+      const zones = entry['zonas'];
+      if (!owns(entry, 'zonas') || !Array.isArray(zones)
+        || !zones.some((_: unknown, index: number) => owns(zones, index))) {
+        report(zonesLocation, 'zonas debe ser un array con al menos una ficha materializada.');
+        return;
+      }
+      zones.forEach((zone: unknown, zoneIndex: number) => {
+        if (!owns(zones, zoneIndex)) return;
+        const zoneLocation = `${zonesLocation}[${zoneIndex}]`;
+        if (!isRecord(zone)) {
+          report(zoneLocation, 'La ficha de zona debe ser un objeto.');
+          return;
+        }
+        if (!owns(zone, 'nombre') || !nonEmptyString(zone['nombre'])) {
+          report(`${zoneLocation}.nombre`, 'nombre debe ser un string no vacío.');
+        }
+        const item = owns(zone, 'nombre') && nonEmptyString(zone['nombre']) ? zone['nombre'] : undefined;
+        if (!owns(zone, 'descripcion') || !nonEmptyString(zone['descripcion'])) {
+          report(`${zoneLocation}.descripcion`, 'descripcion debe ser un string no vacío.', item);
+        }
+        const types = zone['tiposPlan'];
+        if (!owns(zone, 'tiposPlan') || !Array.isArray(types) || types.length === 0
+          || !Array.from(types).every(type => typeof type === 'string' && VALID_PLAN_TYPES.has(type))) {
+          report(`${zoneLocation}.tiposPlan`,
+            'tiposPlan debe ser un array no vacío de valores válidos del catálogo PLAN_TYPES.', item);
+        }
+      });
+    });
+  });
+  return issues;
+}
+
 /** Valida lugares de Qué visitar y de sus subsecciones inmediatas; el llamador establece el ámbito. */
 export function validateSpanishMunicipalVisitCards(guide: unknown): FactoryQaIssue[] {
   return validateVisitCardsInScope(guide, () => true);

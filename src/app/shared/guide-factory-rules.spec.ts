@@ -13,6 +13,7 @@ import {
   validateSpanishMunicipalRestaurantEditorialBlocksScoped,
   validateSpanishMunicipalTargetRules,
   validateSpanishMunicipalGuideRules,
+  validateGuideItineraryStructure,
   validateGastronomyFoodProfiles,
   validatePublishedInternalLanguage,
   validateGuideTechnicalUrls,
@@ -33,6 +34,213 @@ const municipalGuide = () => ({
 
 const guideWithCard = (titulo: string, card: unknown) => ({
   secciones: [{ titulo, lugares: [card] }]
+});
+
+describe('validateGuideItineraryStructure', () => {
+  const full: FactoryReviewContext = { scope: 'guide' };
+  const targets = (...locations: string[]): FactoryReviewContext => ({ scope: 'targets', targets: locations });
+  const root = 'secciones[0].itinerario';
+  const entryPath = `${root}[0]`;
+  const zonePath = `${entryPath}.zonas[0]`;
+  const zone = () => ({ nombre: 'Visita', descripcion: 'Descripción útil', tiposPlan: ['ruta', 'urbano'] });
+  const guide = (itinerario: unknown) => ({ secciones: [{ titulo: 'Qué visitar', itinerario }] });
+  const entry = (zona: unknown = zone()) => ({ dia: 'Jornada flexible', zonas: [zona] });
+  const locations = (value: unknown, context: FactoryReviewContext = full) =>
+    validateGuideItineraryStructure(value, context).map(issue => issue.location);
+
+  it('does not require itinerary or even a visit section', () => {
+    for (const value of [null, undefined, {}, [], { secciones: [] },
+      { secciones: [{ titulo: 'Qué visitar', lugares: [{}] }] }]) {
+      expect(validateGuideItineraryStructure(value, full)).toEqual([]);
+    }
+  });
+  it('accepts an empty itinerary without inventing a minimum number of days', () => {
+    expect(validateGuideItineraryStructure(guide([]), full)).toEqual([]);
+  });
+  for (const [index, value] of [null, undefined, 42, false, 'texto', {}].entries()) {
+    it(`rejects declared non-array itinerary ${index} once`, () => {
+      expect(validateGuideItineraryStructure(guide(value), full)).toEqual([{
+        severity: 'ERROR', category: 'itinerary', location: root, detail: 'itinerario debe ser un array.'
+      }]);
+    });
+  }
+  it('ignores inherited itinerary even when invalid', () => {
+    const section = Object.assign(Object.create({ itinerario: null }), { titulo: 'Qué visitar' });
+    expect(validateGuideItineraryStructure({ secciones: [section] }, full)).toEqual([]);
+  });
+  for (const title of ['Qué visitar', 'Qué visitar en Roma', 'Qué visitar de Roma',
+    ' QUÉ   VISITAR  EN  Roma ', 'Que visitar en/de Roma']) {
+    it(`recognizes normalized visit section ${title}`, () => {
+      expect(locations({ secciones: [{ titulo: title, itinerario: null }] })).toEqual([root]);
+    });
+  }
+  it('ignores unrelated itineraries, direct places and parallel or deeper subsections', () => {
+    const value = { itinerario: null, secciones: [
+      { titulo: 'Historia', itinerario: null },
+      { titulo: 'Qué visitar', lugares: [{}], subsecciones: [{ itinerario: null, lugares: [{}] }] },
+      { titulo: 'Qué visitar en', itinerario: null },
+      { titulo: 'Otras cosas: Qué visitar', itinerario: null }
+    ] };
+    expect(validateGuideItineraryStructure(value, full)).toEqual([]);
+  });
+  for (const [index, value] of [null, undefined, 'texto', 42, true, [], () => ({})].entries()) {
+    it(`rejects materialized malformed entry ${index} without descending`, () => {
+      expect(locations(guide([value]))).toEqual([entryPath]);
+    });
+    it(`rejects materialized malformed zone ${index} without descending or calling it empty`, () => {
+      expect(locations(guide([{ dia: 'Visita', zonas: [value] }]))).toEqual([zonePath]);
+    });
+  }
+  for (const field of ['dia', 'nombre', 'descripcion']) {
+    for (const [index, value] of [undefined, null, '', ' \t\n ', 42, false, [], {}].entries()) {
+      it(`rejects invalid ${field} value ${index} at its own property`, () => {
+        const card = { ...zone(), [field]: value };
+        const day = { ...entry(card), ...(field === 'dia' ? { dia: value } : {}) };
+        expect(locations(guide([day]))).toEqual([field === 'dia' ? `${entryPath}.dia` : `${zonePath}.${field}`]);
+      });
+    }
+    it(`requires own ${field}, not an inherited or missing value`, () => {
+      for (const inherited of [false, true]) {
+        const object: Record<string, unknown> = field === 'dia' ? entry() : zone();
+        const validValue = object[field];
+        delete object[field];
+        if (inherited) Object.setPrototypeOf(object, { [field]: validValue });
+        expect(locations(guide([field === 'dia' ? object : entry(object)])))
+          .toEqual([field === 'dia' ? `${entryPath}.dia` : `${zonePath}.${field}`]);
+      }
+    });
+  }
+  for (const [index, zones] of [undefined, null, 42, 'texto', {}, [], Array(3)].entries()) {
+    it(`rejects absent, malformed, empty or holes-only zones ${index}`, () => {
+      expect(locations(guide([{ dia: 'Llegada', zonas: zones }]))).toEqual([`${entryPath}.zonas`]);
+    });
+  }
+  it('requires own zonas instead of accepting an inherited collection', () => {
+    for (const day of [{ dia: 'Llegada' }, Object.assign(Object.create({ zonas: [zone()] }), { dia: 'Llegada' })]) {
+      expect(locations(guide([day]))).toEqual([`${entryPath}.zonas`]);
+    }
+  });
+  for (const [index, types] of [undefined, null, [], ['inventado'], [42], ['ruta', false],
+    'ruta', {}, Array(2), ['ruta', , 'urbano']].entries()) {
+    it(`rejects invalid tiposPlan ${index} once without inferring values`, () => {
+      expect(locations(guide([entry({ ...zone(), tiposPlan: types })]))).toEqual([`${zonePath}.tiposPlan`]);
+    });
+  }
+  it('requires own tiposPlan and ignores inherited classification', () => {
+    for (const inherited of [false, true]) {
+      const card = { nombre: 'Visita', descripcion: 'Descripción' };
+      if (inherited) Object.setPrototypeOf(card, { tiposPlan: ['ruta'] });
+      expect(locations(guide([entry(card)]))).toEqual([`${zonePath}.tiposPlan`]);
+    }
+  });
+  it('accepts valid zones without optional fields and all existing plan type values', () => {
+    const card = { ...zone(), tiposPlan: ['ruta', 'opcional', 'playa', 'urbano', 'naturaleza',
+      'museo', 'gratuito', 'de-pago', 'coste-variable'] };
+    expect(validateGuideItineraryStructure(guide([entry(card)]), full)).toEqual([]);
+  });
+  it('does not validate property order, unknown or optional fields or nested collections', () => {
+    const card = { tiposPlan: ['ruta'], descripcion: 'Visita', nombre: 'Nombre',
+      foto: false, fotos: 42, horario: {}, precio: null, direccion: false, maps: 'inválida',
+      telefono: [], web: 'inválida', reserva: 'inválida', acceso: {}, duracion: false,
+      guiaRelacionada: { path: false }, noCropGallery: 'texto', desconocido: {}, zonas: [null] };
+    expect(validateGuideItineraryStructure(guide([entry(card)]), full)).toEqual([]);
+  });
+  it('allows arbitrary nonblank day labels, repeated labels, excursions and open-ended days', () => {
+    expect(validateGuideItineraryStructure(guide(['Día 7 (y siguientes)', 'Regreso', 'Regreso',
+      'Día 99 - Excursión a otro país', ' Llegada flexible '].map(dia => ({ ...entry(), dia }))), full)).toEqual([]);
+  });
+  it('orders entry checks before zone fields, keeping original sections, entries and zones indices', () => {
+    const value = { secciones: [{ titulo: 'Historia' }, { titulo: 'Qué visitar', itinerario: [
+      { dia: '', zonas: [{}, null, {}] }, { zonas: [] }, null
+    ] }, { titulo: 'Qué visitar en Roma', itinerario: false }] };
+    const issues = validateGuideItineraryStructure(value, full);
+    expect(issues.map(issue => issue.location)).toEqual([
+      'secciones[1].itinerario[0].dia',
+      'secciones[1].itinerario[0].zonas[0].nombre', 'secciones[1].itinerario[0].zonas[0].descripcion',
+      'secciones[1].itinerario[0].zonas[0].tiposPlan', 'secciones[1].itinerario[0].zonas[1]',
+      'secciones[1].itinerario[0].zonas[2].nombre', 'secciones[1].itinerario[0].zonas[2].descripcion',
+      'secciones[1].itinerario[0].zonas[2].tiposPlan',
+      'secciones[1].itinerario[1].dia', 'secciones[1].itinerario[1].zonas',
+      'secciones[1].itinerario[2]', 'secciones[2].itinerario'
+    ]);
+    expect(issues.every(issue => issue.severity === 'ERROR' && issue.category === 'itinerary')).toBeTrue();
+  });
+  it('skips holes while retaining indices and treating explicit undefined as materialized', () => {
+    const zones: unknown[] = Array(4);
+    zones[2] = undefined;
+    const itinerary: unknown[] = Array(5);
+    itinerary[1] = { dia: 'Visita', zonas: zones };
+    itinerary[4] = undefined;
+    expect(locations(guide(itinerary))).toEqual([`${root}[1].zonas[2]`, `${root}[4]`]);
+    expect(locations(guide(Array(3)))).toEqual([]);
+  });
+  it('does not count inherited numeric indices as materialized zones', () => {
+    const zones: unknown[] = Array(1);
+    Object.setPrototypeOf(zones, Object.assign(Object.create(Array.prototype), { 0: zone() }));
+    expect(locations(guide([{ dia: 'Visita', zonas: zones }]))).toEqual([`${entryPath}.zonas`]);
+  });
+  it('uses valid own names as item only for other zone field failures', () => {
+    const issues = validateGuideItineraryStructure(guide([entry({ nombre: 'Visita' }), entry({ nombre: '' })]), full);
+    expect(issues.slice(0, 2).map(issue => issue.item)).toEqual(['Visita', 'Visita']);
+    expect(issues.slice(2).every(issue => !Object.prototype.hasOwnProperty.call(issue, 'item'))).toBeTrue();
+  });
+  it('does not mutate frozen inputs, context or shared objects and reports shared references by location', () => {
+    const card = Object.freeze({ nombre: 'Visita', tiposPlan: Object.freeze(['ruta']) });
+    const zones = Object.freeze([card, card]);
+    const day = Object.freeze({ dia: 'Día flexible', zonas: zones });
+    const itinerary = Object.freeze([day, day]);
+    const value = Object.freeze({ secciones: Object.freeze([Object.freeze({ titulo: 'Qué visitar', itinerario: itinerary })]) });
+    const context = Object.freeze({ scope: 'targets' as const, targets: Object.freeze([root]) });
+    const before = JSON.stringify({ value, context });
+    expect(locations(value, context)).toEqual([`${root}[0].zonas[0].descripcion`, `${root}[0].zonas[1].descripcion`,
+      `${root}[1].zonas[0].descripcion`, `${root}[1].zonas[1].descripcion`]);
+    expect(JSON.stringify({ value, context })).toBe(before);
+    expect(value.secciones[0].itinerario).toBe(itinerary);
+    expect(day.zonas).toBe(zones);
+  });
+
+  const badGuide = () => guide([{ dia: '', zonas: [{}, {}] }, { zonas: [] }]);
+  const firstZoneFields = ['nombre', 'descripcion', 'tiposPlan'].map(field => `${zonePath}.${field}`);
+  const firstEntryIssues = [`${entryPath}.dia`, ...firstZoneFields,
+    ...['nombre', 'descripcion', 'tiposPlan'].map(field => `${entryPath}.zonas[1].${field}`)];
+  const allIssues = [...firstEntryIssues, `${root}[1].dia`, `${root}[1].zonas`];
+  const scopes: [string, string[]][] = [
+    ['secciones[0]', allIssues], [root, allIssues], [entryPath, firstEntryIssues],
+    [`${entryPath}.dia`, [`${entryPath}.dia`]],
+    [`${entryPath}.zonas`, firstEntryIssues.slice(1)], [zonePath, firstZoneFields],
+    ...firstZoneFields.map(location => [location, [location]] as [string, string[]]),
+    [`${zonePath}.tiposPlan[0]`, []], [`${zonePath}.maps`, []], [`${zonePath}.web`, []],
+    [`${zonePath}.foto`, []], [`${root}[1]`, [`${root}[1].dia`, `${root}[1].zonas`]]
+  ];
+  for (const [target, expected] of scopes) {
+    it(`activates only controls covered by target ${target}`, () => {
+      expect(locations(badGuide(), targets(target))).toEqual(expected);
+    });
+  }
+  it('validates all recognized locations in explicit guide scope', () => {
+    expect(locations(badGuide(), full)).toEqual(allIssues);
+  });
+  it('does not duplicate issues for overlapping or repeated targets', () => {
+    expect(locations(badGuide(), targets('secciones[0]', root, entryPath, zonePath, firstZoneFields[0], root)))
+      .toEqual(allIssues);
+  });
+  it('does nothing for empty targets or absent or malformed context', () => {
+    for (const context of [targets(), undefined, null, {}, { scope: 'unknown' }]) {
+      expect(validateGuideItineraryStructure(badGuide(), context as FactoryReviewContext)).toEqual([]);
+    }
+  });
+  it('does not promote unreachable child targets to invalid parent checks', () => {
+    expect(locations(guide(null), targets(`${entryPath}.dia`))).toEqual([]);
+    expect(locations(guide([null]), targets(`${entryPath}.dia`))).toEqual([]);
+    expect(locations(guide([{ dia: 'Visita', zonas: null }]), targets(`${zonePath}.nombre`))).toEqual([]);
+    expect(locations(guide([entry(null)]), targets(`${zonePath}.nombre`))).toEqual([]);
+  });
+  it('ignores malformed unrelated branches while reaching the selected field', () => {
+    const value = { secciones: [{ titulo: 'Qué visitar', itinerario: null },
+      { titulo: 'Qué visitar', itinerario: [null, { dia: '', zonas: [{}, null] }] }] };
+    const location = 'secciones[1].itinerario[1].zonas[0].descripcion';
+    expect(locations(value, targets(location))).toEqual([location]);
+  });
 });
 
 describe('validateSpanishMunicipalSectionOrder', () => {
