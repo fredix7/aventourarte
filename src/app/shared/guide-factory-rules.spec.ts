@@ -7,7 +7,8 @@ import {
   validateSpanishMunicipalFestivalCards,
   validateSpanishMunicipalRestaurantEditorialBlocks,
   validateSpanishMunicipalGuideRules,
-  validateGastronomyFoodProfiles
+  validateGastronomyFoodProfiles,
+  validatePublishedInternalLanguage
 } from './guide-factory-rules';
 
 const municipalGuide = () => ({
@@ -743,6 +744,240 @@ describe('validateGastronomyFoodProfiles', () => {
     sections[3] = { titulo: 'Gastronomía', platos: [{}, { perfilAlimentario: null }] };
     const guide = { secciones: sections };
     expect(validateGastronomyFoodProfiles(guide, fullGuide).length).toBe(2);
+    expect(validateSpanishMunicipalGuideRules(guide)).toEqual([]);
+  });
+});
+
+describe('validatePublishedInternalLanguage', () => {
+  const fullGuide: FactoryReviewContext = { scope: 'guide' };
+  const phrase = 'según nuestra investigación';
+  const phrases = [
+    phrase, 'tras nuestra investigación', 'según las fuentes consultadas',
+    'el agente ha determinado', 'Codex ha detectado', 'durante la auditoría de esta guía',
+    'esta guía ha sido generada por ChatGPT'
+  ];
+  const validateText = (descripcion: unknown) => validatePublishedInternalLanguage({ descripcion }, fullGuide);
+  const scopedGuide = () => ({
+    descripcion: phrase,
+    secciones: [
+      { contenido: phrase },
+      { contenido: phrase, lugares: [
+        { nombre: 'Primera ficha', descripcion: phrase, horario: phrase },
+        { nombre: 'Segunda ficha', descripcion: phrase }
+      ] }
+    ]
+  });
+
+  for (const text of phrases) {
+    it(`reports the complete phrase ${text}`, () => {
+      expect(validateText(text)).toEqual([jasmine.objectContaining({
+        severity: 'ERROR', category: 'internal-language', location: 'descripcion',
+        detail: 'El contenido publicado expone lenguaje interno del proceso de creación, investigación o validación.'
+      })]);
+    });
+    it(`normalizes case, decomposed accents and whitespace for ${text}`, () => {
+      const variant = `  ${text.toUpperCase().normalize('NFD').replace(/ /g, '  \n\t')}  `;
+      expect(validateText(variant).length).toBe(1);
+      expect(validateText(text.normalize('NFD').replace(/[\u0300-\u036f]/g, '')).length).toBe(1);
+    });
+    it(`respects word boundaries around ${text}`, () => {
+      for (const textWithAffix of [`x${text}`, `${text}x`, `ñ${text}`, `${text}漢`,
+        `1${text}`, `${text}2`, `_${text}`, `${text}_`]) {
+        expect(validateText(textWithAffix)).toEqual([]);
+      }
+      expect(validateText(`Texto: «${text}».` ).length).toBe(1);
+    });
+  }
+
+  it('reports only one issue for several or repeated patterns in one property', () => {
+    expect(validateText([...phrases, phrase].join('. ')).length).toBe(1);
+  });
+
+  it('reports separate issues for separate properties', () => {
+    expect(validatePublishedInternalLanguage({ descripcion: phrase, contenido: phrases[1] }, fullGuide)
+      .map(issue => issue.location)).toEqual(['descripcion', 'contenido']);
+  });
+
+  it('checks the full guide only with explicit guide scope', () => {
+    expect(validatePublishedInternalLanguage(scopedGuide(), fullGuide).length).toBe(6);
+    expect(validatePublishedInternalLanguage(scopedGuide(), { scope: 'targets', targets: [] })).toEqual([]);
+  });
+
+  it('checks section text and descendants without checking other sections or the root', () => {
+    expect(validatePublishedInternalLanguage(scopedGuide(), {
+      scope: 'targets', targets: ['secciones[1]']
+    }).map(issue => issue.location)).toEqual([
+      'secciones[1].contenido', 'secciones[1].lugares[0].descripcion',
+      'secciones[1].lugares[0].horario', 'secciones[1].lugares[1].descripcion'
+    ]);
+  });
+
+  it('checks only the targeted card and its descendants', () => {
+    expect(validatePublishedInternalLanguage(scopedGuide(), {
+      scope: 'targets', targets: ['secciones[1].lugares[0]']
+    }).map(issue => issue.location)).toEqual([
+      'secciones[1].lugares[0].descripcion', 'secciones[1].lugares[0].horario'
+    ]);
+  });
+
+  it('reaches a deep property target even when its parent is not in scope', () => {
+    expect(validatePublishedInternalLanguage(scopedGuide(), {
+      scope: 'targets', targets: ['secciones[1].lugares[1].descripcion']
+    })).toEqual([jasmine.objectContaining({ location: 'secciones[1].lugares[1].descripcion' })]);
+  });
+
+  it('does not confuse indices 2 and 20', () => {
+    const guide = { secciones: [{ lugares: Array.from({ length: 21 }, () => ({ descripcion: phrase })) }] };
+    for (const index of [2, 20]) {
+      expect(validatePublishedInternalLanguage(guide, {
+        scope: 'targets', targets: [`secciones[0].lugares[${index}].descripcion`]
+      }).map(issue => issue.location)).toEqual([`secciones[0].lugares[${index}].descripcion`]);
+    }
+  });
+
+  it('does not scan a sibling field when the target is technical', () => {
+    const guide = { secciones: [{ lugares: [{ web: phrase, descripcion: phrase }] }] };
+    expect(validatePublishedInternalLanguage(guide, {
+      scope: 'targets', targets: ['secciones[0].lugares[0].web']
+    })).toEqual([]);
+  });
+
+  for (const field of ['nombre', 'titulo', 'descripcion', 'contenido', 'dia', 'horario', 'precio',
+    'precioOrientativo', 'fecha', 'acceso', 'direccion']) {
+    it(`checks published string field ${field}`, () => {
+      expect(validatePublishedInternalLanguage({ [field]: phrase }, fullGuide))
+        .toEqual([jasmine.objectContaining({ location: field })]);
+    });
+  }
+
+  for (const field of ['idioma', 'moneda', 'hora', 'internet', 'electricidad', 'pasaporte', 'visado', 'vacunas']) {
+    it(`checks infoGeneral.${field}`, () => {
+      expect(validatePublishedInternalLanguage({ infoGeneral: { [field]: phrase } }, fullGuide))
+        .toEqual([jasmine.objectContaining({ location: `infoGeneral.${field}` })]);
+    });
+  }
+
+  it('preserves all locations across known nested editorial structures', () => {
+    const guide = { secciones: [null, {}, {
+      contenido: phrase, lugares: [null, { descripcion: phrase }], platos: [{ descripcion: phrase }],
+      subsecciones: [{ lugares: [null, null, null, { horario: phrase }] }],
+      itinerario: [{ dia: phrase, zonas: [null, { descripcion: phrase }] }]
+    }, {}, { lugares: [null, { guiaRelacionada: { nombre: phrase, path: phrase } }] }] };
+    expect(validatePublishedInternalLanguage(guide, fullGuide).map(issue => issue.location)).toEqual([
+      'secciones[2].contenido', 'secciones[2].lugares[1].descripcion',
+      'secciones[2].platos[0].descripcion', 'secciones[2].subsecciones[0].lugares[3].horario',
+      'secciones[2].itinerario[0].dia', 'secciones[2].itinerario[0].zonas[1].descripcion',
+      'secciones[4].lugares[1].guiaRelacionada.nombre'
+    ]);
+  });
+
+  for (const field of ['web', 'reserva', 'maps', 'mapaUrl', 'telefono', 'foto', 'flag', 'flag2',
+    'background', 'path', 'bgPos', 'bgPosMobile', 'bgSize', 'bgSizeMobile', 'flagSize',
+    'flagSizeMobile', 'id', 'otroCampo', 'duracion']) {
+    it(`ignores technical or unlisted string field ${field}`, () => {
+      expect(validatePublishedInternalLanguage({ [field]: phrase }, fullGuide)).toEqual([]);
+    });
+  }
+
+  it('inspects only guiaRelacionada.nombre without traversing its other fields or descendants', () => {
+    const guiaRelacionada = {
+      nombre: 'Guía relacionada normal',
+      descripcion: 'según nuestra investigación',
+      contenido: 'tras nuestra investigación',
+      horario: 'Codex ha detectado',
+      secciones: [{ contenido: 'el agente ha determinado' }],
+      guiaRelacionada: { nombre: 'durante la auditoría de esta guía' }
+    };
+    const guide = { secciones: [{ lugares: [{ guiaRelacionada }] }] };
+    expect(validatePublishedInternalLanguage(guide, fullGuide)).toEqual([]);
+
+    guiaRelacionada.nombre = 'según nuestra investigación';
+    expect(validatePublishedInternalLanguage(guide, fullGuide)).toEqual([
+      jasmine.objectContaining({
+        severity: 'ERROR', category: 'internal-language',
+        location: 'secciones[0].lugares[0].guiaRelacionada.nombre'
+      })
+    ]);
+  });
+
+  it('does not walk strings or objects inside technical and unknown properties', () => {
+    const hidden = { descripcion: phrase, lugares: [{ nombre: phrase }] };
+    expect(validatePublishedInternalLanguage({
+      fotos: [phrase, hidden], tiposPlan: [phrase, hidden], perfilAlimentario: hidden,
+      alergenos: hidden, posiblesAlergenos: [hidden], perfilAlergenos: phrase,
+      otroCampo: hidden, infoGeneral: { otroCampo: hidden, descripcion: phrase }
+    }, fullGuide)).toEqual([]);
+  });
+
+  const validTexts = [
+    'Los horarios pueden variar según la temporada.',
+    'Conviene confirmar los horarios antes de la visita.', 'Reserva pendiente de confirmación.',
+    'Una fuente de hierro fundido.', 'El dinero generado por el estrecho...',
+    'Acceso libre todo el día.', 'Según actividades o aperturas específicas.',
+    'Revisión de seguridad.', 'Modelo arquitectónico.', 'Fuente documental histórica.',
+    'ChatGPT', 'QA', 'prompt', 'Codex', 'IA', 'audit', 'auditoría', 'TODO', 'FIXME',
+    'no se ha podido verificar', 'pendiente de comprobar', 'hemos verificado',
+    'requiere revisión', 'nivel de confianza'
+  ];
+  for (const text of validTexts) {
+    it(`does not flag contextual or out-of-scope pattern ${text}`, () => {
+      expect(validateText(text)).toEqual([]);
+    });
+  }
+
+  it('does not flag normal titles, names or other strings', () => {
+    expect(validatePublishedInternalLanguage({ nombre: 'Destino', secciones: [{
+      titulo: 'Historia', contenido: 'Historia local.', lugares: [{ nombre: 'Fuente monumental', precio: 'Gratis' }]
+    }] }, fullGuide)).toEqual([]);
+  });
+
+  it('ignores non-string text fields without making them required', () => {
+    for (const value of [undefined, null, 1, false, [], {}, { descripcion: phrase }]) {
+      expect(validatePublishedInternalLanguage({ descripcion: value, infoGeneral: { internet: value } }, fullGuide))
+        .toEqual([]);
+    }
+  });
+
+  it('ignores malformed guides, collections and records without throwing', () => {
+    for (const guide of [null, undefined, [], 1, 'Guía', {}, { infoGeneral: [] },
+      { secciones: {} }, { secciones: [null, undefined, [], 1, false, phrase] },
+      { secciones: [{ lugares: {}, platos: null, subsecciones: phrase, itinerario: false,
+        zonas: 1, guiaRelacionada: [] }] }]) {
+      expect(() => validatePublishedInternalLanguage(guide, fullGuide)).not.toThrow();
+      expect(validatePublishedInternalLanguage(guide, fullGuide)).toEqual([]);
+    }
+  });
+
+  it('does not mutate frozen text, guides, arrays or contexts', () => {
+    const guide = Object.freeze({ descripcion: phrase, secciones: Object.freeze([
+      Object.freeze({ lugares: Object.freeze([Object.freeze({ descripcion: phrase })]) })
+    ]) });
+    const context: FactoryReviewContext = Object.freeze({ scope: 'targets',
+      targets: Object.freeze(['descripcion', 'secciones[0].lugares[0].descripcion']) });
+    const before = JSON.stringify({ guide, context });
+    expect(validatePublishedInternalLanguage(guide, context).length).toBe(2);
+    expect(JSON.stringify({ guide, context })).toBe(before);
+  });
+
+  it('uses only the name of the current object as item', () => {
+    const issues = validatePublishedInternalLanguage({ nombre: 'Guía', contenido: phrase, secciones: [{
+      contenido: phrase, lugares: [{ nombre: 'Ficha', descripcion: phrase }, { nombre: 1, descripcion: phrase }]
+    }] }, fullGuide);
+    expect(issues.map(issue => issue.item)).toEqual(['Guía', undefined, 'Ficha', undefined]);
+  });
+
+  it('handles cycles without suppressing shared objects at different locations', () => {
+    const shared: Record<string, unknown> = { descripcion: phrase };
+    shared['guiaRelacionada'] = shared;
+    expect(validatePublishedInternalLanguage({ secciones: [{ lugares: [shared, shared] }] }, fullGuide)
+      .map(issue => issue.location)).toEqual([
+        'secciones[0].lugares[0].descripcion', 'secciones[0].lugares[1].descripcion'
+      ]);
+  });
+
+  it('keeps the municipal combined validator independent and without implicit scope', () => {
+    const guide = { ...municipalGuide(), descripcion: phrase };
+    expect(validatePublishedInternalLanguage(guide, fullGuide).length).toBe(1);
     expect(validateSpanishMunicipalGuideRules(guide)).toEqual([]);
   });
 });

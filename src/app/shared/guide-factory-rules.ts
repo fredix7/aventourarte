@@ -262,7 +262,9 @@ export function validateGastronomyFoodProfiles(
       const present = Object.prototype.hasOwnProperty.call(dish, 'perfilAlimentario');
       if (present && hasValidFoodProfileStructure(dish['perfilAlimentario'])) return;
       issues.push({
-        severity: 'ERROR', category: 'gastronomy', location: `${location}.perfilAlimentario`,
+        severity: 'ERROR',
+        category: 'gastronomy',
+        location: `${location}.perfilAlimentario`,
         ...(typeof dish['nombre'] === 'string' ? { item: dish['nombre'] } : {}),
         detail: present
           ? 'El perfilAlimentario no respeta la estructura mínima del modelo vigente.'
@@ -270,6 +272,77 @@ export function validateGastronomyFoodProfiles(
       });
     });
   });
+  return issues;
+}
+
+function normalizePublishedText(text: string): string {
+  return text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+const INTERNAL_LANGUAGE_PATTERNS = [
+  'según nuestra investigación',
+  'tras nuestra investigación',
+  'según las fuentes consultadas',
+  'el agente ha determinado',
+  'Codex ha detectado',
+  'durante la auditoría de esta guía',
+  'esta guía ha sido generada por ChatGPT'
+].map(phrase => new RegExp(
+  `(?:^|[^\\p{L}\\p{N}_])${normalizePublishedText(phrase)}(?=$|[^\\p{L}\\p{N}_])`, 'u'
+));
+const PUBLISHED_TEXT_FIELDS = [
+  'nombre', 'titulo', 'descripcion', 'contenido', 'dia', 'horario', 'precio',
+  'precioOrientativo', 'fecha', 'acceso', 'direccion'
+] as const;
+const PUBLISHED_GENERAL_INFO_FIELDS = [
+  'idioma', 'moneda', 'hora', 'internet', 'electricidad', 'pasaporte', 'visado', 'vacunas'
+] as const;
+const EDITORIAL_COLLECTIONS = [
+  'secciones', 'lugares', 'platos', 'subsecciones', 'itinerario', 'zonas'
+] as const;
+
+/** Examina solo campos publicados conocidos, con alcance explícito por propiedad. */
+export function validatePublishedInternalLanguage(
+  guide: unknown,
+  context: FactoryReviewContext
+): FactoryQaIssue[] {
+  const issues: FactoryQaIssue[] = [];
+  const ancestors = new WeakSet<object>();
+  const childLocation = (parent: string, field: string) => parent ? `${parent}.${field}` : field;
+  const inspectText = (object: Record<string, unknown>, location: string, fields: readonly string[]) => {
+    for (const field of fields) {
+      const value = object[field];
+      const propertyLocation = childLocation(location, field);
+      if (typeof value !== 'string' || !isFactoryLocationInScope(context, propertyLocation)) continue;
+      const normalized = normalizePublishedText(value);
+      if (!INTERNAL_LANGUAGE_PATTERNS.some(pattern => pattern.test(normalized))) continue;
+      issues.push({
+        severity: 'ERROR', category: 'internal-language', location: propertyLocation,
+        ...(typeof object['nombre'] === 'string' ? { item: object['nombre'] } : {}),
+        detail: 'El contenido publicado expone lenguaje interno del proceso de creación, investigación o validación.'
+      });
+    }
+  };
+  const visit = (object: unknown, location: string): void => {
+    if (!isRecord(object) || ancestors.has(object)) return;
+    ancestors.add(object);
+    inspectText(object, location, PUBLISHED_TEXT_FIELDS);
+    if (isRecord(object['infoGeneral'])) {
+      inspectText(object['infoGeneral'], childLocation(location, 'infoGeneral'), PUBLISHED_GENERAL_INFO_FIELDS);
+    }
+    for (const collection of EDITORIAL_COLLECTIONS) {
+      const values = object[collection];
+      if (!Array.isArray(values)) continue;
+      values.forEach((value: unknown, index: number) =>
+        visit(value, `${childLocation(location, collection)}[${index}]`)
+      );
+    }
+    if (isRecord(object['guiaRelacionada'])) {
+      inspectText(object['guiaRelacionada'], childLocation(location, 'guiaRelacionada'), ['nombre']);
+    }
+    ancestors.delete(object);
+  };
+  visit(guide, '');
   return issues;
 }
 
