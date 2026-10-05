@@ -1,11 +1,13 @@
 import { buildFactoryQaResult } from './guide-factory-qa';
+import type { FactoryReviewContext } from './guide-factory-context';
 import {
   validateSpanishMunicipalSectionOrder,
   validateSpanishMunicipalForbiddenImages,
   validateSpanishMunicipalVisitCards,
   validateSpanishMunicipalFestivalCards,
   validateSpanishMunicipalRestaurantEditorialBlocks,
-  validateSpanishMunicipalGuideRules
+  validateSpanishMunicipalGuideRules,
+  validateGastronomyFoodProfiles
 } from './guide-factory-rules';
 
 const municipalGuide = () => ({
@@ -505,6 +507,243 @@ describe('validateSpanishMunicipalRestaurantEditorialBlocks', () => {
       titulo: 'Dónde comer en Rota', contenido: invalid, lugares: [{ nombre: invalid, contenido: invalid }],
       subsecciones: [{ lugares: [{ descripcion: invalid }] }], platos: [{ descripcion: invalid }]
     }] })).toEqual([]);
+  });
+});
+
+describe('validateGastronomyFoodProfiles', () => {
+  const fullGuide: FactoryReviewContext = { scope: 'guide' };
+  const profile = () => ({
+    dieta: { certeza: 'confirmado', compatibilidad: 'vegano' },
+    alcohol: 'no-contiene', cerdo: 'no-contiene'
+  });
+  const guideWithDishes = (platos: unknown[], titulo = 'Gastronomía') => ({
+    secciones: [{ titulo: 'Historia' }, { titulo, platos }]
+  });
+  const validateProfile = (perfilAlimentario: unknown) => validateGastronomyFoodProfiles(
+    guideWithDishes([{ nombre: 'Plato', perfilAlimentario }]), fullGuide
+  );
+  const expectInvalid = (value: unknown) => {
+    expect(validateProfile(value)).toEqual([jasmine.objectContaining({
+      severity: 'ERROR', category: 'gastronomy', item: 'Plato',
+      location: 'secciones[1].platos[0].perfilAlimentario',
+      detail: jasmine.stringMatching('estructura')
+    })]);
+  };
+
+  it('checks every gastronomic dish for a full guide and keeps real section indices', () => {
+    const guide = { secciones: [
+      { titulo: 'Historia' }, { titulo: 'Gastronomía', platos: [{}, {}] },
+      { titulo: 'Gastronomía de Copenhague', platos: [{}] }
+    ] };
+    expect(validateGastronomyFoodProfiles(guide, fullGuide).map(issue => issue.location)).toEqual([
+      'secciones[1].platos[0].perfilAlimentario', 'secciones[1].platos[1].perfilAlimentario',
+      'secciones[2].platos[0].perfilAlimentario'
+    ]);
+  });
+
+  for (const target of ['secciones[1]', 'secciones[1].platos']) {
+    it(`checks all direct dishes under ${target}`, () => {
+      expect(validateGastronomyFoodProfiles(guideWithDishes([{}, {}]), {
+        scope: 'targets', targets: [target]
+      }).length).toBe(2);
+    });
+  }
+
+  it('checks only the targeted dish and leaves missing sibling profiles untouched', () => {
+    expect(validateGastronomyFoodProfiles(guideWithDishes([{}, {}, {}]), {
+      scope: 'targets', targets: ['secciones[1].platos[1]']
+    })).toEqual([jasmine.objectContaining({ location: 'secciones[1].platos[1].perfilAlimentario' })]);
+  });
+
+  for (const target of ['secciones[0]', 'secciones[1].lugares[0]',
+    'secciones[1].platos[0].descripcion', 'secciones[1].platos[0].perfilAlimentario']) {
+    it(`does not promote unrelated or child target ${target} to a dish`, () => {
+      expect(validateGastronomyFoodProfiles(guideWithDishes([{}]), {
+        scope: 'targets', targets: [target]
+      })).toEqual([]);
+    });
+  }
+
+  it('does not confuse indices 2 and 20 in either direction', () => {
+    const guide = guideWithDishes(Array.from({ length: 21 }, () => ({})));
+    for (const index of [2, 20]) {
+      expect(validateGastronomyFoodProfiles(guide, {
+        scope: 'targets', targets: [`secciones[1].platos[${index}]`]
+      }).map(issue => issue.location)).toEqual([`secciones[1].platos[${index}].perfilAlimentario`]);
+    }
+  });
+
+  it('does not validate invalid profiles outside scope', () => {
+    expect(validateGastronomyFoodProfiles(guideWithDishes([{ perfilAlimentario: null }, {}]), {
+      scope: 'targets', targets: ['secciones[0]']
+    })).toEqual([]);
+  });
+
+  it('reports one absence error with the dish name and profile location', () => {
+    expect(validateGastronomyFoodProfiles(guideWithDishes([{ nombre: 'Plato' }]), fullGuide))
+      .toEqual([jasmine.objectContaining({
+        severity: 'ERROR', category: 'gastronomy', item: 'Plato',
+        location: 'secciones[1].platos[0].perfilAlimentario',
+        detail: jasmine.stringMatching('declarar')
+      })]);
+  });
+
+  it('does not accept an inherited profile as an explicit declaration', () => {
+    const dish = Object.assign(Object.create({ perfilAlimentario: profile() }), { nombre: 'Plato' });
+    expect(validateGastronomyFoodProfiles(guideWithDishes([dish]), fullGuide))
+      .toEqual([jasmine.objectContaining({ detail: jasmine.stringMatching('declarar') })]);
+  });
+
+  [null, undefined, 'perfil', 7, false, [], {}].forEach((value, index) => {
+    it(`reports one structural error for malformed profile ${index + 1}`, () => expectInvalid(value));
+  });
+
+  for (const field of ['dieta', 'alcohol', 'cerdo']) {
+    it(`requires own ${field} in the profile`, () => {
+      const value: Record<string, unknown> = profile();
+      const inherited = value[field];
+      delete value[field];
+      expectInvalid(value);
+      expectInvalid(Object.assign(Object.create({ [field]: inherited }), value));
+    });
+  }
+
+  it('reports only one structural error for multiple internal defects', () => {
+    expectInvalid({ dieta: { certeza: 'inventado' }, alcohol: false, cerdo: [] });
+  });
+
+  for (const compatibilidad of ['vegetariano', 'vegano', 'pescetariano', 'ninguno']) {
+    it(`accepts confirmed ${compatibilidad}`, () => {
+      expect(validateProfile({ ...profile(), dieta: { certeza: 'confirmado', compatibilidad } })).toEqual([]);
+    });
+  }
+
+  it('requires own compatibility for a confirmed diet', () => {
+    expectInvalid({ ...profile(), dieta: { certeza: 'confirmado' } });
+    expectInvalid({ ...profile(), dieta: Object.assign(Object.create({ compatibilidad: 'vegano' }), {
+      certeza: 'confirmado'
+    }) });
+  });
+
+  for (const compatibilidad of ['inventado', 'Vegano', '', null, undefined, 1, []]) {
+    it(`rejects confirmed compatibility ${String(compatibilidad)}`, () => {
+      expectInvalid({ ...profile(), dieta: { certeza: 'confirmado', compatibilidad } });
+    });
+  }
+
+  for (const certeza of ['variable', 'desconocido']) {
+    it(`accepts ${certeza} without compatibility`, () => {
+      expect(validateProfile({ ...profile(), dieta: { certeza } })).toEqual([]);
+    });
+    it(`does not reject additional compatibility for ${certeza}`, () => {
+      expect(validateProfile({ ...profile(), dieta: { certeza, compatibilidad: 'otra información' } }))
+        .toEqual([]);
+    });
+  }
+
+  for (const dieta of [null, undefined, 'vegano', 1, false, [], {},
+    { certeza: 'inventado' }, { certeza: 'Confirmado' }, { certeza: null },
+    Object.create({ certeza: 'variable' })]) {
+    it(`rejects malformed diet ${JSON.stringify(dieta)}`, () => expectInvalid({ ...profile(), dieta }));
+  }
+
+  for (const field of ['alcohol', 'cerdo']) {
+    for (const state of ['contiene', 'puede-contener', 'no-contiene', 'desconocido']) {
+      it(`accepts ${field} state ${state}`, () => {
+        expect(validateProfile({ ...profile(), [field]: state })).toEqual([]);
+      });
+    }
+    for (const state of ['inventado', 'Contiene', 'contains', null, undefined, true, 1, []]) {
+      it(`rejects ${field} state ${String(state)}`, () => expectInvalid({ ...profile(), [field]: state }));
+    }
+  }
+
+  for (const title of ['Gastronomía', 'Gastronomía de Copenhague', 'Gastronomía de Malmö',
+    '  GASTRONOMIA  DE   Destino  ', '  gAstrOnOmÍa  ']) {
+    it(`recognizes structural title ${title}`, () => {
+      expect(validateGastronomyFoodProfiles(guideWithDishes([{}], title), fullGuide).length).toBe(1);
+    });
+  }
+
+  for (const title of ['Gastronomía local', 'Gastronomía de', 'Gastronomía en Rota',
+    'Nuestra Gastronomía', 'Gastronomías', 'Qué visitar', 'Dónde comer', 'Gastronomia del destino']) {
+    it(`ignores nonmatching title ${title}`, () => {
+      expect(validateGastronomyFoodProfiles(guideWithDishes([{}], title), fullGuide)).toEqual([]);
+    });
+  }
+
+  it('tolerates absent sections and malformed guides or sections', () => {
+    for (const guide of [null, undefined, [], {}, { secciones: null }, { secciones: {} },
+      { secciones: [] }, { secciones: [null, undefined, 1, [], {}, { titulo: 1, platos: [{}] }] }]) {
+      expect(validateGastronomyFoodProfiles(guide, fullGuide)).toEqual([]);
+    }
+  });
+
+  it('ignores missing or invalid platos', () => {
+    for (const platos of [null, undefined, {}, 1, false, 'Platos']) {
+      expect(validateGastronomyFoodProfiles({ secciones: [{ titulo: 'Gastronomía', platos }] }, fullGuide))
+        .toEqual([]);
+    }
+    expect(validateGastronomyFoodProfiles({ secciones: [{ titulo: 'Gastronomía' }] }, fullGuide)).toEqual([]);
+  });
+
+  it('ignores malformed dishes without throwing and retains later indices', () => {
+    const guide = guideWithDishes([null, undefined, 'Plato', 1, false, [], {}]);
+    expect(() => validateGastronomyFoodProfiles(guide, fullGuide)).not.toThrow();
+    expect(validateGastronomyFoodProfiles(guide, fullGuide)).toEqual([
+      jasmine.objectContaining({ location: 'secciones[1].platos[6].perfilAlimentario' })
+    ]);
+  });
+
+  it('does not inspect lugares, subsecciones or itineraries', () => {
+    expect(validateGastronomyFoodProfiles({ secciones: [{
+      titulo: 'Gastronomía', platos: [{ perfilAlimentario: profile() }], lugares: [{}],
+      subsecciones: [{ titulo: 'Gastronomía', platos: [{}] }], itinerarios: [{}]
+    }, { titulo: 'Otra sección', platos: [{}] }] }, fullGuide)).toEqual([]);
+  });
+
+  it('allows additional properties in the profile and diet', () => {
+    expect(validateProfile({ ...profile(), extra: null,
+      dieta: { certeza: 'confirmado', compatibilidad: 'vegano', extra: [] }
+    })).toEqual([]);
+  });
+
+  it('does not mutate frozen guides, profiles, contexts or arrays', () => {
+    const guide = Object.freeze({ secciones: Object.freeze([
+      Object.freeze({ titulo: 'Gastronomía', platos: Object.freeze([
+        Object.freeze({ nombre: 'Sin perfil' }), Object.freeze({ perfilAlimentario: Object.freeze({
+          ...profile(), dieta: Object.freeze(profile().dieta)
+        }) }), Object.freeze({ perfilAlimentario: Object.freeze({ dieta: null }) })
+      ]) })
+    ]) });
+    const context: FactoryReviewContext = Object.freeze({
+      scope: 'targets', targets: Object.freeze(['secciones[0]'])
+    });
+    const before = JSON.stringify({ guide, context });
+    expect(validateGastronomyFoodProfiles(guide, context).length).toBe(2);
+    expect(JSON.stringify({ guide, context })).toBe(before);
+  });
+
+  it('omits item when nombre is not a string', () => {
+    for (const dish of [{}, { nombre: 1 }, { nombre: null }]) {
+      expect(validateGastronomyFoodProfiles(guideWithDishes([dish]), fullGuide)[0].item).toBeUndefined();
+    }
+  });
+
+  it('does not validate allergens or require their catalog resolution', () => {
+    expect(validateGastronomyFoodProfiles(guideWithDishes([{
+      nombre: 'Plato sintético sin catálogo', perfilAlimentario: profile(),
+      alergenos: 'inválido', posiblesAlergenos: 1, perfilAlergenos: 'inventado',
+      contains: null, possible: false, status: 'inventado'
+    }]), fullGuide)).toEqual([]);
+  });
+
+  it('keeps the municipal combined validator unchanged and without implicit review scope', () => {
+    const sections: unknown[] = [...municipalGuide().secciones];
+    sections[3] = { titulo: 'Gastronomía', platos: [{}, { perfilAlimentario: null }] };
+    const guide = { secciones: sections };
+    expect(validateGastronomyFoodProfiles(guide, fullGuide).length).toBe(2);
+    expect(validateSpanishMunicipalGuideRules(guide)).toEqual([]);
   });
 });
 

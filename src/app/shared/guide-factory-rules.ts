@@ -1,4 +1,8 @@
 import type { FactoryQaIssue } from './guide-factory-qa';
+import type { FactoryReviewContext } from './guide-factory-context';
+import { isFactoryLocationInScope } from './guide-factory-context';
+import { DIETARY_PREFERENCES } from './gastronomy-preferences';
+import type { AlcoholProfile, PorkProfile } from './gastronomy-preferences';
 import { PLAN_TYPES } from './plan-types';
 
 const SECTION_ORDER = [
@@ -209,6 +213,61 @@ export function validateSpanishMunicipalRestaurantEditorialBlocks(guide: unknown
           detail: 'La descripción contiene marcadores editoriales oficiales duplicados.'
         });
       }
+    });
+  });
+  return issues;
+}
+
+const VALID_DIET_COMPATIBILITIES = new Set<string>([
+  ...DIETARY_PREFERENCES.map(preference => preference.id), 'ninguno'
+]);
+const FOOD_INGREDIENT_STATES: readonly (AlcoholProfile | PorkProfile)[] = [
+  'contiene', 'puede-contener', 'no-contiene', 'desconocido'
+];
+const VALID_FOOD_INGREDIENT_STATES = new Set<string>(FOOD_INGREDIENT_STATES);
+
+function hasValidFoodProfileStructure(profile: unknown): boolean {
+  if (!isRecord(profile)
+    || !['dieta', 'alcohol', 'cerdo'].every(key => Object.prototype.hasOwnProperty.call(profile, key))) {
+    return false;
+  }
+  const diet = profile['dieta'];
+  if (!isRecord(diet) || !Object.prototype.hasOwnProperty.call(diet, 'certeza')) return false;
+  if (diet['certeza'] === 'confirmado') {
+    if (!Object.prototype.hasOwnProperty.call(diet, 'compatibilidad')
+      || typeof diet['compatibilidad'] !== 'string'
+      || !VALID_DIET_COMPATIBILITIES.has(diet['compatibilidad'])) return false;
+  } else if (diet['certeza'] !== 'variable' && diet['certeza'] !== 'desconocido') {
+    return false;
+  }
+  return ['alcohol', 'cerdo'].every(key =>
+    typeof profile[key] === 'string' && VALID_FOOD_INGREDIENT_STATES.has(profile[key])
+  );
+}
+
+/** Valida solo perfiles de platos directos incluidos explícitamente en la revisión. */
+export function validateGastronomyFoodProfiles(
+  guide: unknown,
+  context: FactoryReviewContext
+): FactoryQaIssue[] {
+  const issues: FactoryQaIssue[] = [];
+  (sectionsOf(guide) ?? []).forEach((section, sectionIndex) => {
+    if (!/^gastronomia(?: de .+)?$/.test(sectionTitle(section))
+      || !isRecord(section) || !Array.isArray(section['platos'])) return;
+
+    section['platos'].forEach((dish: unknown, dishIndex: number) => {
+      if (!isRecord(dish)) return;
+      const location = `secciones[${sectionIndex}].platos[${dishIndex}]`;
+      if (!isFactoryLocationInScope(context, location)) return;
+      const present = Object.prototype.hasOwnProperty.call(dish, 'perfilAlimentario');
+      if (present && hasValidFoodProfileStructure(dish['perfilAlimentario'])) return;
+      issues.push({
+        severity: 'ERROR', category: 'gastronomy', location: `${location}.perfilAlimentario`,
+        ...(typeof dish['nombre'] === 'string' ? { item: dish['nombre'] } : {}),
+        detail: present
+          ? 'El perfilAlimentario no respeta la estructura mínima del modelo vigente.'
+          : 'La ficha gastronómica en revisión debe declarar perfilAlimentario.'
+      });
     });
   });
   return issues;
