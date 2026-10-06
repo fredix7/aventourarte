@@ -11,7 +11,7 @@ const tempRoot = realpathSync.native(tmpdir());
 const prefix = 'factory-fix-phase1-build-';
 const resolutionFlags = ['--preserve-symlinks', '--preserve-symlinks-main'];
 
-test('Factory Fix Phase 1: typecheck, compile and complete static identity suite', { timeout: 90000 }, t => {
+test('Factory Fix Phases 1 + 2: typecheck, compile and complete read-only suites', { timeout: 180000 }, t => {
   const outDir = mkdtempSync(path.join(tempRoot, prefix));
   try {
     const compiler = path.join(projectRoot, 'node_modules/typescript/bin/tsc');
@@ -25,8 +25,8 @@ test('Factory Fix Phase 1: typecheck, compile and complete static identity suite
       assert.equal(compile.status, 0, compile.stdout + compile.stderr);
     }
     const suite = spawnSync(process.execPath, [...resolutionFlags, '--test',
-      'scripts/factory-fix/source-identity.cases.mjs'], {
-      cwd: projectRoot, encoding: 'utf8', timeout: 30000, shell: false,
+      'scripts/factory-fix/source-identity.cases.mjs', 'scripts/factory-fix/snapshot.cases.mjs'], {
+      cwd: projectRoot, encoding: 'utf8', timeout: 120000, shell: false,
       env: {
         NODE_DISABLE_COMPILE_CACHE: '1', NODE_PATH: path.join(projectRoot, 'node_modules'),
         FACTORY_FIX_OUT_DIR: outDir, TEMP: tempRoot, TMP: tempRoot

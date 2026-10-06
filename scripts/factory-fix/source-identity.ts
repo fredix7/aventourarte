@@ -14,6 +14,10 @@ import {
 export { SourceIdentityError } from './errors';
 export type { SourceIdentity, CatalogSourceBinding, SourceIdentityRequest } from './contracts';
 
+// Runtime provenance, not a brand that an external shape validator can confer.
+const resolvedRoots = new WeakMap<SourceIdentity, string>();
+export const MAX_GUIDE_SOURCE_BYTES = 8 * 1024 * 1024;
+
 function errorCode(error: unknown): unknown {
   return typeof error === 'object' && error !== null ? Reflect.get(error, 'code') : undefined;
 }
@@ -64,7 +68,8 @@ function readContainedFile(root: string, relativePath: string, missing: SourceId
 }
 
 function decode(bytes: Buffer, code: SourceIdentityErrorCode): string {
-  try { return new TextDecoder('utf-8', { fatal: true }).decode(bytes); }
+  // Preserve BOM in decoded text so source spans remain offsets into the original text.
+  try { return new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes); }
   catch { fail(code); }
 }
 
@@ -76,8 +81,9 @@ function isExported(statement: ts.VariableStatement): boolean {
   return statement.modifiers?.some(modifier => modifier.kind === ts.SyntaxKind.ExportKeyword) === true;
 }
 
-function exportedPath(bytes: Buffer, exportName: string): string {
-  const source = parseTypeScript(decode(bytes, 'SOURCE_UNSUPPORTED'), 'guide.ts', 'SOURCE_UNSUPPORTED');
+function guideExport(source: ts.SourceFile, exportName: string): {
+  root: ts.ObjectLiteralExpression; guidePath: string;
+} {
   const matching = source.statements.filter(ts.isVariableStatement).flatMap(statement =>
     isExported(statement) ? statement.declarationList.declarations.filter(declaration =>
       ts.isIdentifier(declaration.name) && declaration.name.text === exportName
@@ -109,7 +115,7 @@ function exportedPath(bytes: Buffer, exportName: string): string {
   }
   if (guidePath === undefined) fail('PATH_NOT_STATIC');
   // Other property initializers remain opaque AST: no data conversion or execution in Phase 1.
-  return guidePath;
+  return { root: declaration.initializer, guidePath };
 }
 
 export function listFactoryGuideSourceIdentities(input: { readonly repoRoot: string }): readonly SourceIdentity[] {
@@ -124,7 +130,8 @@ export function listFactoryGuideSourceIdentities(input: { readonly repoRoot: str
   const identities = assignments.map((assignment): SourceIdentity => {
     const sourcePath = sourcePathFromModuleSpecifier(assignment.moduleSpecifier);
     const bytes = readContainedFile(root, sourcePath, 'SOURCE_NOT_FOUND');
-    const guidePath = exportedPath(bytes, assignment.importedSymbol);
+    const source = parseTypeScript(decode(bytes, 'SOURCE_UNSUPPORTED'), 'guide.ts', 'SOURCE_UNSUPPORTED');
+    const { guidePath } = guideExport(source, assignment.importedSymbol);
     if (seen.has(guidePath)) fail('DUPLICATE_GUIDE_PATH');
     seen.add(guidePath);
     const identity: SourceIdentity = {
@@ -136,7 +143,9 @@ export function listFactoryGuideSourceIdentities(input: { readonly repoRoot: str
       })
     };
     assertSourceIdentity(identity);
-    return Object.freeze(identity);
+    Object.freeze(identity);
+    resolvedRoots.set(identity, root);
+    return identity;
   });
   return Object.freeze(identities);
 }
@@ -149,4 +158,26 @@ export function resolveFactoryGuideSourceIdentity(input: SourceIdentityRequest):
   const identity = identities.find(entry => entry.guidePath === input.guidePath);
   if (!identity) fail('GUIDE_NOT_FOUND');
   return identity;
+}
+
+// Shared internal bridge: only identities emitted by Phase 1 can select a source.
+// Read/hash/parse the target once here; no silent refresh of an old identity.
+export function readResolvedGuideSource(input: {
+  readonly repoRoot: string; readonly sourceIdentity: SourceIdentity;
+}): { sourceFile: ts.SourceFile; root: ts.ObjectLiteralExpression; bytes: Buffer } {
+  if (!hasExactKeys(input, ['repoRoot', 'sourceIdentity'])) fail('INVALID_INPUT');
+  assertSourceIdentity(input.sourceIdentity);
+  const root = canonicalRoot(input.repoRoot);
+  if (resolvedRoots.get(input.sourceIdentity) !== root) fail('INVALID_INPUT');
+  const identity = input.sourceIdentity;
+  const bytes = readContainedFile(root, identity.sourcePath, 'SOURCE_NOT_FOUND');
+  if (sha256(bytes) !== identity.sourceHash) fail('SOURCE_STALE');
+  if (sha256(readContainedFile(root, FACTORY_CATALOG_PATH, 'CATALOG_NOT_FOUND'))
+    !== identity.catalogBinding.catalogHash) fail('SOURCE_STALE');
+  if (bytes.length > MAX_GUIDE_SOURCE_BYTES) fail('SNAPSHOT_LIMIT_EXCEEDED');
+  const sourceFile = parseTypeScript(decode(bytes, 'GUIDE_ROOT_UNSUPPORTED'), identity.sourcePath,
+    'GUIDE_ROOT_UNSUPPORTED');
+  const exported = guideExport(sourceFile, identity.exportName);
+  if (exported.guidePath !== identity.guidePath) fail('PATH_MISMATCH');
+  return { sourceFile, root: exported.root, bytes };
 }
