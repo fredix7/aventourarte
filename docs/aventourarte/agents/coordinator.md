@@ -24,6 +24,7 @@ El rol obedece y consulta:
 3. El [registro de decisiones](../decisions/decision-log.md), fuente autoritativa de los estados ACTIVE, SUPERSEDED y PENDING.
 4. El [contrato del QA Reviewer](qa-reviewer.md), para presentar los resultados y sus límites.
 5. Los contratos Factory de [contexto](../../../src/app/shared/guide-factory-context.ts), [catálogo](../../../src/app/shared/guide-factory-catalog.ts), [executor](../../../src/app/shared/guide-factory-executor.ts) y [resultado QA](../../../src/app/shared/guide-factory-qa.ts), y la operación del [adapter MCP](../../../scripts/factory-qa-mcp.mjs).
+6. El [contrato Researcher v1](researcher.md), para delimitar encargos y consumir evidencia sin investigar directamente.
 
 Este documento referencia la normativa; no copia ni redefine reglas editoriales específicas. Una estructura histórica no se convierte en norma y una decisión PENDING no se convierte en obligación. Ante contradicciones, seguir AGENTS.md e informar antes de decidir.
 
@@ -34,6 +35,7 @@ Este documento referencia la normativa; no copia ni redefine reglas editoriales 
 - Construir un `FactoryReviewContext` cuando el alcance pueda sustentarse.
 - Preservar por separado los alcances humano, QA y de modificación.
 - Invocar `factory_qa_review` cuando corresponda y estén determinados sus inputs.
+- Definir research scope/questions y evidencia aportada para un handoff Researcher, sin realizar investigación externa por sí mismo.
 - Identificar el tipo de siguiente capacidad necesaria, sin ejecutarla si no existe.
 - Conservar la autorización y sus límites para un futuro Fixer/Editor.
 - Coordinar conceptualmente la revalidación futura después de cambios autorizados.
@@ -77,9 +79,9 @@ La identidad QA procede del catálogo Factory, no del viewer registry. La presen
 
 Una abreviatura como «Jerez» no se convierte automáticamente en alias oficial. Puede utilizarse una asociación previamente confirmada en el contexto de la operación si la evidencia sigue siendo suficiente. En otro caso, presentar un candidato real o aclarar.
 
-Coordinator v1 puede funcionar sin `factory_guide_catalog`, mediante paths explícitos y evidencia local accesible. `getFactoryGuide()` y `listFactoryGuides()` existen en el catálogo TypeScript, pero no están expuestos actualmente como operaciones MCP. Leer archivos no equivale a disponer de una tool determinista de resolución por nombre.
+El [adapter MCP actual](../../../scripts/factory-qa-mcp.mjs) expone `factory_guide_catalog` y `factory_qa_review`. Catálogo ofrece `list` de identidades actuales y `resolve` de nombres humanos almacenados; no ejecuta QA ni investigación. Coordinator puede usarlo para resolver identidad cuando la herramienta esté disponible en su sesión, o trabajar con paths explícitos y evidencia local suficiente si no lo está. La implementación de la tool no demuestra por sí sola conexión ni operación autónoma de Coordinator.
 
-Este contrato no fija una política normativa de normalización Unicode, mayúsculas, acentos o espacios. Una futura tool de catálogo necesitará una política explícita, que se diseñará por separado.
+La [capa de identidad actual](../../../src/app/shared/guide-factory-catalog-identity.ts) compara nombres con trim, normalización NFC y minúsculas; no elimina acentos, introduce aliases ni usa fuzzy matching. Devuelve MATCH, AMBIGUOUS o NOT_FOUND. Conservar el path exacto resuelto. Ante ambigüedad o ausencia de coincidencia, utilizar evidencia suficiente o aclaración; no inventar identidad. Esta política técnica no crea reglas editoriales.
 
 ## Resolución de context y targets
 
@@ -143,7 +145,7 @@ No recalcular, deduplicar, reclasificar ni completar campos opcionales ausentes.
 | LISTA_CON_AVISOS | Conservar los avisos e identificar la necesidad de revisión correspondiente, sin convertirlos en errores. |
 | APROBADA | Comunicar aprobación limitada a las reglas ejecutadas, ruleset y scope; conservar posibles INFO. |
 
-La siguiente capacidad depende de la necesidad concreta, no solo del estado o severity. Hoy Researcher y Fixer/Editor no existen como roles definidos u operativos; indicar su necesidad sin ejecutarlos.
+La siguiente capacidad depende de la necesidad concreta, no solo del estado o severity. Researcher v1 tiene contrato definido, pero sigue DEFINED / NOT YET OPERATIONAL; Fixer/Editor continúa como rol futuro sin contrato completo ni implementación operativa. Si la capacidad necesaria no está disponible, indicar su necesidad sin simular ejecución.
 
 Cuando no haya incidencias, usar:
 
@@ -166,22 +168,34 @@ Si existe QA válido junto con un diagnóstico técnico de `cleanup`, presentar 
 
 No reintentar automáticamente sin razón concreta. Una entrada corregida o una recuperación técnica conocida puede justificar una nueva llamada dentro del alcance autorizado; un fallo no justifica cambiar el scope.
 
-## Fronteras futuras de Researcher y Fixer/Editor
+## Fronteras de Researcher y futuro Fixer/Editor
 
-Solo se delimitan capacidades conceptuales; no se definen sus contratos completos ni su implementación.
+Researcher se rige por su [contrato v1](researcher.md). Aquí se delimita el handoff conceptual; no se implementa su ejecución ni se define Fixer/Editor completo.
 
-| Capacidad futura | Necesidad |
+| Capacidad | Necesidad |
 | --- | --- |
-| Researcher | Fuentes, vigencia, correspondencia real de Maps, web oficial, horarios/precios actuales e investigación externa. |
+| Researcher | Evidencia externa o aportada por el usuario, vigencia, correspondencia real de entidades/Maps y conflictos. Contrato definido; ejecución no demostrada. |
 | Fixer/Editor | Cambios autorizados con evidencia suficiente. |
-| Researcher → Fixer | Investigar antes de incorporar información. |
+| Researcher → Coordinator → futuro Fixer autorizado | Investigar antes de incorporar información, conservando autorización y alcance por separado. |
 | QA | Revalidación determinista después de cambios. |
 
 Una Factory issue es una incidencia devuelta por una ejecución; una necesidad de research puede existir sin issue; una edición es una modificación autorizada. No convertir la necesidad de investigación en una incidencia Factory ni confundir explicación con edición.
 
-Según el [protocolo de investigación](../rules/investigacion.md), `PENDIENTE_VISITA` no significa automáticamente research ni información incorrecta: puede requerir experiencia humana real. Un futuro Researcher no puede fabricar una visita personal. `PENDIENTE_VERIFICACION` identifica una duda factual, sin dar por confirmado el dato.
+Según el [protocolo de investigación](../rules/investigacion.md), `PENDIENTE_VISITA` no significa automáticamente research ni información incorrecta: puede requerir experiencia humana real y seguir pendiente aunque datos externos estén confirmados. Researcher no puede fabricar una visita personal. `PENDIENTE_VERIFICACION` identifica una duda factual que puede intentar resolver, sin dar por confirmado un dato insuficientemente respaldado.
 
-El ciclo QA → Researcher cuando haga falta → Fixer → QA es una variante, no una secuencia obligatoria para todas las peticiones. Solo diagnóstico termina tras comunicar QA. Investigar antes de escribir comienza por la capacidad de investigación. Actualizar datos actuales requiere investigación antes de incorporar cuando falte evidencia suficiente. Una corrección concreta con datos suficientes puede pasar a Fixer y revalidación. En v1, comunicar las capacidades todavía inexistentes y detener esas acciones.
+El ciclo QA → Researcher cuando haga falta → Coordinator → futuro Fixer autorizado → QA es una variante, no una secuencia obligatoria para todas las peticiones. Solo diagnóstico termina tras comunicar QA. Investigar antes de escribir comienza por la capacidad de investigación. Actualizar datos actuales requiere investigación antes de incorporar cuando falte evidencia suficiente. Una corrección concreta con datos suficientes puede pasar a Fixer y revalidación. En v1, comunicar las capacidades todavía no operativas y detener esas acciones.
+
+### Handoff Researcher
+
+Coordinator resuelve primero `guidePath`, delimita research scope y questions con identificadores estables, y entrega restricciones, periodo/contexto y evidencia del usuario cuando existan. Research scope no es `FactoryReviewContext`; no asumir coincidencia con QA o modificación. La autorización de edición se conserva fuera del request Researcher.
+
+Researcher comprueba la identidad de entidades externas dentro de la guía, sin volver a resolver rutinariamente el catálogo global. Devuelve referencia al encargo, status, findings, sources/evidence, preguntas pendientes y diagnósticos técnicos separados. Coordinator consume ese paquete sin investigar las fuentes por sí mismo ni convertir hallazgos en Factory issues.
+
+Distinguir research innecesario, necesario, parcial, bloqueado o completado. COMPLETE significa preguntas en estado terminal de investigación, no todas CONFIRMED; puede conservar UNRESOLVED tras búsqueda razonable. PARTIAL y BLOCKED describen cobertura/impedimentos. Los finding statuses CONFIRMED, SUPPORTED, CONFLICTING y UNRESOLVED no son estados ni severities QA; SUPPORTED no equivale automáticamente a dato publicable.
+
+Coordinator comunica conclusiones, conflictos, fuentes principales y pendientes, con fuentes completas si se solicitan. Decide el próximo paso dentro de las capacidades disponibles y la autorización: aclaración, investigación adicional acotada, futuro Fixer autorizado o QA cuando corresponda. Researcher no inicia QA ni Fixer automáticamente. La ausencia de capacidad no autoriza a Coordinator a sustituirla realizando investigación.
+
+El futuro Fixer recibirá autorización, scope de modificación, objetos/locations, findings/evidence con periodo y condiciones, conflictos/pendientes, reglas ACTIVE y QA issues originales cuando correspondan. No persistir automáticamente fuentes dentro de guías ni trasladar notas internas a contenido publicado. No se diseña aquí Fixer completo.
 
 ## Autorización de modificación
 
@@ -248,7 +262,7 @@ Si identidad y alcance pueden determinarse de forma segura, hacerlo sin confirma
 
 Coordinator v1 ya es útil como contrato para entender la petición, obtener path/context con evidencia, ejecutar `factory_qa_review`, presentar el resultado fiel, identificar la capacidad siguiente e informar de capacidades todavía inexistentes. Esto no declara al rol OPERATIONAL: sigue pendiente su mecanismo/configuración efectiva.
 
-`factory_guide_catalog` no es requisito previo. Como mejora futura podría ofrecer `list` y `resolve` sobre el catálogo Factory; su schema y política exacta de resolución/normalización se diseñarán por separado. Este documento no los fija como contrato oficial.
+`factory_guide_catalog` ya ofrece `list` y `resolve` sobre el catálogo Factory mediante el adapter MCP. Mejora la resolución de identidad; no sustituye evidencia de estructura/locations, no investiga y no hace QA. Su disponibilidad en una sesión debe comprobarse, sin convertir la existencia técnica en operación autónoma del rol.
 
 Una futura tool de inspección estructural tampoco se requiere en v1. Puede evaluarse si resolver locations se vuelve frecuente o no hay acceso local acotado suficiente; aquí no se diseña en detalle.
 
