@@ -41,7 +41,7 @@ function runChild(args, cwd, input, deadline) {
   return child;
 }
 
-function validateResponse(child) {
+function validateQaResponse(child) {
   if (child.stderr !== '' || !child.stdout) throw new Error('Invalid channel output.');
   const payload = JSON.parse(child.stdout);
   if (typeof payload !== 'object' || payload === null || Array.isArray(payload)) {
@@ -54,8 +54,43 @@ function validateResponse(child) {
   throw new Error('Invalid response envelope.');
 }
 
-/** Host API: texto JSON sin transformar; devuelve los dos streams, no un wrapper QA. */
-export function invokeFactoryQa(input) {
+function isObject(value) {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function hasKeys(value, keys) {
+  return Object.keys(value).length === keys.length && keys.every(key => Object.hasOwn(value, key));
+}
+
+function isIdentity(value, named = false) {
+  return isObject(value) && hasKeys(value, ['path', 'name']) && typeof value.path === 'string'
+    && (typeof value.name === 'string' || (!named && value.name === null));
+}
+
+function validateCatalogResponse(child) {
+  if (child.stderr !== '' || !child.stdout) throw new Error('Invalid channel output.');
+  const payload = JSON.parse(child.stdout);
+  if (isObject(payload)) {
+    if (payload.ok === false && hasKeys(payload, ['ok', 'error']) && isObject(payload.error)
+      && hasKeys(payload.error, ['kind', 'message'])
+      && typeof payload.error.kind === 'string' && typeof payload.error.message === 'string') return payload;
+    if (payload.ok === true) {
+      if (hasKeys(payload, ['ok', 'entries']) && Array.isArray(payload.entries)
+        && payload.entries.every(entry => isIdentity(entry))) return payload;
+      if (payload.resolution === 'MATCH' && hasKeys(payload, ['ok', 'resolution', 'entry'])
+        && isIdentity(payload.entry, true)) return payload;
+      if (payload.resolution === 'AMBIGUOUS' && hasKeys(payload, ['ok', 'resolution', 'candidates'])
+        && Array.isArray(payload.candidates) && payload.candidates.every(entry => isIdentity(entry, true))) return payload;
+      if (payload.resolution === 'NOT_FOUND' && hasKeys(payload, ['ok', 'resolution'])) return payload;
+    }
+  }
+  throw new Error('Invalid response envelope.');
+}
+
+const qaChannel = Object.freeze({ file: 'scripts/factory-qa-channel.js', validate: validateQaResponse });
+const catalogChannel = Object.freeze({ file: 'scripts/factory-guide-catalog-channel.js', validate: validateCatalogResponse });
+
+function invokePreparedFactoryChannel(input, fixedChannel) {
   const deadline = performance.now() + 60000;
   let stage = 'prepare';
   let tempRoot;
@@ -78,14 +113,16 @@ export function invokeFactoryQa(input) {
       '--noEmit', 'false', '--outDir', outputDir,
     ], projectRoot, undefined, deadline);
 
-    const channel = path.join(outputDir, 'scripts/factory-qa-channel.js');
+    const channel = path.join(outputDir, fixedChannel.file);
+    // QA conserva su clasificación histórica; catálogo clasifica un artefacto ausente como execute.
+    if (fixedChannel === catalogChannel) stage = 'execute';
     if (!statSync(channel).isFile()) throw new Error('Compiled channel missing.');
     stage = 'execute';
     const child = runChild([
       '--permission', '--allow-fs-read=' + outputDir, ...resolutionFlags, channel,
     ], outputDir, input, deadline);
     stage = 'response';
-    stdout = JSON.stringify(validateResponse(child)) + '\n';
+    stdout = JSON.stringify(fixedChannel.validate(child)) + '\n';
   } catch {
     stderr = diagnostic(stage);
   } finally {
@@ -107,6 +144,16 @@ export function invokeFactoryQa(input) {
     }
   }
   return { stdout, stderr };
+}
+
+/** Host API: texto JSON sin transformar; devuelve los dos streams, no un wrapper QA. */
+export function invokeFactoryQa(input) {
+  return invokePreparedFactoryChannel(input, qaChannel);
+}
+
+/** Host API: ejecuta únicamente el channel fijo de catálogo. */
+export function invokeFactoryGuideCatalog(input) {
+  return invokePreparedFactoryChannel(input, catalogChannel);
 }
 
 async function main() {
