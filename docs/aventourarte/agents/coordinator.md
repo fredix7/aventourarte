@@ -145,7 +145,7 @@ No recalcular, deduplicar, reclasificar ni completar campos opcionales ausentes.
 | LISTA_CON_AVISOS | Conservar los avisos e identificar la necesidad de revisión correspondiente, sin convertirlos en errores. |
 | APROBADA | Comunicar aprobación limitada a las reglas ejecutadas, ruleset y scope; conservar posibles INFO. |
 
-La siguiente capacidad depende de la necesidad concreta, no solo del estado o severity. Researcher v1 tiene contrato definido, pero sigue DEFINED / NOT YET OPERATIONAL; Fixer/Editor continúa como rol futuro sin contrato completo ni implementación operativa. Si la capacidad necesaria no está disponible, indicar su necesidad sin simular ejecución.
+La siguiente capacidad depende de la necesidad concreta, no solo del estado o severity. Researcher v1 es OPERATIONAL cuando puede invocarse mediante su [perfil controlado `codex exec`](researcher.md#runtime-profile-operativo-aprobado); Fixer/Editor continúa como rol futuro sin contrato completo ni implementación operativa. Si la capacidad necesaria no está disponible, indicar su necesidad sin simular ejecución.
 
 Cuando no haya incidencias, usar:
 
@@ -174,7 +174,7 @@ Researcher se rige por su [contrato v1](researcher.md). Aquí se delimita el han
 
 | Capacidad | Necesidad |
 | --- | --- |
-| Researcher | Evidencia externa o aportada por el usuario, vigencia, correspondencia real de entidades/Maps y conflictos. Contrato definido; ejecución no demostrada. |
+| Researcher | Evidencia externa o aportada por el usuario, vigencia, correspondencia real de entidades/Maps y conflictos. OPERATIONAL exclusivamente mediante el perfil aprobado y dentro de sus capacidades disponibles. |
 | Fixer/Editor | Cambios autorizados con evidencia suficiente. |
 | Researcher → Coordinator → futuro Fixer autorizado | Investigar antes de incorporar información, conservando autorización y alcance por separado. |
 | QA | Revalidación determinista después de cambios. |
@@ -183,9 +183,11 @@ Una Factory issue es una incidencia devuelta por una ejecución; una necesidad d
 
 Según el [protocolo de investigación](../rules/investigacion.md), `PENDIENTE_VISITA` no significa automáticamente research ni información incorrecta: puede requerir experiencia humana real y seguir pendiente aunque datos externos estén confirmados. Researcher no puede fabricar una visita personal. `PENDIENTE_VERIFICACION` identifica una duda factual que puede intentar resolver, sin dar por confirmado un dato insuficientemente respaldado.
 
-El ciclo QA → Researcher cuando haga falta → Coordinator → futuro Fixer autorizado → QA es una variante, no una secuencia obligatoria para todas las peticiones. Solo diagnóstico termina tras comunicar QA. Investigar antes de escribir comienza por la capacidad de investigación. Actualizar datos actuales requiere investigación antes de incorporar cuando falte evidencia suficiente. Una corrección concreta con datos suficientes puede pasar a Fixer y revalidación. En v1, comunicar las capacidades todavía no operativas y detener esas acciones.
+El ciclo QA → Researcher cuando haga falta → Coordinator → futuro Fixer autorizado → QA es una variante, no una secuencia obligatoria para todas las peticiones. Solo diagnóstico termina tras comunicar QA. Investigar antes de escribir comienza por la capacidad de investigación. Actualizar datos actuales requiere investigación antes de incorporar cuando falte evidencia suficiente. Una corrección concreta con datos suficientes puede pasar a Fixer y revalidación. Researcher está disponible cuando puede invocarse mediante su perfil aprobado; comunicar las capacidades todavía no operativas y detener esas acciones.
 
 ### Handoff Researcher
+
+Flujo: Coordinator → invocación operacional Researcher mediante el perfil aprobado → evidence packet → Coordinator → futuro Fixer autorizado → QA cuando corresponda. La disponibilidad de Researcher no declara Coordinator OPERATIONAL ni autoriza a Coordinator a investigar directamente. No se crea una tool `factory_research`.
 
 Coordinator resuelve primero `guidePath`, delimita research scope y questions con identificadores estables, y entrega restricciones, periodo/contexto y evidencia del usuario cuando existan. Research scope no es `FactoryReviewContext`; no asumir coincidencia con QA o modificación. La autorización de edición se conserva fuera del request Researcher.
 

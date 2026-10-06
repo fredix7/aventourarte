@@ -26,7 +26,7 @@ Si existe una contradicción entre documentación ACTIVE y código o instruccion
 
 - [Coordinator](coordinator.md) — orquesta identidad, alcance y autorización; contrato v1 definido; **DEFINED / NOT YET OPERATIONAL**.
 - [Factory QA Reviewer](qa-reviewer.md) — presenta fielmente QA determinista; **DEFINED / NOT YET OPERATIONAL**; **TOOL CHAIN READY**.
-- [Researcher](researcher.md) — reúne evidencia externa o aportada por el usuario para preguntas concretas; contrato v1 aprobado mediante RES-003; **DEFINED / NOT YET OPERATIONAL**.
+- [Researcher](researcher.md) — reúne evidencia externa o aportada por el usuario para preguntas concretas; contrato v1 aprobado mediante RES-003 y operación mediante RES-004; **OPERATIONAL mediante el perfil controlado `codex exec`**.
 
 Fixer/Editor sigue siendo un rol futuro: modificará únicamente con autorización y alcance explícitos. No tiene todavía contrato completo ni implementación operativa.
 
@@ -42,6 +42,6 @@ Coordinator v1 está definido como [contrato](coordinator.md) de control de fluj
 
 El adapter MCP local ya expone `factory_guide_catalog` para identidad y `factory_qa_review` como única operación QA. La existencia de estas herramientas no demuestra conexión ni permisos efectivos de una sesión de los roles.
 
-Researcher v1 tiene [contrato definido](researcher.md), pero permanece **DEFINED / NOT YET OPERATIONAL** hasta demostrar ejecución real, capacidad web y superficie de herramientas con permisos efectivos y ausencia de escritura. Usa conceptualmente herramientas web disponibles; no se crea `factory_research` propia ni se exige un agente persistente separado. Su output es un paquete conceptual de evidencia, con estados independientes de QA y sin persistencia automática en guías.
+Researcher v1 es **OPERATIONAL mediante el perfil controlado `codex exec`** descrito en su [contrato y runtime aprobado](researcher.md#runtime-profile-operativo-aprobado). Los smoke tests acreditaron búsqueda y apertura web trazable, handoff estructurado y las garantías del threat model aceptado, con la limitación conocida de que `exec` no expone un inventario runtime completo verificable. Es una invocación delimitada del modelo, no cualquier sesión Codex ni un agente persistente separado; no se crea `factory_research` propia. Su output es un paquete de evidencia validado mediante schema y recibido por `--output-last-message`, con estados independientes de QA y sin persistencia automática en guías.
 
-Flujo conceptual: Coordinator → Researcher → evidence packet → Coordinator → futuro Fixer autorizado → QA cuando Coordinator determine que corresponde. Coordinator entrega identidad y preguntas sin investigar por sí mismo; Researcher no edita ni inicia QA o Fixer automáticamente.
+Flujo: Coordinator → invocación operacional Researcher mediante el perfil aprobado → evidence packet → Coordinator → futuro Fixer autorizado → QA cuando Coordinator determine que corresponde. Coordinator entrega identidad y preguntas sin investigar por sí mismo; Researcher no edita ni inicia QA o Fixer automáticamente. La operación de Researcher no declara Coordinator OPERATIONAL.

@@ -1,11 +1,11 @@
 # AvenTourArte Factory Researcher v1
 
-- Role status: **DEFINED / NOT YET OPERATIONAL**.
+- Role status: **OPERATIONAL exclusivamente mediante el perfil controlado `codex exec`**.
 - Access: investigación externa y lectura local acotada, sin modificación.
 - Direct mutation / publication: **prohibited**.
 - Automatic QA / Fixer execution: **prohibited**.
 
-Contrato aprobado mediante [RES-003](../decisions/decision-log.md). Define responsabilidades, entradas y salidas conceptuales; no implementa un agente, una tool, un schema ni una configuración. La ejecución real, la capacidad web necesaria y la superficie de herramientas con permisos efectivos todavía no están demostradas.
+Contrato aprobado mediante [RES-003](../decisions/decision-log.md); operación aprobada mediante [RES-004](../decisions/decision-log.md). Researcher es una invocación delimitada del modelo bajo el runtime profile controlado descrito aquí, no cualquier sesión Codex ni un agente persistente separado. Este documento no crea una tool, un schema permanente ni una configuración.
 
 ## Misión y autoridad
 
@@ -127,7 +127,9 @@ Cada source/evidence conserva conceptualmente:
 - Evidencia breve o paráfrasis relevante.
 - Locator opcional: página PDF, timestamp o fragmento que permita localizar la evidencia.
 
-No guardar páginas completas ni copiar textos largos. Un search result descubre una fuente; no sustituye abrirla cuando la claim depende de su contenido. No atribuir a una página no abierta información que solo apareció en un snippet.
+No guardar páginas completas ni copiar textos largos. Los resultados de búsqueda sirven para descubrir fuentes; un search snippet no es soporte material de una claim. Toda fuente web usada materialmente para sostener un finding debe abrirse mediante la capacidad web y leerse antes de incluirla como evidence en el paquete. No atribuir a una página no abierta información que solo apareció en un snippet.
+
+En ejecución auditada, realizar aperturas web explícitas independientes para las fuentes materiales y relacionar sus URLs de `sources` con aperturas observadas en la telemetría. Una operación `other` sin URL inequívoca no acredita esa apertura. Una fuente que no puede abrirse no se utiliza como evidence; una fuente abierta pero inútil puede omitirse del paquete. Conservar SUPPORTED o UNRESOLVED cuando estos límites impidan concluir. No es necesario abrir todas las URLs descubiertas, solo las utilizadas como evidencia material. La evidencia humana conserva su procedencia y no requiere inventar una URL.
 
 ## Freshness, conflictos y hallazgos negativos
 
@@ -194,9 +196,9 @@ No realizar búsqueda sistemática de nuevas imágenes, operaciones Cloudinary, 
 
 ## Capacidades, permisos y mecanismo de ejecución
 
-Necesita conceptualmente búsqueda web, apertura/lectura de páginas, PDFs, browser condicionado para páginas JS/Maps cuando sea necesario y lectura local acotada de reglas, guía y contexto. La comprobación factual explícita de imágenes requiere poder inspeccionar el material recibido o accesible.
+Necesita búsqueda web, apertura/lectura de páginas y PDFs públicos, y lectura local acotada de reglas, guía y contexto. La comprobación factual explícita de imágenes requiere poder inspeccionar el material recibido o accesible. Browser/computer interactivo está deshabilitado en el perfil aprobado; una fuente JS/Maps que necesite esa interacción debe comunicarse como limitación de capacidad.
 
-Empezar por búsqueda y lectura de fuentes; no exigir computer-use general. Si la fuente requiere una interacción incompatible o una capacidad ausente, comunicar la limitación. No fijar una versión de Codex o flags observados como requisito permanente.
+Empezar por búsqueda y lectura de fuentes; no exigir computer-use general. Si la fuente requiere una interacción incompatible o una capacidad ausente, comunicar la limitación. La versión de CLI validada es evidencia histórica, no un requisito normativo permanente; cambios materiales del perfil requieren reverificación.
 
 No necesita ni tiene autorizados repo write, git write, shell general, package install, deploy, pagos, credenciales, cuentas, formularios, reservas/contactos o modificaciones de servicios externos. No comprar, reservar, contactar, enviar formularios, crear cuentas, realizar acciones de cuenta ni aceptar cookies invasivamente para completar una pregunta. No descargar ni ejecutar ejecutables o scripts de terceros. Puede analizar PDFs/documentos públicos mediante herramientas de lectura; la navegación no autoriza ejecutar código arbitrario aportado por fuentes.
 
@@ -206,9 +208,64 @@ Decisión v1: no `factory_research` propia. Usar herramientas web disponibles ba
 
 No exigir proceso/agente persistente separado: puede ser una invocación delimitada del modelo bajo el contrato Researcher, distinta de la función Coordinator. El flujo no depende de preguntar manualmente a un ChatGPT externo y pegar resultados. Conservar encargo, fuentes, fechas y conclusiones permite revisar el proceso; no garantiza resultados idénticos frente a una web cambiante.
 
-Hasta demostrar ejecución real, tool surface, permisos efectivos, ausencia de escritura y capacidad web necesaria, Researcher permanece DEFINED / NOT YET OPERATIONAL. Prompt, annotations MCP o sandbox de shell por sí solos no prueban aislamiento del conjunto de herramientas.
+## Runtime profile operativo aprobado
+
+El runtime Researcher v1 es `codex exec` con estos requisitos:
+
+- Web search habilitada mediante `--search`.
+- `--no-daemon`.
+- Approval `never` mediante `-a never`.
+- Cwd en TEMP fuera del repositorio mediante `-C`.
+- `exec --ephemeral --ignore-user-config --sandbox read-only --skip-git-repo-check`.
+- `--json` para telemetría.
+- `--output-schema` y `--output-last-message` apuntando a archivos en TEMP.
+- Prompt por stdin mediante `-`.
+- `code_mode_host` disponible y no deshabilitado.
+
+Las siguientes features incompatibles deben deshabilitarse mediante `--disable`:
+
+- `shell_tool`
+- `unified_exec`
+- `apps`
+- `plugins`
+- `remote_plugin`
+- `browser_use`
+- `browser_use_external`
+- `browser_use_full_cdp_access`
+- `computer_use`
+- `in_app_browser`
+- `multi_agent`
+- `hooks`
+- `workspace_dependencies`
+- `skill_search`
+- `skill_mcp_dependency_install`
+- `image_generation`
+- `tool_suggest`
+- `unbounded_connection_retries`
+
+### Threat model aprobado y límites
+
+TOOL_ISOLATION = PASS en Researcher v1 requiere el perfil anterior: user config ignorada, cwd fuera del repo, sandbox read-only, approval never, sesión ephemeral y superficies conocidas de shell/unified exec, browser/computer interactivo, apps/plugins/remote plugins, instalación/dependencias y multi-agent deshabilitadas. La evidencia operativa incluye una tentativa real de escritura denegada bajo la combinación esencial read-only/never/code_mode_host, ausencia de acciones mutables inesperadas observadas en el smoke final y repositorio idéntico tras la ejecución.
+
+`codex exec` no expone en la versión evaluada un inventario runtime completo verificable equivalente al obtenido mediante app-server raw events. Esta limitación se acepta expresamente dentro del threat model aprobado de Researcher v1. El perfil reduce y restringe las superficies conocidas y ha superado los smoke tests definidos; no demuestra que no pueda existir absolutamente ninguna otra tool. Prompt, annotations MCP o sandbox de shell por sí solos no constituyen esa evidencia.
+
+### App-server
+
+`app-server` no es runtime aprobado de Researcher en la versión y configuración evaluadas: heredó configuración MCP del usuario y el inventario raw mostró Node REPL y tools Notion. No se encontró un mecanismo soportado equivalente a `--ignore-user-config` que aislara esos MCP conservando auth. Puede utilizarse para diagnóstico local cuando proceda, pero no para ejecutar Researcher operativamente ni como evidencia de la tool surface de `exec`. Esta conclusión describe el comportamiento observado, no una afirmación de inseguridad universal de app-server.
+
+### Evidencia de los smoke tests
+
+Los smoke tests del 2026-10-06 demostraron búsqueda web, apertura web trazable, vinculación de sources materiales a aperturas observadas, handoff estructurado validado por schema, repositorio read-only, denegación real de escritura bajo la combinación esencial, conservación de incertidumbre y conflictos, ausencia de acciones mutables inesperadas observadas y eliminación de TEMP. El smoke final trazable obtuvo PASS con Museo del Moscatel de Chipiona como caso controlado; sus precios o gratuidades no forman parte del contrato ni de las reglas.
+
+El perfil final fue validado con Codex CLI 0.160.1. No es un requisito normativo permanente ni promete compatibilidad futura automática. Una actualización material del CLI o cambios de flags, sandbox, tool routing o comportamiento de web pueden requerir repetir el smoke test; los cambios materiales del runtime requieren reverificación.
 
 ## Handoffs, presentación y persistencia
+
+El canal oficial del resultado es `--output-last-message` con `--output-schema`. El consumer lee el último mensaje estructurado, valida el schema, los estados, las preguntas y las referencias de evidencia, y mantiene separados los eventos técnicos. El event stream `--json` sirve para observabilidad y diagnóstico, no como research packet; los mensajes de progreso no contaminan el handoff.
+
+El host/orquestador gestiona los archivos temporales de schema/output fuera del repositorio y los elimina al finalizar. Esa gestión del canal no autoriza al modelo Researcher a escribir archivos ni a persistir automáticamente packets en la guía.
+
+Researcher solo debe afirmar en `technicalDiagnostics` hechos observados sobre sus herramientas o fuentes. No debe especular sobre mecanismos host que no observa: si `--output-last-message` creó un archivo, cómo el caller almacenó la respuesta o detalles de infraestructura. El host/orquestador registra esos hechos por separado. Esta precisión corrige el diagnóstico impreciso sobre creación del handoff observado en el smoke final.
 
 Coordinator entrega guidePath resuelto, research scope/questions, restricciones y evidencia del usuario; recibe el paquete y decide el próximo paso. No investiga por sí mismo. Researcher no llama automáticamente catálogo, QA o Fixer. Si una capacidad no está disponible, comunicarlo sin simular ejecución.
 
@@ -234,4 +291,4 @@ Un error técnico no se convierte en finding factual. Timeout no significa que e
 
 La verificación futura del contrato usará fixtures y escenarios locales: referencias pregunta/evidencia, estados, fechas diferenciadas, fuentes sin fecha, conflictos, PDFs antiguos, homónimos/sedes, redirecciones, evidencia humana, alcance parcial y contenido externo con instrucciones maliciosas. No eliminar condiciones mediante normalización ni considerar un schema prueba de verdad factual.
 
-Integración con web real y smoke tests serán opcionales/condicionados, no dependencias de cada build ni baselines permanentes de precios/horarios. Antes de declarar operación, verificar capacidad de búsqueda/lectura/PDF, handoff estructurado y permisos efectivos. Este documento no implementa esos tests ni demuestra su ejecución.
+La integración con web real y los smoke tests siguen siendo comprobaciones acotadas y condicionadas, no dependencias de cada build ni baselines permanentes de precios/horarios. La evidencia histórica resumida aquí acredita el perfil aprobado; cambios materiales requieren reverificación de capacidad de búsqueda/lectura/PDF, trazabilidad, handoff estructurado y permisos efectivos. Este documento registra resultados, sin implementar tests.
