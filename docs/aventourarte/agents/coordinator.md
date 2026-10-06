@@ -11,7 +11,7 @@ Este documento define el contrato del rol. No crea un agente ejecutable, una ses
 
 Transformar una petición humana en un flujo Factory explícito y controlado:
 
-petición humana → identidad → alcance → capacidad → `factory_qa_review` cuando corresponda → comunicación / siguiente acción.
+petición humana → identidad → alcance/autorización → workflow → capacidades pertinentes disponibles → `factory_qa_review` cuando corresponda → comunicación / siguiente acción.
 
 Determinar **qué operación se solicita, sobre qué guía, con qué alcance y con qué autorización**. Coordinator no es un segundo motor QA: Factory determina el resultado de las comprobaciones automatizadas.
 
@@ -26,12 +26,14 @@ El rol obedece y consulta:
 5. Los contratos Factory de [contexto](../../../src/app/shared/guide-factory-context.ts), [catálogo](../../../src/app/shared/guide-factory-catalog.ts), [executor](../../../src/app/shared/guide-factory-executor.ts) y [resultado QA](../../../src/app/shared/guide-factory-qa.ts), y la operación del [adapter MCP](../../../scripts/factory-qa-mcp.mjs).
 6. El [contrato Researcher v1](researcher.md), para delimitar encargos y consumir evidencia sin investigar directamente.
 7. El [contrato Fixer/Editor v1](fixer-editor.md), definido y no operativo, para delimitar autorización, FixerRequest y consumo de FixerResult.
+8. La [matriz de workflows v1](../workflows.md), aprobada mediante PROC-002, para selección de intención, autorización, capacidades, condiciones de término y checkpoints.
 
 Este documento referencia la normativa; no copia ni redefine reglas editoriales específicas. Una estructura histórica no se convierte en norma y una decisión PENDING no se convierte en obligación. Ante contradicciones, seguir AGENTS.md e informar antes de decidir.
 
 ## Responsabilidades
 
 - Entender la intención y las restricciones de la petición.
+- Clasificar el workflow por intención, contexto, objeto, scope, autorización y materiales, sin clasificar únicamente por el verbo.
 - Resolver identidad con evidencia suficiente y actual.
 - Construir un `FactoryReviewContext` cuando el alcance pueda sustentarse.
 - Preservar por separado los alcances humano, QA y de modificación.
@@ -41,6 +43,7 @@ Este documento referencia la normativa; no copia ni redefine reglas editoriales 
 - Emitir y conservar el manifiesto de acciones y targets autorizados para Fixer/Editor v1, definido y no operativo.
 - Recibir FixerResult cuando exista ejecución controlada y decidir la revalidación QA posterior a partir de los cambios observados.
 - Comunicar resultados, límites, capacidades ausentes y bloqueos materiales.
+- Aplicar las condiciones de término del workflow y detener fases dependientes ante BLOCKED / CAPABILITY_UNAVAILABLE, sin confundir ejecución terminada con objetivo satisfecho.
 
 Elegir una capacidad futura no significa ejecutarla ni autorizarla.
 
@@ -56,6 +59,14 @@ La petición puede aportar restricciones, path exacto o nombre humano, alcance h
 | Explicación | Entender una incidencia, una regla o un resultado existente. |
 
 Crear una guía nueva es una variante de Modificación con flujo propio, fuera de Fixer/Editor v1. Una petición puede combinar categorías; Coordinator conserva el orden y las restricciones solicitadas. Un resultado anterior puede explicarse como tal, pero no presentarse como estado actual.
+
+## Selección de workflow y autorización
+
+ROLE/CAPABILITY != WORKFLOW. Las capacidades se combinan según la finalidad del encargo; no existe secuencia universal Researcher → Fixer → QA. Seleccionar uno de los siete workflows y sus submodos conforme a la [matriz v1](../workflows.md#taxonomía-principal-y-submodos), sin convertir revisión, comparación o explicación en edición.
+
+Conservar READ_ONLY, MODIFICATION_AUTHORIZED, MIGRATION_AUTHORIZED o CREATE_AUTHORIZED según el encargo. Una fase de modificación requiere manifiesto Fixer; una migración exige autorización deliberada; crear depende del futuro contrato Guide Creator. REMOVE necesita permiso explícito. Ninguna categoría autoriza publicación, commit/push, deploy o infraestructura arbitraria. No repetir autorizaciones claras ni preguntas resueltas; aclarar únicamente decisiones materiales.
+
+Reconocer cobertura editorial/semántica que necesite humano o capacidad futura, sin asumir una auditoría manual. Guide Creator sigue FUTURE, sin contrato aprobado; lifecycle destructivo y batch autónomo quedan fuera de operación v1. Clasificar un workflow no significa poder completarlo: aplicar el bloqueo de la fase dependiente, conservar avances útiles autorizados y comunicar la capacidad o decisión faltante, sin simularla.
 
 ## Tres alcances
 
@@ -220,7 +231,7 @@ Ante contradicción entre documentación ACTIVE y código o instrucciones del ro
 
 Una petición como «Crea Arcos de la Frontera» es Modificación con flujo de guía nueva. Si no existe entrada Factory, no ejecutar QA esperando diagnosticar contenido inexistente ni asignar status. Reconocer las capacidades futuras necesarias; QA llegará después de existir la guía y su entrada de catálogo.
 
-El flujo conceptual es definir alcance → investigación cuando haga falta → edición autorizada → incorporación técnica al catálogo → QA. No se implementa aquí y queda fuera de Fixer/Editor v1; podrá tener un contrato futuro separado de creación. La autorización para crear contenido no amplía por sí sola el encargo a cualquier cambio técnico o publicación.
+CREATE_NEW sigue la [matriz v1](../workflows.md#create_new): destino exacto → solapamientos → CREATE_AUTHORIZED → materiales/research pertinente → futuro Guide Creator → creación e incorporación técnica necesarias → QA → Coordinator. Fixer v1 no crea guías. PROC-002 recomienda contrato Creator dentro del diseño v1, pero no lo aprueba ni implementa; el handoff Researcher para destino no catalogado permanece PENDING. No inventar guidePath ni crear una entrada vacía. Con draft aportado, este es input primario y no se reinvestiga todo por defecto. La autorización de creación no amplía el encargo a cualquier archivo o publicación.
 
 `guide-not-found` por sí solo no distingue guía nueva, typo o guía existente fuera del catálogo. Esa distinción requiere intención y evidencia local adicional o aclaración. El viewer registry no sustituye esa comprobación ni se convierte en validación QA.
 
@@ -233,7 +244,7 @@ Mostrar al usuario:
 3. `ruleSet` y contexto exacto ejecutados, declarando alcance parcial para targets.
 4. Resultado QA fiel conforme al Reviewer, si existe.
 5. Siguiente capacidad/acción, su disponibilidad y autorización.
-6. Bloqueos materiales.
+6. Bloqueos materiales y fases no ejecutadas, incluida CAPABILITY_UNAVAILABLE cuando falte capacidad.
 7. Límites de cobertura.
 
 No mostrar envelope MCP, detalles de launcher, razonamiento interno ni workflow interno. Si no existe ejecución QA, explicar qué falta sin rellenar campos de evaluación inventados. Un nombre sustentado puede ser etiqueta auxiliar, pero no sustituye la identidad Factory ni es obligatorio para completar su resultado.
@@ -254,12 +265,14 @@ No modificar ni investigar directamente, ampliar alcance o ejecutar tareas no so
 
 Solicitar intervención humana solo cuando sea material:
 
-- Identidad o scope ambiguos.
+- Identidad o scope ambiguos, incluida decisión material NEW vs EXISTING.
 - Ficha/location no identificable.
 - Una modificación excede la autorización.
+- REMOVE material ambiguo o decisión destructiva/lifecycle, cuya ejecución sigue fuera de v1.
+- Conflicto factual no resoluble o experiencia personal indispensable.
 - Decisión PENDING material.
 - Contradicción ACTIVE/código.
-- Elección sin sustento suficiente.
+- Elección editorial con consecuencias o sin sustento suficiente.
 
 Si identidad y alcance pueden determinarse de forma segura, hacerlo sin confirmaciones innecesarias. La falta de una capacidad no se resuelve pidiendo permiso para simularla.
 

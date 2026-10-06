@@ -25,6 +25,9 @@ Consultar los documentos correspondientes al alcance del trabajo:
 - [Registro de decisiones y estados](decisions/decision-log.md).
 - [Referencias aprobadas](examples/README.md).
 - [Categorías de QA](qa/checklist.md).
+- [Matriz de workflows v1](workflows.md).
+
+La matriz v1, aprobada mediante PROC-002, distingue roles/capacidades de siete workflows y selecciona el flujo según intención, alcance y autorización. La creación requiere un futuro contrato Guide Creator; las capacidades conservan sus estados operativos propios. La política de workflows no implementa orquestación.
 
 ## Contexto observado
 
@@ -37,4 +40,4 @@ Los hechos recogidos en los documentos de reglas describen el estado observado e
 - Aspectos de estructura editorial y contratos de contenido aún pendientes según el registro de decisiones y las reglas específicas.
 - Aspectos de reglas editoriales, investigación e implementación y operación de QA que continúan PENDING en sus documentos correspondientes.
 - Referencias aprobadas y alcance de cada aprobación.
-- Roles de agentes y flujo de trabajo.
+- Operación e integración de roles y workflows, junto a los contratos y capacidades todavía pendientes.
