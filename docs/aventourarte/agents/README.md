@@ -28,7 +28,9 @@ Si existe una contradicción entre documentación ACTIVE y código o instruccion
 - [Factory QA Reviewer](qa-reviewer.md) — presenta fielmente QA determinista; **DEFINED / NOT YET OPERATIONAL**; **TOOL CHAIN READY**.
 - [Researcher](researcher.md) — reúne evidencia externa o aportada por el usuario para preguntas concretas; contrato v1 aprobado mediante RES-003 y operación mediante RES-004; **OPERATIONAL mediante el perfil controlado `codex exec`**.
 
-Fixer/Editor sigue siendo un rol futuro: modificará únicamente con autorización y alcance explícitos. No tiene todavía contrato completo ni implementación operativa.
+- [Fixer/Editor](fixer-editor.md) — contrato v1 aprobado mediante EDIT-013 para cambios editoriales autorizados sobre guías existentes; **DEFINED / NOT YET OPERATIONAL**.
+
+El modelo Fixer/Editor produce un FixPlan sin escribir en el repositorio. Un futuro Trusted Fix Executor deberá validar identidad, autorización, scope, precondiciones, candidate y diff antes de aplicar cambios. El contrato no implementa ni aprueba ese executor o su runtime.
 
 ## Estado operativo
 
@@ -44,4 +46,4 @@ El adapter MCP local ya expone `factory_guide_catalog` para identidad y `factory
 
 Researcher v1 es **OPERATIONAL mediante el perfil controlado `codex exec`** descrito en su [contrato y runtime aprobado](researcher.md#runtime-profile-operativo-aprobado). Los smoke tests acreditaron búsqueda y apertura web trazable, handoff estructurado y las garantías del threat model aceptado, con la limitación conocida de que `exec` no expone un inventario runtime completo verificable. Es una invocación delimitada del modelo, no cualquier sesión Codex ni un agente persistente separado; no se crea `factory_research` propia. Su output es un paquete de evidencia validado mediante schema y recibido por `--output-last-message`, con estados independientes de QA y sin persistencia automática en guías.
 
-Flujo: Coordinator → invocación operacional Researcher mediante el perfil aprobado → evidence packet → Coordinator → futuro Fixer autorizado → QA cuando Coordinator determine que corresponde. Coordinator entrega identidad y preguntas sin investigar por sí mismo; Researcher no edita ni inicia QA o Fixer automáticamente. La operación de Researcher no declara Coordinator OPERATIONAL.
+Flujo conceptual: Coordinator → identidad exacta → autorización → Researcher cuando haga falta mediante el perfil aprobado → modelo Fixer/Editor → futuro Trusted Fix Executor → FixerResult → Coordinator → QA cuando Coordinator determine que corresponde. Coordinator conserva el manifiesto de modificación, entrega evidencia seleccionada y recibe cambios observados; Researcher no edita ni inicia QA o Fixer automáticamente. Fixer/Editor sigue DEFINED / NOT YET OPERATIONAL. La operación de Researcher no declara Coordinator OPERATIONAL.

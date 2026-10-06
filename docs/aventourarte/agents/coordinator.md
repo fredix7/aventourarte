@@ -25,6 +25,7 @@ El rol obedece y consulta:
 4. El [contrato del QA Reviewer](qa-reviewer.md), para presentar los resultados y sus límites.
 5. Los contratos Factory de [contexto](../../../src/app/shared/guide-factory-context.ts), [catálogo](../../../src/app/shared/guide-factory-catalog.ts), [executor](../../../src/app/shared/guide-factory-executor.ts) y [resultado QA](../../../src/app/shared/guide-factory-qa.ts), y la operación del [adapter MCP](../../../scripts/factory-qa-mcp.mjs).
 6. El [contrato Researcher v1](researcher.md), para delimitar encargos y consumir evidencia sin investigar directamente.
+7. El [contrato Fixer/Editor v1](fixer-editor.md), definido y no operativo, para delimitar autorización, FixerRequest y consumo de FixerResult.
 
 Este documento referencia la normativa; no copia ni redefine reglas editoriales específicas. Una estructura histórica no se convierte en norma y una decisión PENDING no se convierte en obligación. Ante contradicciones, seguir AGENTS.md e informar antes de decidir.
 
@@ -37,8 +38,8 @@ Este documento referencia la normativa; no copia ni redefine reglas editoriales 
 - Invocar `factory_qa_review` cuando corresponda y estén determinados sus inputs.
 - Definir research scope/questions y evidencia aportada para un handoff Researcher, sin realizar investigación externa por sí mismo.
 - Identificar el tipo de siguiente capacidad necesaria, sin ejecutarla si no existe.
-- Conservar la autorización y sus límites para un futuro Fixer/Editor.
-- Coordinar conceptualmente la revalidación futura después de cambios autorizados.
+- Emitir y conservar el manifiesto de acciones y targets autorizados para Fixer/Editor v1, definido y no operativo.
+- Recibir FixerResult cuando exista ejecución controlada y decidir la revalidación QA posterior a partir de los cambios observados.
 - Comunicar resultados, límites, capacidades ausentes y bloqueos materiales.
 
 Elegir una capacidad futura no significa ejecutarla ni autorizarla.
@@ -54,7 +55,7 @@ La petición puede aportar restricciones, path exacto o nombre humano, alcance h
 | Modificación | Corregir, actualizar, añadir o crear. |
 | Explicación | Entender una incidencia, una regla o un resultado existente. |
 
-Crear una guía nueva es una variante de Modificación con flujo propio. Una petición puede combinar categorías; Coordinator conserva el orden y las restricciones solicitadas. Un resultado anterior puede explicarse como tal, pero no presentarse como estado actual.
+Crear una guía nueva es una variante de Modificación con flujo propio, fuera de Fixer/Editor v1. Una petición puede combinar categorías; Coordinator conserva el orden y las restricciones solicitadas. Un resultado anterior puede explicarse como tal, pero no presentarse como estado actual.
 
 ## Tres alcances
 
@@ -145,7 +146,7 @@ No recalcular, deduplicar, reclasificar ni completar campos opcionales ausentes.
 | LISTA_CON_AVISOS | Conservar los avisos e identificar la necesidad de revisión correspondiente, sin convertirlos en errores. |
 | APROBADA | Comunicar aprobación limitada a las reglas ejecutadas, ruleset y scope; conservar posibles INFO. |
 
-La siguiente capacidad depende de la necesidad concreta, no solo del estado o severity. Researcher v1 es OPERATIONAL cuando puede invocarse mediante su [perfil controlado `codex exec`](researcher.md#runtime-profile-operativo-aprobado); Fixer/Editor continúa como rol futuro sin contrato completo ni implementación operativa. Si la capacidad necesaria no está disponible, indicar su necesidad sin simular ejecución.
+La siguiente capacidad depende de la necesidad concreta, no solo del estado o severity. Researcher v1 es OPERATIONAL cuando puede invocarse mediante su [perfil controlado `codex exec`](researcher.md#runtime-profile-operativo-aprobado); [Fixer/Editor v1](fixer-editor.md) tiene contrato aprobado mediante EDIT-013 y sigue DEFINED / NOT YET OPERATIONAL, sin executor ni runtime operativo. Si la capacidad necesaria no está disponible, indicar su necesidad sin simular ejecución.
 
 Cuando no haya incidencias, usar:
 
@@ -168,26 +169,26 @@ Si existe QA válido junto con un diagnóstico técnico de `cleanup`, presentar 
 
 No reintentar automáticamente sin razón concreta. Una entrada corregida o una recuperación técnica conocida puede justificar una nueva llamada dentro del alcance autorizado; un fallo no justifica cambiar el scope.
 
-## Fronteras de Researcher y futuro Fixer/Editor
+## Fronteras de Researcher y Fixer/Editor
 
-Researcher se rige por su [contrato v1](researcher.md). Aquí se delimita el handoff conceptual; no se implementa su ejecución ni se define Fixer/Editor completo.
+Researcher se rige por su [contrato v1](researcher.md) y Fixer/Editor por su [contrato v1 definido y no operativo](fixer-editor.md). Aquí se delimita el handoff conceptual; no se implementa coordinación ni ejecución de Fixer.
 
 | Capacidad | Necesidad |
 | --- | --- |
 | Researcher | Evidencia externa o aportada por el usuario, vigencia, correspondencia real de entidades/Maps y conflictos. OPERATIONAL exclusivamente mediante el perfil aprobado y dentro de sus capacidades disponibles. |
-| Fixer/Editor | Cambios autorizados con evidencia suficiente. |
-| Researcher → Coordinator → futuro Fixer autorizado | Investigar antes de incorporar información, conservando autorización y alcance por separado. |
+| Fixer/Editor | Cambios autorizados con evidencia suficiente sobre una guía existente y un source file. DEFINED / NOT YET OPERATIONAL; el modelo produce FixPlan y no escribe. |
+| Researcher → Coordinator → Fixer/Editor autorizado | Investigar antes de incorporar información, conservando autorización y alcance por separado. |
 | QA | Revalidación determinista después de cambios. |
 
 Una Factory issue es una incidencia devuelta por una ejecución; una necesidad de research puede existir sin issue; una edición es una modificación autorizada. No convertir la necesidad de investigación en una incidencia Factory ni confundir explicación con edición.
 
 Según el [protocolo de investigación](../rules/investigacion.md), `PENDIENTE_VISITA` no significa automáticamente research ni información incorrecta: puede requerir experiencia humana real y seguir pendiente aunque datos externos estén confirmados. Researcher no puede fabricar una visita personal. `PENDIENTE_VERIFICACION` identifica una duda factual que puede intentar resolver, sin dar por confirmado un dato insuficientemente respaldado.
 
-El ciclo QA → Researcher cuando haga falta → Coordinator → futuro Fixer autorizado → QA es una variante, no una secuencia obligatoria para todas las peticiones. Solo diagnóstico termina tras comunicar QA. Investigar antes de escribir comienza por la capacidad de investigación. Actualizar datos actuales requiere investigación antes de incorporar cuando falte evidencia suficiente. Una corrección concreta con datos suficientes puede pasar a Fixer y revalidación. Researcher está disponible cuando puede invocarse mediante su perfil aprobado; comunicar las capacidades todavía no operativas y detener esas acciones.
+El ciclo QA → Researcher cuando haga falta → Coordinator → modelo Fixer/Editor autorizado → futuro Trusted Fix Executor → FixerResult → Coordinator → QA es una variante, no una secuencia obligatoria para todas las peticiones. Solo diagnóstico termina tras comunicar QA. Investigar antes de escribir comienza por la capacidad de investigación. Actualizar datos actuales requiere investigación antes de incorporar cuando falte evidencia suficiente. Una corrección concreta con datos suficientes puede pasar a Fixer y revalidación. Researcher está disponible cuando puede invocarse mediante su perfil aprobado; comunicar las capacidades todavía no operativas y detener esas acciones.
 
 ### Handoff Researcher
 
-Flujo: Coordinator → invocación operacional Researcher mediante el perfil aprobado → evidence packet → Coordinator → futuro Fixer autorizado → QA cuando corresponda. La disponibilidad de Researcher no declara Coordinator OPERATIONAL ni autoriza a Coordinator a investigar directamente. No se crea una tool `factory_research`.
+Flujo conceptual: Coordinator → invocación operacional Researcher mediante el perfil aprobado → evidence packet → Coordinator → modelo Fixer/Editor autorizado → futuro Trusted Fix Executor → FixerResult → Coordinator → QA cuando corresponda. La disponibilidad de Researcher no declara Coordinator OPERATIONAL ni autoriza a Coordinator a investigar directamente. No se crea una tool `factory_research`.
 
 Coordinator resuelve primero `guidePath`, delimita research scope y questions con identificadores estables, y entrega restricciones, periodo/contexto y evidencia del usuario cuando existan. Research scope no es `FactoryReviewContext`; no asumir coincidencia con QA o modificación. La autorización de edición se conserva fuera del request Researcher.
 
@@ -195,9 +196,11 @@ Researcher comprueba la identidad de entidades externas dentro de la guía, sin 
 
 Distinguir research innecesario, necesario, parcial, bloqueado o completado. COMPLETE significa preguntas en estado terminal de investigación, no todas CONFIRMED; puede conservar UNRESOLVED tras búsqueda razonable. PARTIAL y BLOCKED describen cobertura/impedimentos. Los finding statuses CONFIRMED, SUPPORTED, CONFLICTING y UNRESOLVED no son estados ni severities QA; SUPPORTED no equivale automáticamente a dato publicable.
 
-Coordinator comunica conclusiones, conflictos, fuentes principales y pendientes, con fuentes completas si se solicitan. Decide el próximo paso dentro de las capacidades disponibles y la autorización: aclaración, investigación adicional acotada, futuro Fixer autorizado o QA cuando corresponda. Researcher no inicia QA ni Fixer automáticamente. La ausencia de capacidad no autoriza a Coordinator a sustituirla realizando investigación.
+Coordinator comunica conclusiones, conflictos, fuentes principales y pendientes, con fuentes completas si se solicitan. Decide el próximo paso dentro de las capacidades disponibles y la autorización: aclaración, investigación adicional acotada, Fixer/Editor autorizado cuando sea operativo o QA cuando corresponda. Researcher no inicia QA ni Fixer automáticamente. La ausencia de capacidad no autoriza a Coordinator a sustituirla realizando investigación.
 
-El futuro Fixer recibirá autorización, scope de modificación, objetos/locations, findings/evidence con periodo y condiciones, conflictos/pendientes, reglas ACTIVE y QA issues originales cuando correspondan. No persistir automáticamente fuentes dentro de guías ni trasladar notas internas a contenido publicado. No se diseña aquí Fixer completo.
+Coordinator preparará FixerRequest con guidePath, sourceIdentity como precondición, manifiesto de acciones ADD/UPDATE/REMOVE/REORDER y targets, ModificationScope independiente, requestedActions, evidenceBindings autosuficientes locales a la request, suppliedFacts, reglas ACTIVE y QA issues originales cuando correspondan, y restricciones. Seleccionará del packet la evidencia necesaria conservando origen, periodo, límites y conflictos; no presupone almacenamiento persistente ni referencias packetRef + findingIndex. La única ubicación de allowPartial es authorization.allowPartial, false por defecto. No persistir automáticamente fuentes dentro de guías ni trasladar notas internas a contenido publicado.
+
+El modelo entregará FixPlan sin escribir. El futuro Trusted Fix Executor deberá re-resolver guidePath mediante la misma autoridad de catálogo para comprobar sourceIdentity y validar propuesta, autorización y diff antes de aplicar. Coordinator recibirá FixerResult y changedTargets observados; decidirá el contexto QA posterior, que podrá incluir ficha/contenedor cuando corresponda dentro del alcance QA autorizado, sin ampliar permisos de escritura. Después de ADD/REMOVE/REORDER resolverá locations actuales, no índices antiguos. Esto no implementa executor ni runtime y Fixer/Editor permanece DEFINED / NOT YET OPERATIONAL.
 
 ## Autorización de modificación
 
@@ -205,7 +208,7 @@ El futuro Fixer recibirá autorización, scope de modificación, objetos/locatio
 
 No extender la autorización a otras fichas o guías, migraciones, reglas, publicación ni cambios técnicos ajenos. Eliminar contenido mantiene las restricciones de AGENTS.md; detectar una incidencia no autoriza su eliminación.
 
-Coordinator conserva la autorización para un futuro Fixer/Editor, pero no edita directamente. No volver a solicitar una autorización ya clara; sí resolver una decisión material que exceda o cambie el encargo.
+Coordinator conserva y emite el manifiesto de acciones y targets para Fixer/Editor v1, pero no edita directamente. Una referencia textual a la petición es contexto/provenance; la autoridad efectiva es el manifiesto dentro de la autorización del usuario, que Fixer no puede ampliar. No volver a solicitar una autorización ya clara; sí resolver una decisión material que exceda o cambie el encargo.
 
 ## PENDING y contradicciones
 
@@ -217,7 +220,7 @@ Ante contradicción entre documentación ACTIVE y código o instrucciones del ro
 
 Una petición como «Crea Arcos de la Frontera» es Modificación con flujo de guía nueva. Si no existe entrada Factory, no ejecutar QA esperando diagnosticar contenido inexistente ni asignar status. Reconocer las capacidades futuras necesarias; QA llegará después de existir la guía y su entrada de catálogo.
 
-El flujo conceptual es definir alcance → investigación cuando haga falta → edición autorizada → incorporación técnica al catálogo → QA. No se implementa aquí. La autorización para crear contenido no amplía por sí sola el encargo a cualquier cambio técnico o publicación.
+El flujo conceptual es definir alcance → investigación cuando haga falta → edición autorizada → incorporación técnica al catálogo → QA. No se implementa aquí y queda fuera de Fixer/Editor v1; podrá tener un contrato futuro separado de creación. La autorización para crear contenido no amplía por sí sola el encargo a cualquier cambio técnico o publicación.
 
 `guide-not-found` por sí solo no distingue guía nueva, typo o guía existente fuera del catálogo. Esa distinción requiere intención y evidencia local adicional o aclaración. El viewer registry no sustituye esa comprobación ni se convierte en validación QA.
 
@@ -277,7 +280,7 @@ Esta tabla verifica límites del contrato; no representa ejecuciones QA ni fija 
 | Revisar toda una guía | Resolver identidad y usar `guide`; comunicar QA y cobertura limitada. |
 | Revisar gastronomía | Usar targets con la location actual verificada de la sección, sin incluir otras secciones. |
 | Revisar una ficha concreta | Resolver su location actual o pedir la referencia necesaria; comunicar revisión parcial. |
-| Corregir errores | Diagnosticar dentro del alcance y conservar autorización; informar de Fixer futuro y research si hace falta, sin ejecutarlos. |
+| Corregir errores | Diagnosticar dentro del alcance y conservar autorización; informar de Fixer/Editor definido y no operativo y de research si hace falta; no simular la capacidad ausente. |
 | Actualizar horarios/precios | Resolver guía y datos afectados; identificar investigación y edición necesarias, sin sustituirlas por QA. |
 | Crear una guía nueva | Reconocer NEW GUIDE FLOW; QA solo después de guía y entrada Factory. |
 | Revisar una guía internacional | Resolver entrada Factory; usar alcance solicitado y el ruleset devuelto, sin aplicar reglas propias. |
