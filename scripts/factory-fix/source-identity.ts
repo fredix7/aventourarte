@@ -81,7 +81,7 @@ function isExported(statement: ts.VariableStatement): boolean {
   return statement.modifiers?.some(modifier => modifier.kind === ts.SyntaxKind.ExportKeyword) === true;
 }
 
-function guideExport(source: ts.SourceFile, exportName: string): {
+export function inspectGuideExport(source: ts.SourceFile, exportName: string): {
   root: ts.ObjectLiteralExpression; guidePath: string;
 } {
   const matching = source.statements.filter(ts.isVariableStatement).flatMap(statement =>
@@ -131,7 +131,7 @@ export function listFactoryGuideSourceIdentities(input: { readonly repoRoot: str
     const sourcePath = sourcePathFromModuleSpecifier(assignment.moduleSpecifier);
     const bytes = readContainedFile(root, sourcePath, 'SOURCE_NOT_FOUND');
     const source = parseTypeScript(decode(bytes, 'SOURCE_UNSUPPORTED'), 'guide.ts', 'SOURCE_UNSUPPORTED');
-    const { guidePath } = guideExport(source, assignment.importedSymbol);
+    const { guidePath } = inspectGuideExport(source, assignment.importedSymbol);
     if (seen.has(guidePath)) fail('DUPLICATE_GUIDE_PATH');
     seen.add(guidePath);
     const identity: SourceIdentity = {
@@ -177,7 +177,7 @@ export function readResolvedGuideSource(input: {
   if (bytes.length > MAX_GUIDE_SOURCE_BYTES) fail('SNAPSHOT_LIMIT_EXCEEDED');
   const sourceFile = parseTypeScript(decode(bytes, 'GUIDE_ROOT_UNSUPPORTED'), identity.sourcePath,
     'GUIDE_ROOT_UNSUPPORTED');
-  const exported = guideExport(sourceFile, identity.exportName);
+  const exported = inspectGuideExport(sourceFile, identity.exportName);
   if (exported.guidePath !== identity.guidePath) fail('PATH_MISMATCH');
   return { sourceFile, root: exported.root, bytes };
 }

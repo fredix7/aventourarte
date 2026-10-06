@@ -1,6 +1,6 @@
 import * as ts from 'typescript';
 import { fail } from './errors';
-import { digest, type CanonicalValue } from './fingerprint';
+import { digest, scalarFingerprint } from './fingerprint';
 import {
   READ_LIMITS, type Discriminator, type GuideNode, type SourceSpan,
   type StaticScalar, type StructuralLocation
@@ -74,14 +74,17 @@ export function readStaticGuideRoot(root: ts.ObjectLiteralExpression, source: ts
     else if (ts.isNumericLiteral(node)) {
       value = Number(node.text);
       if (!Number.isFinite(value)) fail('STATIC_VALUE_UNSUPPORTED');
+    } else if (ts.isPrefixUnaryExpression(node) && ts.isNumericLiteral(node.operand)
+      && (node.operator === ts.SyntaxKind.MinusToken || node.operator === ts.SyntaxKind.PlusToken)) {
+      value = Number(node.operand.text) * (node.operator === ts.SyntaxKind.MinusToken ? -1 : 1);
+      if (!Number.isFinite(value)) fail('STATIC_VALUE_UNSUPPORTED');
     } else if (node.kind === ts.SyntaxKind.TrueKeyword) value = true;
     else if (node.kind === ts.SyntaxKind.FalseKeyword) value = false;
     else if (node.kind === ts.SyntaxKind.NullKeyword) value = null;
     else fail('STATIC_VALUE_UNSUPPORTED');
-    // JSON numeric policy: finite literals; -0/unary forms are unsupported, not silently collapsed.
     const nodeKind = value === null ? 'null' : typeof value as 'string' | 'number' | 'boolean';
     return Object.freeze({ ...base, nodeKind, value, discriminators: Object.freeze([]),
-      fingerprint: digest([nodeKind, value] as CanonicalValue) });
+      fingerprint: scalarFingerprint(nodeKind, value) });
   };
   return read(root, Object.freeze([]), null, null, source.end, 0);
 }

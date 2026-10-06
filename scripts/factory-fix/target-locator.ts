@@ -1,5 +1,5 @@
 import { fail } from './errors';
-import { digest, identityTuple, spanTuple } from './fingerprint';
+import { digest, identityTuple, scalarFingerprint, spanTuple } from './fingerprint';
 import { assertGuideSnapshot, getSnapshotNode, nodeTargetId } from './snapshot';
 import { hasExactKeys, isSha256 } from './validation';
 import {
@@ -19,10 +19,16 @@ function isProperty(value: unknown): value is string {
 }
 function isScalar(value: unknown): value is StaticScalar {
   return value === null || typeof value === 'boolean' || isProperty(value)
-    || typeof value === 'number' && Number.isFinite(value) && !Object.is(value, -0);
+    || typeof value === 'number' && Number.isFinite(value);
+}
+function isDenseDataList(value: unknown, max: number): value is readonly unknown[] {
+  return Array.isArray(value) && Object.getPrototypeOf(value) === Array.prototype && value.length <= max
+    && Reflect.ownKeys(value).length === value.length + 1
+    && Array.from({ length: value.length }, (_, index) => Object.getOwnPropertyDescriptor(value, String(index)))
+      .every(descriptor => descriptor !== undefined && 'value' in descriptor);
 }
 function isLocation(value: unknown): value is StructuralLocation {
-  return Array.isArray(value) && value.length <= READ_LIMITS.maxDepth && Array.from(value).every(step =>
+  return isDenseDataList(value, READ_LIMITS.maxDepth) && value.every(step =>
     hasExactKeys(step, ['property']) && isProperty(step['property'])
     || hasExactKeys(step, ['element']) && isIndex(step['element'])
   );
@@ -33,7 +39,7 @@ function isIdentityRef(value: unknown): value is NodeIdentityRef {
     && isLocation(value['location']) && isSha256(value['fingerprint']);
 }
 function isDiscriminators(value: unknown): value is readonly Discriminator[] {
-  if (!Array.isArray(value) || value.length > READ_LIMITS.maxObjectProperties) return false;
+  if (!isDenseDataList(value, READ_LIMITS.maxObjectProperties)) return false;
   const seen = new Set<string>();
   return Array.from(value).every(item => {
     if (!hasExactKeys(item, ['property', 'value']) || !isProperty(item['property']) || !isScalar(item['value'])
@@ -99,7 +105,7 @@ function matches(node: GuideNode, discriminators: readonly Discriminator[]): boo
   return discriminators.every(discriminator => {
     if (node.nodeKind !== 'object') return false;
     const child = node.properties.find(property => property.name === discriminator.property)?.node;
-    return child !== undefined && 'value' in child && child.value === discriminator.value;
+    return child !== undefined && 'value' in child && Object.is(child.value, discriminator.value);
   });
 }
 
@@ -172,7 +178,8 @@ function isResolvedRef(value: unknown): value is ResolvedTargetRef {
 }
 function refDigest(ref: ResolvedTargetRef): string {
   return digest([identityTuple(ref), ref.targetType, ref.parent === null ? null : identityTuple(ref.parent),
-    ref.containerFingerprint, ref.observedIndex, ref.discriminators.map(d => [d.property, d.value]),
+    ref.containerFingerprint, ref.observedIndex, ref.discriminators.map(d => [d.property,
+      scalarFingerprint(d.value === null ? 'null' : typeof d.value, d.value)]),
     spanTuple(ref.span), ref.parentSpan === null ? null : spanTuple(ref.parentSpan),
     ref.propertySpan === null ? null : spanTuple(ref.propertySpan)]);
 }

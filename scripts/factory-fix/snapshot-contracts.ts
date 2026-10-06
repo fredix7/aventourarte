@@ -1,6 +1,7 @@
 import type { SourceIdentity } from './contracts';
 
-export const SNAPSHOT_SCHEMA_VERSION = 1;
+// Version 2 distinguishes signed finite numbers, including negative zero.
+export const SNAPSHOT_SCHEMA_VERSION = 2;
 export const READ_LIMITS = Object.freeze({
   maxDepth: 64, maxArrayElements: 10000, maxObjectProperties: 1000,
   maxStringLength: 2 * 1024 * 1024, maxNodes: 50000, maxTotalStringLength: 4 * 1024 * 1024

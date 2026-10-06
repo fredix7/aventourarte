@@ -1,10 +1,14 @@
 import { createHash } from 'node:crypto';
 import type { NodeIdentityRef, SourceSpan, StructuralLocation } from './snapshot-contracts';
+import type { StaticScalar } from './snapshot-contracts';
 
 // Canonical inputs are explicit ordered tuples, never arbitrary object enumeration.
 export type CanonicalValue = string | number | boolean | null | readonly CanonicalValue[];
 export function digest(value: CanonicalValue): string {
   return createHash('sha256').update(JSON.stringify(value)).digest('hex');
+}
+export function scalarFingerprint(kind: string, value: StaticScalar): string {
+  return digest([kind, Object.is(value, -0) ? ['negative-zero'] : value]);
 }
 export function locationTuple(location: StructuralLocation): CanonicalValue {
   return location.map(step => 'property' in step ? ['property', step.property] : ['element', step.element]);

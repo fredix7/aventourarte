@@ -278,17 +278,17 @@ test('shape-valid external SourceIdentity and serialized snapshot do not acquire
   rejectsCode(() => buildGuideSnapshot({ repoRoot: ctx.root, sourceIdentity: trusted }), 'INVALID_INPUT');
 }));
 test('same exact bytes give deterministic versioned snapshot and unique deterministic target IDs', () => withFixture(ctx => {
-  const a = snapshot(ctx), b = snapshot(ctx); assert.equal(a.snapshotSchemaVersion, 1);
+  const a = snapshot(ctx), b = snapshot(ctx); assert.equal(a.snapshotSchemaVersion, 2);
   assert.equal(a.snapshotId, b.snapshotId); assert.equal(a.sourceHash, sha256(readFileSync(ctx.sourceFile)));
   const refsA = allRefs(a), refsB = allRefs(b);
   assert.deepEqual(refsA, refsB); assert.equal(new Set(refsA.map(ref => ref.targetId)).size, refsA.length);
   assert.ok(refsA.every(ref => /^[a-f0-9]{64}$/.test(ref.targetId)));
   const root = a.sourceIdentity, binding = root.catalogBinding;
-  const expected = ['guide-snapshot', 1, [root.guidePath, root.sourcePath, root.exportName, root.ruleSet, root.sourceHash],
+  const expected = ['guide-snapshot', 2, [root.guidePath, root.sourcePath, root.exportName, root.ruleSet, root.sourceHash],
     [binding.catalogPath, binding.catalogHash, binding.moduleSpecifier, binding.importedSymbol, binding.localSymbol,
       binding.assignmentIndex, binding.ruleSet, binding.declaredGuidePath], a.root.fingerprint];
   assert.equal(a.snapshotId, sha256(JSON.stringify(expected)));
-  expected[1] = 2; assert.notEqual(a.snapshotId, sha256(JSON.stringify(expected)));
+  expected[1] = 3; assert.notEqual(a.snapshotId, sha256(JSON.stringify(expected)));
 }));
 for (const [name, change, structuralSame] of [
   ['editorial', source => source.replace("'editorial'", "'edited'"), false],
@@ -344,7 +344,7 @@ for (const [name, expression] of [
   ['shorthand', '{ untrusted }'], ['assertion', "'x' as string"], ['satisfies', "'x' satisfies string"],
   ['nonfinite number', '1e999'], ['duplicate property', "{ nombre: 'a', nombre: 'b' }"],
   ['duplicate escaped property', "{ nombre: 'a', 'nom\\u0062re': 'b' }"], ['numeric property key', "{ 1: 'x' }"],
-  ['unary numeric form', '-1'], ['parenthesized number', '(1)'], ['eval-like', "eval('process.exit()')"]
+  ['unsafe unary expression', '-dangerous()'], ['parenthesized number', '(1)'], ['eval-like', "eval('process.exit()')"]
 ]) {
   test(`static reader rejects unsupported executable/ambiguous form: ${name}`, () => withFixture(ctx =>
     rejectsCode(() => snapshot(ctx), 'STATIC_VALUE_UNSUPPORTED'), guideSource(`payload: ${expression}`)));
@@ -414,7 +414,7 @@ test('syntactically valid copied model locator can resolve data but carries no a
 }));
 test('locator shapes reject private extras, getters, invalid refs and insufficient selectors', () => withFixture(ctx => {
   const s = snapshot(ctx), parent = places(s), locator = elementLocator(s, parent, exact('nombre', 'Same'));
-  for (const candidate of [null, [], {}, { ...locator, stack: 'private' }, { ...locator, snapshotSchemaVersion: 2 },
+  for (const candidate of [null, [], {}, { ...locator, stack: 'private' }, { ...locator, snapshotSchemaVersion: 3 },
     { ...locator, parent: { ...locator.parent, extra: 'x' } }, { ...locator, expectedKind: 'future' },
     { ...locator, parent: { ...locator.parent, location: [{ property: 'secciones' }, {}] } },
     { ...locator, selector: { ...locator.selector, discriminators: [{ property: 'nombre', value: [] }] } },

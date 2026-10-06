@@ -9,6 +9,7 @@ import {
 import type { SourceIdentity } from './contracts';
 
 const indexes = new WeakMap<GuideSnapshot, ReadonlyMap<string, GuideNode>>();
+const sourceTexts = new WeakMap<GuideSnapshot, string>();
 
 export function nodeTargetId(snapshotId: string, node: GuideNode): string {
   return digest(['target', SNAPSHOT_SCHEMA_VERSION, snapshotId, locationTuple(node.location), node.fingerprint]);
@@ -40,6 +41,7 @@ export function buildGuideSnapshot(input: {
   const snapshot: GuideSnapshot = Object.freeze({ snapshotSchemaVersion: SNAPSHOT_SCHEMA_VERSION,
     snapshotId, sourceIdentity: identity, sourceHash: identity.sourceHash, root, nodes: Object.freeze(nodes) });
   indexes.set(snapshot, index);
+  sourceTexts.set(snapshot, sourceFile.text);
   return snapshot;
 }
 
@@ -52,4 +54,9 @@ export function assertGuideSnapshot(value: unknown): asserts value is GuideSnaps
 export function getSnapshotNode(snapshot: GuideSnapshot, location: StructuralLocation): GuideNode | undefined {
   assertGuideSnapshot(snapshot);
   return indexes.get(snapshot)?.get(locationKey(location));
+}
+// Internal immutable source captured at snapshot creation; candidate generation never re-reads files.
+export function getSnapshotSourceText(snapshot: GuideSnapshot): string {
+  assertGuideSnapshot(snapshot);
+  return sourceTexts.get(snapshot)!;
 }
