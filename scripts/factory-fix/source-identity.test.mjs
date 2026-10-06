@@ -11,7 +11,7 @@ const tempRoot = realpathSync.native(tmpdir());
 const prefix = 'factory-fix-phase1-build-';
 const resolutionFlags = ['--preserve-symlinks', '--preserve-symlinks-main'];
 
-test('Factory Fix Phases 1 + 2 + 3 + 4: typecheck, compile and complete in-memory suites', { timeout: 180000 }, t => {
+test('Factory Fix Phases 1 + 2 + 3 + 4 + 5: typecheck, compile and complete in-memory suites', { timeout: 180000 }, t => {
   const outDir = mkdtempSync(path.join(tempRoot, prefix));
   try {
     const compiler = path.join(projectRoot, 'node_modules/typescript/bin/tsc');
@@ -28,13 +28,15 @@ test('Factory Fix Phases 1 + 2 + 3 + 4: typecheck, compile and complete in-memor
     const core = spawnSync(process.execPath, [...resolutionFlags, compiler, '--target', 'ES2022',
       '--module', 'CommonJS', '--moduleResolution', 'Node', '--lib', 'ES2022', '--strict', '--skipLibCheck',
       '--types', 'node,jasmine', '--rootDir', projectRoot, '--outDir', outDir,
-      ...['context', 'rules', 'runner', 'qa'].map(name => `src/app/shared/guide-factory-${name}.spec.ts`)], {
+      ...['context', 'rules', 'runner', 'qa', 'catalog', 'catalog-identity', 'executor']
+        .map(name => `src/app/shared/guide-factory-${name}.spec.ts`)], {
       cwd: projectRoot, encoding: 'utf8', timeout: 30000, env: { NODE_DISABLE_COMPILE_CACHE: '1' }, shell: false
     });
     assert.equal(core.error, undefined); assert.equal(core.status, 0, core.stdout + core.stderr);
     const suite = spawnSync(process.execPath, [...resolutionFlags, '--test',
       'scripts/factory-fix/source-identity.cases.mjs', 'scripts/factory-fix/snapshot.cases.mjs',
-      'scripts/factory-fix/candidate.cases.mjs', 'scripts/factory-fix/authorization.cases.mjs'], {
+      'scripts/factory-fix/candidate.cases.mjs', 'scripts/factory-fix/authorization.cases.mjs',
+      'scripts/factory-fix/result.cases.mjs'], {
       cwd: projectRoot, encoding: 'utf8', timeout: 120000, shell: false,
       env: {
         NODE_DISABLE_COMPILE_CACHE: '1', NODE_PATH: path.join(projectRoot, 'node_modules'),
