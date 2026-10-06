@@ -2,7 +2,7 @@
 
 Estado: política de workflows **ACTIVE** mediante [PROC-002](decisions/decision-log.md). Este documento define selección, autorización, composición de capacidades y condiciones de término; no implementa runtime, workflow engine ni state machine técnica.
 
-Los estados de los roles se conservan: Coordinator y Fixer/Editor **DEFINED / NOT YET OPERATIONAL**; QA Reviewer **DEFINED / NOT YET OPERATIONAL**, con **TOOL CHAIN READY**. Researcher existing-guide sigue **OPERATIONAL exclusivamente mediante su perfil controlado aprobado** por RES-004; NewDestinationResearchRequest tiene contrato RES-005 y está **DEFINED / NOT YET OPERATIONAL**. [Guide Creator v1](agents/guide-creator.md) tiene contrato CREATE-001 y está **DEFINED / NOT YET OPERATIONAL**, sin executor ni runtime aprobados.
+Los estados de los roles se conservan: Coordinator y Fixer/Editor **DEFINED / NOT YET OPERATIONAL**; QA Reviewer **DEFINED / NOT YET OPERATIONAL**, con **TOOL CHAIN READY**. Researcher existing-guide sigue **OPERATIONAL exclusivamente mediante su perfil controlado aprobado** por RES-004; NewDestinationResearchRequest tiene contrato RES-005 y operación RES-006, **OPERATIONAL exclusivamente mediante el mismo perfil controlado aprobado**. [Guide Creator v1](agents/guide-creator.md) tiene contrato CREATE-001 y está **DEFINED / NOT YET OPERATIONAL**, sin executor ni runtime aprobados.
 
 ## Autoridad y principio central
 
@@ -165,7 +165,7 @@ Puede utilizar Fixer para una única guía/source file cuando encaje en EDIT-013
 
 ## CREATE_NEW
 
-Flujo conceptual: destino exacto → comprobación de solapamientos → CREATE_AUTHORIZED → materiales / Researcher new-destination cuando haga falta y sea operativo → Guide Creator cuando sea operativo → creación controlada → incorporación técnica necesaria → QA → Coordinator. CREATE-001 y RES-005 aprueban contratos, no operación: CREATE_NEW permanece bloqueado en las fases dependientes mientras falte capacidad real.
+Flujo conceptual: destino exacto → comprobación de solapamientos → CREATE_AUTHORIZED → materiales / Researcher new-destination cuando haga falta mediante el perfil aprobado RES-006 → Guide Creator cuando sea operativo → creación controlada → incorporación técnica necesaria → QA → Coordinator. CREATE-001 aprueba el contrato Creator sin operación; RES-005 aprueba el handoff y RES-006 acredita la operación de research de destino nuevo. La fase de investigación está disponible bajo el perfil aprobado, pero CREATE_NEW aún no puede terminar en escritura y se detiene como CAPABILITY_UNAVAILABLE si necesita Creator.
 
 Catalog REQUIRED significa consultar la autoridad de catálogo para detectar identidades/solapamientos existentes antes de crear y registrar/resolver la nueva identidad cuando la creación exista. **No significa que una guía nueva deba tener previamente un guidePath resoluble.** No crear una entrada vacía para engañar al flujo.
 
@@ -179,11 +179,11 @@ Researcher solo verifica datos cambiantes, resuelve dudas concretas y completa h
 
 Después actúa Guide Creator cuando sea operativo → QA. La conversión técnica no autoriza nueva selección editorial arbitraria ni copia de notas internas a contenido publicado.
 
-### Researcher para destino no catalogado — contrato definido, no operativo
+### Researcher para destino no catalogado — operacional bajo RES-006
 
 ExistingGuideResearchRequest conserva guidePath resuelto y operación RES-004. [NewDestinationResearchRequest v1](agents/researcher.md#newdestinationresearchrequest-v1--contrato-res-005) tiene contrato RES-005: DestinationIdentity resuelta, research scope/questions, periodo/constraints y user evidence/URLs pertinentes, sin guidePath ni autorización CREATE o technical binding.
 
-La nueva modalidad está DEFINED / NOT YET OPERATIONAL hasta demostrar su handoff/schema, ejecución, web trazable, aislamiento y output estructurado. RES-004 no la acredita automáticamente. No inventar guidePath ni simular capacidad. Si es necesaria, CAPABILITY_UNAVAILABLE para esa fase; Creator sigue igualmente sin operación aprobada. PROC-002 conserva su política y no se redefine mediante estos contratos.
+RES-006 acredita esa modalidad OPERATIONAL exclusivamente mediante el perfil controlado Researcher, tras demostrar handoff/schema, ejecución, web trazable, aislamiento y output estructurado. RES-004 no la acredita automáticamente. No inventar guidePath ni simular capacidades: su fase de research está disponible cuando sea necesaria y la invocación cumpla el perfil y las condiciones efectivas del host; Creator sigue sin operación aprobada y bloquea su fase dependiente como CAPABILITY_UNAVAILABLE. PROC-002 conserva su política y no se redefine.
 
 ## COMPARE_DRAFT_WITH_REPO
 
@@ -236,7 +236,7 @@ Catalog REQUIRED no exige repetir una llamada si ya hay evidencia exacta actual 
 | UPDATE_EXISTING | REQUIRED | OPTIONAL | OPTIONAL | FUTURE/UNAVAILABLE | NOT USED | OPTIONAL | Sí, cuando Fixer sea operativo | FixerResult y QA pertinente. |
 | REVIEW_AND_FIX | REQUIRED | REQUIRED | OPTIONAL | FUTURE/UNAVAILABLE | NOT USED | OPTIONAL; REQUIRED ante decisión material | Sí, fase futura | Informe inicial, manifiesto, cambios observados y revalidación. |
 | MIGRATE_EXISTING | REQUIRED | REQUIRED | OPTIONAL | FUTURE/UNAVAILABLE | NOT USED | OPTIONAL | Sí, fase futura | Scope migrado y cobertura QA, o bloqueo/parcial explícito. |
-| CREATE_NEW | REQUIRED | REQUIRED tras integración | OPTIONAL; modo RES-005 definido/no operativo si necesario | NOT USED | FUTURE/UNAVAILABLE | OPTIONAL; REQUIRED ante elección material | Sí, fase futura | Artefactos/identidad integrados, validación y QA. |
+| CREATE_NEW | REQUIRED | REQUIRED tras integración | OPTIONAL; operacional bajo RES-006 mediante el perfil aprobado | NOT USED | FUTURE/UNAVAILABLE | OPTIONAL; REQUIRED ante elección material | Sí, fase futura | Artefactos/identidad integrados, validación y QA. |
 | COMPARE_DRAFT_WITH_REPO | REQUIRED | NOT USED | OPTIONAL si contraste factual solicitado | NOT USED | NOT USED | OPTIONAL; humano/capacidad pendiente para cobertura semántica | No | Diferencias clasificadas, sin sync. |
 | EXPLAIN_ONLY | OPTIONAL | OPTIONAL | OPTIONAL | NOT USED | NOT USED | OPTIONAL | No | Explicación/recomendaciones, sin aplicación. |
 
@@ -277,7 +277,7 @@ No volver a pedir identidad exacta ya resuelta, autorización clara, hechos sufi
 
 ## Recomendación Guide Creator v1
 
-PROC-002 aprobó la recomendación de que Factory v1 necesita un contrato Guide Creator antes de considerar cubiertas sus actividades centrales, sin aprobar ese contrato, schema o runtime ni ampliar Fixer. [CREATE-001](agents/guide-creator.md) aprueba ahora exclusivamente el contrato Guide Creator v1, DEFINED / NOT YET OPERATIONAL; su executor/runtime y schemas permanecen pendientes. RES-005 aprueba por separado el handoff new-destination, también no operativo.
+PROC-002 aprobó la recomendación de que Factory v1 necesita un contrato Guide Creator antes de considerar cubiertas sus actividades centrales, sin aprobar ese contrato, schema o runtime ni ampliar Fixer. [CREATE-001](agents/guide-creator.md) aprueba ahora exclusivamente el contrato Guide Creator v1, DEFINED / NOT YET OPERATIONAL; su executor/runtime y schemas permanecen pendientes. RES-005 aprueba por separado el handoff new-destination y RES-006 acredita su operación exclusivamente mediante el perfil controlado Researcher.
 
 Frontera mínima para el futuro diseño: CREATE_AUTHORIZED; destino/solapamientos comprobados; draft primario cuando exista; artefactos técnicos explícitos; modelo sin escritura directa; aplicación confiable; QA posterior; sin commit/deploy. No se diseña aquí implementación ni transacción multarchivo.
 
@@ -286,7 +286,6 @@ Frontera mínima para el futuro diseño: CREATE_AUTHORIZED; destino/solapamiento
 - Coordinator operational runtime.
 - Fixer execution y sus mecanismos pendientes según EDIT-013.
 - Guide Creator executor/runtime y schemas definitivos.
-- Researcher new-destination runtime proof, handoff/schema técnico y validación operacional.
 - Automated semantic/editorial review y automated draft comparison.
 - Create integration y multi-file recovery/transaction.
 - Guide lifecycle operations y batch autónomo.

@@ -24,7 +24,7 @@ El rol obedece y consulta:
 3. El [registro de decisiones](../decisions/decision-log.md), fuente autoritativa de los estados ACTIVE, SUPERSEDED y PENDING.
 4. El [contrato del QA Reviewer](qa-reviewer.md), para presentar los resultados y sus límites.
 5. Los contratos Factory de [contexto](../../../src/app/shared/guide-factory-context.ts), [catálogo](../../../src/app/shared/guide-factory-catalog.ts), [executor](../../../src/app/shared/guide-factory-executor.ts) y [resultado QA](../../../src/app/shared/guide-factory-qa.ts), y la operación del [adapter MCP](../../../scripts/factory-qa-mcp.mjs).
-6. El [contrato Researcher v1](researcher.md), para delimitar encargos existing-guide operativos y el nuevo handoff contractual no operativo RES-005, consumiendo evidencia sin investigar directamente.
+6. El [contrato Researcher v1](researcher.md), para delimitar encargos existing-guide operativos y el handoff new-destination contractual RES-005 y operacional RES-006, consumiendo evidencia sin investigar directamente.
 7. El [contrato Fixer/Editor v1](fixer-editor.md), definido y no operativo, para delimitar autorización, FixerRequest y consumo de FixerResult.
 8. La [matriz de workflows v1](../workflows.md), aprobada mediante PROC-002, para selección de intención, autorización, capacidades, condiciones de término y checkpoints.
 9. El [contrato Guide Creator v1](guide-creator.md), aprobado mediante CREATE-001, definido y no operativo, para creación de nueva identidad y artefactos enumerados.
@@ -188,7 +188,7 @@ Researcher se rige por su [contrato v1](researcher.md) y Fixer/Editor por su [co
 
 | Capacidad | Necesidad |
 | --- | --- |
-| Researcher | Evidencia externa o aportada por el usuario, vigencia, correspondencia real de entidades/Maps y conflictos. Existing-guide OPERATIONAL exclusivamente mediante el perfil aprobado; NewDestinationResearchRequest RES-005 DEFINED / NOT YET OPERATIONAL. |
+| Researcher | Evidencia externa o aportada por el usuario, vigencia, correspondencia real de entidades/Maps y conflictos. Existing-guide OPERATIONAL exclusivamente mediante el perfil aprobado; NewDestinationResearchRequest con contrato RES-005 y operación RES-006, OPERATIONAL exclusivamente mediante el mismo perfil aprobado. |
 | Fixer/Editor | Cambios autorizados con evidencia suficiente sobre una guía existente y un source file. DEFINED / NOT YET OPERATIONAL; el modelo produce FixPlan y no escribe. |
 | Researcher → Coordinator → Fixer/Editor autorizado | Investigar antes de incorporar información, conservando autorización y alcance por separado. |
 | QA | Revalidación determinista después de cambios. |
@@ -237,7 +237,7 @@ CREATE_NEW sigue la [matriz v1](../workflows.md#create_new) y el [contrato CREAT
 
 Coordinator resuelve DestinationIdentity/ambiguity y obtiene collision state con evidencia local. Una futura preparación confiable obtiene candidates técnicos; Coordinator cierra binding y manifiesto con paths/export exactos, artefactos, inserciones permitidas, contenido/huecos autorizados y preconditions. El modelo Creator produce CreationPlan sin escritura; el executor futuro valida contra la request original y aplica integración atómica. Coordinator no redacta, investiga ni crea directamente.
 
-[NewDestinationResearchRequest v1](researcher.md#newdestinationresearchrequest-v1--contrato-res-005) tiene handoff RES-005 aprobado y permanece DEFINED / NOT YET OPERATIONAL. Cuando haga falta y sea operativo, Coordinator entrega DestinationIdentity resuelta, scope/questions, periodo/constraints y material humano/URLs relevantes, sin guidePath, sourcePath, exportName, technical binding ni CREATE authorization. La modalidad existing-guide conserva la operación aprobada RES-004. Hasta disponer de una capacidad necesaria, detener su fase como CAPABILITY_UNAVAILABLE.
+[NewDestinationResearchRequest v1](researcher.md#newdestinationresearchrequest-v1--contrato-res-005) tiene handoff RES-005 y operación RES-006 aprobados, exclusivamente mediante el perfil controlado Researcher. Cuando haga falta, Coordinator entrega DestinationIdentity resuelta, scope/questions, periodo/constraints y material humano/URLs relevantes, sin guidePath, sourcePath, exportName, technical binding ni CREATE authorization. La modalidad existing-guide conserva la operación aprobada RES-004. El flujo disponible es Coordinator conceptual → NewDestinationResearchRequest operacional → evidence packet → Coordinator; no implica ejecución autónoma de Coordinator, que sigue DEFINED / NOT YET OPERATIONAL. CREATE_NEW completo aún depende de Creator no operativo: detener esa fase como CAPABILITY_UNAVAILABLE.
 
 Tras CREATED, resolver identidad final mediante catálogo actualizado y decidir Factory QA scope guide conforme al workflow. CreationResult y QA conservan estados separados; CREATED puede requerir correcciones editoriales. Cualquier corrección autorizada posterior pasa a UPDATE_EXISTING → Fixer cuando sea operativo, sin reutilizar Creator.
 

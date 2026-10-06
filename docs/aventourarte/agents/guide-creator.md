@@ -14,7 +14,7 @@ Este documento aprueba exclusivamente el contrato. No implementa Creator, execut
 
 Materializar una guía nueva autorizada e integrar su nueva identidad en las conexiones técnicas necesarias. Puede partir de research/materiales o de CREATE_FROM_USER_DRAFT; la selección y redacción permanecen dentro del encargo.
 
-Coordinator → DestinationIdentity → collision/overlap resolution → CREATE authorization → Researcher new-destination cuando haga falta y sea operativo → Creator model → CreationPlan → future Trusted Creation Executor → CreationResult → Coordinator → Factory QA.
+Coordinator → DestinationIdentity → collision/overlap resolution → CREATE authorization → Researcher new-destination cuando haga falta mediante el perfil aprobado bajo RES-006 → Creator model → CreationPlan → future Trusted Creation Executor → CreationResult → Coordinator → Factory QA.
 
 Consultar [AGENTS.md](../../../AGENTS.md), la [memoria Factory](../README.md), las reglas ACTIVE aplicables y la [checklist QA](../qa/checklist.md). El [registro de decisiones](../decisions/decision-log.md) determina estados oficiales; la [matriz de workflows](../workflows.md) conserva PROC-002. Los contratos de [Coordinator](coordinator.md), [Researcher](researcher.md), [Fixer/Editor](fixer-editor.md) y [QA Reviewer](qa-reviewer.md) conservan su autoridad.
 
@@ -261,7 +261,7 @@ Modelo read-only + future trusted deterministic executor: el modelo necesita lec
 
 Recomendación contractual: primero Trusted Creation Executor library independiente del transporte. Wrapper/launcher solo si luego aporta aislamiento/enforcement. factory_create permanece PENDING; no crear tool por simetría ni ampliar launcher QA con escritura.
 
-Coordinator selecciona CREATE_NEW, resuelve DestinationIdentity/ambiguity y collision state, emite CREATE manifest, prepara materiales, usa NewDestinationResearchRequest cuando haga falta y sea operativo, invoca Creator cuando sea operativo, recibe CreationResult, resuelve identidad final y decide QA. No redacta/investiga/crea directamente. Si falta capacidad necesaria, CAPABILITY_UNAVAILABLE para esa fase, conservando avances autorizados útiles.
+Coordinator selecciona CREATE_NEW, resuelve DestinationIdentity/ambiguity y collision state, emite CREATE manifest, prepara materiales, usa NewDestinationResearchRequest (OPERATIONAL exclusivamente mediante el perfil aprobado bajo RES-006) cuando haga falta, invoca Creator cuando sea operativo, recibe CreationResult, resuelve identidad final y decide QA. No redacta/investiga/crea directamente. Si falta capacidad necesaria, CAPABILITY_UNAVAILABLE para esa fase, conservando avances autorizados útiles.
 
 ## PENDING y acreditación futura
 
@@ -270,7 +270,6 @@ Coordinator selecciona CREATE_NEW, resuelve DestinationIdentity/ambiguity y coll
 - Runtime Creator y schemas TypeScript definitivos.
 - Transacción/exclusión/recovery Windows y prueba de garantías efectivas.
 - Tool/MCP exposure y wrapper cuando se justifique.
-- NewDestinationResearch runtime proof bajo RES-005; no acreditado automáticamente por RES-004.
 - Typecheck command fijo, si se demuestra necesario y seguro.
 - Lifecycle, batch y automated semantic review.
 - Provenance persistence, publish rights/authorization y contrato estructural español no municipal.

@@ -1,14 +1,14 @@
 # AvenTourArte Factory Researcher v1
 
 - Role status: **OPERATIONAL exclusivamente mediante el perfil controlado `codex exec`** para ExistingGuideResearchRequest, basado en guidePath.
-- NewDestinationResearchRequest v1: **DEFINED / NOT YET OPERATIONAL**; handoff contractual **RES-005 ACTIVE**.
+- NewDestinationResearchRequest v1: **OPERATIONAL exclusivamente mediante el perfil controlado `codex exec`** bajo **RES-006 ACTIVE**; handoff contractual **RES-005 ACTIVE**.
 - Access: investigación externa y lectura local acotada, sin modificación.
 - Direct mutation / publication: **prohibited**.
 - Automatic QA / Fixer execution: **prohibited**.
 
-Contrato aprobado mediante [RES-003](../decisions/decision-log.md); operación aprobada mediante [RES-004](../decisions/decision-log.md). Researcher es una invocación delimitada del modelo bajo el runtime profile controlado descrito aquí, no cualquier sesión Codex ni un agente persistente separado. Este documento no crea una tool, un schema permanente ni una configuración.
+ExistingGuideResearchRequest conserva contrato aprobado mediante [RES-003](../decisions/decision-log.md) y operación mediante [RES-004](../decisions/decision-log.md); NewDestinationResearchRequest conserva contrato [RES-005](../decisions/decision-log.md) y operación acreditada mediante [RES-006](../decisions/decision-log.md). Researcher es una invocación delimitada del modelo bajo el runtime profile controlado descrito aquí, no cualquier sesión Codex ni un agente persistente separado. Este documento no crea una tool, un schema permanente ni una configuración.
 
-RES-005 añade una modalidad contractual separada para destinos todavía no catalogados; no cambia el input ni la operación aprobada de ExistingGuideResearchRequest. La nueva modalidad no hereda acreditación operacional de RES-004 ni crea runtime, tool o schema implementado.
+RES-005 añade una modalidad contractual separada para destinos todavía no catalogados; no cambia el input ni la operación aprobada de ExistingGuideResearchRequest. RES-006 acredita su operación por smoke específico mediante el mismo perfil controlado; no la hereda automáticamente de RES-004 ni crea otro runtime, tool o schema permanente.
 
 ## Misión y autoridad
 
@@ -56,7 +56,7 @@ No incluir autorización de edición dentro del request Researcher. Coordinator 
 
 ## NewDestinationResearchRequest v1 — contrato RES-005
 
-Estado de esta modalidad: **DEFINED / NOT YET OPERATIONAL**. Es un request conceptual separado, no una union que cambie los campos existentes. ExistingGuideResearchRequest conserva exactamente el contrato basado en guidePath y sigue OPERATIONAL exclusivamente bajo RES-004 y su runtime controlado aprobado.
+Estado de esta modalidad: **OPERATIONAL exclusivamente mediante el perfil controlado aprobado, acreditado por RES-006**. Es un request conceptual separado, no una union que cambie los campos existentes. ExistingGuideResearchRequest conserva exactamente el contrato basado en guidePath y sigue OPERATIONAL exclusivamente bajo RES-004 y su runtime controlado aprobado.
 
 Coordinator entrega la [DestinationIdentity resuelta](guide-creator.md#destinationidentity) antes de investigar: referencia local, entidad/cobertura, parentage y decisiones materiales pertinentes. Researcher no resuelve por sí mismo la creación ni sustituye esa identidad por otra; una discrepancia material vuelve a Coordinator.
 
@@ -74,21 +74,25 @@ No contiene guidePath, sourcePath, exportName, CREATE authorization ni technical
 
 Conserva el mismo modelo conceptual de research findings/evidence, fechas/condiciones, conflictos, preguntas pendientes y diagnostics separados. COMPLETE/PARTIAL/BLOCKED y CONFIRMED/SUPPORTED/CONFLICTING/UNRESOLVED mantienen exactamente su semántica. El packet referencia requestId y DestinationIdentity del destination request, sin guidePath provisional, vacío o inventado. No atribuir a una guía existente la evidencia de otro destino.
 
-Flujo futuro: Coordinator → NewDestinationResearchRequest → Researcher cuando esa modalidad sea operativa → evidence packet → Coordinator → Guide Creator cuando sea operativo y autorizado. Researcher no invoca Creator ni QA. Findings suficientemente respaldados pueden alimentar contenido autorizado bajo [CREATE-001](guide-creator.md), sin persistencia automática ni copia literal de notas internas.
+Flujo conceptual: Coordinator → NewDestinationResearchRequest → Researcher mediante el perfil aprobado bajo RES-006 → evidence packet → Coordinator → Guide Creator cuando sea operativo y autorizado. Researcher no invoca Creator ni QA. Findings suficientemente respaldados pueden alimentar contenido autorizado bajo [CREATE-001](guide-creator.md), sin persistencia automática ni copia literal de notas internas.
 
-### Acreditación operacional pendiente de la nueva modalidad
+### Runtime operacional aprobado — NewDestinationResearchRequest
 
-RES-005 aprueba SOLO EL HANDOFF CONTRACTUAL. RES-004 describe la operación ya demostrada para guía existente; no se modifica retrospectivamente ni acredita automáticamente este modo. La modalidad nueva requiere smoke específico que demuestre:
+RES-005 aprueba el handoff contractual; RES-006 acredita exclusivamente la operación de esta modalidad mediante el [perfil controlado Researcher](#runtime-profile-operativo-aprobado), compartido con ExistingGuideResearchRequest. RES-004 permanece intacto y no acredita automáticamente el nuevo modo. No se crea un segundo runtime profile ni schema/tool permanente; Coordinator y Guide Creator conservan sus estados.
 
-- Schema/validación y handoff real, con preguntas y referencias de evidencia correctas.
-- Ejecución bajo Researcher runtime profile compatible, con sus restricciones efectivas.
-- Web search/open traceability para fuentes materiales.
-- Output estructurado recibido y validado; eventos técnicos separados.
-- Ausencia de repo write y denegación de acciones mutables incompatibles.
-- Ausencia de apps/plugins/shell general y otras superficies incompatibles conforme al threat model aplicable.
-- Packet correcto de destino nuevo sin guidePath ni technical identity inventados.
+El smoke del 2026-10-06 con codex-cli 0.160.1 obtuvo PASS en los criterios A–L. Usó requestId res005-smoke-arcos-001 y destinationRef new-destination-smoke-arcos, con DestinationIdentity de Arcos de la Frontera, municipio de Cádiz, Andalucía, España. El scope fue verificación factual mínima del destino, Basílica Menor de Santa María de la Asunción y Castillo Ducal; esos hechos turísticos no son decisiones editoriales Factory.
 
-El bloque de runtime y sus smoke tests actuales de este documento siguen acreditando únicamente ExistingGuideResearchRequest. Mientras falte demostración del nuevo modo, devolver CAPABILITY_UNAVAILABLE para las fases dependientes, sin degradar la operación existing-guide ni simular ejecución. Schema/handoff técnico definitivo y prueba de runtime permanecen PENDING.
+Se conservaron los flags y los 18 disables del perfil común: --search, --no-daemon, -a never, exec --ephemeral --ignore-user-config --sandbox read-only --skip-git-repo-check, cwd en TEMP fuera del repo, prompt por stdin, --json, output schema controlado y --output-last-message en TEMP; code_mode_host disponible y no deshabilitado. Las diferencias del smoke fueron el input DestinationIdentity, schema/output RES-005 y autorización acotada de red/export requerida por el host. Request y packet carecían de guidePath, sourcePath, exportName, technical binding y CREATE authorization.
+
+La telemetría registró búsqueda observable con dos consultas y un evento open_page agrupado con tres páginas diferenciadas: spain.info para Arcos de la Frontera y para la Basílica Menor de Santa María de la Asunción, y turismoarcos.es para Castillo Ducal. Las tres sources del packet coincidieron exactamente con páginas realmente abiertas; no se basó evidencia material únicamente en snippets. La apertura agrupada conserva trazabilidad por página, sin afirmar tres llamadas separadas.
+
+El handoff estructurado contenía requestId, destinationRef, status, findings, sources, unresolvedQuestions y technicalDiagnostics; conservó COMPLETE/PARTIAL/BLOCKED y CONFIRMED/SUPPORTED/CONFLICTING/UNRESOLVED. El schema temporal exigió required, enums y additionalProperties false, con validación independiente de todos sus keywords usados y referencias pregunta/evidencia. Se rechazaron cinco controles negativos: technical field extra, source extra field, APROBADA, tipo incorrecto y requestId ausente. Esta evidencia no aprueba una interfaz TypeScript ni un schema permanente.
+
+No se observaron repo writes ni ejecución Creator/Fixer/QA, shell general o apps/plugins. Los hashes de los 153 archivos tracked fueron idénticos, HEAD 8b15a537a656a0a3179c5832b8b7b008fd759ea4 se conservó y el working tree quedó limpio; TEMP fue eliminado. No se repitió una tentativa de escritura: el aislamiento read-only ya se había demostrado bajo el perfil aprobado y se verificó la integridad del repo.
+
+El reintento exitoso necesitó autorización explícita del usuario para enviar a api.openai.com únicamente request del smoke, instrucciones, contenido necesario de AGENTS.md, researcher.md, investigacion.md y schema temporal. Fue una condición del host/revisión de exportación, no autorización Factory general ni permiso persistente de datos. No autorizó otros archivos locales, código de guías, secretos, credenciales, tokens, variables de entorno, configuración privada o historial Git; tampoco amplió write, shell, apps/plugins, git, Creator, Fixer, QA o deploy. Cada futura invocación debe respetar las políticas y consentimientos efectivos del host para el contenido local que envíe.
+
+Se conserva el [threat model aprobado y sus límites](#threat-model-aprobado-y-límites): exec no expone inventario runtime completo verificable y no se afirma más aislamiento del observado/demostrado. Cambios materiales de CLI, profile, features o comportamiento requieren reverificación. La versión 0.160.1 es evidencia histórica del smoke, no requisito permanente congelado.
 
 ## Output conceptual: research packet
 
@@ -306,7 +310,7 @@ El host/orquestador gestiona los archivos temporales de schema/output fuera del 
 
 Researcher solo debe afirmar en `technicalDiagnostics` hechos observados sobre sus herramientas o fuentes. No debe especular sobre mecanismos host que no observa: si `--output-last-message` creó un archivo, cómo el caller almacenó la respuesta o detalles de infraestructura. El host/orquestador registra esos hechos por separado. Esta precisión corrige el diagnóstico impreciso sobre creación del handoff observado en el smoke final.
 
-Para ExistingGuideResearchRequest, Coordinator entrega guidePath resuelto, research scope/questions, restricciones y evidencia del usuario; recibe el paquete y decide el próximo paso. Para NewDestinationResearchRequest se aplica el handoff contractual RES-005 anterior, aún no operativo. No investiga por sí mismo. Researcher no llama automáticamente catálogo, QA o Fixer. Si una capacidad no está disponible, comunicarlo sin simular ejecución.
+Para ExistingGuideResearchRequest, Coordinator entrega guidePath resuelto, research scope/questions, restricciones y evidencia del usuario; recibe el paquete y decide el próximo paso. Para NewDestinationResearchRequest se aplica el handoff contractual RES-005, operacional exclusivamente mediante el perfil aprobado bajo RES-006. No investiga por sí mismo. Researcher no llama automáticamente catálogo, QA o Fixer. Si una capacidad no está disponible, comunicarlo sin simular ejecución.
 
 Coordinator distingue research innecesario, necesario, parcial, bloqueado o completado, sin confundir esos conceptos con aprobación QA. Conserva por separado autorización y scope de modificación.
 
