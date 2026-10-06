@@ -26,11 +26,14 @@ Si existe una contradicción entre documentación ACTIVE y código o instruccion
 
 - [Coordinator](coordinator.md) — orquesta identidad, alcance y autorización; contrato v1 definido; **DEFINED / NOT YET OPERATIONAL**.
 - [Factory QA Reviewer](qa-reviewer.md) — presenta fielmente QA determinista; **DEFINED / NOT YET OPERATIONAL**; **TOOL CHAIN READY**.
-- [Researcher](researcher.md) — reúne evidencia externa o aportada por el usuario para preguntas concretas; contrato v1 aprobado mediante RES-003 y operación mediante RES-004; **OPERATIONAL mediante el perfil controlado `codex exec`**.
+- [Researcher](researcher.md) — reúne evidencia externa o aportada por el usuario; ExistingGuideResearchRequest conserva contrato RES-003 y operación RES-004, **OPERATIONAL mediante el perfil controlado `codex exec`**; NewDestinationResearchRequest tiene contrato RES-005 y está **DEFINED / NOT YET OPERATIONAL**.
 
 - [Fixer/Editor](fixer-editor.md) — contrato v1 aprobado mediante EDIT-013 para cambios editoriales autorizados sobre guías existentes; **DEFINED / NOT YET OPERATIONAL**.
+- [Guide Creator](guide-creator.md) — contrato v1 aprobado mediante CREATE-001 para una guía nueva y sus artefactos técnicos enumerados; **DEFINED / NOT YET OPERATIONAL**.
 
 El modelo Fixer/Editor produce un FixPlan sin escribir en el repositorio. Un futuro Trusted Fix Executor deberá validar identidad, autorización, scope, precondiciones, candidate y diff antes de aplicar cambios. El contrato no implementa ni aprueba ese executor o su runtime.
+
+Guide Creator produce CreationPlan sin escritura directa; un futuro Trusted Creation Executor validará manifiesto, binding técnico, artefactos y mutaciones exactas antes de una integración atómica. CREATE-001 no aprueba executor, runtime, schema ni tool/MCP.
 
 ## Estado operativo
 
@@ -44,6 +47,10 @@ Coordinator v1 está definido como [contrato](coordinator.md) de control de fluj
 
 El adapter MCP local ya expone `factory_guide_catalog` para identidad y `factory_qa_review` como única operación QA. La existencia de estas herramientas no demuestra conexión ni permisos efectivos de una sesión de los roles.
 
-Researcher v1 es **OPERATIONAL mediante el perfil controlado `codex exec`** descrito en su [contrato y runtime aprobado](researcher.md#runtime-profile-operativo-aprobado). Los smoke tests acreditaron búsqueda y apertura web trazable, handoff estructurado y las garantías del threat model aceptado, con la limitación conocida de que `exec` no expone un inventario runtime completo verificable. Es una invocación delimitada del modelo, no cualquier sesión Codex ni un agente persistente separado; no se crea `factory_research` propia. Su output es un paquete de evidencia validado mediante schema y recibido por `--output-last-message`, con estados independientes de QA y sin persistencia automática en guías.
+Researcher v1, en su modalidad ExistingGuideResearchRequest basada en guidePath, es **OPERATIONAL mediante el perfil controlado `codex exec`** descrito en su [contrato y runtime aprobado](researcher.md#runtime-profile-operativo-aprobado). Los smoke tests acreditaron búsqueda y apertura web trazable, handoff estructurado y las garantías del threat model aceptado, con la limitación conocida de que `exec` no expone un inventario runtime completo verificable. Es una invocación delimitada del modelo, no cualquier sesión Codex ni un agente persistente separado; no se crea `factory_research` propia. Su output es un paquete de evidencia validado mediante schema y recibido por `--output-last-message`, con estados independientes de QA y sin persistencia automática en guías.
 
-Flujo conceptual: Coordinator → identidad exacta → autorización → Researcher cuando haga falta mediante el perfil aprobado → modelo Fixer/Editor → futuro Trusted Fix Executor → FixerResult → Coordinator → QA cuando Coordinator determine que corresponde. Coordinator conserva el manifiesto de modificación, entrega evidencia seleccionada y recibe cambios observados; Researcher no edita ni inicia QA o Fixer automáticamente. Fixer/Editor sigue DEFINED / NOT YET OPERATIONAL. La operación de Researcher no declara Coordinator OPERATIONAL.
+NewDestinationResearchRequest v1, aprobado contractualmente mediante RES-005, recibe DestinationIdentity resuelta sin guidePath ni autorización CREATE y conserva el modelo de evidencia. Esa modalidad sigue **DEFINED / NOT YET OPERATIONAL** hasta demostrar handoff/schema, ejecución, web trazable, aislamiento y output estructurado. RES-004 no la acredita automáticamente ni pierde la operación ya demostrada para guías existentes.
+
+Flujo conceptual para guía existente: Coordinator → identidad exacta → autorización → Researcher cuando haga falta mediante el perfil aprobado → modelo Fixer/Editor → futuro Trusted Fix Executor → FixerResult → Coordinator → QA cuando Coordinator determine que corresponde. Coordinator conserva el manifiesto de modificación, entrega evidencia seleccionada y recibe cambios observados; Researcher no edita ni inicia QA o Fixer automáticamente. Fixer/Editor sigue DEFINED / NOT YET OPERATIONAL. La operación de Researcher no declara Coordinator OPERATIONAL.
+
+CREATE_NEW conserva el flujo de PROC-002: Coordinator resuelve DestinationIdentity/solapamientos y emite CREATE manifest; Researcher new-destination cuando haga falta y sea operativo → modelo Creator → futuro Trusted Creation Executor → CreationResult → Coordinator → QA. Creator y la nueva modalidad Researcher no son operativos todavía; detener fases dependientes como CAPABILITY_UNAVAILABLE, sin simular capacidades. Coordinator y Fixer conservan sus estados.

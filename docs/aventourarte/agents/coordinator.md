@@ -24,9 +24,10 @@ El rol obedece y consulta:
 3. El [registro de decisiones](../decisions/decision-log.md), fuente autoritativa de los estados ACTIVE, SUPERSEDED y PENDING.
 4. El [contrato del QA Reviewer](qa-reviewer.md), para presentar los resultados y sus límites.
 5. Los contratos Factory de [contexto](../../../src/app/shared/guide-factory-context.ts), [catálogo](../../../src/app/shared/guide-factory-catalog.ts), [executor](../../../src/app/shared/guide-factory-executor.ts) y [resultado QA](../../../src/app/shared/guide-factory-qa.ts), y la operación del [adapter MCP](../../../scripts/factory-qa-mcp.mjs).
-6. El [contrato Researcher v1](researcher.md), para delimitar encargos y consumir evidencia sin investigar directamente.
+6. El [contrato Researcher v1](researcher.md), para delimitar encargos existing-guide operativos y el nuevo handoff contractual no operativo RES-005, consumiendo evidencia sin investigar directamente.
 7. El [contrato Fixer/Editor v1](fixer-editor.md), definido y no operativo, para delimitar autorización, FixerRequest y consumo de FixerResult.
 8. La [matriz de workflows v1](../workflows.md), aprobada mediante PROC-002, para selección de intención, autorización, capacidades, condiciones de término y checkpoints.
+9. El [contrato Guide Creator v1](guide-creator.md), aprobado mediante CREATE-001, definido y no operativo, para creación de nueva identidad y artefactos enumerados.
 
 Este documento referencia la normativa; no copia ni redefine reglas editoriales específicas. Una estructura histórica no se convierte en norma y una decisión PENDING no se convierte en obligación. Ante contradicciones, seguir AGENTS.md e informar antes de decidir.
 
@@ -42,6 +43,7 @@ Este documento referencia la normativa; no copia ni redefine reglas editoriales 
 - Identificar el tipo de siguiente capacidad necesaria, sin ejecutarla si no existe.
 - Emitir y conservar el manifiesto de acciones y targets autorizados para Fixer/Editor v1, definido y no operativo.
 - Recibir FixerResult cuando exista ejecución controlada y decidir la revalidación QA posterior a partir de los cambios observados.
+- Para CREATE_NEW, resolver DestinationIdentity/solapamientos, obtener preparación técnica confiable, emitir CREATE manifest y recibir CreationResult cuando exista operación; no crear directamente.
 - Comunicar resultados, límites, capacidades ausentes y bloqueos materiales.
 - Aplicar las condiciones de término del workflow y detener fases dependientes ante BLOCKED / CAPABILITY_UNAVAILABLE, sin confundir ejecución terminada con objetivo satisfecho.
 
@@ -64,9 +66,9 @@ Crear una guía nueva es una variante de Modificación con flujo propio, fuera d
 
 ROLE/CAPABILITY != WORKFLOW. Las capacidades se combinan según la finalidad del encargo; no existe secuencia universal Researcher → Fixer → QA. Seleccionar uno de los siete workflows y sus submodos conforme a la [matriz v1](../workflows.md#taxonomía-principal-y-submodos), sin convertir revisión, comparación o explicación en edición.
 
-Conservar READ_ONLY, MODIFICATION_AUTHORIZED, MIGRATION_AUTHORIZED o CREATE_AUTHORIZED según el encargo. Una fase de modificación requiere manifiesto Fixer; una migración exige autorización deliberada; crear depende del futuro contrato Guide Creator. REMOVE necesita permiso explícito. Ninguna categoría autoriza publicación, commit/push, deploy o infraestructura arbitraria. No repetir autorizaciones claras ni preguntas resueltas; aclarar únicamente decisiones materiales.
+Conservar READ_ONLY, MODIFICATION_AUTHORIZED, MIGRATION_AUTHORIZED o CREATE_AUTHORIZED según el encargo. Una fase de modificación requiere manifiesto Fixer; una migración exige autorización deliberada; crear se rige por CREATE-001, con Guide Creator definido y no operativo. REMOVE necesita permiso explícito. Ninguna categoría autoriza publicación, commit/push, deploy o infraestructura arbitraria. No repetir autorizaciones claras ni preguntas resueltas; aclarar únicamente decisiones materiales.
 
-Reconocer cobertura editorial/semántica que necesite humano o capacidad futura, sin asumir una auditoría manual. Guide Creator sigue FUTURE, sin contrato aprobado; lifecycle destructivo y batch autónomo quedan fuera de operación v1. Clasificar un workflow no significa poder completarlo: aplicar el bloqueo de la fase dependiente, conservar avances útiles autorizados y comunicar la capacidad o decisión faltante, sin simularla.
+Reconocer cobertura editorial/semántica que necesite humano o capacidad futura, sin asumir una auditoría manual. Guide Creator tiene contrato CREATE-001 y sigue DEFINED / NOT YET OPERATIONAL; lifecycle destructivo y batch autónomo quedan fuera de operación v1. Clasificar un workflow no significa poder completarlo: aplicar el bloqueo de la fase dependiente, conservar avances útiles autorizados y comunicar la capacidad o decisión faltante, sin simularla.
 
 ## Tres alcances
 
@@ -157,7 +159,7 @@ No recalcular, deduplicar, reclasificar ni completar campos opcionales ausentes.
 | LISTA_CON_AVISOS | Conservar los avisos e identificar la necesidad de revisión correspondiente, sin convertirlos en errores. |
 | APROBADA | Comunicar aprobación limitada a las reglas ejecutadas, ruleset y scope; conservar posibles INFO. |
 
-La siguiente capacidad depende de la necesidad concreta, no solo del estado o severity. Researcher v1 es OPERATIONAL cuando puede invocarse mediante su [perfil controlado `codex exec`](researcher.md#runtime-profile-operativo-aprobado); [Fixer/Editor v1](fixer-editor.md) tiene contrato aprobado mediante EDIT-013 y sigue DEFINED / NOT YET OPERATIONAL, sin executor ni runtime operativo. Si la capacidad necesaria no está disponible, indicar su necesidad sin simular ejecución.
+La siguiente capacidad depende de la necesidad concreta, no solo del estado o severity. Researcher v1 en modalidad existing-guide es OPERATIONAL cuando puede invocarse mediante su [perfil controlado `codex exec`](researcher.md#runtime-profile-operativo-aprobado); [Fixer/Editor v1](fixer-editor.md) tiene contrato aprobado mediante EDIT-013 y sigue DEFINED / NOT YET OPERATIONAL, sin executor ni runtime operativo. Si la capacidad necesaria no está disponible, indicar su necesidad sin simular ejecución.
 
 Cuando no haya incidencias, usar:
 
@@ -186,7 +188,7 @@ Researcher se rige por su [contrato v1](researcher.md) y Fixer/Editor por su [co
 
 | Capacidad | Necesidad |
 | --- | --- |
-| Researcher | Evidencia externa o aportada por el usuario, vigencia, correspondencia real de entidades/Maps y conflictos. OPERATIONAL exclusivamente mediante el perfil aprobado y dentro de sus capacidades disponibles. |
+| Researcher | Evidencia externa o aportada por el usuario, vigencia, correspondencia real de entidades/Maps y conflictos. Existing-guide OPERATIONAL exclusivamente mediante el perfil aprobado; NewDestinationResearchRequest RES-005 DEFINED / NOT YET OPERATIONAL. |
 | Fixer/Editor | Cambios autorizados con evidencia suficiente sobre una guía existente y un source file. DEFINED / NOT YET OPERATIONAL; el modelo produce FixPlan y no escribe. |
 | Researcher → Coordinator → Fixer/Editor autorizado | Investigar antes de incorporar información, conservando autorización y alcance por separado. |
 | QA | Revalidación determinista después de cambios. |
@@ -197,7 +199,7 @@ Según el [protocolo de investigación](../rules/investigacion.md), `PENDIENTE_V
 
 El ciclo QA → Researcher cuando haga falta → Coordinator → modelo Fixer/Editor autorizado → futuro Trusted Fix Executor → FixerResult → Coordinator → QA es una variante, no una secuencia obligatoria para todas las peticiones. Solo diagnóstico termina tras comunicar QA. Investigar antes de escribir comienza por la capacidad de investigación. Actualizar datos actuales requiere investigación antes de incorporar cuando falte evidencia suficiente. Una corrección concreta con datos suficientes puede pasar a Fixer y revalidación. Researcher está disponible cuando puede invocarse mediante su perfil aprobado; comunicar las capacidades todavía no operativas y detener esas acciones.
 
-### Handoff Researcher
+### Handoff Researcher para guía existente
 
 Flujo conceptual: Coordinator → invocación operacional Researcher mediante el perfil aprobado → evidence packet → Coordinator → modelo Fixer/Editor autorizado → futuro Trusted Fix Executor → FixerResult → Coordinator → QA cuando corresponda. La disponibilidad de Researcher no declara Coordinator OPERATIONAL ni autoriza a Coordinator a investigar directamente. No se crea una tool `factory_research`.
 
@@ -231,7 +233,13 @@ Ante contradicción entre documentación ACTIVE y código o instrucciones del ro
 
 Una petición como «Crea Arcos de la Frontera» es Modificación con flujo de guía nueva. Si no existe entrada Factory, no ejecutar QA esperando diagnosticar contenido inexistente ni asignar status. Reconocer las capacidades futuras necesarias; QA llegará después de existir la guía y su entrada de catálogo.
 
-CREATE_NEW sigue la [matriz v1](../workflows.md#create_new): destino exacto → solapamientos → CREATE_AUTHORIZED → materiales/research pertinente → futuro Guide Creator → creación e incorporación técnica necesarias → QA → Coordinator. Fixer v1 no crea guías. PROC-002 recomienda contrato Creator dentro del diseño v1, pero no lo aprueba ni implementa; el handoff Researcher para destino no catalogado permanece PENDING. No inventar guidePath ni crear una entrada vacía. Con draft aportado, este es input primario y no se reinvestiga todo por defecto. La autorización de creación no amplía el encargo a cualquier archivo o publicación.
+CREATE_NEW sigue la [matriz v1](../workflows.md#create_new) y el [contrato CREATE-001](guide-creator.md): DestinationIdentity → collision/overlap resolution → CREATE manifest → materiales/research pertinente → modelo Creator → futuro Trusted Creation Executor → CreationResult → Coordinator → QA. Guide Creator tiene contrato aprobado y sigue DEFINED / NOT YET OPERATIONAL; Fixer v1 no crea guías. No inventar guidePath ni crear una entrada vacía. Con draft aportado, este es input primario y no se reinvestiga todo por defecto. La autorización de creación no amplía el encargo a cualquier archivo o publicación.
+
+Coordinator resuelve DestinationIdentity/ambiguity y obtiene collision state con evidencia local. Una futura preparación confiable obtiene candidates técnicos; Coordinator cierra binding y manifiesto con paths/export exactos, artefactos, inserciones permitidas, contenido/huecos autorizados y preconditions. El modelo Creator produce CreationPlan sin escritura; el executor futuro valida contra la request original y aplica integración atómica. Coordinator no redacta, investiga ni crea directamente.
+
+[NewDestinationResearchRequest v1](researcher.md#newdestinationresearchrequest-v1--contrato-res-005) tiene handoff RES-005 aprobado y permanece DEFINED / NOT YET OPERATIONAL. Cuando haga falta y sea operativo, Coordinator entrega DestinationIdentity resuelta, scope/questions, periodo/constraints y material humano/URLs relevantes, sin guidePath, sourcePath, exportName, technical binding ni CREATE authorization. La modalidad existing-guide conserva la operación aprobada RES-004. Hasta disponer de una capacidad necesaria, detener su fase como CAPABILITY_UNAVAILABLE.
+
+Tras CREATED, resolver identidad final mediante catálogo actualizado y decidir Factory QA scope guide conforme al workflow. CreationResult y QA conservan estados separados; CREATED puede requerir correcciones editoriales. Cualquier corrección autorizada posterior pasa a UPDATE_EXISTING → Fixer cuando sea operativo, sin reutilizar Creator.
 
 `guide-not-found` por sí solo no distingue guía nueva, typo o guía existente fuera del catálogo. Esa distinción requiere intención y evidencia local adicional o aclaración. El viewer registry no sustituye esa comprobación ni se convierte en validación QA.
 

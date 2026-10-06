@@ -2,17 +2,17 @@
 
 Estado: política de workflows **ACTIVE** mediante [PROC-002](decisions/decision-log.md). Este documento define selección, autorización, composición de capacidades y condiciones de término; no implementa runtime, workflow engine ni state machine técnica.
 
-Los estados de los roles se conservan: Coordinator y Fixer/Editor **DEFINED / NOT YET OPERATIONAL**; QA Reviewer **DEFINED / NOT YET OPERATIONAL**, con **TOOL CHAIN READY**; Researcher **OPERATIONAL exclusivamente mediante su perfil controlado aprobado**. Guide Creator continúa FUTURE, sin contrato aprobado ni runtime.
+Los estados de los roles se conservan: Coordinator y Fixer/Editor **DEFINED / NOT YET OPERATIONAL**; QA Reviewer **DEFINED / NOT YET OPERATIONAL**, con **TOOL CHAIN READY**. Researcher existing-guide sigue **OPERATIONAL exclusivamente mediante su perfil controlado aprobado** por RES-004; NewDestinationResearchRequest tiene contrato RES-005 y está **DEFINED / NOT YET OPERATIONAL**. [Guide Creator v1](agents/guide-creator.md) tiene contrato CREATE-001 y está **DEFINED / NOT YET OPERATIONAL**, sin executor ni runtime aprobados.
 
 ## Autoridad y principio central
 
 Consultar [AGENTS.md](../../AGENTS.md), la [memoria Factory](README.md), las reglas ACTIVE aplicables y la [checklist de QA](qa/checklist.md). El [registro de decisiones](decisions/decision-log.md) determina los estados oficiales. PENDING no es normativa; una estructura histórica no se convierte en regla.
 
-**ROLE/CAPABILITY != WORKFLOW.** Catalog/identity, Factory QA, Researcher, Fixer y futuro Guide Creator son capacidades. Los workflows describen la finalidad del encargo y combinan únicamente las capacidades pertinentes y disponibles.
+**ROLE/CAPABILITY != WORKFLOW.** Catalog/identity, Factory QA, Researcher, Fixer y Guide Creator definido y no operativo son capacidades. Los workflows describen la finalidad del encargo y combinan únicamente las capacidades pertinentes y disponibles.
 
 No existe una secuencia universal Researcher → Fixer → QA. Una revisión puede terminar en informe; una explicación puede no necesitar ejecución; una actualización con evidencia suficiente puede no necesitar research.
 
-[Coordinator](agents/coordinator.md) selecciona workflow por intención, contexto, objeto, scope, autorización y materiales. No investiga, edita, realiza auditoría editorial manual ni simula capacidades inexistentes. Los contratos de [Researcher](agents/researcher.md), [Fixer/Editor](agents/fixer-editor.md) y [QA Reviewer](agents/qa-reviewer.md) conservan sus límites.
+[Coordinator](agents/coordinator.md) selecciona workflow por intención, contexto, objeto, scope, autorización y materiales. No investiga, edita, realiza auditoría editorial manual ni simula capacidades inexistentes. Los contratos de [Researcher](agents/researcher.md), [Fixer/Editor](agents/fixer-editor.md), [Guide Creator](agents/guide-creator.md) y [QA Reviewer](agents/qa-reviewer.md) conservan sus límites.
 
 ## Taxonomía principal y submodos
 
@@ -58,7 +58,7 @@ Resolver solo decisiones materiales que no puedan determinarse razonablemente po
 | READ_ONLY | Revisión, verificación, comparación o explicación sin escritura. |
 | MODIFICATION_AUTHORIZED | Modificación dentro del alcance del usuario, concretada en manifiesto Fixer antes de la fase de escritura. |
 | MIGRATION_AUTHORIZED | Revisión deliberada de contenido histórico dentro del scope de migración y reglas ACTIVE seleccionadas, sin imponer PENDING. |
-| CREATE_AUTHORIZED | Exclusivamente los artefactos necesarios para esa guía bajo el futuro contrato Creator. |
+| CREATE_AUTHORIZED | Exclusivamente los artefactos necesarios para esa guía bajo CREATE-001; contrato Creator definido y no operativo. |
 
 REVIEW_EXISTING, COMPARE_DRAFT_WITH_REPO y EXPLAIN_ONLY son READ_ONLY. UPDATE_EXISTING requiere MODIFICATION_AUTHORIZED; MIGRATE_EXISTING requiere MIGRATION_AUTHORIZED; CREATE_NEW requiere CREATE_AUTHORIZED. REVIEW_AND_FIX comienza con revisión READ_ONLY y conserva por separado la autorización de corrección para el manifiesto posterior.
 
@@ -165,7 +165,7 @@ Puede utilizar Fixer para una única guía/source file cuando encaje en EDIT-013
 
 ## CREATE_NEW
 
-Flujo conceptual: destino exacto → comprobación de solapamientos → CREATE_AUTHORIZED → materiales / Researcher cuando corresponda → future Guide Creator → creación controlada → incorporación técnica necesaria → QA → Coordinator.
+Flujo conceptual: destino exacto → comprobación de solapamientos → CREATE_AUTHORIZED → materiales / Researcher new-destination cuando haga falta y sea operativo → Guide Creator cuando sea operativo → creación controlada → incorporación técnica necesaria → QA → Coordinator. CREATE-001 y RES-005 aprueban contratos, no operación: CREATE_NEW permanece bloqueado en las fases dependientes mientras falte capacidad real.
 
 Catalog REQUIRED significa consultar la autoridad de catálogo para detectar identidades/solapamientos existentes antes de crear y registrar/resolver la nueva identidad cuando la creación exista. **No significa que una guía nueva deba tener previamente un guidePath resoluble.** No crear una entrada vacía para engañar al flujo.
 
@@ -177,13 +177,13 @@ El draft trabajado con el usuario es **INPUT PRIMARIO**. Preservar selección, e
 
 Researcher solo verifica datos cambiantes, resuelve dudas concretas y completa huecos autorizados. No reinvestigar todo por defecto ni sustituir silenciosamente decisiones editoriales trabajadas con el usuario. Cumplir ACTIVE y reportar incompatibilidades materiales antes de decidir.
 
-Después actúa future Guide Creator → QA. La conversión técnica no autoriza nueva selección editorial arbitraria ni copia de notas internas a contenido publicado.
+Después actúa Guide Creator cuando sea operativo → QA. La conversión técnica no autoriza nueva selección editorial arbitraria ni copia de notas internas a contenido publicado.
 
-### PENDING — Researcher para destino no catalogado
+### Researcher para destino no catalogado — contrato definido, no operativo
 
-Researcher actual recibe guidePath resuelto. CREATE_NEW necesita un futuro handoff para destino no catalogado con destination identity explícita, geografía/disambiguación, research scope, questions, periodo y user evidence cuando corresponda.
+ExistingGuideResearchRequest conserva guidePath resuelto y operación RES-004. [NewDestinationResearchRequest v1](agents/researcher.md#newdestinationresearchrequest-v1--contrato-res-005) tiene contrato RES-005: DestinationIdentity resuelta, research scope/questions, periodo/constraints y user evidence/URLs pertinentes, sin guidePath ni autorización CREATE o technical binding.
 
-No inventar guidePath ni afirmar que ese handoff ya está soportado. El contrato específico se resolverá junto a Guide Creator; PROC-002 no modifica researcher.md ni aprueba esa extensión. Si el research necesario depende de ese handoff aún ausente, comunicar CAPABILITY_UNAVAILABLE para esa fase.
+La nueva modalidad está DEFINED / NOT YET OPERATIONAL hasta demostrar su handoff/schema, ejecución, web trazable, aislamiento y output estructurado. RES-004 no la acredita automáticamente. No inventar guidePath ni simular capacidad. Si es necesaria, CAPABILITY_UNAVAILABLE para esa fase; Creator sigue igualmente sin operación aprobada. PROC-002 conserva su política y no se redefine mediante estos contratos.
 
 ## COMPARE_DRAFT_WITH_REPO
 
@@ -227,7 +227,7 @@ REQUIRED indica necesidad conceptual de la capacidad/autoridad; OPTIONAL depende
 
 Catalog REQUIRED no exige repetir una llamada si ya hay evidencia exacta actual de identidad. Para CREATE_NEW tiene el significado previo/posterior descrito arriba. QA representa infraestructura determinista disponible, no QA Reviewer autónomo OPERATIONAL. La disponibilidad efectiva de sesión sigue siendo necesaria. Researcher conserva su perfil aprobado; evidencia suficiente aplicable puede evitar otra ejecución.
 
-| Workflow | Catalog | QA | Researcher | Fixer | Future Guide Creator | Human checkpoint | Writes? | Typical output |
+| Workflow | Catalog | QA | Researcher | Fixer | Guide Creator | Human checkpoint | Writes? | Typical output |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | REVIEW_EXISTING general | REQUIRED | REQUIRED | OPTIONAL | NOT USED | NOT USED | OPTIONAL; REQUIRED si falta revisión humana necesaria | No | Informe QA/factual/editorial y cobertura separada. |
 | VERIFY_ONLY | REQUIRED | OPTIONAL | REQUIRED | NOT USED | NOT USED | OPTIONAL | No | Findings, condiciones y pendientes. |
@@ -236,7 +236,7 @@ Catalog REQUIRED no exige repetir una llamada si ya hay evidencia exacta actual 
 | UPDATE_EXISTING | REQUIRED | OPTIONAL | OPTIONAL | FUTURE/UNAVAILABLE | NOT USED | OPTIONAL | Sí, cuando Fixer sea operativo | FixerResult y QA pertinente. |
 | REVIEW_AND_FIX | REQUIRED | REQUIRED | OPTIONAL | FUTURE/UNAVAILABLE | NOT USED | OPTIONAL; REQUIRED ante decisión material | Sí, fase futura | Informe inicial, manifiesto, cambios observados y revalidación. |
 | MIGRATE_EXISTING | REQUIRED | REQUIRED | OPTIONAL | FUTURE/UNAVAILABLE | NOT USED | OPTIONAL | Sí, fase futura | Scope migrado y cobertura QA, o bloqueo/parcial explícito. |
-| CREATE_NEW | REQUIRED | REQUIRED tras integración | OPTIONAL; handoff nuevo PENDING si necesario | NOT USED | FUTURE/UNAVAILABLE | OPTIONAL; REQUIRED ante elección material | Sí, fase futura | Artefactos/identidad integrados, validación y QA. |
+| CREATE_NEW | REQUIRED | REQUIRED tras integración | OPTIONAL; modo RES-005 definido/no operativo si necesario | NOT USED | FUTURE/UNAVAILABLE | OPTIONAL; REQUIRED ante elección material | Sí, fase futura | Artefactos/identidad integrados, validación y QA. |
 | COMPARE_DRAFT_WITH_REPO | REQUIRED | NOT USED | OPTIONAL si contraste factual solicitado | NOT USED | NOT USED | OPTIONAL; humano/capacidad pendiente para cobertura semántica | No | Diferencias clasificadas, sin sync. |
 | EXPLAIN_ONLY | OPTIONAL | OPTIONAL | OPTIONAL | NOT USED | NOT USED | OPTIONAL | No | Explicación/recomendaciones, sin aplicación. |
 
@@ -277,7 +277,7 @@ No volver a pedir identidad exacta ya resuelta, autorización clara, hechos sufi
 
 ## Recomendación Guide Creator v1
 
-PROC-002 aprueba la recomendación de que Factory v1 necesita un contrato Guide Creator antes de considerar cubiertas sus actividades centrales. **No aprueba todavía ese contrato**, schema o runtime, ni amplía Fixer.
+PROC-002 aprobó la recomendación de que Factory v1 necesita un contrato Guide Creator antes de considerar cubiertas sus actividades centrales, sin aprobar ese contrato, schema o runtime ni ampliar Fixer. [CREATE-001](agents/guide-creator.md) aprueba ahora exclusivamente el contrato Guide Creator v1, DEFINED / NOT YET OPERATIONAL; su executor/runtime y schemas permanecen pendientes. RES-005 aprueba por separado el handoff new-destination, también no operativo.
 
 Frontera mínima para el futuro diseño: CREATE_AUTHORIZED; destino/solapamientos comprobados; draft primario cuando exista; artefactos técnicos explícitos; modelo sin escritura directa; aplicación confiable; QA posterior; sin commit/deploy. No se diseña aquí implementación ni transacción multarchivo.
 
@@ -285,8 +285,8 @@ Frontera mínima para el futuro diseño: CREATE_AUTHORIZED; destino/solapamiento
 
 - Coordinator operational runtime.
 - Fixer execution y sus mecanismos pendientes según EDIT-013.
-- Guide Creator contract/runtime.
-- Researcher new-destination handoff.
+- Guide Creator executor/runtime y schemas definitivos.
+- Researcher new-destination runtime proof, handoff/schema técnico y validación operacional.
 - Automated semantic/editorial review y automated draft comparison.
 - Create integration y multi-file recovery/transaction.
 - Guide lifecycle operations y batch autónomo.

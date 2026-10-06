@@ -1,17 +1,20 @@
 # AvenTourArte Factory Researcher v1
 
-- Role status: **OPERATIONAL exclusivamente mediante el perfil controlado `codex exec`**.
+- Role status: **OPERATIONAL exclusivamente mediante el perfil controlado `codex exec`** para ExistingGuideResearchRequest, basado en guidePath.
+- NewDestinationResearchRequest v1: **DEFINED / NOT YET OPERATIONAL**; handoff contractual **RES-005 ACTIVE**.
 - Access: investigación externa y lectura local acotada, sin modificación.
 - Direct mutation / publication: **prohibited**.
 - Automatic QA / Fixer execution: **prohibited**.
 
 Contrato aprobado mediante [RES-003](../decisions/decision-log.md); operación aprobada mediante [RES-004](../decisions/decision-log.md). Researcher es una invocación delimitada del modelo bajo el runtime profile controlado descrito aquí, no cualquier sesión Codex ni un agente persistente separado. Este documento no crea una tool, un schema permanente ni una configuración.
 
+RES-005 añade una modalidad contractual separada para destinos todavía no catalogados; no cambia el input ni la operación aprobada de ExistingGuideResearchRequest. La nueva modalidad no hereda acreditación operacional de RES-004 ni crea runtime, tool o schema implementado.
+
 ## Misión y autoridad
 
 Obtener evidencia externa o aportada por el usuario para responder preguntas concretas. Identificar entidades, comprobar fuentes, comparar afirmaciones y conservar límites, contradicciones y pendientes. La evidencia no se convierte automáticamente en contenido publicado.
 
-Flujo conceptual:
+Flujo conceptual para guía existente:
 
 Coordinator → Researcher → evidence packet → Coordinator → futuro Fixer autorizado → QA cuando Coordinator determine que corresponde.
 
@@ -31,7 +34,7 @@ Responde preguntas explícitas. Un hallazgo incidental puede comunicarse como ob
 
 ## Identidad y research scope
 
-Coordinator resuelve primero la identidad global y entrega `guidePath` exacto. Researcher no usa rutinariamente `factory_guide_catalog` ni vuelve a resolver esa identidad. Si detecta una discrepancia material, la devuelve a Coordinator; no corrige el path ni selecciona otra guía.
+En ExistingGuideResearchRequest, Coordinator resuelve primero la identidad global y entrega `guidePath` exacto. Researcher no usa rutinariamente `factory_guide_catalog` ni vuelve a resolver esa identidad. Si detecta una discrepancia material, la devuelve a Coordinator; no corrige el path ni selecciona otra guía.
 
 La identidad de una entidad externa dentro de la guía sí se comprueba: nombre, municipio, sede, dirección u otras pistas disponibles. Resolver la guía no resuelve un restaurante homónimo. No hay fuzzy matching implícito ni sustitución por una entidad de nombre parecido.
 
@@ -39,7 +42,7 @@ La identidad de una entidad externa dentro de la guía sí se comprueba: nombre,
 
 Una location técnica ayuda a localizar el objeto, pero no acredita por sí sola su identidad externa. No inferir índices desde títulos o números de día. Si falta una precisión material, devolver la necesidad de aclaración y continuar las preguntas independientes cuando sea posible.
 
-## Input conceptual
+## Input conceptual — ExistingGuideResearchRequest
 
 | Elemento obligatorio | Contenido |
 | --- | --- |
@@ -51,11 +54,47 @@ Opcionales según la petición: periodo o fecha relevante; constraints; evidenci
 
 No incluir autorización de edición dentro del request Researcher. Coordinator la conserva por separado. No imponer una lista general de `requiredFields`: los detalles necesarios pertenecen a las preguntas concretas. No se crean interfaces, código ni schema en este contrato.
 
+## NewDestinationResearchRequest v1 — contrato RES-005
+
+Estado de esta modalidad: **DEFINED / NOT YET OPERATIONAL**. Es un request conceptual separado, no una union que cambie los campos existentes. ExistingGuideResearchRequest conserva exactamente el contrato basado en guidePath y sigue OPERATIONAL exclusivamente bajo RES-004 y su runtime controlado aprobado.
+
+Coordinator entrega la [DestinationIdentity resuelta](guide-creator.md#destinationidentity) antes de investigar: referencia local, entidad/cobertura, parentage y decisiones materiales pertinentes. Researcher no resuelve por sí mismo la creación ni sustituye esa identidad por otra; una discrepancia material vuelve a Coordinator.
+
+| Input conceptual | Contenido |
+| --- | --- |
+| requestId | Correlación inequívoca del encargo de destino nuevo. |
+| DestinationIdentity | Identidad resuelta; no guía o path provisional. |
+| researchScope | Temas/entidades y condiciones delimitados, independientes de QA y CREATE. |
+| questions | Preguntas explícitas con IDs estables y únicos. |
+| period y constraints | Periodo pertinente cuando exista y restricciones conocidas, sin inventar fechas. |
+| user evidence/material | Aportaciones relevantes con origen, entidad, fechas conocidas y límites. |
+| user-provided URLs | Referencias cuando existan; aportarlas no demuestra apertura/verificación. |
+
+No contiene guidePath, sourcePath, exportName, CREATE authorization ni technical binding. La autorización de creación permanece en Coordinator. Researcher no inventa paths, crea ficheros, decide ruleset técnico ni concede CREATE.
+
+Conserva el mismo modelo conceptual de research findings/evidence, fechas/condiciones, conflictos, preguntas pendientes y diagnostics separados. COMPLETE/PARTIAL/BLOCKED y CONFIRMED/SUPPORTED/CONFLICTING/UNRESOLVED mantienen exactamente su semántica. El packet referencia requestId y DestinationIdentity del destination request, sin guidePath provisional, vacío o inventado. No atribuir a una guía existente la evidencia de otro destino.
+
+Flujo futuro: Coordinator → NewDestinationResearchRequest → Researcher cuando esa modalidad sea operativa → evidence packet → Coordinator → Guide Creator cuando sea operativo y autorizado. Researcher no invoca Creator ni QA. Findings suficientemente respaldados pueden alimentar contenido autorizado bajo [CREATE-001](guide-creator.md), sin persistencia automática ni copia literal de notas internas.
+
+### Acreditación operacional pendiente de la nueva modalidad
+
+RES-005 aprueba SOLO EL HANDOFF CONTRACTUAL. RES-004 describe la operación ya demostrada para guía existente; no se modifica retrospectivamente ni acredita automáticamente este modo. La modalidad nueva requiere smoke específico que demuestre:
+
+- Schema/validación y handoff real, con preguntas y referencias de evidencia correctas.
+- Ejecución bajo Researcher runtime profile compatible, con sus restricciones efectivas.
+- Web search/open traceability para fuentes materiales.
+- Output estructurado recibido y validado; eventos técnicos separados.
+- Ausencia de repo write y denegación de acciones mutables incompatibles.
+- Ausencia de apps/plugins/shell general y otras superficies incompatibles conforme al threat model aplicable.
+- Packet correcto de destino nuevo sin guidePath ni technical identity inventados.
+
+El bloque de runtime y sus smoke tests actuales de este documento siguen acreditando únicamente ExistingGuideResearchRequest. Mientras falte demostración del nuevo modo, devolver CAPABILITY_UNAVAILABLE para las fases dependientes, sin degradar la operación existing-guide ni simular ejecución. Schema/handoff técnico definitivo y prueba de runtime permanecen PENDING.
+
 ## Output conceptual: research packet
 
 | Elemento | Función |
 | --- | --- |
-| Referencia al encargo | Permite recuperar inequívocamente guía, scope y preguntas; basta el contexto del encargo, sin exigir almacenamiento persistente. |
+| Referencia al encargo | Permite recuperar inequívocamente guía existente o destination request, scope y preguntas según modalidad; basta el contexto del encargo, sin exigir almacenamiento persistente ni guidePath para destino nuevo. |
 | Status general | Cobertura de la investigación: COMPLETE, PARTIAL o BLOCKED. |
 | Findings | Afirmaciones vinculadas a preguntas concretas. |
 | Sources/evidence | Fuentes y materiales identificados, referenciables desde los findings. |
@@ -267,7 +306,7 @@ El host/orquestador gestiona los archivos temporales de schema/output fuera del 
 
 Researcher solo debe afirmar en `technicalDiagnostics` hechos observados sobre sus herramientas o fuentes. No debe especular sobre mecanismos host que no observa: si `--output-last-message` creó un archivo, cómo el caller almacenó la respuesta o detalles de infraestructura. El host/orquestador registra esos hechos por separado. Esta precisión corrige el diagnóstico impreciso sobre creación del handoff observado en el smoke final.
 
-Coordinator entrega guidePath resuelto, research scope/questions, restricciones y evidencia del usuario; recibe el paquete y decide el próximo paso. No investiga por sí mismo. Researcher no llama automáticamente catálogo, QA o Fixer. Si una capacidad no está disponible, comunicarlo sin simular ejecución.
+Para ExistingGuideResearchRequest, Coordinator entrega guidePath resuelto, research scope/questions, restricciones y evidencia del usuario; recibe el paquete y decide el próximo paso. Para NewDestinationResearchRequest se aplica el handoff contractual RES-005 anterior, aún no operativo. No investiga por sí mismo. Researcher no llama automáticamente catálogo, QA o Fixer. Si una capacidad no está disponible, comunicarlo sin simular ejecución.
 
 Coordinator distingue research innecesario, necesario, parcial, bloqueado o completado, sin confundir esos conceptos con aprobación QA. Conserva por separado autorización y scope de modificación.
 
