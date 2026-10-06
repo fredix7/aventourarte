@@ -14,5 +14,5 @@
     "noEmitOnError": true,
     "noEmit": true
   },
-  "files": ["scripts/factory-qa-channel.ts"]
+  "files": ["scripts/factory-qa-channel.ts", "scripts/factory-guide-catalog-channel.ts"]
 }
