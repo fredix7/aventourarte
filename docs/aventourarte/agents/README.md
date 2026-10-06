@@ -24,9 +24,10 @@ Si existe una contradicción entre documentación ACTIVE y código o instruccion
 
 ## Roles
 
-- [Factory QA Reviewer](qa-reviewer.md) — definición disponible; **DEFINED / NOT YET OPERATIONAL**.
+- [Factory QA Reviewer](qa-reviewer.md) — **DEFINED / NOT YET OPERATIONAL**; **TOOL CHAIN READY**.
+- [Coordinator](coordinator.md) — contrato v1 definido; **DEFINED / NOT YET OPERATIONAL**.
 
-Coordinator, Researcher y Fixer/Editor son roles futuros mencionados conceptualmente. No se definen aquí como agentes existentes.
+Researcher y Fixer/Editor siguen siendo roles futuros mencionados conceptualmente; no están definidos todavía ni son agentes operativos.
 
 ## Estado operativo
 
@@ -34,4 +35,6 @@ Factory QA Reviewer sigue **DEFINED / NOT YET OPERATIONAL**. Su cadena técnica 
 
 La tool chain está lista (**TOOL CHAIN READY**); esto describe la infraestructura, no un nuevo estado formal del rol ni una autorización de publicación. La activación del agente autónomo depende de verificar la superficie real de herramientas de la plataforma: todavía no está acreditada la ausencia efectiva de shell, editor/write, git, web/browser, delegación y otras tools incompatibles. Las annotations MCP y el prompt no constituyen enforcement suficiente. La prueba final de aislamiento de sesión permanece pendiente.
 
-Mientras ese aislamiento no esté demostrado, el contrato del Reviewer puede utilizarse como rol lógico de presentación sobre resultados de `factory_qa_review` dentro de una futura orquestación/Coordinator. Esto no significa que Coordinator exista ya ni define su contrato.
+Mientras ese aislamiento no esté demostrado, el contrato del Reviewer puede utilizarse como rol lógico de presentación sobre resultados de `factory_qa_review` dentro de una futura orquestación/Coordinator, sin declarar al Reviewer autónomo OPERATIONAL.
+
+Coordinator v1 está definido como [contrato](coordinator.md) de control de flujo, identidad, alcance y autorización. Sigue **DEFINED / NOT YET OPERATIONAL**: todavía carece de sesión, configuración y superficie de herramientas operativa propia. La definición documental no implementa el agente ni ejecuta Researcher o Fixer/Editor.
