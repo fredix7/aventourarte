@@ -16,6 +16,13 @@ export type { SourceIdentity, CatalogSourceBinding, SourceIdentityRequest } from
 
 // Runtime provenance, not a brand that an external shape validator can confer.
 const resolvedRoots = new WeakMap<SourceIdentity, string>();
+// Internal provenance bridge for later environment gates. A byte-identical clone repository
+// is not the repository that originally resolved this identity.
+export function resolvedIdentityRepository(identity: SourceIdentity): string {
+  const root = resolvedRoots.get(identity);
+  if (!root) fail('INVALID_INPUT');
+  return root;
+}
 export const MAX_GUIDE_SOURCE_BYTES = 8 * 1024 * 1024;
 
 function errorCode(error: unknown): unknown {

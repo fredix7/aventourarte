@@ -18,6 +18,11 @@ export interface PrepareFixInput {
   readonly snapshot: GuideSnapshot; readonly manifest: AuthorizationManifest;
   readonly requestDigest: string; readonly operations: readonly AuthorizedOperation[];
 }
+const preparedResults = new WeakSet<object>();
+// Shape/JSON copies cannot confer host authorization on a later write-readiness gate.
+export function isHostPreparedFixResult(value: unknown): value is PreparedFixResult {
+  return typeof value === 'object' && value !== null && preparedResults.has(value);
+}
 const sameData = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 const invariant = (condition: unknown,
   known?: Pick<PreparedResultError, 'actionId' | 'operationId' | 'target'>): void => {
@@ -159,7 +164,7 @@ export function prepareFixResult(input: PrepareFixInput): PreparedFixResult {
       ...common, status: 'READY_TO_WRITE', candidateText: result.candidateText, changedTargets,
       qaHandoff: buildQaHandoff(snapshot, changedTargets, result.candidateHash)
     } : { ...common, status: 'NO_CHANGE', changedTargets: [], qaHandoff: { required: false, reason: 'NO_CHANGE' } };
-    assertResultLimits(output); return freezeResult(output);
+    assertResultLimits(output); freezeResult(output); preparedResults.add(output); return output;
   } catch (error) {
     // No getters or broad serialized manifest copies for failure correlation. These are hints only.
     const m: PropertyDescriptorMap = input.manifest && typeof input.manifest === 'object' ? Object.getOwnPropertyDescriptors(input.manifest) : {};
