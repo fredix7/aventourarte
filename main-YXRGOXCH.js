@@ -3685,7 +3685,7 @@ Mediante un sistema \xF3ptico de espejo y lentes, la C\xE1mara Oscura proyecta i
 El Alc\xE1zar permite recorrer muchas capas de la historia de Jerez sin salir del mismo recinto. Mezquita, ba\xF1os, sistemas hidr\xE1ulicos, murallas y palacio barroco se suceden entre patios y jardines, haciendo que la visita sea mucho m\xE1s variada que la de una fortaleza convencional.
 
 \u{1F4A1} Consejo AvenTourArte:
-Si quieres conocer la C\xE1mara Oscura, pregunta por la siguiente sesi\xF3n nada m\xE1s llegar, ya que el aforo es reducido y los pases se organizan durante la jornada. Si buscas ahorrar en la visita, aprovecha la franja BIC gratuita de los lunes; ten en cuenta que la C\xE1mara Oscura se paga aparte incluso durante ese horario.`,foto:"cld:europa/espana/andalucia/cadiz/jerez/jerez-flag",horario:`De enero a junio y de octubre a diciembre:
+Si quieres conocer la C\xE1mara Oscura, pregunta por la siguiente sesi\xF3n nada m\xE1s llegar, ya que el aforo es reducido y los pases se organizan durante la jornada. Si buscas ahorrar en la visita, aprovecha la franja BIC gratuita de los lunes; ten en cuenta que la C\xE1mara Oscura se paga aparte incluso durante ese horario.`,fotos:["cld:europa/espana/andalucia/cadiz/jerez/alcazar-jerez","cld:europa/espana/andalucia/cadiz/jerez/jerez-flag","cld:europa/espana/andalucia/cadiz/jerez/alcazar-interior","cld:europa/espana/andalucia/cadiz/jerez/jerez-flag"],horario:`De enero a junio y de octubre a diciembre:
 Lunes a domingo: 08:30 \u2013 14:30.
 
 De julio a septiembre:
