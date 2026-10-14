@@ -23,7 +23,13 @@
     inset: 0;
     z-index: -3;
     background-image:
-      linear-gradient(180deg, rgba(4, 12, 18, 0.42), rgba(247, 239, 227, 0.7) 46rem),
+      linear-gradient(
+        180deg,
+        rgba(4, 12, 18, 0.62) 0,
+        rgba(4, 12, 18, 0.52) 24rem,
+        rgba(4, 12, 18, 0.38) 36rem,
+        rgba(247, 239, 227, 0.7) 46rem
+      ),
       var(--bg-image);
     background-position: var(--bg-pos, 50% 50%);
     background-repeat: no-repeat;

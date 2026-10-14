@@ -9,6 +9,7 @@ import { ImageService } from '../../shared/image.service';
 import { ImgUrlPipe } from '../../shared/img-url.pipe';
 import { GuideEditorialAuditComponent } from '../guide-editorial-audit/guide-editorial-audit.component';
 import { PlanFilterComponent } from '../plan-filter/plan-filter.component';
+import { GuideShareComponent } from '../guide-share/guide-share.component';
 import { filterPlanSections, sectionPlanItems } from '../../shared/plan-filter';
 import {
   AllergenDefinition,
@@ -88,7 +89,8 @@ export const GUIDE_REGISTRY: Readonly<Record<string, any>> = {
     MatIconModule,
     ImgUrlPipe,
     GuideEditorialAuditComponent,
-    PlanFilterComponent
+    PlanFilterComponent,
+    GuideShareComponent
   ],
   templateUrl: './guide-viewer.component.html',
   styleUrls: ['./guide-viewer.component.scss']
@@ -97,6 +99,7 @@ export class GuideViewerComponent implements OnDestroy {
   guide: any = null;
   pageStyle: Record<string, string> = {};
   requestedGuidePath: string | null = null;
+  currentGuidePath = '';
   editorialMode = false;
   showScrollTop = false;
   activeTabId = '';
@@ -766,6 +769,7 @@ export class GuideViewerComponent implements OnDestroy {
     if (placePath && this.guides[placePath]) {
       this.closePhoto();
       this.guide = this.guides[placePath];
+      this.currentGuidePath = placePath;
       this.requestedGuidePath = null;
       this.activeTabId = '';
       this.clearAllergenSelection();
@@ -777,6 +781,7 @@ export class GuideViewerComponent implements OnDestroy {
     }
 
     this.guide = null;
+    this.currentGuidePath = '';
     this.closePhoto();
     this.requestedGuidePath = placePath || null;
     this.pageStyle = {};

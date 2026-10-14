@@ -2,6 +2,12 @@
 2. Crear el fichero ts dentro de guides... de la ciudad donde irá el contenido de la guía (PONER LA RUTA INDICADA DEL travel.data.ts)
 3. En el guide-viewer.component.ts importar e incluir la guía de la ciudad y en el Records (private guides) 
 
+4. Para trabajar en la rama developer
+git switch developer
+
+Para trabajar en la rama de arquitectura
+git switch factory/aventourarte-agents
+
 Para publicar en GitHub Pages con rutas directas y fallback SPA:
 npm run deploy:pages
 

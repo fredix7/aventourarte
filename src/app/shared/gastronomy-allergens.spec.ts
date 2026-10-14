@@ -92,4 +92,16 @@ describe('gastronomy allergens', () => {
     expect(profileAvoidsSelectedAllergens(sarmale, ['leche'])).toBeFalse();
     expect(profileHasSelectedAllergen(sarmale, ['leche'])).toBeTrue();
   });
+
+  it('requires an explicit complete status before treating an inline recipe as compatible', () => {
+    const unconfirmed = resolveDishAllergenProfile({ nombre: 'Receta sin confirmar', alergenos: [] });
+    expect(unconfirmed?.status).toBe('variable');
+    expect(profileAvoidsSelectedAllergens(unconfirmed, ['gluten'])).toBeFalse();
+
+    const confirmed = resolveDishAllergenProfile({
+      nombre: 'Receta confirmada', alergenos: [], perfilAlergenos: 'complete'
+    });
+    expect(confirmed?.status).toBe('complete');
+    expect(profileAvoidsSelectedAllergens(confirmed, ['gluten'])).toBeTrue();
+  });
 });

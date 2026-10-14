@@ -65,6 +65,7 @@ describe('GuideViewerComponent', () => {
     component.ngOnInit();
 
     expect(component.guide?.nombre).toBe('Jerez de la Frontera');
+    expect(component.currentGuidePath).toBe('europa/espana/andalucia/cadiz/jerez-de-la-frontera');
     expect(component.requestedGuidePath).toBeNull();
     expect(component.tabs.length).toBeGreaterThan(0);
     expect(component.activeTabId).toBe(component.tabs[0].id);
@@ -75,6 +76,7 @@ describe('GuideViewerComponent', () => {
     setRoute('europa/espana/andalucia/cadiz/rota', true);
     component.ngOnInit();
     expect(component.editorialMode).toBeTrue();
+    expect(component.currentGuidePath).toBe('europa/espana/andalucia/cadiz/rota');
 
     setRoute('europa/espana/andalucia/cadiz/rota');
     routerEvents.next(new NavigationEnd(1, routerUrl, routerUrl));
@@ -87,6 +89,7 @@ describe('GuideViewerComponent', () => {
     component.ngOnInit();
 
     expect(component.guide).toBeNull();
+    expect(component.currentGuidePath).toBe('');
     expect(component.requestedGuidePath).toBe(
       'europa/espana/andalucia/cadiz/destino-pendiente'
     );

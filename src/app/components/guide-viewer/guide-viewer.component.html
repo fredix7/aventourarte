@@ -4,6 +4,7 @@
       <span class="eyebrow">{{ guideLocationLabel() }}</span>
       <h1 class="city-title">{{ guide.nombre }}</h1>
       <p class="hero-description">{{ guide.descripcion }}</p>
+      <app-guide-share [guidePath]="currentGuidePath" [guideName]="guide.nombre"></app-guide-share>
     </div>
 
     <div class="hero-media" *ngIf="guide.flag || guide.flag2">

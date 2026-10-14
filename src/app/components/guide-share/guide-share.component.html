@@ -1,0 +1,28 @@
+<div *ngIf="url" class="guide-sharing">
+  <p class="share-invitation">Los buenos planes se comparten.</p>
+  <div class="share-actions" role="group" aria-label="Compartir esta guía">
+    <button
+      type="button"
+      class="share-primary"
+      [disabled]="busy"
+      [attr.aria-label]="nativeSharing ? 'Compartir guía de ' + guideName : 'Copiar enlace de la guía de ' + guideName"
+      (click)="share()"
+    >
+      <mat-icon aria-hidden="true">{{ copied ? 'check' : nativeSharing ? 'ios_share' : 'link' }}</mat-icon>
+      <span>{{ copied ? 'Enlace copiado' : nativeSharing ? 'Compartir guía' : 'Copiar enlace' }}</span>
+      <mat-icon class="share-arrow" aria-hidden="true">{{ copied ? 'done' : 'arrow_outward' }}</mat-icon>
+    </button>
+  </div>
+  <p class="share-feedback" role="status" aria-live="polite" aria-atomic="true">{{ message }}</p>
+  <div *ngIf="manualCopy" class="share-manual">
+    <label for="guide-share-link">Enlace de la guía de {{ guideName }}</label>
+    <input
+      #manualLink
+      id="guide-share-link"
+      type="text"
+      [value]="url"
+      readonly
+      (click)="selectLink($event)"
+    />
+  </div>
+</div>
