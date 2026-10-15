@@ -11,7 +11,7 @@ const tempRoot = realpathSync.native(tmpdir());
 const prefix = 'factory-fix-phase1-build-';
 const resolutionFlags = ['--preserve-symlinks', '--preserve-symlinks-main'];
 
-test('Factory Fix Phases 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8: typecheck, compile and complete suites', { timeout: 1200000 }, t => {
+test('Factory Fix Phases 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9: typecheck, compile and complete suites', { timeout: 1800000 }, t => {
   const outDir = mkdtempSync(path.join(tempRoot, prefix));
   try {
     const compiler = path.join(projectRoot, 'node_modules/typescript/bin/tsc');
@@ -39,8 +39,9 @@ test('Factory Fix Phases 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8: typecheck, compile and c
       'scripts/factory-fix/source-identity.cases.mjs', 'scripts/factory-fix/snapshot.cases.mjs',
       'scripts/factory-fix/candidate.cases.mjs', 'scripts/factory-fix/authorization.cases.mjs',
       'scripts/factory-fix/result.cases.mjs', 'scripts/factory-fix/write-readiness.cases.mjs',
-      'scripts/factory-fix/writer.cases.mjs', 'scripts/factory-fix/fixer-launcher.cases.mjs'], {
-      cwd: projectRoot, encoding: 'utf8', timeout: 1140000, shell: false,
+      'scripts/factory-fix/writer.cases.mjs', 'scripts/factory-fix/fixer-launcher.cases.mjs',
+      'scripts/factory-fix/execution.cases.mjs'], {
+      cwd: projectRoot, encoding: 'utf8', timeout: 1740000, shell: false,
       env: {
         NODE_DISABLE_COMPILE_CACHE: '1', NODE_PATH: path.join(projectRoot, 'node_modules'),
         FACTORY_FIX_OUT_DIR: outDir, TEMP: tempRoot, TMP: tempRoot,
@@ -49,6 +50,10 @@ test('Factory Fix Phases 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8: typecheck, compile and c
     });
     const summary = suite.stdout.split(/\r?\n/).filter(line => /^# (tests|pass|fail|cancelled|skipped|todo|Existing pure Factory core)\b/.test(line));
     t.diagnostic(summary.join('; '));
+    const phase9Names = suite.stdout.split(/\r?\n/).filter(line => line.startsWith('# Subtest: Phase 9 '));
+    assert.ok(phase9Names.length > 0, 'Phase 9 must execute inside the complete suite.');
+    assert.equal(new Set(phase9Names).size, phase9Names.length, 'Phase 9 case names must identify unique cases.');
+    t.diagnostic(`Phase 9: ${phase9Names.length} distinct cases inside the complete suite; included in the global total.`);
     assert.equal(suite.error, undefined);
     // Keep failed-case diagnostics reviewable without embedding thousands of passing cases.
     const failures = []; let failing = false;
