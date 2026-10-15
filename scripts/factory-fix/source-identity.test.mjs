@@ -11,7 +11,7 @@ const tempRoot = realpathSync.native(tmpdir());
 const prefix = 'factory-fix-phase1-build-';
 const resolutionFlags = ['--preserve-symlinks', '--preserve-symlinks-main'];
 
-test('Factory Fix Phases 1 + 2 + 3 + 4 + 5 + 6: typecheck, compile and complete suites', { timeout: 360000 }, t => {
+test('Factory Fix Phases 1 + 2 + 3 + 4 + 5 + 6 + 7: typecheck, compile and complete suites', { timeout: 1200000 }, t => {
   const outDir = mkdtempSync(path.join(tempRoot, prefix));
   try {
     const compiler = path.join(projectRoot, 'node_modules/typescript/bin/tsc');
@@ -33,11 +33,14 @@ test('Factory Fix Phases 1 + 2 + 3 + 4 + 5 + 6: typecheck, compile and complete 
       cwd: projectRoot, encoding: 'utf8', timeout: 30000, env: { NODE_DISABLE_COMPILE_CACHE: '1' }, shell: false
     });
     assert.equal(core.error, undefined); assert.equal(core.status, 0, core.stdout + core.stderr);
-    const suite = spawnSync(process.execPath, [...resolutionFlags, '--test',
+    // Both environment suites deliberately replace the shared per-user lock root in tests.
+    // Run files sequentially so their fault injections cannot interfere with each other.
+    const suite = spawnSync(process.execPath, [...resolutionFlags, '--test', '--test-concurrency=1',
       'scripts/factory-fix/source-identity.cases.mjs', 'scripts/factory-fix/snapshot.cases.mjs',
       'scripts/factory-fix/candidate.cases.mjs', 'scripts/factory-fix/authorization.cases.mjs',
-      'scripts/factory-fix/result.cases.mjs', 'scripts/factory-fix/write-readiness.cases.mjs'], {
-      cwd: projectRoot, encoding: 'utf8', timeout: 300000, shell: false,
+      'scripts/factory-fix/result.cases.mjs', 'scripts/factory-fix/write-readiness.cases.mjs',
+      'scripts/factory-fix/writer.cases.mjs'], {
+      cwd: projectRoot, encoding: 'utf8', timeout: 1140000, shell: false,
       env: {
         NODE_DISABLE_COMPILE_CACHE: '1', NODE_PATH: path.join(projectRoot, 'node_modules'),
         FACTORY_FIX_OUT_DIR: outDir, TEMP: tempRoot, TMP: tempRoot,
@@ -47,7 +50,14 @@ test('Factory Fix Phases 1 + 2 + 3 + 4 + 5 + 6: typecheck, compile and complete 
     const summary = suite.stdout.split(/\r?\n/).filter(line => /^# (tests|pass|fail|cancelled|skipped|todo|Existing pure Factory core)\b/.test(line));
     t.diagnostic(summary.join('; '));
     assert.equal(suite.error, undefined);
-    assert.equal(suite.status, 0, suite.stdout + suite.stderr);
+    // Keep failed-case diagnostics reviewable without embedding thousands of passing cases.
+    const failures = []; let failing = false;
+    for (const line of suite.stdout.split(/\r?\n/)) {
+      if (/^not ok /.test(line)) failing = true;
+      if (failing) failures.push(line);
+      if (failing && /^  \.\.\.$/.test(line)) failing = false;
+    }
+    assert.equal(suite.status, 0, failures.join('\n') + suite.stderr);
     assert.equal(suite.stderr, '');
   } finally {
     const resolved = realpathSync.native(outDir);

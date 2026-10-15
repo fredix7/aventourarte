@@ -12,7 +12,7 @@ import { WORKSPACE_CLASSIFICATION, WORKSPACE_LIMITS, environmentFail, WorkspaceE
 import type { SourceIdentity } from './contracts';
 
 interface LeaseState { readonly lock: SourceLockHandle; readonly prepared: ReadyPreparedResult;
-  readonly report: WriteReadinessReport; active: boolean }
+  readonly report: WriteReadinessReport; active: boolean; writing?: boolean }
 const leases = new WeakMap<object, LeaseState>();
 function revalidate(repoRoot: string, prepared: ReadyPreparedResult): SourceIdentity {
   const fresh = resolveFactoryGuideSourceIdentity({ repoRoot, guidePath: prepared.guidePath });
@@ -92,6 +92,32 @@ export function isPreparedWriteLeaseActive(lease: PreparedWriteLease): boolean {
 export function releaseWriteLease(lease: PreparedWriteLease): LockReleaseResult {
   const state = lease && leases.get(lease);
   if (!state) return freezeResult({ status: 'BLOCKED', code: 'LOCK_INVALID' });
+  if (state.writing) return freezeResult({ status: 'BLOCKED', code: 'LOCK_INVALID' });
   if (!state.active) return freezeResult({ status: 'ALREADY_RELEASED' });
   state.active = false; return releaseSourceLock(state.lock);
+}
+
+// Internal Phase 7 bridge. The report supplied by a caller is never authority. Claim once,
+// by object identity, before any filesystem mutation. A mismatched call does not consume it.
+export function claimPreparedWriteLease(repoRoot: string, prepared: PreparedFixResult, lease: PreparedWriteLease): {
+  readonly report: WriteReadinessReport; readonly lock: SourceLockHandle;
+} {
+  const state = lease && leases.get(lease);
+  if (!state?.active || state.writing || state.prepared !== prepared || prepared.status !== 'READY_TO_WRITE') {
+    environmentFail('READINESS_INPUT_INVALID');
+  }
+  const report = state.report;
+  if (repoRoot !== report.repository.canonicalRoot || report.requestId !== prepared.requestId
+    || report.requestDigest !== prepared.requestDigest || report.guidePath !== prepared.guidePath
+    || report.sourcePath !== prepared.sourceIdentity.sourcePath || report.sourceHash !== prepared.sourceHash
+    || report.candidateHash !== prepared.candidateHash) environmentFail('READINESS_INPUT_INVALID');
+  state.writing = true;
+  return Object.freeze({ report, lock: state.lock });
+}
+// The writer owns release after a successful claim, including every failure path.
+export function finishPreparedWriteLease(lease: PreparedWriteLease): LockReleaseResult {
+  const state = lease && leases.get(lease);
+  if (!state?.writing) return freezeResult({ status: 'BLOCKED', code: 'LOCK_INVALID' });
+  state.writing = false;
+  return releaseWriteLease(lease);
 }

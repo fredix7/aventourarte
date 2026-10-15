@@ -202,7 +202,7 @@ export function parseGitStatus(text: string): readonly StatusEntry[] {
   }
   return freezeResult(entries);
 }
-export function inspectGitTargetState(repo: RepositoryIdentity, sourcePath: string): GitTargetState {
+function inspectGitState(repo: RepositoryIdentity, sourcePath: string, persistedHash?: string): GitTargetState {
   assertRepositoryIdentity(repo); validateSourcePath(sourcePath);
   const rootText = run(repo, 'ROOT', sourcePath).output.replace(/\r?\n$/, '');
   if (!path.isAbsolute(rootText) || rootText.length > WORKSPACE_LIMITS.maxPathLength || /[\x00-\x1f\x7f]/.test(rootText)) environmentFail('GIT_OUTPUT_INVALID');
@@ -244,9 +244,20 @@ export function inspectGitTargetState(repo: RepositoryIdentity, sourcePath: stri
   const attrs = attributes(run(repo, 'ATTRIBUTES', sourcePath).output, sourcePath), source = readSourcePath(repo, sourcePath);
   if ((booleanSetting(config['core.filemode'], process.platform !== 'win32')
     && ((BigInt(source.observation.file.mode) & 0o100n) !== 0n) !== (entry.mode === '100755'))
-    || !cleanBytes(source.bytes, entry.oid, config, attrs)) environmentFail('TARGET_DIRTY_WORKTREE');
+    || (persistedHash === undefined ? !cleanBytes(source.bytes, entry.oid, config, attrs)
+      : source.observation.sourceHash !== persistedHash)) environmentFail('TARGET_DIRTY_WORKTREE');
   if (indexFileHash(gitDirectory) !== indexHash) environmentFail('GIT_STATE_DRIFT');
   return freezeResult({ state: 'TRACKED_CLEAN', repository: repo, gitDirectory, headOid, sourcePath,
     indexMode: entry.mode, indexOid: entry.oid, indexFlags: 'H', indexStateDigest: hashBytes(JSON.stringify([indexOutput, indexHash])),
     conversionDigest: hashBytes(JSON.stringify([config['core.autocrlf'] ?? null, config['core.filemode'] ?? null, attrs])) });
+}
+export function inspectGitTargetState(repo: RepositoryIdentity, sourcePath: string): GitTargetState {
+  return inspectGitState(repo, sourcePath);
+}
+// Read-only post-write inspection reuses all Git guards. Only the worktree byte expectation
+// changes; the target is now deliberately dirty, never reported as TRACKED_CLEAN publicly.
+export function inspectGitPersistedState(repo: RepositoryIdentity, sourcePath: string, candidateHash: string):
+  Omit<GitTargetState, 'state'> & { readonly state: 'TRACKED_EXPECTED_CANDIDATE' } {
+  if (!/^[a-f0-9]{64}$/.test(candidateHash)) environmentFail('WRITE_PRECONDITION_FAILED');
+  return freezeResult({ ...inspectGitState(repo, sourcePath, candidateHash), state: 'TRACKED_EXPECTED_CANDIDATE' as const });
 }
