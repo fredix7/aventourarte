@@ -11,7 +11,7 @@ const tempRoot = realpathSync.native(tmpdir());
 const prefix = 'factory-fix-phase1-build-';
 const resolutionFlags = ['--preserve-symlinks', '--preserve-symlinks-main'];
 
-test('Factory Fix Phases 1 + 2 + 3 + 4 + 5 + 6 + 7: typecheck, compile and complete suites', { timeout: 1200000 }, t => {
+test('Factory Fix Phases 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8: typecheck, compile and complete suites', { timeout: 1200000 }, t => {
   const outDir = mkdtempSync(path.join(tempRoot, prefix));
   try {
     const compiler = path.join(projectRoot, 'node_modules/typescript/bin/tsc');
@@ -39,7 +39,7 @@ test('Factory Fix Phases 1 + 2 + 3 + 4 + 5 + 6 + 7: typecheck, compile and compl
       'scripts/factory-fix/source-identity.cases.mjs', 'scripts/factory-fix/snapshot.cases.mjs',
       'scripts/factory-fix/candidate.cases.mjs', 'scripts/factory-fix/authorization.cases.mjs',
       'scripts/factory-fix/result.cases.mjs', 'scripts/factory-fix/write-readiness.cases.mjs',
-      'scripts/factory-fix/writer.cases.mjs'], {
+      'scripts/factory-fix/writer.cases.mjs', 'scripts/factory-fix/fixer-launcher.cases.mjs'], {
       cwd: projectRoot, encoding: 'utf8', timeout: 1140000, shell: false,
       env: {
         NODE_DISABLE_COMPILE_CACHE: '1', NODE_PATH: path.join(projectRoot, 'node_modules'),
