@@ -1,7 +1,7 @@
 import type { FixRequest } from './fixer-contracts';
 import type { StaticData } from './static-data';
 
-// Descriptive HTTP contract only: Phase 9D has no executable networking implementation.
+// Broker stays offline. The separate 9F native implementation has no exported invocation or issuer.
 export const INFERENCE_PROFILE = Object.freeze({ version: 'openai-responses-offline-v1',
   provider: 'openai', endpoint: 'https://api.openai.com/v1/responses', method: 'POST', model: 'gpt-6-luna',
   maxOutputTokens: 4096, proposedMaxInputTokens: 16000, maxConcurrency: 1,
@@ -13,7 +13,9 @@ export const INFERENCE_ERROR_CODES = ['INFERENCE_INPUT_INVALID', 'PROJECTION_INV
   'BUDGET_USAGE_EXCEEDED', 'CONCURRENCY_EXCEEDED', 'INFERENCE_CANCELLED', 'HTTP_RESPONSE_INVALID',
   'HTTP_HEADER_LIMIT', 'HTTP_BODY_LIMIT', 'HTTP_CONTENT_TYPE_INVALID', 'HTTP_REDIRECT_FORBIDDEN',
   'HTTP_BAD_REQUEST', 'HTTP_UNAUTHORIZED', 'HTTP_FORBIDDEN', 'HTTP_TIMEOUT', 'HTTP_RATE_LIMIT',
-  'HTTP_SERVER_ERROR', 'TOKEN_COUNT_INVALID', 'TOKEN_LIMIT_EXCEEDED', 'TOKEN_BINDING_INVALID'] as const;
+  'HTTP_SERVER_ERROR', 'TOKEN_COUNT_INVALID', 'TOKEN_LIMIT_EXCEEDED', 'TOKEN_BINDING_INVALID',
+  'HTTPS_DNS_FAILED', 'HTTPS_ADDRESS_FORBIDDEN', 'HTTPS_TLS_INVALID', 'HTTPS_HOSTNAME_INVALID',
+  'HTTPS_CONNECTION_FAILED', 'HTTPS_UNEXPECTED_CLOSE', 'HTTPS_EVENT_INVALID', 'HTTPS_SECRET_ECHO'] as const;
 export type InferenceErrorCode = typeof INFERENCE_ERROR_CODES[number];
 export class InferenceError extends Error {
   constructor(readonly code: InferenceErrorCode) { super(`Factory inference: ${code}.`); }

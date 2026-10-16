@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
+import { performance } from 'node:perf_hooks';
 import { fixture, hostInput, planFor, refAt, update, compiled, projectRoot } from './inference-fixtures.mjs';
 
 const require = createRequire(import.meta.url), ts = require('typescript');
@@ -223,10 +224,26 @@ for (const stage of ['count', 'response']) sim(`cancellation during ${stage} rel
   assert.equal((await setup(ctx).run()).status, 'PROPOSAL_VALID');
 });
 for (const stage of ['count', 'response']) sim(`total timeout during ${stage}`, async ctx => {
-  const request = launcher.createFixRequest(hostInput(ctx.snapshot, undefined, { timeoutMs: 30 }));
-  const r = stage === 'count' ? countReply(8000) : reply(JSON.stringify(response(request))); r.chunks[0].delayMs = 100;
-  const x = setup(ctx, { request, [stage]: r }); blocked(await x.run(), 'TIMEOUT');
-  assert.equal(budgets.inspectOfflineInferenceBudget(x.budget).uncertainMicroUsd, stage === 'count' ? 0 : 4048);
+  // Under concurrent compiler/wrapper load the old 30ms wall clock could expire
+  // during count even in the response test (observed: 0 reserved, not 4048).
+  // Advance only the monotonic deadline AT the selected IO boundary instead;
+  // retain exact timeout and allocation assertions, with no production change.
+  const request = launcher.createFixRequest(hostInput(ctx.snapshot, undefined, { timeoutMs: 5000 }));
+  const x = setup(ctx, { request }), receive = http.receiveOfflineHttp;
+  const ownNow = Object.getOwnPropertyDescriptor(performance, 'now'), now = performance.now.bind(performance);
+  let advance = 0, reached = false;
+  try {
+    Object.defineProperty(performance, 'now', { configurable: true, value: () => now() + advance });
+    http.receiveOfflineHttp = (...args) => {
+      if (args[3] === (stage === 'count')) { reached = true; advance = 5001; }
+      return receive(...args);
+    };
+    blocked(await x.run(), 'TIMEOUT'); assert.equal(reached, true);
+    assert.equal(budgets.inspectOfflineInferenceBudget(x.budget).uncertainMicroUsd, stage === 'count' ? 0 : 4048);
+  } finally {
+    http.receiveOfflineHttp = receive;
+    if (ownNow) Object.defineProperty(performance, 'now', ownNow); else delete performance.now;
+  }
 });
 sim('single flight covers count stage and the legacy broker across different budgets', async ctx => {
   const request = launcher.createFixRequest(hostInput(ctx.snapshot)), slow = countReply(8000); slow.chunks[0].delayMs = 80;

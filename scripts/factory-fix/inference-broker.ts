@@ -12,12 +12,15 @@ import { decodeOfflineResponsesReply } from './inference-response';
 import { inspectOfflineInferenceBudget, reserveOfflineInference, settleOfflineInference, type OfflineInferenceBudget } from './inference-budget';
 import { buildOfflineHttpRequests, snapshotOfflineHttpReply, receiveOfflineHttp, decodeOfflineInputTokens,
   discardOfflineHttpReply, type OfflineHttpReply, type OfflineHttpRequests, type SimulatedHttpResponse } from './inference-http';
+import { createOfflineHttpsExchange, receiveOfflineHttpsExchange, discardOfflineHttpsExchange,
+  type OfflineHttpsExchange, type OfflineHttpsEvent } from './inference-https-adapter';
 
 interface ProjectionState { request: FixRequest; phase: 'OPEN' | 'RUNNING' | 'FINISHED' | 'CANCELLED'; abort?: AbortController }
 const projections = new WeakMap<OfflineInferenceProjection, ProjectionState>();
 type TransportState = { projection: OfflineInferenceProjection; used: boolean } & (
   { mode: 'LEGACY'; reply: OfflineProviderReply } | { mode: 'HTTPS'; requests: OfflineHttpRequests;
-    count: SimulatedHttpResponse; response: SimulatedHttpResponse });
+    count: SimulatedHttpResponse; response: SimulatedHttpResponse }
+  | { mode: 'ADAPTER'; requests: OfflineHttpRequests; exchange: OfflineHttpsExchange });
 const transports = new WeakMap<OfflineResponsesTransport, TransportState>();
 declare const httpsBrand: unique symbol;
 export interface OfflineHttpsTransport extends OfflineResponsesTransport { readonly [httpsBrand]: true }
@@ -75,6 +78,15 @@ export function createOfflineHttpsTransport(input: { readonly projection: Offlin
   const token = Object.freeze({ kind: 'OFFLINE_RESPONSES_ONLY' }) as OfflineHttpsTransport;
   transports.set(token, { projection, mode: 'HTTPS', requests, count, response, used: false }); return token;
 }
+export function createOfflineHttpsAdapterTransport(input: { readonly projection: OfflineInferenceProjection;
+  readonly countEvents: readonly OfflineHttpsEvent[]; readonly responseEvents: readonly OfflineHttpsEvent[] }): OfflineHttpsTransport {
+  const d = inferenceEnvelope(input, ['projection', 'countEvents', 'responseEvents']);
+  const projection = d['projection'] as OfflineInferenceProjection, requests = inspectOfflineHttpRequests(projection);
+  const exchange = createOfflineHttpsExchange({ requests, countEvents: d['countEvents'] as readonly OfflineHttpsEvent[],
+    responseEvents: d['responseEvents'] as readonly OfflineHttpsEvent[] });
+  const token = Object.freeze({ kind: 'OFFLINE_RESPONSES_ONLY' }) as OfflineHttpsTransport;
+  transports.set(token, { projection, mode: 'ADAPTER', requests, exchange, used: false }); return token;
+}
 export function cancelOfflineInference(projection: OfflineInferenceProjection): void {
   const s = context(projection);
   if (s.phase === 'FINISHED' || s.phase === 'CANCELLED') return;
@@ -85,6 +97,9 @@ type RunOfflineInput = { readonly projection: OfflineInferenceProjection;
 export function runOfflineInference(input: RunOfflineInput) { return runOffline(input, 'LEGACY'); }
 export function runOfflineHttpsInference(input: RunOfflineInput & { readonly transport: OfflineHttpsTransport }) {
   return runOffline(input, 'HTTPS');
+}
+export function runOfflineHttpsAdapterInference(input: RunOfflineInput & { readonly transport: OfflineHttpsTransport }) {
+  return runOffline(input, 'ADAPTER');
 }
 async function runOffline(input: RunOfflineInput, mode: TransportState['mode']): Promise<FixerLaunchResult | Readonly<{
     status: 'BLOCKED'; code: string; requestId: string | null }>> {
@@ -101,7 +116,9 @@ async function runOffline(input: RunOfflineInput, mode: TransportState['mode']):
     if (active) inferenceFail('CONCURRENCY_EXCEEDED');
     const budget = d['budget'] as OfflineInferenceBudget;
     inspectOfflineInferenceBudget(budget);
-    if (transport.mode === 'LEGACY') reservation = reserveOfflineInference(budget);
+    // 9F reserves BEFORE count too: its future quota/billing is not assumed free.
+    // This is still a generation-only simulation amount, not a live count quote.
+    if (transport.mode !== 'HTTPS') reservation = reserveOfflineInference(budget);
     active = true; owns = true; host.phase = 'RUNNING'; transport.used = true;
     ownedTransport = transport;
     const abort = new AbortController(); host.abort = abort;
@@ -112,7 +129,7 @@ async function runOffline(input: RunOfflineInput, mode: TransportState['mode']):
     };
     timer = setTimeout(() => abort.abort(new FixerError('TIMEOUT')), host.request.limits.timeoutMs);
     let reply: OfflineProviderReply, countedInput: number | undefined;
-    if (transport.mode === 'HTTPS') {
+    if (transport.mode !== 'LEGACY') {
       const binding = (): void => {
         withinDeadline();
         if (host!.phase !== 'RUNNING') inferenceFail('PROJECTION_INACTIVE');
@@ -122,15 +139,19 @@ async function runOffline(input: RunOfflineInput, mode: TransportState['mode']):
           || current.bindingDigest !== transport.requests.bindingDigest) inferenceFail('TOKEN_BINDING_INVALID');
       };
       binding();
-      const counted = decodeOfflineInputTokens(await receiveOfflineHttp(transport.count, abort.signal, transport.requests.count, true));
+      const receive = (count: boolean) => transport.mode === 'ADAPTER'
+        ? receiveOfflineHttpsExchange(transport.exchange, count ? transport.requests.count : transport.requests.inference, count, abort.signal)
+        : receiveOfflineHttp(count ? transport.count : transport.response, abort.signal,
+          count ? transport.requests.count : transport.requests.inference, count);
+      const counted = decodeOfflineInputTokens(await receive(true));
       countedInput = counted;
       binding();
       // Count replies are locally bound to this exact immutable exchange, not trusted
       // because of a number, digest or provider field. Real provider evidence is pending.
       if (counted > INFERENCE_PROFILE.proposedMaxInputTokens) inferenceFail('TOKEN_LIMIT_EXCEEDED');
-      reservation = reserveOfflineInference(budget);
+      if (!reservation) reservation = reserveOfflineInference(budget);
       binding();
-      const body = await receiveOfflineHttp(transport.response, abort.signal, transport.requests.inference, false);
+      const body = await receive(false);
       binding(); reply = { status: 200, body, delayMs: 0 };
     } else {
       if (transport.reply.delayMs) await delay(transport.reply.delayMs, undefined, { signal: abort.signal });
@@ -162,6 +183,7 @@ async function runOffline(input: RunOfflineInput, mode: TransportState['mode']):
     if (ownedTransport?.mode === 'HTTPS') {
       discardOfflineHttpReply(ownedTransport.count); discardOfflineHttpReply(ownedTransport.response);
     }
+    if (ownedTransport?.mode === 'ADAPTER') discardOfflineHttpsExchange(ownedTransport.exchange);
     if (owns && host) { active = false; host.abort = undefined; if (host.phase !== 'CANCELLED') host.phase = 'FINISHED'; }
   }
 }
