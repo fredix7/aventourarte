@@ -70,7 +70,8 @@ const planFor = request => {
   const keys = ['schemaVersion', 'requestId', 'nonce', 'responseId', 'guidePath', 'sourceHash', 'catalogHash',
     'snapshotId', 'snapshotFingerprint', 'targetFingerprint', 'actionFingerprint', 'evidenceFingerprint', 'requestFingerprint'];
   return { ...Object.fromEntries(keys.map(k => [k, request[k]])), operations: request.actions.map(a => ({ actionId: a.actionId,
-    operation: a.operation.type, targetId: a.operation.targetRef.targetId, value: a.operation.value, evidence: [] })), unresolvedActionIds: [] };
+    operation: a.operation.type, targetId: compiled('modification-scope').operationRef(a.operation).targetId,
+    ...('value' in a.operation ? { value: a.operation.value } : {}), evidence: [] })), unresolvedActionIds: [] };
 };
 function response(s) {
   return { id: 'resp_manual_lab', object: 'response', created_at: 1792108800, status: 'completed', error: null, incomplete_details: null,
@@ -88,11 +89,11 @@ function events(body, status = 200) {
     { type: 'headers', status, headers: [{ name: 'Content-Type', value: 'application/json' },
       { name: 'Content-Length', value: String(data.length) }], delayMs: 0 }, ...chunks, { type: 'end', complete: true, delayMs: 0 }];
 }
-function inputFor(s, options = {}) {
-  const connectivity = manual.authorizeManualLabConnectivity(s), credential = manual.createManualLabCredential(s);
-  const projectCredential = manual.authorizeManualLabCredential({ session: s, credential });
-  const economic = manual.authorizeManualLabBudget({ session: s, maxAttemptMicroUsd: options.max ?? 4048 });
-  const transcript = manual.createManualLabTranscript({ session: s, events: options.events ?? events(JSON.stringify(response(s))) });
+function inputFor(s, options = {}, api = manual) {
+  const connectivity = api.authorizeManualLabConnectivity(s), credential = api.createManualLabCredential(s);
+  const projectCredential = api.authorizeManualLabCredential({ session: s, credential });
+  const economic = api.authorizeManualLabBudget({ session: s, maxAttemptMicroUsd: options.max ?? 4048 });
+  const transcript = api.createManualLabTranscript({ session: s, events: options.events ?? events(JSON.stringify(response(s))) });
   return { session: s, connectivity, projectCredential, economic, credential, transcript, timeoutMs: options.timeout ?? 5000 };
 }
 async function run(input) { const result = await manual.runManualLabInference(input); outputs.push(result); return result; }
@@ -445,3 +446,362 @@ test('Paso 205: complete manual source import graph excludes privileged and real
   visit(path.join(root, 'scripts/factory-fix/inference-manual.ts'));
   t.diagnostic('Manual runtime source graph audited: ' + visited.size + ' local modules; no native/privileged entrypoint.');
 });
+
+// Virtual monotonic time is test instrumentation only. Production exposes no
+// clock, sleep-skip, rate-reset, live flag or alternate transport registration.
+let stageEpoch = 0;
+const realStageNow = require('node:perf_hooks').performance.now.bind(require('node:perf_hooks').performance);
+const stageTest = (name, body) => test('Paso 207: ' + name, async t => {
+  let now = realStageNow() + (++stageEpoch) * 2000000;
+  const clock = require('node:perf_hooks').performance, owned = [];
+  t.mock.method(clock, 'now', () => now);
+  const ctx = { create() { const s = manual.createManualCountedLabSession(); owned.push(s); return s; },
+    tick(ms = 60000) { now += ms; },
+    async count(s, tokens = 8000, options = {}) {
+      const i = inputFor(s, { max: 8096, events: events(JSON.stringify({ object: 'response.input_tokens', input_tokens: tokens })), ...options });
+      const result = await manual.runManualLabCount(i); outputs.push(result); return { i, result };
+    },
+    advance(s, result) { return manual.advanceManualLabGeneration({ session: s, countResult: result }); },
+    generation(s, options = {}) { return inputFor(s, { max: 8096, ...options }); } };
+  try { await body(ctx, t); }
+  finally { for (const s of owned) cancel(s); t.mock.restoreAll(); }
+});
+stageTest('authentic count -> explicit 60s transition -> fresh ABC -> generation -> original memory result', async x => {
+  const s = x.create(), before = inspect(s), { i, result: count } = await x.count(s);
+  assert.equal(count.status, 'LAB_COUNT_VALID', JSON.stringify(count)); assert.equal(manual.isManualLabCountResult(count), true);
+  assert.equal(manual.isManualLabValidatedResult(count), false); assert.equal(count.inputTokens, 8000);
+  assert.equal(inspect(s).phase, 'COUNTED'); assert.equal(inspect(s).countPosts, 1); assert.equal(inspect(s).simulatedPosts, 0);
+  assert.equal(inspect(s).budget.allocatedMicroUsd, 4048); assert.equal(inspect(s).budget.uncertainMicroUsd, 4048);
+  assert.equal(inspect(s).budget.knownMicroUsd, 0); assert.equal(inspect(s).budget.realMoneyReserved, false);
+  assert.throws(() => x.advance(s, count), /MANUAL_RATE_LIMIT/); x.tick(59999);
+  assert.throws(() => x.advance(s, count), /MANUAL_RATE_LIMIT/); assert.equal(inspect(s).simulatedPosts, 0);
+  x.tick(1); assert.equal(x.advance(s, count).status, 'LAB_GENERATION_READY');
+  assert.equal(manual.isManualLabCountResult(count), false);
+  const result = await run(x.generation(s)); assert.equal(result.status, 'LAB_PLAN_VALID', JSON.stringify(result));
+  assert.equal(manual.isManualLabValidatedResult(result), true); assert.equal(result.persistence, 'NOT_ATTEMPTED');
+  assert.equal(inspect(s).countPosts, 1); assert.equal(inspect(s).simulatedPosts, 1);
+  assert.equal(inspect(s).budget.attempts, 2); assert.equal(inspect(s).budget.allocatedMicroUsd, 8096);
+  assert.equal(inspect(s).budget.uncertainMicroUsd, 4048); assert.equal(inspect(s).budget.knownMicroUsd, 1800);
+  assert.equal(inspect(s).cleanup, 'REMOVED'); assert.equal(inspect(s).phase, 'CLOSED');
+  assert.equal(inspect(s).countedFrames.bindingDigest, before.countedFrames.bindingDigest);
+  blocked(await run(i), 'MANUAL_SESSION_INACTIVE');
+});
+stageTest('count and generation share all immutable input-affecting fields, instructions and strict schema', async x => {
+  const s = x.create(), frames = inspect(s).countedFrames;
+  const count = JSON.parse(frames.count.body), generation = JSON.parse(frames.inference.body);
+  for (const key of Object.keys(count)) assert.deepEqual(count[key], generation[key], key);
+  assert.deepEqual(Object.keys(count).sort(), ['model', 'input', 'instructions', 'parallel_tool_calls', 'reasoning', 'text', 'tools', 'tool_choice', 'truncation'].sort());
+  assert.equal(frames.count.path, '/v1/responses/input_tokens'); assert.equal(frames.inference.path, '/v1/responses');
+  for (const f of [frames.count, frames.inference]) {
+    assert.equal(f.hostname, 'api.openai.com'); assert.equal(f.protocol, 'https:'); assert.equal(f.port, 443); assert.equal(f.method, 'POST');
+    assert.throws(() => { f.body = '{}'; }, TypeError);
+  }
+  const { result } = await x.count(s); x.tick(); x.advance(s, result);
+  assert.deepEqual(inspect(s).countedFrames, frames);
+  const policy = inspect(s).policy; assert.equal(policy.reportedTpm, 25000); assert.equal(policy.reportedRpm, 1);
+  assert.equal(policy.realMoneyAuthorized, false); assert.equal(policy.countPricingVerified, false); assert.equal(policy.networkEnabled, false);
+  const live = manual.inspectManualLiveReadiness(s); assert.equal(live.fullInputTokenBoundVerified, false);
+  assert.ok(live.blockers.includes('COUNT_PRICE_AND_QUOTA_UNVERIFIED')); assert.ok(live.blockers.includes('API_BALANCE_REPORTED_ZERO'));
+});
+for (const tokens of [0, -1, 16001, 25000, 8000.5, '8000']) stageTest(`invalid/excess count ${String(tokens)} closes without generation`, async x => {
+  const s = x.create(), { result } = await x.count(s, tokens); blocked(result);
+  assert.equal(inspect(s).countPosts, 1); assert.equal(inspect(s).simulatedPosts, 0); assert.equal(inspect(s).cleanup, 'REMOVED');
+  assert.equal(inspect(s).budget.uncertainMicroUsd, 4048);
+});
+for (const field of ['connectivity', 'projectCredential', 'economic']) stageTest(`count cannot omit ${field}`, async x => {
+  const s = x.create(), i = x.generation(s, { events: events('{"object":"response.input_tokens","input_tokens":8000}') });
+  i[field] = undefined; blocked(await manual.runManualLabCount(i)); assert.equal(inspect(s).countPosts, 0); assert.equal(inspect(s).budget, null);
+});
+for (const max of [0, 4048, 8095]) stageTest(`count requires an explicit cap for BOTH lab reservations: ${max}`, async x => {
+  const s = x.create(), { result } = await x.count(s, 8000, { max }); blocked(result, 'MANUAL_WORKFLOW_BUDGET_INVALID');
+  assert.equal(inspect(s).countPosts, 0); assert.equal(inspect(s).budget, null);
+});
+stageTest('generation cannot run before count or transition', async x => {
+  const s = x.create();
+  const i = x.generation(s, { events: events('{"object":"response.input_tokens","input_tokens":8000}') });
+  blocked(await run(i), 'MANUAL_STAGE_INVALID');
+  assert.equal(inspect(s).countPosts, 0); assert.equal(inspect(s).simulatedPosts, 0);
+  x.tick(); const other = x.create(), { result } = await x.count(other);
+  blocked(await run({ session: other }), 'INFERENCE_INPUT_INVALID');
+  assert.equal(inspect(other).phase, 'COUNTED'); assert.equal(inspect(other).simulatedPosts, 0);
+  assert.throws(() => manual.authorizeManualLabConnectivity(other), /MANUAL_SESSION_INACTIVE/);
+});
+for (const clone of [v => ({ ...v }), v => JSON.parse(JSON.stringify(v)), v => new Proxy(v, {}),
+  () => ({ inputTokens: 8000, verified: true, bindingDigest: 'fake' })]) stageTest('public count data cannot mint a transition receipt', async x => {
+  const s = x.create(), { result } = await x.count(s); x.tick();
+  const forged = clone(result); assert.equal(manual.isManualLabCountResult(forged), false);
+  assert.throws(() => x.advance(s, forged), /MANUAL_COUNT_RECEIPT_INVALID/); assert.equal(inspect(s).simulatedPosts, 0);
+});
+stageTest('count receipt or transcript from another session/request is rejected', async x => {
+  const s = x.create(), { result: first, i } = await x.count(s); x.tick();
+  const other = x.create(), { result: second } = await x.count(other); x.tick();
+  assert.throws(() => x.advance(s, second), /MANUAL_COUNT_RECEIPT_INVALID/);
+  assert.throws(() => x.advance(other, first), /MANUAL_COUNT_RECEIPT_INVALID/);
+  x.advance(s, first);
+  const generation = x.generation(s); generation.transcript = i.transcript;
+  blocked(await run(generation), 'MANUAL_TRANSCRIPT_INVALID'); assert.equal(inspect(s).simulatedPosts, 0);
+});
+for (const field of ['connectivity', 'projectCredential', 'economic', 'credential']) stageTest(`old count ${field} cannot authorize generation`, async x => {
+  const s = x.create(), { i, result } = await x.count(s); x.tick(); x.advance(s, result);
+  const generation = x.generation(s); generation[field] = i[field]; blocked(await run(generation));
+  assert.equal(inspect(s).simulatedPosts, 0); assert.equal(inspect(s).budget.allocatedMicroUsd, 4048);
+});
+stageTest('count, approval and generation each resist replay', async x => {
+  const s = x.create(), { i, result } = await x.count(s);
+  blocked(await manual.runManualLabCount(i), 'MANUAL_SESSION_INACTIVE'); x.tick(); x.advance(s, result);
+  assert.throws(() => x.advance(s, result), /MANUAL_COUNT_REQUIRED/);
+  const generation = x.generation(s), valid = await run(generation); assert.equal(valid.status, 'LAB_PLAN_VALID');
+  blocked(await run(generation), 'MANUAL_SESSION_INACTIVE'); assert.equal(inspect(s).countPosts + inspect(s).simulatedPosts, 2);
+});
+stageTest('generation rejects a crossed model response through original correlations', async x => {
+  const s = x.create(), { result } = await x.count(s); x.tick(); const other = x.create(); x.advance(s, result);
+  blocked(await run(x.generation(s, { events: events(JSON.stringify(response(other))) })), 'CORRELATION_MISMATCH');
+  assert.equal(inspect(s).simulatedPosts, 1); assert.equal(inspect(s).cleanup, 'REMOVED');
+});
+stageTest('generation usage must match the count bound to this immutable payload', async x => {
+  const s = x.create(), { result } = await x.count(s); x.tick(); x.advance(s, result);
+  const r = response(s); r.usage.input_tokens--; r.usage.total_tokens--;
+  blocked(await run(x.generation(s, { events: events(JSON.stringify(r)) })), 'TOKEN_COUNT_INVALID');
+  assert.equal(inspect(s).budget.uncertainMicroUsd, 8096); assert.equal(inspect(s).budget.allocatedMicroUsd, 8096);
+});
+stageTest('generation cannot change the explicit workflow economic maximum', async x => {
+  const s = x.create(), { result } = await x.count(s); x.tick(); x.advance(s, result);
+  blocked(await run(x.generation(s, { max: 100000 })), 'MANUAL_WORKFLOW_BUDGET_INVALID');
+  assert.equal(inspect(s).simulatedPosts, 0); assert.equal(inspect(s).budget.allocatedMicroUsd, 4048);
+});
+stageTest('cancel between stages revokes the receipt and never refunds count uncertainty', async x => {
+  const s = x.create(), { result } = await x.count(s); cancel(s); x.tick();
+  assert.equal(manual.isManualLabCountResult(result), false); assert.throws(() => x.advance(s, result), /MANUAL_COUNT_REQUIRED/);
+  assert.equal(inspect(s).budget.uncertainMicroUsd, 4048); assert.equal(inspect(s).simulatedPosts, 0);
+});
+stageTest('cancel during count rejects a late count without receipt or revival', async x => {
+  const s = x.create(), transcript = events('{"object":"response.input_tokens","input_tokens":8000}'); transcript[0].delayMs = 1000;
+  const i = x.generation(s, { events: transcript }), pending = manual.runManualLabCount(i);
+  cancel(s); blocked(await pending, 'INFERENCE_CANCELLED');
+  assert.equal(inspect(s).budget.uncertainMicroUsd, 4048); assert.equal(inspect(s).simulatedPosts, 0); assert.equal(inspect(s).cleanup, 'REMOVED');
+});
+stageTest('cancel during generation retains both independent reservations', async x => {
+  const s = x.create(), { result } = await x.count(s); x.tick(); x.advance(s, result);
+  const transcript = events(JSON.stringify(response(s))); transcript[0].delayMs = 1000;
+  const pending = run(x.generation(s, { events: transcript })); cancel(s); blocked(await pending, 'INFERENCE_CANCELLED');
+  assert.equal(inspect(s).budget.uncertainMicroUsd, 8096); assert.equal(inspect(s).budget.allocatedMicroUsd, 8096);
+});
+for (const stage of ['COUNT', 'GENERATION']) for (const status of [429, 307, 503]) stageTest(`${stage} HTTP ${status} closes with no retry/redirect`, async x => {
+  const s = x.create(); let result;
+  if (stage === 'COUNT') ({ result } = await x.count(s, 8000, { events: events('untrusted error', status) }));
+  else { const counted = await x.count(s); x.tick(); x.advance(s, counted.result); result = await run(x.generation(s, { events: events('untrusted error', status) })); }
+  blocked(result); assert.equal(inspect(s).phase, 'CLOSED'); assert.equal(inspect(s).cleanup, 'REMOVED');
+  assert.equal(inspect(s).countPosts, 1); assert.equal(inspect(s).simulatedPosts, stage === 'COUNT' ? 0 : 1);
+  assert.equal(inspect(s).budget.uncertainMicroUsd, stage === 'COUNT' ? 4048 : 8096);
+});
+for (const stage of ['COUNT', 'GENERATION']) stageTest(`${stage} timeout cannot trigger the next stage or refund`, async x => {
+  const s = x.create(), transcript = [{ type: 'timeout', delayMs: 0 }, { type: 'end', complete: true, delayMs: 10 }]; let result;
+  if (stage === 'COUNT') ({ result } = await x.count(s, 8000, { events: transcript }));
+  else { const counted = await x.count(s); x.tick(); x.advance(s, counted.result); result = await run(x.generation(s, { events: transcript })); }
+  blocked(result, 'HTTP_TIMEOUT'); assert.equal(inspect(s).budget.uncertainMicroUsd, stage === 'COUNT' ? 4048 : 8096);
+});
+stageTest('one RPM also blocks a different session and closing cannot reset its cooldown', async x => {
+  const s = x.create(), { result } = await x.count(s), other = x.create();
+  const i = x.generation(other, { events: events('{"object":"response.input_tokens","input_tokens":8000}') });
+  blocked(await manual.runManualLabCount(i), 'MANUAL_RATE_LIMIT'); assert.equal(inspect(other).countPosts, 0);
+  cancel(s); blocked(await manual.runManualLabCount(i), 'MANUAL_RATE_LIMIT');
+  x.tick(); // Explicit new call after the interval, not an automatic retry or timer.
+  const counted = await manual.runManualLabCount(i); assert.equal(counted.status, 'BLOCKED', 'Old 30s A/B/C have expired');
+  assert.equal(inspect(other).countPosts, 0); assert.equal(manual.isManualLabCountResult(result), false);
+});
+stageTest('counted workflow expires while awaiting manual approval', async x => {
+  const s = x.create(), { result } = await x.count(s); x.tick(600000);
+  assert.throws(() => x.advance(s, result), /MANUAL_SESSION_EXPIRED/);
+  assert.equal(inspect(s).cleanup, 'REMOVED'); assert.equal(inspect(s).budget.uncertainMicroUsd, 4048);
+});
+stageTest('changed source after count invalidates approval and count binding', async x => {
+  const s = x.create(), { result } = await x.count(s), source = writes.at(-2).file;
+  fs.appendFileSync(source, '\n// changed between count and generation'); x.tick();
+  assert.throws(() => x.advance(s, result), /MANUAL_SYNTHETIC_CONTEXT_CHANGED/);
+  assert.equal(inspect(s).cleanup, 'REMOVED'); assert.equal(manual.isManualLabCountResult(result), false);
+});
+for (const [name, mutate, code] of [
+  ['tool call', r => { r.output.push({ type: 'function_call', name: 'writer' }); }, 'PROVIDER_TOOL_FORBIDDEN'],
+  ['invalid plan', r => { const p = JSON.parse(r.output[0].content[0].text); p.operations[0].value = 'Unauthorized'; r.output[0].content[0].text = JSON.stringify(p); }, 'OPERATION_NOT_ALLOWED']
+]) stageTest(`count cannot grant authority to a generation ${name}`, async x => {
+  const s = x.create(), { result } = await x.count(s); x.tick(); x.advance(s, result);
+  const r = response(s); mutate(r); blocked(await run(x.generation(s, { events: events(JSON.stringify(r)) })), code);
+});
+for (const patch of [{ real: true }, { verified: true }, { retries: 1 }, { endpoint: 'http://localhost' }, { transport: () => { throw Error('CALLED'); } }]) {
+  stageTest('caller flags, URLs and transports cannot activate real count or generation', async x => {
+    const s = x.create(), i = x.generation(s, { events: events('{"object":"response.input_tokens","input_tokens":8000}') });
+    blocked(await manual.runManualLabCount({ ...i, ...patch }), 'INFERENCE_INPUT_INVALID');
+    assert.equal(inspect(s).countPosts, 0); assert.equal(inspect(s).policy.nativeClientEnabled, false);
+  });
+}
+stageTest('count crossing the deadline during decoding cannot publish a late receipt', async x => {
+  const s = x.create(), http = compiled('inference-http'), original = http.decodeOfflineInputTokens;
+  http.decodeOfflineInputTokens = text => { const value = original(text); x.tick(30001); return value; };
+  try {
+    const { result } = await x.count(s); blocked(result, 'MANUAL_TIMEOUT');
+    assert.equal(manual.isManualLabCountResult(result), false); assert.equal(inspect(s).simulatedPosts, 0);
+    assert.equal(inspect(s).budget.uncertainMicroUsd, 4048); assert.equal(inspect(s).cleanup, 'REMOVED');
+  } finally { http.decodeOfflineInputTokens = original; }
+});
+
+stageTest('AUDIT 208: final plan decoding at the deadline cannot publish a validated result', async x => {
+  const s = x.create(), { result } = await x.count(s); x.tick(); x.advance(s, result);
+  const json = compiled('fixer-json'), decode = json.decodeFixerJson, launch = launcher.launchFixer;
+  let validationFinished = false;
+  launcher.launchFixer = async input => { const value = await launch(input); validationFinished = true; return value; };
+  json.decodeFixerJson = text => { const value = decode(text); if (validationFinished) x.tick(30000); return value; };
+  try {
+    const r = await run(x.generation(s, { timeout: 30000 })); blocked(r, 'MANUAL_TIMEOUT');
+    assert.equal(manual.isManualLabValidatedResult(r), false); assert.equal(inspect(s).cleanup, 'REMOVED');
+  } finally { json.decodeFixerJson = decode; launcher.launchFixer = launch; }
+});
+stageTest('AUDIT 208: provider decoding at the deadline cannot enter plan validation', async x => {
+  const s = x.create(), { result } = await x.count(s); x.tick(); x.advance(s, result);
+  const provider = compiled('inference-response'), decode = provider.decodeOfflineResponsesReply, launch = launcher.launchFixer;
+  let validations = 0;
+  provider.decodeOfflineResponsesReply = input => { const value = decode(input); x.tick(30000); return value; };
+  launcher.launchFixer = async input => { validations++; return launch(input); };
+  try {
+    const r = await run(x.generation(s, { timeout: 30000 })); blocked(r, 'MANUAL_TIMEOUT');
+    assert.equal(validations, 0); assert.equal(inspect(s).budget.uncertainMicroUsd, 8096);
+  } finally { provider.decodeOfflineResponsesReply = decode; launcher.launchFixer = launch; }
+});
+
+for (const [name, body, code] of [
+  ['unsafe integer', '{"object":"response.input_tokens","input_tokens":9007199254740993}', 'JSON_MALFORMED'],
+  ['numeric overflow', '{"object":"response.input_tokens","input_tokens":1e999}', 'JSON_MALFORMED'],
+  ['duplicate field', '{"object":"response.input_tokens","input_tokens":1,"input_tokens":8000}', 'JSON_MALFORMED'],
+  ['truncated JSON', '{"object":', 'JSON_MALFORMED'],
+  ['wrong envelope', '{"object":"response","input_tokens":8000}', 'TOKEN_COUNT_INVALID']
+]) stageTest(`AUDIT 208: ${name} count burns exactly one reservation and no receipt`, async x => {
+  const s = x.create(), { result } = await x.count(s, 8000, { events: events(body) }); blocked(result, code);
+  assert.equal(manual.isManualLabCountResult(result), false); assert.equal(inspect(s).budget.attempts, 1);
+  assert.equal(inspect(s).budget.allocatedMicroUsd, 4048); assert.equal(inspect(s).budget.uncertainMicroUsd, 4048);
+  blocked(await manual.runManualLabCount({ session: s }), 'INFERENCE_INPUT_INVALID');
+  assert.equal(inspect(s).budget.allocatedMicroUsd, 4048);
+});
+stageTest('AUDIT 208: 16000 input tokens is accepted through both stages without exceeding simulated TPM', async x => {
+  const s = x.create(), { result } = await x.count(s, 16000); assert.equal(result.status, 'LAB_COUNT_VALID');
+  x.tick(); x.advance(s, result); const r = response(s); r.usage.input_tokens = 16000; r.usage.total_tokens = 18000;
+  const valid = await run(x.generation(s, { events: events(JSON.stringify(r)) })); assert.equal(valid.status, 'LAB_PLAN_VALID');
+  assert.equal(inspect(s).budget.knownMicroUsd, 2600); assert.equal(inspect(s).budget.allocatedMicroUsd, 8096);
+});
+for (const stage of ['COUNT', 'GENERATION']) for (const elapsed of [29999, 30000]) {
+  stageTest(`AUDIT 208: ${stage} grants at exact ${elapsed}ms boundary`, async x => {
+    const s = x.create();
+    if (stage === 'GENERATION') { const { result } = await x.count(s); x.tick(); x.advance(s, result); }
+    const i = x.generation(s, { events: stage === 'COUNT' ? events('{"object":"response.input_tokens","input_tokens":8000}') : events(JSON.stringify(response(s))), timeout: 30000 });
+    x.tick(elapsed);
+    const r = stage === 'COUNT' ? await manual.runManualLabCount(i) : await run(i);
+    if (elapsed === 29999) assert.equal(r.status, stage === 'COUNT' ? 'LAB_COUNT_VALID' : 'LAB_PLAN_VALID', JSON.stringify(r));
+    else { blocked(r, 'MANUAL_A_REQUIRED'); assert.equal(inspect(s).budget?.allocatedMicroUsd ?? 0, stage === 'COUNT' ? 0 : 4048); }
+  });
+}
+for (const elapsed of [599999, 600000]) stageTest(`AUDIT 208: workflow exact ${elapsed}ms boundary`, async x => {
+  const s = x.create(), { result } = await x.count(s); x.tick(elapsed);
+  if (elapsed === 600000) { assert.throws(() => x.advance(s, result), /MANUAL_SESSION_EXPIRED/); return; }
+  x.advance(s, result); const i = x.generation(s, { timeout: 30000 }); x.tick(1);
+  blocked(await run(i), 'MANUAL_SESSION_EXPIRED'); assert.equal(inspect(s).simulatedPosts, 0);
+});
+for (const shift of [-864000000, 864000000]) stageTest(`AUDIT 208: wall clock shift ${shift} cannot advance RPM or extend TTL`, async (x, t) => {
+  const s = x.create(), { result } = await x.count(s), wall = Date.now();
+  t.mock.method(Date, 'now', () => wall + shift);
+  assert.throws(() => x.advance(s, result), /MANUAL_RATE_LIMIT/);
+  x.tick(59999); assert.throws(() => x.advance(s, result), /MANUAL_RATE_LIMIT/);
+  x.tick(1); assert.equal(x.advance(s, result).status, 'LAB_GENERATION_READY');
+  const i = x.generation(s); x.tick(30000); blocked(await run(i), 'MANUAL_A_REQUIRED');
+});
+for (const failure of ['error', 'timeout', 'cancel']) stageTest(`AUDIT 208: ${failure} count keeps the project cooldown for other sessions`, async x => {
+  const s = x.create(), other = x.create(); let result;
+  if (failure === 'cancel') {
+    const transcript = events('{"object":"response.input_tokens","input_tokens":8000}'); transcript[0].delayMs = 1000;
+    const pending = x.count(s, 8000, { events: transcript }); cancel(s); ({ result } = await pending);
+  } else ({ result } = await x.count(s, 8000, { events: [failure === 'error' ? { type: 'error', code: 'DNS', delayMs: 0 } : { type: 'timeout', delayMs: 0 }] }));
+  blocked(result); const i = x.generation(other, { events: events('{"object":"response.input_tokens","input_tokens":8000}') });
+  blocked(await manual.runManualLabCount(i), 'MANUAL_RATE_LIMIT'); assert.equal(inspect(other).budget, null);
+  assert.equal(inspect(s).budget.allocatedMicroUsd, 4048);
+});
+stageTest('AUDIT 208: simultaneous attempts cannot dispatch a second count in the same module', async x => {
+  const s = x.create(), other = x.create(), transcript = events('{"object":"response.input_tokens","input_tokens":8000}');
+  const i = x.generation(s, { events: transcript }), j = x.generation(other, { events: transcript });
+  transcript[0].delayMs = 1000; // Existing snapshots remain immutable.
+  const pending = manual.runManualLabCount(i); blocked(await manual.runManualLabCount(j), 'MANUAL_CONCURRENCY_EXCEEDED');
+  assert.equal((await pending).status, 'LAB_COUNT_VALID'); assert.equal(inspect(other).countPosts, 0);
+});
+stageTest('AUDIT 208: duplicate module loads have independent RPM state (documented live blocker)', async x => {
+  const s = x.create(); assert.equal((await x.count(s)).result.status, 'LAB_COUNT_VALID');
+  const id = require.resolve(path.join(out, 'scripts/factory-fix/inference-manual.js')), cached = require.cache[id];
+  delete require.cache[id]; let otherApi, other;
+  try {
+    otherApi = require(id); other = otherApi.createManualCountedLabSession();
+    const i = inputFor(other, { max: 8096, events: events('{"object":"response.input_tokens","input_tokens":8000}') }, otherApi);
+    assert.equal((await otherApi.runManualLabCount(i)).status, 'LAB_COUNT_VALID', 'No global coordination is claimed');
+    assert.equal(otherApi.MANUAL_COUNTED_LAB_POLICY.rateCoordinationScope, 'MODULE_INSTANCE_ONLY');
+    assert.equal(otherApi.MANUAL_COUNTED_LAB_POLICY.survivesProcessRestart, false);
+    assert.equal(otherApi.MANUAL_COUNTED_LAB_POLICY.providerAndOrganizationQuotaVerified, false);
+  } finally { if (other) otherApi.cancelManualLabSession(other); require.cache[id] = cached; }
+});
+for (const point of ['TRANSITION', 'GENERATION']) stageTest(`AUDIT 208: catalog drift before ${point} invalidates the counted context`, async x => {
+  const s = x.create(), { result } = await x.count(s), catalog = writes.at(-1).file; x.tick();
+  if (point === 'GENERATION') x.advance(s, result);
+  fs.appendFileSync(catalog, '\n// changed after count');
+  if (point === 'TRANSITION') assert.throws(() => x.advance(s, result), /MANUAL_SYNTHETIC_CONTEXT_CHANGED/);
+  else assert.throws(() => x.generation(s), /MANUAL_SYNTHETIC_CONTEXT_CHANGED/);
+  assert.equal(inspect(s).simulatedPosts, 0); assert.equal(inspect(s).cleanup, 'REMOVED');
+  assert.equal(manual.isManualLabCountResult(result), false);
+});
+stageTest('AUDIT 208: authentic host request invalidation after count cannot be replaced by public request data', async x => {
+  const s = x.create(), { result } = await x.count(s), r = inspect(s).request;
+  launcher.invalidateFixRequest(hostRequests.get(r.requestId)); x.tick();
+  assert.throws(() => x.advance(s, result), /MANUAL_SYNTHETIC_CONTEXT_CHANGED/);
+  assert.equal(inspect(s).simulatedPosts, 0);
+});
+stageTest('AUDIT 208: transition rejects payload substitution even with an authentic count receipt', async x => {
+  const s = x.create(), { result } = await x.count(s); x.tick();
+  assert.throws(() => manual.advanceManualLabGeneration({ session: s, countResult: result, frame: { body: '{}' } }), e => e.code === 'INFERENCE_INPUT_INVALID');
+  assert.equal(inspect(s).phase, 'COUNTED'); x.advance(s, result);
+  assert.throws(() => { inspect(s).countedFrames.inference.body = '{}'; }, TypeError);
+  assert.equal((await run(x.generation(s))).status, 'LAB_PLAN_VALID');
+});
+stageTest('AUDIT 208: both reserves exist before their first simulated transport event', async x => {
+  const s = x.create(), receive = adapter.receiveOfflineSingleHttpsExchange, seen = [];
+  adapter.receiveOfflineSingleHttpsExchange = (...args) => { const b = inspect(s).budget; seen.push([b.attempts, b.allocatedMicroUsd, b.active]); return receive(...args); };
+  try {
+    const { result } = await x.count(s); x.tick(); x.advance(s, result); assert.equal((await run(x.generation(s))).status, 'LAB_PLAN_VALID');
+    assert.deepEqual(seen, [[1, 4048, 1], [2, 8096, 1]]);
+  } finally { adapter.receiveOfflineSingleHttpsExchange = receive; }
+});
+
+// Trusted test dependency substitution ONLY: exercise the same counted state
+// machine with six authentic host authorizations in owned synthetic workspaces.
+// No production registration hook or caller-selected manual context is added.
+for (const operator of ['UPDATE_VALUE', 'ADD_PROPERTY', 'ADD_ELEMENT', 'REMOVE_PROPERTY', 'REMOVE_ELEMENT', 'REORDER_ELEMENTS']) {
+  stageTest(`AUDIT 208: ${operator} count -> fresh ABC -> original validators -> FixPlan memory`, async x => {
+    const f = await import('./inference-fixtures.mjs'), fixtureApi = compiled('inference-manual-fixture');
+    await f.fixture(async ctx => {
+      const make = {
+        UPDATE_VALUE: () => f.update(ctx.snapshot),
+        ADD_PROPERTY: () => ({ type: 'ADD_PROPERTY', parentRef: f.refAt(ctx.snapshot, 'empty'), propertyName: 'nota', value: { exact: [0.125, 0.125], texto: 'Texto inventado' }, placement: { mode: 'auto' } }),
+        ADD_ELEMENT: () => ({ type: 'ADD_ELEMENT', parentRef: f.refAt(ctx.snapshot, 'values'), value: { nombre: 'C', descripcion: 'Tercero' }, placement: { mode: 'append' } }),
+        REMOVE_PROPERTY: () => ({ type: 'REMOVE_PROPERTY', targetRef: f.refAt(ctx.snapshot, 'info', 'count') }),
+        REMOVE_ELEMENT: () => ({ type: 'REMOVE_ELEMENT', targetRef: f.refAt(ctx.snapshot, 'values', 1) }),
+        REORDER_ELEMENTS: () => ({ type: 'REORDER_ELEMENTS', parentRef: f.refAt(ctx.snapshot, 'values'), order: [...compiled('target-locator').listChildTargets({ snapshot: ctx.snapshot, parentRef: f.refAt(ctx.snapshot, 'values') })].reverse() })
+      };
+      const request = launcher.createFixRequest(f.hostInput(ctx.snapshot, [make[operator]()], { timeoutMs: 30000 }));
+      const source = originalRead(ctx.sourceFile), catalog = originalRead(ctx.catalogFile), createFixture = fixtureApi.createManualSyntheticFixture;
+      let closed = false;
+      fixtureApi.createManualSyntheticFixture = () => Object.freeze({ request,
+        assertData() { assert.deepEqual(originalRead(ctx.sourceFile), source); assert.deepEqual(originalRead(ctx.catalogFile), catalog); },
+        close() { if (!closed) { launcher.invalidateFixRequest(request); closed = true; } } });
+      try {
+        const s = x.create(), { result } = await x.count(s); assert.equal(result.status, 'LAB_COUNT_VALID');
+        x.tick(); x.advance(s, result); const r = await run(x.generation(s));
+        assert.equal(r.status, 'LAB_PLAN_VALID', JSON.stringify(r)); assert.equal(r.plan.operations[0].operation, operator);
+        assert.deepEqual(r.plan, compiled('fixer-json').normalizeFixerData(planFor(request))); assert.equal(manual.isManualLabValidatedResult(r), true);
+        assert.equal(r.persistence, 'NOT_ATTEMPTED'); assert.equal(r.sourceWrite, false); assert.equal(r.writeAuthorized, false);
+        assert.equal('handoff' in r, false); assert.equal(closed, true);
+        assert.deepEqual(originalRead(ctx.sourceFile), source); assert.deepEqual(originalRead(ctx.catalogFile), catalog);
+      } finally { fixtureApi.createManualSyntheticFixture = createFixture; if (!closed) launcher.invalidateFixRequest(request); }
+    });
+  });
+}

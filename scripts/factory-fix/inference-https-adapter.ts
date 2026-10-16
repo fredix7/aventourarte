@@ -152,27 +152,28 @@ export async function receiveOfflineHttpsExchange(token: OfflineHttpsExchange, f
 }
 
 // Single POST laboratory transcript. This is inert data, with no callable port,
-// credential resolver, native-client import or count request. Both modes share
+// credential resolver or native-client import. Count and generation share
 // the SAME event engine/receiver as 9F, never a second HTTP implementation.
 declare const singleBrand: unique symbol;
 export interface OfflineSingleHttpsExchange { readonly [singleBrand]: true }
-const singles = new WeakMap<OfflineSingleHttpsExchange, { frame: OfflineHttpRequests['inference']; events: readonly Event[] }>();
+const singles = new WeakMap<OfflineSingleHttpsExchange, { frame: OfflineHttpRequests['inference']; events: readonly Event[]; count: boolean }>();
 export function createOfflineSingleHttpsExchange(input: { readonly frame: OfflineHttpRequests['inference'];
-  readonly events: readonly OfflineHttpsEvent[] }): OfflineSingleHttpsExchange {
+  readonly events: readonly OfflineHttpsEvent[] }, count = false): OfflineSingleHttpsExchange {
+  if (typeof count !== 'boolean') inferenceFail('HTTPS_EVENT_INVALID');
   const d = inferenceEnvelope(input, ['frame', 'events']);
   const frame = normalizeFixerData(d['frame']) as unknown as OfflineHttpRequests['inference'];
-  assertFixedHttpRequest(frame, false);
-  const events = snapshot(d['events'] as readonly OfflineHttpsEvent[], false);
-  const token = Object.freeze({}) as OfflineSingleHttpsExchange; singles.set(token, { frame, events }); return token;
+  assertFixedHttpRequest(frame, count);
+  const events = snapshot(d['events'] as readonly OfflineHttpsEvent[], count);
+  const token = Object.freeze({}) as OfflineSingleHttpsExchange; singles.set(token, { frame, events, count }); return token;
 }
 export function discardOfflineSingleHttpsExchange(token: OfflineSingleHttpsExchange): void { singles.delete(token); }
 export async function receiveOfflineSingleHttpsExchange(token: OfflineSingleHttpsExchange,
   frame: OfflineHttpRequests['inference'], signal: AbortSignal, syntheticSecret: string): Promise<string> {
   const state = singles.get(token); singles.delete(token);
   if (!state) inferenceFail('HTTPS_EVENT_INVALID');
-  assertFixedHttpRequest(frame, false);
+  assertFixedHttpRequest(frame, state.count);
   if (frame.body !== state.frame.body || frame.path !== state.frame.path || frame.digest !== state.frame.digest) inferenceFail('TOKEN_BINDING_INVALID');
-  return receiveEvents(frame, false, state.events, signal, syntheticSecret);
+  return receiveEvents(frame, state.count, state.events, signal, syntheticSecret);
 }
 async function receiveEvents(frame: OfflineHttpRequests['count'], count: boolean, events: readonly Event[],
   signal: AbortSignal, secret: string): Promise<string> {
