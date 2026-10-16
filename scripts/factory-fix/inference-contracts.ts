@@ -1,7 +1,8 @@
 import type { FixRequest } from './fixer-contracts';
 import type { StaticData } from './static-data';
 
-// Broker stays offline. The separate 9F native implementation has no exported invocation or issuer.
+// Broker stays offline. The dormant native manual port consumes private permits;
+// no operational issuer exists, and public data never authorizes its invocation.
 export const INFERENCE_PROFILE = Object.freeze({ version: 'openai-responses-offline-v1',
   provider: 'openai', endpoint: 'https://api.openai.com/v1/responses', method: 'POST', model: 'gpt-6-luna',
   maxOutputTokens: 4096, proposedMaxInputTokens: 16000, maxConcurrency: 1,

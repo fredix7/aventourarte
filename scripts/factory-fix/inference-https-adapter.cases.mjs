@@ -232,8 +232,8 @@ function nativeHarness(mode = 'ok', harnessOptions = {}) {
   load(mod.exports, imports, mod, setTimeout, clearTimeout, Buffer);
   return { ...mod.exports.testAccess, key, calls, sockets, dnsCalls };
 }
-sim('native production module exports policy only; importing it cannot open sockets', ctx => {
-  assert.deepEqual(Object.keys(native), ['DORMANT_HTTPS_CLIENT_POLICY']);
+sim('native production module exports policy and consume-only dormant bridge; importing cannot open sockets', ctx => {
+  assert.deepEqual(Object.keys(native).sort(), ['DORMANT_HTTPS_CLIENT_POLICY', 'receivePreparedManualHttpsAttempt'].sort());
   assert.equal(native.DORMANT_HTTPS_CLIENT_POLICY.enabled, false);
   const h = nativeHarness(), frame = broker.inspectOfflineHttpRequests(setup(ctx).projection).count;
   return assert.rejects(h.dormantHttpsRequest({}, frame, true, h.key, new AbortController().signal, 1000), e => e.code === 'RUNTIME_NOT_ISOLATED').then(() => assert.equal(h.calls.length, 0));
@@ -342,7 +342,7 @@ sim('audit: forged capabilities fail before reading any request or secret input'
     await assert.rejects(h.dormantHttpsRequest(grant, proxy, true, 'FAKE_SECRET', proxy, 1), e => e.code === 'RUNTIME_NOT_ISOLATED');
   }
   assert.equal(invoked, 0); assert.equal(h.dnsCalls.length, 0); assert.equal(h.calls.length, 0);
-  assert.deepEqual(Object.getOwnPropertyNames(native).sort(), ['DORMANT_HTTPS_CLIENT_POLICY', '__esModule'].sort());
+  assert.deepEqual(Object.getOwnPropertyNames(native).sort(), ['DORMANT_HTTPS_CLIENT_POLICY', 'receivePreparedManualHttpsAttempt', '__esModule'].sort());
   const js = readFileSync(path.join(process.env.FACTORY_FIX_OUT_DIR, 'scripts/factory-fix/inference-https-native.js'), 'utf8');
   assert.doesNotMatch(js, /exports\.(?:testAccess|dormantHttpsRequest|liveCapabilities)\s*=/);
 });
@@ -445,7 +445,8 @@ sim('audit: Unicode and double-JSON credential echoes cannot enter a result, pro
 test('Phase 9F: static gate and transitive capability audit', () => {
   const file = path.join(projectRoot, 'scripts/factory-fix/inference-https-native.ts'), source = readFileSync(file, 'utf8');
   const ast = ts.createSourceFile(file, source, ts.ScriptTarget.ES2022, true);
-  assert.equal(ast.statements.filter(s => ts.isFunctionDeclaration(s) && s.modifiers?.some(m => m.kind === ts.SyntaxKind.ExportKeyword)).length, 0);
+  const exported = ast.statements.filter(s => ts.isFunctionDeclaration(s) && s.modifiers?.some(m => m.kind === ts.SyntaxKind.ExportKeyword));
+  assert.deepEqual(exported.map(s => s.name.text), ['receivePreparedManualHttpsAttempt']);
   assert.doesNotMatch(source, /liveCapabilities\.(?:add|delete)|process\.env|console\.|writeFile|child_process|writer|git-inspection|plugins?/);
   assert.equal((source.match(/dormantHttpsRequest\(/g) ?? []).length, 1, 'Declaration only: no production caller');
   const visited = new Set();

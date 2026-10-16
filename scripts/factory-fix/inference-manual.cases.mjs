@@ -74,10 +74,13 @@ const planFor = request => {
     ...('value' in a.operation ? { value: a.operation.value } : {}), evidence: [] })), unresolvedActionIds: [] };
 };
 function response(s) {
+  return responseForRequest(inspect(s).request);
+}
+function responseForRequest(request) {
   return { id: 'resp_manual_lab', object: 'response', created_at: 1792108800, status: 'completed', error: null, incomplete_details: null,
     model: 'gpt-6-luna', store: false, background: false, tools: [], tool_choice: 'none',
     output: [{ id: 'msg_manual_lab', type: 'message', role: 'assistant', status: 'completed',
-      content: [{ type: 'output_text', text: JSON.stringify(planFor(inspect(s).request)), annotations: [], logprobs: [] }] }],
+      content: [{ type: 'output_text', text: JSON.stringify(planFor(request)), annotations: [], logprobs: [] }] }],
     usage: { input_tokens: 8000, output_tokens: 2000, total_tokens: 10000,
       input_tokens_details: { cached_tokens: 0 }, output_tokens_details: { reasoning_tokens: 0 } } };
 }
@@ -115,8 +118,8 @@ runTest('full single POST -> original validators -> exact FixPlan memory -> clos
   assert.throws(() => launcher.assertOpenFixRequest(hostRequest), e => e.code === 'REQUEST_INACTIVE');
   blocked(await run(i), 'MANUAL_SESSION_INACTIVE');
 });
-runTest('manual import graph contains no bootstrap, preflight, native invocation or persistence modules', () => {
-  for (const id of moduleGraph) assert.doesNotMatch(id.replaceAll('\\', '/'), /\/(?:inference-bootstrap|inference-preflight|inference-https-native|writer|write-readiness|source-lock|execution)\.js$/);
+runTest('manual import graph contains only a dormant guarded native bridge and no privileged modules', () => {
+  for (const id of moduleGraph) assert.doesNotMatch(id.replaceAll('\\', '/'), /\/(?:inference-bootstrap|inference-preflight|writer|write-readiness|source-lock|execution)\.js$/);
   assert.equal(compiled('inference-https-native').DORMANT_HTTPS_CLIENT_POLICY.enabled, false);
   assert.equal(launcher.getFixerRuntimeStatus().code, 'RUNTIME_NOT_ISOLATED');
 });
@@ -425,7 +428,7 @@ for (const [name, mutate, expected] of [
 });
 test('Paso 205: complete manual source import graph excludes privileged and real-guide entrypoints', t => {
   const ts = require('typescript'), visited = new Set();
-  const allowed = new Set(['typescript', 'node:crypto', 'node:perf_hooks', 'node:fs', 'node:path', 'node:os', 'node:util', 'node:timers/promises']);
+  const allowed = new Set(['typescript', 'node:crypto', 'node:perf_hooks', 'node:fs', 'node:path', 'node:os', 'node:util', 'node:timers/promises', 'node:readline/promises']);
   function visit(file) {
     if (visited.has(file)) return; visited.add(file);
     const text = originalRead(file, 'utf8'), ast = ts.createSourceFile(file, text, ts.ScriptTarget.ES2022, true);
@@ -433,9 +436,10 @@ test('Paso 205: complete manual source import graph excludes privileged and real
     for (const statement of ast.statements.filter(ts.isImportDeclaration)) {
       if (statement.importClause?.isTypeOnly) continue;
       const specifier = statement.moduleSpecifier.text;
-      assert.doesNotMatch(specifier, /https-native|bootstrap|preflight|writer|readiness|source-lock|git-inspection|child_process|worker_threads|mcp|plugin|factory-qa-(?:channel|invoke)/i);
+      assert.doesNotMatch(specifier, /bootstrap|preflight|writer|readiness|source-lock|git-inspection|child_process|worker_threads|mcp|plugin|factory-qa-(?:channel|invoke)/i);
       if (specifier.startsWith('.')) visit(path.resolve(path.dirname(file), specifier + '.ts'));
-      else assert.ok(allowed.has(specifier), 'Unexpected external runtime dependency: ' + specifier);
+      else assert.ok(allowed.has(specifier) || path.basename(file) === 'inference-https-native.ts'
+        && ['node:https', 'node:tls', 'node:dns/promises'].includes(specifier), 'Unexpected external runtime dependency: ' + specifier);
     }
     function scan(node) {
       if (ts.isCallExpression(node)) assert.equal(/^(?:require|eval|Function|fetch|WebSocket|spawn|execSync|execFile)$/.test(node.expression.getText(ast)), false);
@@ -444,7 +448,7 @@ test('Paso 205: complete manual source import graph excludes privileged and real
     scan(ast);
   }
   visit(path.join(root, 'scripts/factory-fix/inference-manual.ts'));
-  t.diagnostic('Manual runtime source graph audited: ' + visited.size + ' local modules; no native/privileged entrypoint.');
+  t.diagnostic('Manual runtime source graph audited: ' + visited.size + ' local modules; native port is consume-only, no operational issuer/privileged entrypoint.');
 });
 
 // Virtual monotonic time is test instrumentation only. Production exposes no
@@ -805,3 +809,265 @@ for (const operator of ['UPDATE_VALUE', 'ADD_PROPERTY', 'ADD_ELEMENT', 'REMOVE_P
     });
   });
 }
+
+// Both real modules, one isolated CommonJS closure. Only native IO, TTY and the
+// unissued review registry are instrumented IN MEMORY; no test hook is shipped.
+function preparedSmokeHarness(x, mode = 'ok') {
+  const { EventEmitter } = require('node:events'), vm = require('node:vm');
+  const key = 'LAB_FAKE_NATIVE_' + originalRandom(24).toString('hex'), prompts = [], terminalOutput = [], requests = [], sockets = [], sessions = [], permits = [];
+  const input = new EventEmitter(); input.isTTY = true; input.isRaw = false;
+  input.isPaused = () => true; input.setRawMode = value => { input.isRaw = value;
+    if (mode === 'raw-open-error' && value || mode === 'raw-close-error' && !value) throw Error(key);
+  }; input.pause = () => {};
+  input.resume = () => {
+    if (mode === 'resume-error') throw Error(key);
+    queueMicrotask(() => mode === 'input-error' ? input.emit('error', Error(key))
+      : input.emit('data', Buffer.from(mode === 'key-cancel' ? '\x03' : mode === 'key-overflow' ? 'x'.repeat(257) : key + '\r')));
+  };
+  const output = { isTTY: true, write: text => { terminalOutput.push(text); if (mode === 'output-error') throw Error(key); return true; } };
+  const fakeProcess = { pid: process.pid, stdin: input, stdout: output };
+  let dns = 0, closedTerminals = 0, bridgeCalls = 0;
+  class Socket extends EventEmitter {
+    remoteAddress = mode === 'private' ? '127.0.0.1' : '8.8.8.8'; remotePort = 443; authorized = mode !== 'tls'; encrypted = true;
+    getPeerCertificate() { return {}; } destroy() { this.destroyed = true; }
+  }
+  const cache = new Map();
+  const get = name => {
+    if (!['inference-manual', 'inference-https-native'].includes(name)) return compiled(name);
+    if (cache.has(name)) return cache.get(name).exports;
+    const mod = { exports: {} }; cache.set(name, mod);
+    const filename = path.join(out, 'scripts/factory-fix', name + '.js');
+    const access = name === 'inference-manual' ? '\nmodule.exports.testAccess={runPreparedNativeSmoke,nativeReviews,nativeAttempts};' : '';
+    const loader = vm.runInThisContext('(function(exports,require,module,process,setTimeout,clearTimeout,Buffer){' + originalRead(filename, 'utf8') + access + '\n})', { filename: 'smoke-210-offline-' + name, timeout: 1000 });
+    const imports = specifier => {
+      if (specifier === 'node:readline/promises') return { createInterface() { return {
+        async question(label) {
+          prompts.push(label);
+          if (mode === 'question-error') throw Error(key);
+          if (label.includes('A:') && prompts.length === 1) x.tick(60000);
+          if (label.includes('TRANSICION')) x.tick(mode === 'early-transition' ? 59999 : 60000);
+          if (mode === 'expired' && label.includes('C:')) x.tick(30000);
+          if (mode === 'timeout-swap' && label.includes('C:')) x.tick(1000);
+          const authority = label.includes('A:') ? 'A' : label.includes('B:') ? 'B' : 'C';
+          return mode === 'deny-' + authority || mode === 'deny-generation-' + authority && label.startsWith('GENERATION') ? 'NO' : label.match(/APRUEBO [a-f0-9]{32}/)[0];
+        }, close() { closedTerminals++; if (mode === 'question-close-error') throw Error(key); }
+      }; } };
+      if (specifier === 'node:tls') return { TLSSocket: Socket, rootCertificates: ['FAKE_BUNDLED_CA'],
+        checkServerIdentity: () => mode === 'hostname' ? Error(key) : undefined };
+      if (specifier === 'node:dns/promises') return { async lookup(host, options) {
+        dns++; assert.equal(host, 'api.openai.com'); assert.equal(options.family, 4);
+        if (mode === 'dns') throw Error(key);
+        return [{ address: '8.8.8.8', family: 4 }];
+      } };
+      if (specifier === 'node:https') return { request(options, callback) {
+        const req = new EventEmitter(); req.destroy = () => { req.destroyed = true; req.socket?.destroy(); };
+        req.end = body => {
+          assert.equal(options.headers.authorization, 'Bearer ' + key); assert.equal(options.rejectUnauthorized, true);
+          assert.equal(options.agent, false); assert.equal(options.hostname, 'api.openai.com');
+          const count = options.path.endsWith('/input_tokens'), payload = JSON.parse(body);
+          assert.equal(body.includes(key), false); requests.push({ path: options.path, payload });
+          const incoming = new EventEmitter(); incoming.destroy = () => { incoming.destroyed = true; };
+          incoming.rawHeaders = ['Content-Type', 'application/json']; incoming.complete = true;
+          incoming.statusCode = ({ auth: 401, billing: 429, rate: 429, redirect: 307 })[mode] ?? 200;
+          callback(incoming);
+          if (mode === 'cancel') { get('inference-manual').cancelManualLabSession(sessions.at(-1)); return; }
+          if (mode === 'timeout') { x.tick(30000); }
+          let reply = count ? { object: 'response.input_tokens', input_tokens: 8000 } : responseForRequest(JSON.parse(payload.input[0].content[0].text));
+          if (!count && mode === 'malicious') reply.output.push({ type: 'function_call', name: 'writer' });
+          if (!count && mode === 'crossed') { const p = JSON.parse(reply.output[0].content[0].text); p.nonce = 'wrong'; reply.output[0].content[0].text = JSON.stringify(p); }
+          if (!count && mode === 'usage') { reply.usage.input_tokens--; reply.usage.total_tokens--; }
+          if (mode === 'billing') reply = { error: { code: 'insufficient_quota', message: key } };
+          if (mode === 'secret-body') reply = { secret: key };
+          const text = mode === 'malformed' ? '{' : mode === 'malformed-secret' ? '{"secret":' + key
+            : mode === 'unicode-secret' ? '{"secret":"' + [...key].map(c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0')).join('') + '"}' : JSON.stringify(reply);
+          incoming.emit('data', Buffer.from(text)); incoming.emit('end');
+          incoming.emit('end'); incoming.emit('data', Buffer.from(key)); // Late events have no effect.
+        };
+        queueMicrotask(() => { const socket = new Socket(); sockets.push(socket); req.socket = socket; req.emit('socket', socket); socket.emit('secureConnect'); });
+        return req;
+      } };
+      if (specifier === './inference-manual') {
+        const api = get('inference-manual');
+        return { ...api, consumePreparedManualHttpsAttempt(token, ...args) {
+          bridgeCalls++; const p = api.testAccess.nativeAttempts.get(token); if (p) { sessions.push(p.session); permits.push(token); }
+          const secret = api.consumePreparedManualHttpsAttempt(token, ...(mode === 'frame-swap' ? [{ ...args[0] }, ...args.slice(1)] : args));
+          if (mode === 'consume-fault') throw Error(key);
+          return secret;
+        } };
+      }
+      if (specifier === './inference-https-native' && ['signal-swap', 'timeout-swap'].includes(mode)) {
+        const api = get('inference-https-native');
+        return { ...api, receivePreparedManualHttpsAttempt(permit, frame, count, signal, timeout) {
+          return api.receivePreparedManualHttpsAttempt(permit, frame, count,
+            mode === 'signal-swap' ? new AbortController().signal : signal, mode === 'timeout-swap' ? 30000 : timeout);
+        } };
+      }
+      if (specifier.startsWith('./')) return get(specifier.slice(2));
+      return require(specifier);
+    };
+    loader(mod.exports, imports, mod, fakeProcess, setTimeout, clearTimeout, Buffer); return mod.exports;
+  };
+  const api = get('inference-manual'), token = Object.freeze({});
+  // Fictitious count allowance 17 is deliberately unrelated to the old 4048.
+  // Production has NO setter/issuer for this private host review.
+  api.testAccess.nativeReviews.set(token, { projectId: 'proj_LAB_ONLY', countMaximumMicroUsd: 17,
+    generationMaximumMicroUsd: 4048, exclusiveProcessId: process.pid, expires: require('node:perf_hooks').performance.now() + 600000 });
+  return { api, token, prompts, requests, sessions, sockets, permits, fakeProcess, key,
+    native: get('inference-https-native'), review: () => api.testAccess.nativeReviews.get(token),
+    run: () => api.testAccess.runPreparedNativeSmoke(token),
+    check() {
+      assert.equal(input.isRaw, false); assert.equal(closedTerminals, prompts.length);
+      assert.equal(terminalOutput.join('').includes(key), false);
+      for (const s of new Set(sessions)) { assert.equal(api.inspectManualLabSession(s).cleanup, 'REMOVED'); }
+      for (const socket of sockets) assert.equal(socket.destroyed, true);
+    }, stats: () => ({ dns, bridgeCalls }) };
+}
+stageTest('Paso 210: actual manual -> human ABC twice -> native TLS wiring -> FixPlan memory, fake IO only', async x => {
+  const h = preparedSmokeHarness(x), r = await h.run();
+  assert.equal(r.status, 'LAB_PLAN_VALID', JSON.stringify(r)); assert.equal(r.persistence, 'NOT_ATTEMPTED');
+  assert.equal(r.realExecutionEnabled, false); assert.equal(r.writeAuthorized, false); assert.equal('handoff' in r, false);
+  assert.equal(h.prompts.length, 7); assert.deepEqual(h.requests.map(r => r.path), ['/v1/responses/input_tokens', '/v1/responses']);
+  for (const [key, value] of Object.entries(h.requests[0].payload)) assert.deepEqual(h.requests[1].payload[key], value);
+  const budget = h.api.inspectManualLabSession(h.sessions[0]).budget;
+  assert.equal(budget.allocatedMicroUsd, 4065); assert.equal(budget.uncertainMicroUsd, 17); assert.equal(budget.knownMicroUsd, 1800);
+  await assert.rejects(h.run(), e => e.code === 'RUNTIME_NOT_ISOLATED'); assert.equal(h.requests.length, 2); h.check();
+});
+for (const [mode, code] of [['dns', 'HTTPS_DNS_FAILED'], ['private', 'HTTPS_ADDRESS_FORBIDDEN'], ['tls', 'HTTPS_TLS_INVALID'],
+  ['hostname', 'HTTPS_HOSTNAME_INVALID'], ['auth', 'HTTP_UNAUTHORIZED'], ['billing', 'HTTP_RATE_LIMIT'],
+  ['rate', 'HTTP_RATE_LIMIT'], ['redirect', 'HTTP_REDIRECT_FORBIDDEN'], ['timeout', 'MANUAL_TIMEOUT'],
+  ['cancel', 'INFERENCE_CANCELLED'], ['malicious', 'PROVIDER_TOOL_FORBIDDEN'], ['crossed', 'CORRELATION_MISMATCH'], ['usage', 'TOKEN_COUNT_INVALID'],
+  ['frame-swap', 'RUNTIME_NOT_ISOLATED']]) {
+  stageTest(`Paso 210: full native prepared path rejects ${mode}, no retry or authority`, async x => {
+    const h = preparedSmokeHarness(x, mode), r = await h.run(); blocked(r, code);
+    assert.ok(h.requests.length <= (['malicious', 'crossed', 'usage'].includes(mode) ? 2 : 1));
+    assert.equal(JSON.stringify(r).includes(h.key), false); await assert.rejects(h.run(), e => e.code === 'RUNTIME_NOT_ISOLATED'); h.check();
+  });
+}
+for (const mode of ['deny-A', 'deny-B', 'deny-C', 'key-cancel', 'key-overflow']) stageTest(`Paso 210: ${mode} grants no native attempt`, async x => {
+  const h = preparedSmokeHarness(x, mode); await assert.rejects(h.run(), /MANUAL_(?:HUMAN_DENIED|CREDENTIAL_(?:CANCELLED|INVALID))/);
+  assert.equal(h.stats().dns, 0); assert.equal(h.stats().bridgeCalls, 0); h.check();
+});
+for (const authority of ['A', 'B', 'C']) stageTest(`Paso 210: second-stage human ${authority} refusal cannot reuse count permissions`, async x => {
+  const h = preparedSmokeHarness(x, 'deny-generation-' + authority); await assert.rejects(h.run(), /MANUAL_HUMAN_DENIED/);
+  assert.equal(h.requests.length, 1); assert.equal(h.api.inspectManualLabSession(h.sessions[0]).budget.allocatedMicroUsd, 17); h.check();
+});
+stageTest('Paso 210: explicit transition at 59999ms does not send generation or retry', async x => {
+  const h = preparedSmokeHarness(x, 'early-transition'); await assert.rejects(h.run(), /MANUAL_RATE_LIMIT/);
+  assert.equal(h.requests.length, 1); h.check();
+});
+stageTest('Paso 210: elapsed human ceremony cannot reuse expired A', async x => {
+  const h = preparedSmokeHarness(x, 'expired'); blocked(await h.run(), 'MANUAL_A_REQUIRED'); assert.equal(h.stats().dns, 0); h.check();
+});
+stageTest('Paso 210: non TTY and forged review never grant human authority', async x => {
+  const h = preparedSmokeHarness(x); await assert.rejects(h.api.testAccess.runPreparedNativeSmoke({ ...h.token }), e => e.code === 'RUNTIME_NOT_ISOLATED');
+  assert.equal(h.prompts.length, 0); h.fakeProcess.stdin.isTTY = false;
+  await assert.rejects(h.run(), /MANUAL_HUMAN_TTY_REQUIRED/); assert.equal(h.stats().dns, 0); h.check();
+});
+stageTest('Paso 210: public flags, JSON and lab grants cannot enter the consume-only native bridge', async x => {
+  const native = compiled('inference-https-native'), trap = () => { throw Error('UNTRUSTED_PROPERTY_ACCESS'); }, proxy = new Proxy({}, { get: trap });
+  const s = x.create(), { i, result } = await x.count(s);
+  for (const permit of [{}, { enabled: true, authorized: true }, i.connectivity, i.economic, result, { ...result }]) {
+    await assert.rejects(native.receivePreparedManualHttpsAttempt(permit, proxy, true, proxy, 1), e => e.code === 'RUNTIME_NOT_ISOLATED');
+  }
+  assert.equal(manual.inspectManualNativeSmokePreparation().decision, 'BLOCKED');
+  assert.equal(manual.MANUAL_NATIVE_SMOKE_POLICY.countMaximumMicroUsd, null);
+  assert.equal(manual.MANUAL_NATIVE_SMOKE_POLICY.operationalReviewIssuer, false);
+});
+test('Paso 210: separate reviewed generation quote and stage ledger never infer count price or exceed reservations', () => {
+  const b = compiled('inference-budget');
+  assert.equal(b.manualSmokeGenerationMaximumMicroUsd(), 4048); assert.equal(b.OFFLINE_RATE_CARD.verifiedForBilling, false);
+  assert.equal(b.MANUAL_SMOKE_GENERATION_RATES.countPriceMicroUsd, null);
+  const budget = b.createManualSmokePreparationBudget({ countMaximumMicroUsd: 17, generationMaximumMicroUsd: 4048, maxBatchMicroUsd: 4065 });
+  let r = b.reserveOfflineInference(budget); b.settleOfflineInference(r);
+  assert.throws(() => b.settleOfflineInference(r), e => e.code === 'BUDGET_INVALID');
+  r = b.reserveOfflineInference(budget); b.settleOfflineInference(r, { inputTokens: 16000, cacheWriteInputTokens: 16000, outputTokens: 4096 });
+  const state = b.inspectOfflineInferenceBudget(budget);
+  assert.equal(state.accounting, 'PREPARATION_ONLY_NOT_AUTHORIZED'); assert.equal(state.realMoneyReserved, false);
+  assert.equal(state.allocatedMicroUsd, 4065); assert.equal(state.knownMicroUsd, 4048); assert.equal(state.uncertainMicroUsd, 17);
+  assert.throws(() => b.reserveOfflineInference(budget), e => e.code === 'BUDGET_EXHAUSTED');
+});
+for (const cap of [16, 4064]) test(`Paso 210: insufficient independent stage cap ${cap} blocks before its reservation`, () => {
+  const b = compiled('inference-budget'), budget = b.createManualSmokePreparationBudget({ countMaximumMicroUsd: 17, generationMaximumMicroUsd: 4048, maxBatchMicroUsd: cap });
+  if (cap === 4064) b.settleOfflineInference(b.reserveOfflineInference(budget));
+  assert.throws(() => b.reserveOfflineInference(budget), e => e.code === 'BUDGET_EXHAUSTED');
+  assert.equal(b.inspectOfflineInferenceBudget(budget).allocatedMicroUsd, cap === 16 ? 0 : 17);
+});
+for (const count of [-1, 0.5, Number.MAX_SAFE_INTEGER, 1000000001]) test(`Paso 210: invalid count allowance ${count} cannot prepare a budget`, () => {
+  const b = compiled('inference-budget');
+  assert.throws(() => b.createManualSmokePreparationBudget({ countMaximumMicroUsd: count, generationMaximumMicroUsd: 4048, maxBatchMicroUsd: 1000000000 }), e => e.code === 'BUDGET_INVALID');
+});
+test('Paso 210: usage cannot turn the count allowance into an oversized known charge', () => {
+  const b = compiled('inference-budget'), budget = b.createManualSmokePreparationBudget({ countMaximumMicroUsd: 17, generationMaximumMicroUsd: 4048, maxBatchMicroUsd: 4065 });
+  const r = b.reserveOfflineInference(budget);
+  assert.throws(() => b.settleOfflineInference(r, { inputTokens: 16000, outputTokens: 4096 }), e => e.code === 'BUDGET_USAGE_EXCEEDED');
+  assert.equal(b.inspectOfflineInferenceBudget(budget).knownMicroUsd, 0); assert.equal(b.inspectOfflineInferenceBudget(budget).uncertainMicroUsd, 17);
+});
+stageTest('AUDIT 211: authentic native permit cannot substitute its cancellation signal', async x => {
+  const h = preparedSmokeHarness(x, 'signal-swap'); blocked(await h.run(), 'RUNTIME_NOT_ISOLATED');
+  assert.equal(h.stats().dns, 0); assert.equal(h.requests.length, 0); h.check();
+});
+stageTest('AUDIT 211: authentic native permit cannot extend its authorized transport timeout', async x => {
+  const h = preparedSmokeHarness(x, 'timeout-swap'); blocked(await h.run(), 'RUNTIME_NOT_ISOLATED');
+  assert.equal(h.stats().dns, 0); h.check();
+});
+stageTest('AUDIT 211: raw terminal setup failure restores mode and removes owned listeners', async x => {
+  const h = preparedSmokeHarness(x, 'raw-open-error'); await h.run().catch(() => {});
+  assert.equal(h.fakeProcess.stdin.listenerCount('data'), 0); assert.equal(h.fakeProcess.stdin.isRaw, false); h.check();
+});
+for (const mode of ['question-error', 'question-close-error', 'raw-open-error', 'raw-close-error', 'resume-error', 'input-error', 'output-error']) stageTest(`AUDIT 211: ${mode} never leaks an IO error or leaves credential listeners`, async x => {
+  const h = preparedSmokeHarness(x, mode), error = await h.run().then(() => null, error => error);
+  assert.ok(error instanceof Error); assert.equal(String(error.stack).includes(h.key), false, 'Secret-bearing error must be redacted');
+  assert.equal(h.stats().dns, 0);
+  assert.equal(h.fakeProcess.stdin.listenerCount('data'), 0); assert.equal(h.fakeProcess.stdin.listenerCount('end'), 0);
+  assert.equal(h.fakeProcess.stdin.listenerCount('error'), 0); h.check();
+});
+for (const [mode, code] of [['secret-body', 'HTTPS_SECRET_ECHO'], ['unicode-secret', 'HTTPS_SECRET_ECHO'],
+  ['malformed-secret', 'HTTPS_SECRET_ECHO'], ['malformed', 'JSON_MALFORMED'], ['consume-fault', 'MANUAL_REJECTED']]) {
+  stageTest(`AUDIT 211: ${mode} yields only fixed diagnostics and holds count uncertainty`, async x => {
+    const h = preparedSmokeHarness(x, mode), r = await h.run(); blocked(r, code);
+    assert.equal(JSON.stringify({ r, prompts: h.prompts }).includes(h.key), false);
+    const budget = h.api.inspectManualLabSession(h.sessions[0]).budget;
+    assert.equal(budget.allocatedMicroUsd, 17); assert.equal(budget.uncertainMicroUsd, 17); assert.equal(budget.active, 0);
+    await assert.rejects(h.native.receivePreparedManualHttpsAttempt(h.permits[0], new Proxy({}, {}), true, new AbortController().signal, 30000), e => e.code === 'RUNTIME_NOT_ISOLATED');
+    assert.equal(h.requests.length, mode === 'consume-fault' ? 0 : 1); h.check();
+  });
+}
+for (const [name, mutate] of [['PID', h => { h.review().exclusiveProcessId++; }], ['expired review', h => { h.review().expires = require('node:perf_hooks').performance.now(); }]]) {
+  stageTest(`AUDIT 211: ${name} rejects before any human/key/transport access`, async x => {
+    const h = preparedSmokeHarness(x); mutate(h); await assert.rejects(h.run(), e => e.code === 'RUNTIME_NOT_ISOLATED');
+    assert.equal(h.prompts.length, 0); assert.equal(h.stats().dns, 0); h.check();
+  });
+}
+stageTest('AUDIT 211: review from another project/host closure and copied JSON cannot mint approval', async x => {
+  const a = preparedSmokeHarness(x), b = preparedSmokeHarness(x); b.review().projectId = 'proj_OTHER_LAB';
+  for (const token of [a.token, JSON.parse(JSON.stringify(b.token)), { projectId: 'proj_OTHER_LAB', approved: true }]) {
+    await assert.rejects(b.api.testAccess.runPreparedNativeSmoke(token), e => e.code === 'RUNTIME_NOT_ISOLATED');
+  }
+  assert.equal(b.prompts.length, 0); assert.equal(b.stats().dns, 0); a.check(); b.check();
+});
+stageTest('AUDIT 211: native preparation never reads inherited env or argv', async x => {
+  const h = preparedSmokeHarness(x); let reads = 0;
+  const trap = () => { reads++; throw Error(h.key); };
+  Object.defineProperties(h.fakeProcess, { env: { get: trap }, argv: { get: trap } });
+  assert.equal((await h.run()).status, 'LAB_PLAN_VALID'); assert.equal(reads, 0); h.check();
+});
+test('AUDIT 211: TS and compiled production artifacts expose no review issuer, raw client, key reader or test access', async () => {
+  const ts = require('typescript');
+  for (const name of ['inference-manual', 'inference-https-native']) {
+    const source = originalRead(path.join(root, 'scripts/factory-fix', name + '.ts'), 'utf8');
+    const js = originalRead(path.join(out, 'scripts/factory-fix', name + '.js'), 'utf8');
+    assert.doesNotMatch(source, /nativeReviews\.set|liveCapabilities\.add|process\.(?:env|argv)/);
+    assert.doesNotMatch(js, /exports\.(?:runPreparedNativeSmoke|humanApproval|privateTerminalCredential|fixedHttpsRequest|dormantHttpsRequest|nativeReviews|nativeAttempts|testAccess)\s*=/);
+    assert.equal((source.match(/runPreparedNativeSmoke\(/g) ?? []).length, name === 'inference-manual' ? 1 : 0);
+    const ast = ts.createSourceFile(name, source, ts.ScriptTarget.ES2022, true);
+    const exported = ast.statements.filter(s => ts.isFunctionDeclaration(s) && s.modifiers?.some(m => m.kind === ts.SyntaxKind.ExportKeyword)).map(s => s.name.text);
+    for (const forbidden of ['runPreparedNativeSmoke', 'privateTerminalCredential', 'humanApproval', 'fixedHttpsRequest', 'dormantHttpsRequest']) assert.equal(exported.includes(forbidden), false);
+    assert.equal(Object.hasOwn(compiled(name), 'testAccess'), false);
+  }
+  let traps = 0; const trap = () => { traps++; throw Error('TRAP'); };
+  for (const token of [Symbol('approval'), new Proxy({}, { get: trap, ownKeys: trap, getPrototypeOf: trap }),
+    Object.defineProperty({}, 'approved', { get: trap }), { [Symbol('approval')]: true }]) {
+    await assert.rejects(compiled('inference-https-native').receivePreparedManualHttpsAttempt(token, {}, true, {}, 1), e => e.code === 'RUNTIME_NOT_ISOLATED');
+  }
+  assert.equal(traps, 0);
+});

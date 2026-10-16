@@ -8,7 +8,7 @@ import { assertFixedHttpRequest, createBoundedHttpReceiver, inertHttpArray, copy
   type OfflineHttpRequests, type OfflineHttpReply } from './inference-http';
 
 export const HTTPS_ADAPTER_POLICY = Object.freeze({ version: '9f-dormant-v1', networkEnabled: false,
-  operational: false, runtimeStatus: 'RUNTIME_NOT_ISOLATED', nativeEntryPointExported: false,
+  operational: false, runtimeStatus: 'RUNTIME_NOT_ISOLATED', nativeEntryPointExported: true, nativeEntryPointConsumeOnly: true,
   liveCapabilityIssuer: 'ABSENT', realConnectivityVerified: false, proxy: 'FORBIDDEN',
   addressFamily: 'PUBLIC_IPV4_ONLY', ipv6: 'BLOCKED_PENDING_REVIEW', dns: 'RESOLVE_ONCE_VALIDATE_ALL_PIN_ONE_NO_FALLBACK',
   trust: 'BUNDLED_CA_AND_FIXED_HOSTNAME', cleanHostEnvironmentRequired: true,

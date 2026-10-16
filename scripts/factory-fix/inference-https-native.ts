@@ -5,19 +5,30 @@ import { InferenceError, inferenceFail } from './inference-contracts';
 import { FixerError } from './fixer-contracts';
 import { OFFLINE_HTTPS_POLICY, type OfflineHttpRequests } from './inference-http';
 import { createHttpsResponseSession, selectPinnedHttpsAddress } from './inference-https-adapter';
+import { consumePreparedManualHttpsAttempt } from './inference-manual';
 
 // Dormant implementation. This module is NOT imported by the broker. There is no
-// exported invocation, issuer, registration hook, CLI or environment activation.
+// operational issuer, registration hook, CLI or environment activation.
 // A later phase must review host bootstrap, count billing/quota and durable spend
 // reservation BEFORE adding any issuer or operational call path.
 const liveCapabilities = new WeakSet<object>(); // Deliberately never populated.
 export const DORMANT_HTTPS_CLIENT_POLICY = Object.freeze({ implemented: true, enabled: false,
-  exportedInvocation: false, capabilityIssuer: false, credentialStorage: false,
+  exportedInvocation: true, guardedManualBridgeOnly: true, capabilityIssuer: false, credentialStorage: false,
   dnsTlsSocketsVerified: false, runtimeStatus: 'RUNTIME_NOT_ISOLATED' } as const);
 
 async function dormantHttpsRequest(capability: object, frame: OfflineHttpRequests['count'], count: boolean,
   bearer: string, signal: AbortSignal, timeoutMs: number): Promise<string> {
   if (!liveCapabilities.has(capability)) throw new FixerError('RUNTIME_NOT_ISOLATED');
+  return fixedHttpsRequest(frame, count, bearer, signal, timeoutMs);
+}
+// Consumption happens before touching frame/signal or creating DNS/socket state.
+// Only the dormant manual host closure can produce this private one-shot permit.
+export async function receivePreparedManualHttpsAttempt(permit: object, frame: OfflineHttpRequests['count'], count: boolean,
+  signal: AbortSignal, timeoutMs: number): Promise<string> {
+  return fixedHttpsRequest(frame, count, consumePreparedManualHttpsAttempt(permit, frame, count, signal, timeoutMs), signal, timeoutMs);
+}
+async function fixedHttpsRequest(frame: OfflineHttpRequests['count'], count: boolean,
+  bearer: string, signal: AbortSignal, timeoutMs: number): Promise<string> {
   // Even a future authentic grant needs a clean trusted host environment. Agent
   // false bypasses global agents/proxy policy; explicit bundled CA, verification,
   // SNI and one pinned IPv4 destination avoid environment CA/TLS overrides here.

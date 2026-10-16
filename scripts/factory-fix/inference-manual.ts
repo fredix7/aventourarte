@@ -6,13 +6,156 @@ import { createOfflineSingleHttpsExchange, receiveOfflineSingleHttpsExchange, di
   type OfflineHttpsEvent, type OfflineSingleHttpsExchange } from './inference-https-adapter';
 import { assertFixedHttpRequest, decodeOfflineInputTokens, type OfflineHttpRequests } from './inference-http';
 import { createOfflineInferenceBudget, inspectOfflineInferenceBudget, reserveOfflineInference,
-  settleOfflineInference, offlineInferenceReservationMicroUsd, OFFLINE_RATE_CARD, type OfflineInferenceBudget } from './inference-budget';
+  settleOfflineInference, offlineInferenceReservationMicroUsd, OFFLINE_RATE_CARD, type OfflineInferenceBudget,
+  createManualSmokePreparationBudget, MANUAL_SMOKE_GENERATION_RATES, manualSmokeGenerationMaximumMicroUsd } from './inference-budget';
 import { decodeOfflineResponsesReply } from './inference-response';
 import { decodeFixerJson, normalizeFixerData } from './fixer-json';
 import { createSimulatedFixerTransport, launchFixer, assertOpenFixRequest } from './fixer-launcher';
 import { FixerError, type FixPlan } from './fixer-contracts';
 import { inferenceEnvelope } from './inference-data';
 import { InferenceError } from './inference-contracts';
+import { receivePreparedManualHttpsAttempt } from './inference-https-native';
+import { createInterface } from 'node:readline/promises';
+
+// Reviewed public documentation is not account access or authority to spend.
+// Count billing/quota remain unknown; no operational review issuer exists.
+export const MANUAL_NATIVE_SMOKE_POLICY = Object.freeze({ enabled: false, runtimeStatus: 'RUNTIME_NOT_ISOLATED',
+  model: 'gpt-6-luna', generationRates: MANUAL_SMOKE_GENERATION_RATES,
+  generationMaximumMicroUsd: manualSmokeGenerationMaximumMicroUsd(),
+  countMaximumMicroUsd: null, countBillingVerified: false, countQuotaVerified: false,
+  operationalReviewIssuer: false, humanChannel: 'HOST_TTY_ONLY', credentialChannel: 'PRIVATE_NO_ECHO_TTY',
+  automaticRequests: false, retries: 0, startupQuietPeriodMs: 60000,
+  projectExclusivity: 'ONE_HOST_ONE_EPHEMERAL_PROJECT_KEY_NO_OTHER_CLIENTS',
+  restart: 'ABANDON_REVIEW_USAGE_REVOKE_OLD_KEY_NEW_HUMAN_AUTHORIZATION',
+  crossProcessLockImplemented: false, simulatedBudgetsAuthorizeRealSpend: false } as const);
+
+// Deliberately empty. A separate reviewed activation must supply host evidence,
+// not a public flag, environment variable, JSON assertion or model response.
+type NativeReview = { projectId: string; countMaximumMicroUsd: number;
+  generationMaximumMicroUsd: number; exclusiveProcessId: number; expires: number };
+const nativeReviews = new WeakMap<object, NativeReview>();
+const nativeSessions = new WeakMap<ManualLabSession, NativeReview>();
+const nativeAttempts = new WeakMap<object, { session: ManualLabSession; frame: OfflineHttpRequests['count'];
+  count: boolean; secret: string; expires: number; signal: AbortSignal; timeoutMs: number }>();
+
+// Consume-only bridge. No issuer, credential setter or callback is exported.
+// Native transport joins private provenance before reading any caller frame.
+export function consumePreparedManualHttpsAttempt(token: object, frame: OfflineHttpRequests['count'], count: boolean,
+  signal: AbortSignal, timeoutMs: number): string {
+  const permit = nativeAttempts.get(token); nativeAttempts.delete(token);
+  if (!permit) throw new FixerError('RUNTIME_NOT_ISOLATED');
+  const s = state(permit.session);
+  if (!nativeSessions.has(permit.session) || s.phase !== 'RUNNING' || s.abort.signal.aborted
+    || performance.now() >= permit.expires || permit.frame !== frame || permit.count !== count
+    || permit.signal !== signal || permit.timeoutMs !== timeoutMs) {
+    permit.secret = ''; throw new FixerError('RUNTIME_NOT_ISOLATED');
+  }
+  const secret = permit.secret; permit.secret = ''; return secret;
+}
+
+// Public inspection/preparation cannot release the dormant host entry below.
+export function inspectManualNativeSmokePreparation() {
+  return Object.freeze({ policy: MANUAL_NATIVE_SMOKE_POLICY, decision: 'BLOCKED', code: 'RUNTIME_NOT_ISOLATED',
+    blockers: Object.freeze(['OPERATIONAL_REVIEW_ABSENT', 'COUNT_BILLING_AND_QUOTA_UNCONFIRMED',
+      'EXCLUSIVE_PROJECT_CEREMONY_REQUIRED', 'REAL_PROJECT_CREDENTIAL_AND_BALANCE_UNVERIFIED']) } as const);
+}
+
+async function humanApproval(label: string): Promise<void> {
+  if (!process.stdin.isTTY || !process.stdout.isTTY) denied('MANUAL_HUMAN_TTY_REQUIRED');
+  const challenge = 'APRUEBO ' + randomBytes(16).toString('hex');
+  const terminal = createInterface({ input: process.stdin, output: process.stdout, terminal: true });
+  try { if (await terminal.question(label + '\nEscriba exactamente: ' + challenge + '\n') !== challenge) denied('MANUAL_HUMAN_DENIED'); }
+  finally { terminal.close(); }
+}
+
+// Raw TTY input: the secret is never echoed, logged, put in argv/env, or written.
+// Bounded ASCII only; teardown restores the previous terminal mode on all exits.
+async function privateTerminalCredential(): Promise<string> {
+  const input = process.stdin;
+  if (!input.isTTY || !process.stdout.isTTY) denied('MANUAL_HUMAN_TTY_REQUIRED');
+  process.stdout.write('Clave del proyecto (entrada privada, sin eco): ');
+  const wasRaw = !!input.isRaw, wasPaused = input.isPaused(); let value = '', finished = false;
+  return new Promise<string>((resolve, reject) => {
+    const done = (error?: Error): void => {
+      if (finished) return; finished = true;
+      const secret = value; value = ''; let ioFailed = false;
+      input.removeListener('data', receive); input.removeListener('end', end); input.removeListener('error', end);
+      // Attempt each cleanup independently; never throw from a stream callback
+      // or preserve a raw IO error/cause containing credential bytes.
+      try { input.setRawMode(wasRaw); } catch { ioFailed = true; }
+      try { if (wasPaused) input.pause(); } catch { ioFailed = true; }
+      try { process.stdout.write('\n'); } catch { ioFailed = true; }
+      if (ioFailed) reject(Error('MANUAL_CREDENTIAL_IO_FAILED'));
+      else if (error) reject(error); else resolve(secret);
+    };
+    const end = (): void => done(Error('MANUAL_CREDENTIAL_CANCELLED'));
+    const receive = (chunk: Buffer | string): void => {
+      const text = chunk.toString();
+      if (/[\x03\x04]/.test(text)) { end(); return; }
+      for (let at = 0; at < text.length; at++) {
+        const char = text[at];
+        if (char === '\r' || char === '\n') {
+          if (at !== text.length - 1 && text.slice(at) !== '\r\n' || !/^[A-Za-z0-9_-]{16,256}$/.test(value)) {
+            done(Error('MANUAL_CREDENTIAL_INVALID')); return;
+          }
+          done(); return;
+        }
+        if (char === '\x7f' || char === '\b') value = value.slice(0, -1);
+        else if (/^[A-Za-z0-9_-]$/.test(char) && value.length < 256) value += char;
+        else { done(Error('MANUAL_CREDENTIAL_INVALID')); return; }
+      }
+    };
+    try { input.on('data', receive); input.once('end', end); input.once('error', end); input.setRawMode(true); input.resume(); }
+    catch { done(Error('MANUAL_CREDENTIAL_IO_FAILED')); }
+  });
+}
+
+// Dormant host ceremony, NOT exported and with no production caller or review
+// issuer. Offline tests instrument this closure and the actual native IO only.
+// Reuses exactly the existing session/ABC/reservation/decoder/validator path.
+async function runPreparedNativeSmoke(reviewToken: object) {
+  const review = nativeReviews.get(reviewToken); nativeReviews.delete(reviewToken);
+  if (!review || review.exclusiveProcessId !== process.pid || performance.now() >= review.expires
+    || !/^[A-Za-z0-9_-]{1,128}$/.test(review.projectId)
+    || !Number.isSafeInteger(review.countMaximumMicroUsd) || review.countMaximumMicroUsd < 0
+    || review.countMaximumMicroUsd > 1000000000 - review.generationMaximumMicroUsd
+    || review.generationMaximumMicroUsd !== MANUAL_NATIVE_SMOKE_POLICY.generationMaximumMicroUsd) {
+    throw new FixerError('RUNTIME_NOT_ISOLATED');
+  }
+  const s = createSession(true); nativeSessions.set(s, review); state(s).expires = Math.min(state(s).expires, review.expires);
+  const quietUntil = performance.now() + MANUAL_NATIVE_SMOKE_POLICY.startupQuietPeriodMs;
+  try {
+    const attempt = async (stage: 'COUNT' | 'GENERATION') => {
+      const info = inspectManualLabSession(s), scope = `${stage} project=${review.projectId} pid=${process.pid} digest=${info.countedFrames!.bindingDigest}`;
+      await humanApproval(scope + '\nA: una sola conexion HTTPS al endpoint fijo; proyecto exclusivo, sin otros clientes.');
+      if (performance.now() < quietUntil || performance.now() >= review.expires) denied('MANUAL_RATE_LIMIT');
+      const connectivity = authorizeManualLabConnectivity(s);
+      await humanApproval(scope + '\nB: usar solo la clave efimera de este proyecto en este proceso.');
+      const credential = createManualLabCredential(s), key = credentials.get(credential)!;
+      key.secret = await privateTerminalCredential();
+      const projectCredential = authorizeManualLabCredential({ session: s, credential });
+      const maximum = stage === 'COUNT' ? review.countMaximumMicroUsd : review.generationMaximumMicroUsd;
+      const workflowMaximum = review.countMaximumMicroUsd + review.generationMaximumMicroUsd;
+      await humanApproval(scope + `\nC: maximo por intento ${maximum} micro-USD; total ${workflowMaximum}; sin reembolso de consumo incierto ni reintento.`);
+      const economic = authorizeManualLabBudget({ session: s, maxAttemptMicroUsd: workflowMaximum });
+      const transcript = createManualLabTranscript({ session: s, events: [] });
+      const input = { session: s, connectivity, credential, projectCredential, economic, transcript, timeoutMs: 30000 };
+      return stage === 'COUNT' ? runManualLabCount(input) : runManualLabInference(input);
+    };
+    const counted = await attempt('COUNT');
+    if (counted.status !== 'LAB_COUNT_VALID') return counted;
+    await humanApproval('TRANSICION explicita: esperar al menos 60 segundos tras conteo. No se envia otra solicitud al esperar.');
+    advanceManualLabGeneration({ session: s, countResult: counted });
+    return await attempt('GENERATION');
+  } catch (error) {
+    // The dormant ceremony must not propagate raw TTY failures/stacks either.
+    // Only fixed host errors survive, reconstructed without a caller cause.
+    const allowed = new Set(['MANUAL_HUMAN_TTY_REQUIRED', 'MANUAL_HUMAN_DENIED', 'MANUAL_CREDENTIAL_CANCELLED',
+      'MANUAL_CREDENTIAL_INVALID', 'MANUAL_CREDENTIAL_IO_FAILED', 'MANUAL_RATE_LIMIT', 'MANUAL_SESSION_EXPIRED',
+      'MANUAL_SESSION_INACTIVE', 'MANUAL_SYNTHETIC_CONTEXT_CHANGED', 'MANUAL_COUNT_REQUIRED', 'MANUAL_COUNT_RECEIPT_INVALID']);
+    throw Error(error instanceof Error && allowed.has(error.message) ? error.message : 'MANUAL_HUMAN_IO_FAILED');
+  } finally { nativeSessions.delete(s); cancelManualLabSession(s); }
+}
 
 export const MANUAL_LAB_POLICY = Object.freeze({ version: '204-offline-single-post-v1', laboratoryOnly: true,
   runtimeStatus: 'RUNTIME_NOT_ISOLATED', realExecutionEnabled: false, nativeClientEnabled: false,
@@ -286,15 +429,20 @@ async function runManualLabAttempt(input: ManualLabAttemptInput, count: boolean)
     if (!Number.isSafeInteger(timeout) || (timeout as number) < 1 || (timeout as number) > 30000) denied('MANUAL_TIMEOUT_INVALID');
     assertFixedHttpRequest(s.frame, count);
     if (performance.now() >= s.expires) denied('MANUAL_SESSION_EXPIRED');
-    if (s.stage !== 'SINGLE' && (count ? c!.max! < MANUAL_COUNTED_LAB_POLICY.minimumWorkflowCapMicroUsd
+    const nativeReview = nativeSessions.get(session);
+    const workflowMinimum = nativeReview ? nativeReview.countMaximumMicroUsd + nativeReview.generationMaximumMicroUsd
+      : MANUAL_COUNTED_LAB_POLICY.minimumWorkflowCapMicroUsd;
+    if (s.stage !== 'SINGLE' && (count ? c!.max! < workflowMinimum
       : c!.max !== s.workflowCap)) denied('MANUAL_WORKFLOW_BUDGET_INVALID');
     for (const name of ['connectivity', 'projectCredential', 'economic']) grants.delete(d[name] as ManualLabGrant);
     credentials.delete(d['credential'] as ManualLabCredential); transcripts.delete(d['transcript'] as ManualLabTranscript);
     exchange = t!.exchange;
     if (!s.budget) {
       s.workflowCap = c!.max!;
-      s.budget = createOfflineInferenceBudget({ maxAttemptMicroUsd: s.stage === 'SINGLE' ? c!.max! : offlineInferenceReservationMicroUsd(),
-        maxBatchMicroUsd: c!.max!, maxAttempts: s.stage === 'SINGLE' ? 1 : 2 });
+      s.budget = nativeReview ? createManualSmokePreparationBudget({ countMaximumMicroUsd: nativeReview.countMaximumMicroUsd,
+        generationMaximumMicroUsd: nativeReview.generationMaximumMicroUsd, maxBatchMicroUsd: c!.max! })
+        : createOfflineInferenceBudget({ maxAttemptMicroUsd: s.stage === 'SINGLE' ? c!.max! : offlineInferenceReservationMicroUsd(),
+          maxBatchMicroUsd: c!.max!, maxAttempts: s.stage === 'SINGLE' ? 1 : 2 });
     }
     reservation = reserveOfflineInference(s.budget); active = true;
     const signal = s.abort.signal, deadline = Math.min(s.expires, a!.expires, b!.expires, c!.expires,
@@ -304,7 +452,15 @@ async function runManualLabAttempt(input: ManualLabAttemptInput, count: boolean)
     attempted = true;
     if (s.stage !== 'SINGLE') nextProjectAttemptAt = performance.now() + 60000;
     if (count) s.countPosts++; else s.simulatedPosts++;
-    const body = await receiveOfflineSingleHttpsExchange(exchange, s.frame, signal, key!.secret);
+    let body: string;
+    if (nativeSessions.has(session)) {
+      const permit = Object.freeze({});
+      const timeoutMs = Math.max(1, Math.ceil(deadline - performance.now()));
+      nativeAttempts.set(permit, { session, frame: s.frame, count, secret: key!.secret, expires: deadline, signal, timeoutMs });
+      key!.secret = '';
+      try { body = await receivePreparedManualHttpsAttempt(permit, s.frame, count, signal, timeoutMs); }
+      finally { nativeAttempts.delete(permit); }
+    } else body = await receiveOfflineSingleHttpsExchange(exchange, s.frame, signal, key!.secret);
     const check = (): void => {
       if (performance.now() >= deadline) denied('MANUAL_TIMEOUT');
       if (signal.aborted || s!.phase !== 'RUNNING') denied('MANUAL_CANCELLED');
