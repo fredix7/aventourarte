@@ -85,6 +85,15 @@ export function isFixerText(value: unknown, max: number, multiline = true): valu
 // Parse directly rather than JSON.parse + reviver: revivers cannot detect duplicate keys.
 // Only bounded strings enter this parser; it has no IO, evaluation, callbacks or tooling.
 export function decodeFixerJson(text: unknown): StaticData {
+  return decodeBoundedJson(text, FIXER_LIMITS.maxStringLength);
+}
+// The provider wraps the complete FixPlan JSON in one text string. Allow that outer
+// string to span the byte-limited envelope, then apply the original per-string limits
+// independently when decodeFixerJson parses the inner plan. No caller-set limits.
+export function decodeProviderEnvelopeJson(text: unknown): StaticData {
+  return decodeBoundedJson(text, FIXER_LIMITS.maxResponseBytes);
+}
+function decodeBoundedJson(text: unknown, maxStringLength: number): StaticData {
   const bad = (): never => { throw new FixerError('JSON_MALFORMED'); };
   const limit = (): never => { throw new FixerError('OUTPUT_LIMIT_EXCEEDED'); };
   if (typeof text !== 'string') return bad();
@@ -98,14 +107,14 @@ export function decodeFixerJson(text: unknown): StaticData {
       if (!escaped && c === '"') {
         let result: unknown;
         try { result = JSON.parse(text.slice(start, at)); } catch { return bad(); }
-        if (!isFixerText(result, FIXER_LIMITS.maxStringLength)) {
-          if (typeof result === 'string' && result.length > FIXER_LIMITS.maxStringLength) return limit();
+        if (!isFixerText(result, maxStringLength)) {
+          if (typeof result === 'string' && result.length > maxStringLength) return limit();
           return bad();
         }
         return result;
       }
       if (!escaped && c === '\\') escaped = true; else escaped = false;
-      if (at - start > FIXER_LIMITS.maxStringLength * 6 + 2) return limit();
+      if (at - start > maxStringLength * 6 + 2) return limit();
     }
     return bad();
   };

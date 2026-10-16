@@ -143,6 +143,14 @@ export function invalidateFixRequest(request: FixRequest): void {
   const host = context(request); host.phase = 'INVALID'; host.prepared = undefined;
   host.abort?.abort(new FixerError('REQUEST_INACTIVE'));
 }
+// Read-only host bridge for offline provider projection. It grants no transport or write
+// authority and keeps phase/freshness checks in the existing authorization boundary.
+export function assertOpenFixRequest(request: FixRequest): void {
+  const host = context(request);
+  if (host.phase !== 'OPEN') fail('REQUEST_INACTIVE');
+  current(request, host);
+  if (host.phase !== 'OPEN') fail('REQUEST_INACTIVE');
+}
 export function getFixerRuntimeStatus() {
   return Object.freeze({ realExecutionEnabled: false as const, code: 'RUNTIME_NOT_ISOLATED' as const,
     availableTransport: 'SIMULATED_ONLY' as const, isolationEvidence: 'NO_VERIFIED_REAL_RUNTIME' as const });
