@@ -7,7 +7,7 @@ import type { OfflineProviderReply } from './inference-contracts';
 // A deliberately narrow, versioned Responses envelope. Additional provider fields must
 // be reviewed explicitly; no output concatenation, tool dispatch or SDK JSON helpers.
 export function decodeOfflineResponsesReply(reply: OfflineProviderReply): Readonly<{
-  text: string; usage: Readonly<{ inputTokens: number; outputTokens: number }>
+  text: string; usage: Readonly<{ inputTokens: number; outputTokens: number; cacheWriteInputTokens?: number }>
 }> {
   const envelope = inferenceEnvelope(reply, ['status', 'body', 'delayMs']);
   if (typeof envelope['status'] !== 'number' || typeof envelope['body'] !== 'string') inferenceFail('PROVIDER_RESPONSE_INVALID');
@@ -18,17 +18,18 @@ export function decodeOfflineResponsesReply(reply: OfflineProviderReply): Readon
     'model', 'output', 'usage', 'tools', 'tool_choice', 'store', 'background'];
   const optional = ['completed_at', 'instructions', 'max_output_tokens', 'max_tool_calls', 'parallel_tool_calls',
     'previous_response_id', 'reasoning', 'service_tier', 'temperature', 'text', 'top_p', 'truncation',
-    'user', 'metadata', 'prompt_cache_key', 'prompt_cache_retention', 'safety_identifier', 'top_logprobs'];
+    'user', 'metadata', 'prompt_cache_key', 'prompt_cache_retention', 'safety_identifier', 'top_logprobs', 'access_programs'];
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) inferenceFail('PROVIDER_RESPONSE_INVALID');
   const present = Object.keys(raw);
   if (present.some(k => !required.includes(k) && !optional.includes(k))) inferenceFail('PROVIDER_RESPONSE_INVALID');
   const d = inferenceRecord(raw, [...required, ...optional.filter(k => present.includes(k))]);
-  for (const key of ['previous_response_id', 'max_tool_calls', 'user', 'prompt_cache_key', 'safety_identifier']) {
+  for (const key of ['previous_response_id', 'max_tool_calls', 'user', 'prompt_cache_key', 'safety_identifier', 'access_programs']) {
     if (Object.hasOwn(d, key) && d[key] !== null) inferenceFail('PROVIDER_RESPONSE_INVALID');
   }
   if (Object.hasOwn(d, 'max_output_tokens') && d['max_output_tokens'] !== INFERENCE_PROFILE.maxOutputTokens
     || Object.hasOwn(d, 'parallel_tool_calls') && d['parallel_tool_calls'] !== false
-    || Object.hasOwn(d, 'service_tier') && d['service_tier'] !== 'default') inferenceFail('PROVIDER_RESPONSE_INVALID');
+    || Object.hasOwn(d, 'service_tier') && d['service_tier'] !== 'default'
+    || Object.hasOwn(d, 'truncation') && d['truncation'] !== 'disabled') inferenceFail('PROVIDER_RESPONSE_INVALID');
   if (Object.hasOwn(d, 'metadata')) inferenceRecord(d['metadata'], []);
   if (Object.hasOwn(d, 'reasoning')) {
     const r = inferenceRecord(d['reasoning'], ['effort', 'summary']);
@@ -79,9 +80,14 @@ export function decodeOfflineResponsesReply(reply: OfflineProviderReply): Readon
   const input = usage['input_tokens'], output = usage['output_tokens'];
   if (!Number.isSafeInteger(input) || (input as number) < 0 || !Number.isSafeInteger(output) || (output as number) < 0
     || usage['total_tokens'] !== (input as number) + (output as number)) inferenceFail('PROVIDER_RESPONSE_INVALID');
-  const cached = inferenceRecord(usage['input_tokens_details'], ['cached_tokens'])['cached_tokens'];
+  const details = usage['input_tokens_details'];
+  const hasWrites = !!details && typeof details === 'object' && !Array.isArray(details) && Object.hasOwn(details, 'cache_write_tokens');
+  const inputDetails = inferenceRecord(details, ['cached_tokens', ...(hasWrites ? ['cache_write_tokens'] : [])]);
+  const cached = inputDetails['cached_tokens'], writes = hasWrites ? inputDetails['cache_write_tokens'] : 0;
   const reasoning = inferenceRecord(usage['output_tokens_details'], ['reasoning_tokens'])['reasoning_tokens'];
   if (!Number.isSafeInteger(cached) || (cached as number) < 0 || (cached as number) > (input as number)
+    || !Number.isSafeInteger(writes) || (writes as number) < 0 || (writes as number) > (input as number) - (cached as number)
     || !Number.isSafeInteger(reasoning) || (reasoning as number) < 0 || (reasoning as number) > (output as number)) inferenceFail('PROVIDER_RESPONSE_INVALID');
-  return Object.freeze({ text: text['text'], usage: Object.freeze({ inputTokens: input as number, outputTokens: output as number }) });
+  return Object.freeze({ text: text['text'], usage: Object.freeze({ inputTokens: input as number, outputTokens: output as number,
+    ...(hasWrites ? { cacheWriteInputTokens: writes as number } : {}) }) });
 }

@@ -9,11 +9,18 @@ import { INFERENCE_PROFILE, InferenceError, inferenceFail, type OfflineInference
   type OfflineProjectionInput, type OfflineResponsesTransport, type OfflineProviderReply } from './inference-contracts';
 import { inferenceEnvelope } from './inference-data';
 import { decodeOfflineResponsesReply } from './inference-response';
-import { reserveOfflineInference, settleOfflineInference, type OfflineInferenceBudget } from './inference-budget';
+import { inspectOfflineInferenceBudget, reserveOfflineInference, settleOfflineInference, type OfflineInferenceBudget } from './inference-budget';
+import { buildOfflineHttpRequests, snapshotOfflineHttpReply, receiveOfflineHttp, decodeOfflineInputTokens,
+  discardOfflineHttpReply, type OfflineHttpReply, type OfflineHttpRequests, type SimulatedHttpResponse } from './inference-http';
 
 interface ProjectionState { request: FixRequest; phase: 'OPEN' | 'RUNNING' | 'FINISHED' | 'CANCELLED'; abort?: AbortController }
 const projections = new WeakMap<OfflineInferenceProjection, ProjectionState>();
-const transports = new WeakMap<OfflineResponsesTransport, { projection: OfflineInferenceProjection; reply: OfflineProviderReply; used: boolean }>();
+type TransportState = { projection: OfflineInferenceProjection; used: boolean } & (
+  { mode: 'LEGACY'; reply: OfflineProviderReply } | { mode: 'HTTPS'; requests: OfflineHttpRequests;
+    count: SimulatedHttpResponse; response: SimulatedHttpResponse });
+const transports = new WeakMap<OfflineResponsesTransport, TransportState>();
+declare const httpsBrand: unique symbol;
+export interface OfflineHttpsTransport extends OfflineResponsesTransport { readonly [httpsBrand]: true }
 let active = false; // Host-wide single flight, including across separate offline budgets.
 function context(projection: OfflineInferenceProjection): ProjectionState {
   const s = projections.get(projection); if (!s) inferenceFail('PROJECTION_INVALID'); return s;
@@ -29,7 +36,7 @@ export function createOfflineInferenceProjection(input: OfflineProjectionInput):
   const prompt = buildFixerPrompt(request), schema = buildInferenceSchema(request);
   const body = normalizeFixerData({ model: INFERENCE_PROFILE.model, tools: [], tool_choice: 'none',
     store: false, stream: false, background: false, parallel_tool_calls: false, service_tier: 'default',
-    max_output_tokens: INFERENCE_PROFILE.maxOutputTokens,
+    max_output_tokens: INFERENCE_PROFILE.maxOutputTokens, truncation: 'disabled',
     reasoning: { effort: 'none' }, instructions: prompt.system,
     input: [{ role: 'user', content: [{ type: 'input_text', text: prompt.data }] }],
     text: { format: { type: 'json_schema', name: 'factory_fix_plan_v1', strict: true, schema } } });
@@ -52,17 +59,37 @@ export function createOfflineResponsesTransport(input: { readonly projection: Of
     || (r['delayMs'] as number) > FIXER_LIMITS.maxTimeoutMs * 2) inferenceFail('INFERENCE_INPUT_INVALID');
   const reply = Object.freeze({ status: r['status'], body: r['body'], delayMs: r['delayMs'] }) as OfflineProviderReply;
   const token = Object.freeze({ kind: 'OFFLINE_RESPONSES_ONLY' }) as OfflineResponsesTransport;
-  transports.set(token, { projection, reply, used: false }); return token;
+  transports.set(token, { projection, mode: 'LEGACY', reply, used: false }); return token;
+}
+export function inspectOfflineHttpRequests(projection: OfflineInferenceProjection): OfflineHttpRequests {
+  const host = context(projection);
+  if (host.phase !== 'OPEN') inferenceFail('PROJECTION_INACTIVE');
+  assertOpenFixRequest(host.request); return buildOfflineHttpRequests(projection);
+}
+export function createOfflineHttpsTransport(input: { readonly projection: OfflineInferenceProjection;
+  readonly countReply: OfflineHttpReply; readonly responseReply: OfflineHttpReply }): OfflineHttpsTransport {
+  const d = inferenceEnvelope(input, ['projection', 'countReply', 'responseReply']);
+  const projection = d['projection'] as OfflineInferenceProjection, requests = inspectOfflineHttpRequests(projection);
+  const count = snapshotOfflineHttpReply(d['countReply'] as OfflineHttpReply, true);
+  const response = snapshotOfflineHttpReply(d['responseReply'] as OfflineHttpReply);
+  const token = Object.freeze({ kind: 'OFFLINE_RESPONSES_ONLY' }) as OfflineHttpsTransport;
+  transports.set(token, { projection, mode: 'HTTPS', requests, count, response, used: false }); return token;
 }
 export function cancelOfflineInference(projection: OfflineInferenceProjection): void {
   const s = context(projection);
   if (s.phase === 'FINISHED' || s.phase === 'CANCELLED') return;
   s.phase = 'CANCELLED'; s.abort?.abort(new InferenceError('INFERENCE_CANCELLED')); invalidateFixRequest(s.request);
 }
-export async function runOfflineInference(input: { readonly projection: OfflineInferenceProjection;
-  readonly transport: OfflineResponsesTransport; readonly budget: OfflineInferenceBudget }): Promise<FixerLaunchResult | Readonly<{
+type RunOfflineInput = { readonly projection: OfflineInferenceProjection;
+  readonly transport: OfflineResponsesTransport; readonly budget: OfflineInferenceBudget };
+export function runOfflineInference(input: RunOfflineInput) { return runOffline(input, 'LEGACY'); }
+export function runOfflineHttpsInference(input: RunOfflineInput & { readonly transport: OfflineHttpsTransport }) {
+  return runOffline(input, 'HTTPS');
+}
+async function runOffline(input: RunOfflineInput, mode: TransportState['mode']): Promise<FixerLaunchResult | Readonly<{
     status: 'BLOCKED'; code: string; requestId: string | null }>> {
   let host: ProjectionState | undefined, reservation: object | undefined, owns = false;
+  let ownedTransport: TransportState | undefined;
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
     const d = inferenceEnvelope(input, ['projection', 'transport', 'budget']);
@@ -70,10 +97,13 @@ export async function runOfflineInference(input: { readonly projection: OfflineI
     if (host.phase !== 'OPEN') inferenceFail('PROJECTION_INACTIVE');
     assertOpenFixRequest(host.request);
     const transport = transports.get(d['transport'] as OfflineResponsesTransport);
-    if (!transport || transport.projection !== projection || transport.used) inferenceFail('PROJECTION_INVALID');
+    if (!transport || transport.projection !== projection || transport.used || transport.mode !== mode) inferenceFail('PROJECTION_INVALID');
     if (active) inferenceFail('CONCURRENCY_EXCEEDED');
-    reservation = reserveOfflineInference(d['budget'] as OfflineInferenceBudget);
+    const budget = d['budget'] as OfflineInferenceBudget;
+    inspectOfflineInferenceBudget(budget);
+    if (transport.mode === 'LEGACY') reservation = reserveOfflineInference(budget);
     active = true; owns = true; host.phase = 'RUNNING'; transport.used = true;
+    ownedTransport = transport;
     const abort = new AbortController(); host.abort = abort;
     const deadline = performance.now() + host.request.limits.timeoutMs;
     const withinDeadline = (): void => {
@@ -81,12 +111,37 @@ export async function runOfflineInference(input: { readonly projection: OfflineI
       if (abort.signal.aborted) throw abort.signal.reason;
     };
     timer = setTimeout(() => abort.abort(new FixerError('TIMEOUT')), host.request.limits.timeoutMs);
-    if (transport.reply.delayMs) await delay(transport.reply.delayMs, undefined, { signal: abort.signal });
+    let reply: OfflineProviderReply, countedInput: number | undefined;
+    if (transport.mode === 'HTTPS') {
+      const binding = (): void => {
+        withinDeadline();
+        if (host!.phase !== 'RUNNING') inferenceFail('PROJECTION_INACTIVE');
+        assertOpenFixRequest(host!.request);
+        const current = buildOfflineHttpRequests(projection);
+        if (current.inference.body !== transport.requests.inference.body || current.count.body !== transport.requests.count.body
+          || current.bindingDigest !== transport.requests.bindingDigest) inferenceFail('TOKEN_BINDING_INVALID');
+      };
+      binding();
+      const counted = decodeOfflineInputTokens(await receiveOfflineHttp(transport.count, abort.signal, transport.requests.count, true));
+      countedInput = counted;
+      binding();
+      // Count replies are locally bound to this exact immutable exchange, not trusted
+      // because of a number, digest or provider field. Real provider evidence is pending.
+      if (counted > INFERENCE_PROFILE.proposedMaxInputTokens) inferenceFail('TOKEN_LIMIT_EXCEEDED');
+      reservation = reserveOfflineInference(budget);
+      binding();
+      const body = await receiveOfflineHttp(transport.response, abort.signal, transport.requests.inference, false);
+      binding(); reply = { status: 200, body, delayMs: 0 };
+    } else {
+      if (transport.reply.delayMs) await delay(transport.reply.delayMs, undefined, { signal: abort.signal });
+      withinDeadline();
+      if (host.phase !== 'RUNNING') inferenceFail('PROJECTION_INACTIVE');
+      assertOpenFixRequest(host.request); reply = transport.reply;
+    }
+    const decoded = decodeOfflineResponsesReply(reply);
     withinDeadline();
-    if (host.phase !== 'RUNNING') inferenceFail('PROJECTION_INACTIVE');
-    assertOpenFixRequest(host.request);
-    const decoded = decodeOfflineResponsesReply(transport.reply);
-    withinDeadline();
+    if (countedInput !== undefined && decoded.usage.inputTokens !== countedInput) inferenceFail('TOKEN_COUNT_INVALID');
+    if (!reservation) inferenceFail('BUDGET_INVALID');
     const pending = reservation; reservation = undefined;
     settleOfflineInference(pending, decoded.usage);
     // No new authorization/rehydration API: the original Phase 8 simulator and validators
@@ -104,6 +159,9 @@ export async function runOfflineInference(input: { readonly projection: OfflineI
   } finally {
     if (timer) clearTimeout(timer);
     if (reservation) settleOfflineInference(reservation);
+    if (ownedTransport?.mode === 'HTTPS') {
+      discardOfflineHttpReply(ownedTransport.count); discardOfflineHttpReply(ownedTransport.response);
+    }
     if (owns && host) { active = false; host.abort = undefined; if (host.phase !== 'CANCELLED') host.phase = 'FINISHED'; }
   }
 }

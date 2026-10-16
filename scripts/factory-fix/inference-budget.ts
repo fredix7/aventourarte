@@ -1,5 +1,6 @@
 import { inferenceFail, INFERENCE_PROFILE } from './inference-contracts';
 import { inferenceRecord } from './inference-data';
+import { normalizeFixerData } from './fixer-json';
 
 // Integer micro-USD. Snapshot is a simulation estimate, NOT a billing quote or permission
 // to spend. Use the higher cache-write input rate conservatively for every reservation.
@@ -42,19 +43,25 @@ export function reserveOfflineInference(budget: OfflineInferenceBudget): object 
   s.attempts++; s.active++; s.allocatedMicroUsd += reserved;
   const token = Object.freeze({}); reservations.set(token, { budget: s, reserved, settled: false }); return token;
 }
-export function settleOfflineInference(token: object, usage?: Readonly<{ inputTokens: number; outputTokens: number }>): void {
+export function settleOfflineInference(token: object, usage?: Readonly<{ inputTokens: number; outputTokens: number; cacheWriteInputTokens?: number }>): void {
   const r = reservations.get(token); if (!r || r.settled) inferenceFail('BUDGET_INVALID');
   r.settled = true; r.budget.active--;
   // Never refund allocated capacity from untrusted provider usage, even a claimed zero.
   if (!usage) { r.budget.uncertainMicroUsd += r.reserved; return; }
-  let input: number, output: number;
+  let input: number, output: number, writes: number;
   try {
-    const d = inferenceRecord(usage, ['inputTokens', 'outputTokens']);
+    const data = normalizeFixerData(usage);
+    const hasWrites = !!data && typeof data === 'object' && Object.hasOwn(data, 'cacheWriteInputTokens');
+    const d = inferenceRecord(data, ['inputTokens', 'outputTokens', ...(hasWrites ? ['cacheWriteInputTokens'] : [])]);
     input = amount(d['inputTokens']); output = amount(d['outputTokens']);
+    writes = hasWrites ? amount(d['cacheWriteInputTokens']) : 0;
   } catch { r.budget.uncertainMicroUsd += r.reserved; inferenceFail('BUDGET_USAGE_EXCEEDED'); }
-  if (input > INFERENCE_PROFILE.proposedMaxInputTokens || output > INFERENCE_PROFILE.maxOutputTokens) {
+  if (input > INFERENCE_PROFILE.proposedMaxInputTokens || output > INFERENCE_PROFILE.maxOutputTokens || writes > input) {
     r.budget.uncertainMicroUsd += r.reserved; inferenceFail('BUDGET_USAGE_EXCEEDED');
   }
-  r.budget.knownMicroUsd += Math.ceil(input * OFFLINE_RATE_CARD.inputMicroUsdPerMillion / 1000000)
+  // Cached reads get no assumed discount. Cache writes use the conservative rate;
+  // round the combined input charge once so known usage cannot exceed the reserve.
+  r.budget.knownMicroUsd += Math.ceil(((input - writes) * OFFLINE_RATE_CARD.inputMicroUsdPerMillion
+    + writes * OFFLINE_RATE_CARD.reservedInputMicroUsdPerMillion) / 1000000)
     + Math.ceil(output * OFFLINE_RATE_CARD.outputMicroUsdPerMillion / 1000000);
 }
