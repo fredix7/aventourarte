@@ -13,8 +13,10 @@ const scope = process.env.FACTORY_INFERENCE_REGRESSION_SCOPE ?? process.env.FACT
 // Explicit runner: do not auto-discover it beside the full suite, whose Phase 6
 // fixtures modify the same cooperative lock root. Scope is visible in test output.
 test(`Offline inference regressions without writer (scope: ${scope})`, { timeout: 1800000 }, t => {
-  assert.ok(['all', 'fix', 'channels', 'safe', 'channel-case'].includes(scope), 'Unknown regression scope');
+  assert.ok(['all', 'fix', 'channels', 'safe', 'manual', 'channel-case'].includes(scope), 'Unknown regression scope');
   const channelsOnly = scope === 'channels' || scope === 'channel-case';
+  const noLeases = scope === 'safe' || scope === 'manual' || channelsOnly;
+  if (scope === 'manual') t.diagnostic('Paso 204 exclusions: Phase 6 readiness/Git fixtures, 9G bootstrap/preflight and executable channel fixtures. No historical total is claimed.');
   const temp = realpathSync.native(tmpdir()), out = mkdtempSync(path.join(temp, 'factory-fix-9d-regression-'));
   const flags = ['--preserve-symlinks', '--preserve-symlinks-main'];
   const env = { NODE_DISABLE_COMPILE_CACHE: '1', NODE_PATH: path.join(root, 'node_modules'),
@@ -52,12 +54,18 @@ test(`Offline inference regressions without writer (scope: ${scope})`, { timeout
       '--lib', 'ES2022', '--strict', '--skipLibCheck', '--types', 'node,jasmine', '--rootDir', root, '--outDir', out,
       ...['context', 'rules', 'runner', 'qa', 'catalog', 'catalog-identity', 'executor'].map(n => `src/app/shared/guide-factory-${n}.spec.ts`)]);
     const guard = path.join(out, 'no-writer.cjs');
-    writeFileSync(guard, `let calls=0; const deny=()=>{calls++;throw Error('Forbidden persistence capability in offline regressions')};require('./scripts/factory-fix/writer.js').persistPreparedFix=deny;${scope === 'safe' || channelsOnly ? "require('./scripts/factory-fix/write-readiness.js').inspectWriteReadiness=deny;require('./scripts/factory-fix/source-lock.js').acquireSourceLock=deny;" : ''}process.on('exit',()=>{if(calls)process.exitCode=1});`);
+    writeFileSync(guard, `let calls=0; const deny=()=>{calls++;throw Error('Forbidden persistence capability in offline regressions')};require('./scripts/factory-fix/writer.js').persistPreparedFix=deny;${scope === 'safe' || scope === 'manual' || channelsOnly ? "require('./scripts/factory-fix/write-readiness.js').inspectWriteReadiness=deny;require('./scripts/factory-fix/source-lock.js').acquireSourceLock=deny;" : ''}process.on('exit',()=>{if(calls)process.exitCode=1});`);
     // Phase 9E forbids acquiring leases too. Do not run Phase 6 readiness cases in
     // safe scope; keep their existing strict tests intact for an authorized phase.
     const tests = ['source-identity', 'snapshot', 'candidate', 'authorization', 'result',
-      ...(scope === 'safe' ? [] : ['write-readiness']), 'fixer-launcher', 'inference-broker', 'inference-http', 'inference-https-adapter', 'inference-preflight'];
-    if (!channelsOnly) run(`Fix permitted suites + broker + core (Phase 6 ${scope === 'safe' ? 'excluded: no leases' : 'included'})`, ['--require', guard, '--test', '--test-concurrency=1',
+      ...(['safe', 'manual'].includes(scope) ? [] : ['write-readiness']), 'fixer-launcher', 'inference-broker', 'inference-http', 'inference-https-adapter',
+      'inference-manual', ...(scope === 'manual' ? [] : ['inference-preflight'])];
+    if (scope === 'manual') {
+      // Separate evidence per suite, using fixed repository test files only.
+      // No generated executable fixtures, 9G probe or channel launcher is run.
+      for (const suite of tests) run(`Manual-safe ${suite}`, ['--require', guard, '--test', '--test-concurrency=1',
+        `scripts/factory-fix/${suite}.cases.mjs`], 900000, true);
+    } else if (!channelsOnly) run(`Fix permitted suites + broker + core (Phase 6 ${noLeases ? 'excluded: no leases' : 'included'}; 9G included)`, ['--require', guard, '--test', '--test-concurrency=1',
       ...tests.map(n => `scripts/factory-fix/${n}.cases.mjs`)], 900000, true);
     const guards = 'Phase 9 (?:policy:|capabilities:|TEMP: (?:malicious response blocks before writing:|real runtime remains blocked:|request invalidation during generation blocks preparation|late response after timeout cannot revive a finished session|a plan from another authentic request cannot be replayed))';
     if (!channelsOnly) run('Phase 9 non-writing guards only', ['--require', guard, '--test', '--test-concurrency=1', '--test-name-pattern', guards,
@@ -65,7 +73,7 @@ test(`Offline inference regressions without writer (scope: ${scope})`, { timeout
     if (scope === 'channel-case') run('Isolated reproduction of QA subprocess timeout', ['--require', guard, '--test',
       '--test-name-pattern', '^does not normalize or infer path " europa/espana/andalucia/cadiz/jerez-de-la-frontera"$',
       'scripts/factory-qa-channel.test.mjs'], 60000, true);
-    else if (scope !== 'fix') {
+    else if (scope !== 'fix' && scope !== 'manual') {
       // Separate reports and aggregate ceilings; existing assertions and the QA
       // subprocess's own 15-second timeout remain unchanged.
       for (const file of ['factory-guide-catalog-channel', 'factory-qa-channel', 'factory-qa-invoke', 'factory-qa-mcp']) {

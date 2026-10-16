@@ -1,7 +1,7 @@
 import { types } from 'node:util';
 import { setTimeout as delay } from 'node:timers/promises';
 import { inferenceEnvelope } from './inference-data';
-import { normalizeFixerData } from './fixer-json';
+import { normalizeFixerData, serializeFixerData } from './fixer-json';
 import { inferenceFail, type InferenceErrorCode } from './inference-contracts';
 import { assertFixedHttpRequest, createBoundedHttpReceiver, inertHttpArray, copyHttpBytes,
   snapshotOfflineHttpReply, discardOfflineHttpReply, OFFLINE_HTTPS_POLICY,
@@ -74,7 +74,8 @@ export function createHttpsResponseSession(frame: OfflineHttpRequests['count'], 
       phase = 'TLS';
     },
     headers(status: number, headers: OfflineHttpReply['headers']): void {
-      if (phase !== 'TLS') invalid(); receiver = createBoundedHttpReceiver(status, headers, count); phase = 'BODY';
+      if (phase !== 'TLS') invalid(); receiver = createBoundedHttpReceiver(status, headers, count);
+      secretFree(serializeFixerData(headers), secret); phase = 'BODY';
     },
     data(bytes: Buffer): void { if (phase !== 'BODY') invalid(); receiver!.write(bytes); },
     end(complete: boolean): string {
@@ -145,10 +146,40 @@ export async function receiveOfflineHttpsExchange(token: OfflineHttpsExchange, f
   assertFixedHttpRequest(frame, count);
   if (frame.body !== expected.body || frame.path !== expected.path || frame.digest !== expected.digest) inferenceFail('TOKEN_BINDING_INVALID');
   state.next = 'DONE';
-  const session = createHttpsResponseSession(frame, count, syntheticBearer);
+  const result = await receiveEvents(frame, count, count ? state.count : state.response, signal, syntheticBearer);
+  if (count) state.next = 'RESPONSE';
+  return result;
+}
+
+// Single POST laboratory transcript. This is inert data, with no callable port,
+// credential resolver, native-client import or count request. Both modes share
+// the SAME event engine/receiver as 9F, never a second HTTP implementation.
+declare const singleBrand: unique symbol;
+export interface OfflineSingleHttpsExchange { readonly [singleBrand]: true }
+const singles = new WeakMap<OfflineSingleHttpsExchange, { frame: OfflineHttpRequests['inference']; events: readonly Event[] }>();
+export function createOfflineSingleHttpsExchange(input: { readonly frame: OfflineHttpRequests['inference'];
+  readonly events: readonly OfflineHttpsEvent[] }): OfflineSingleHttpsExchange {
+  const d = inferenceEnvelope(input, ['frame', 'events']);
+  const frame = normalizeFixerData(d['frame']) as unknown as OfflineHttpRequests['inference'];
+  assertFixedHttpRequest(frame, false);
+  const events = snapshot(d['events'] as readonly OfflineHttpsEvent[], false);
+  const token = Object.freeze({}) as OfflineSingleHttpsExchange; singles.set(token, { frame, events }); return token;
+}
+export function discardOfflineSingleHttpsExchange(token: OfflineSingleHttpsExchange): void { singles.delete(token); }
+export async function receiveOfflineSingleHttpsExchange(token: OfflineSingleHttpsExchange,
+  frame: OfflineHttpRequests['inference'], signal: AbortSignal, syntheticSecret: string): Promise<string> {
+  const state = singles.get(token); singles.delete(token);
+  if (!state) inferenceFail('HTTPS_EVENT_INVALID');
+  assertFixedHttpRequest(frame, false);
+  if (frame.body !== state.frame.body || frame.path !== state.frame.path || frame.digest !== state.frame.digest) inferenceFail('TOKEN_BINDING_INVALID');
+  return receiveEvents(frame, false, state.events, signal, syntheticSecret);
+}
+async function receiveEvents(frame: OfflineHttpRequests['count'], count: boolean, events: readonly Event[],
+  signal: AbortSignal, secret: string): Promise<string> {
+  const session = createHttpsResponseSession(frame, count, secret);
   let result: string | undefined;
   try {
-    for (const event of count ? state.count : state.response) {
+    for (const event of events) {
       if (signal.aborted) inferenceFail('INFERENCE_CANCELLED');
       if (event['delayMs']) await delay(event['delayMs'] as number, undefined, { signal });
       if (signal.aborted) inferenceFail('INFERENCE_CANCELLED');
@@ -168,7 +199,6 @@ export async function receiveOfflineHttpsExchange(token: OfflineHttpsExchange, f
       }
     }
     if (result === undefined) inferenceFail('HTTPS_UNEXPECTED_CLOSE');
-    if (count) state.next = 'RESPONSE';
     return result;
   } finally { session.discard(); }
 }
