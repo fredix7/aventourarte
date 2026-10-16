@@ -27,7 +27,8 @@ test('Phase 9D standalone: offline broker typecheck and tests, no writer regress
     assert.throws(() => json.decodeFixerJson(JSON.stringify({ a: 'x'.repeat(65537) })), e => e.code === 'OUTPUT_LIMIT_EXCEEDED');
     assert.throws(() => json.decodeProviderEnvelopeJson('{"text":"one","text":"two"}'), e => e.code === 'JSON_MALFORMED');
     const r = spawnSync(process.execPath, [...flags, '--test', '--test-concurrency=1', 'scripts/factory-fix/inference-broker.cases.mjs',
-      'scripts/factory-fix/inference-http.cases.mjs', 'scripts/factory-fix/inference-https-adapter.cases.mjs'], {
+      'scripts/factory-fix/inference-http.cases.mjs', 'scripts/factory-fix/inference-https-adapter.cases.mjs',
+      'scripts/factory-fix/inference-preflight.cases.mjs'], {
       cwd: root, encoding: 'utf8', timeout: 120000, shell: false, maxBuffer: 4 * 1024 * 1024,
       env: { NODE_DISABLE_COMPILE_CACHE: '1', NODE_PATH: path.join(root, 'node_modules'), FACTORY_FIX_OUT_DIR: out,
         TEMP: temp, TMP: temp, PATH: process.env.PATH ?? process.env.Path, SystemRoot: process.env.SystemRoot, WINDIR: process.env.WINDIR }

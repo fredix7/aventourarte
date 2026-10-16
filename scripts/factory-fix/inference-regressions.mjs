@@ -56,7 +56,7 @@ test(`Offline inference regressions without writer (scope: ${scope})`, { timeout
     // Phase 9E forbids acquiring leases too. Do not run Phase 6 readiness cases in
     // safe scope; keep their existing strict tests intact for an authorized phase.
     const tests = ['source-identity', 'snapshot', 'candidate', 'authorization', 'result',
-      ...(scope === 'safe' ? [] : ['write-readiness']), 'fixer-launcher', 'inference-broker', 'inference-http', 'inference-https-adapter'];
+      ...(scope === 'safe' ? [] : ['write-readiness']), 'fixer-launcher', 'inference-broker', 'inference-http', 'inference-https-adapter', 'inference-preflight'];
     if (!channelsOnly) run(`Fix permitted suites + broker + core (Phase 6 ${scope === 'safe' ? 'excluded: no leases' : 'included'})`, ['--require', guard, '--test', '--test-concurrency=1',
       ...tests.map(n => `scripts/factory-fix/${n}.cases.mjs`)], 900000, true);
     const guards = 'Phase 9 (?:policy:|capabilities:|TEMP: (?:malicious response blocks before writing:|real runtime remains blocked:|request invalidation during generation blocks preparation|late response after timeout cannot revive a finished session|a plan from another authentic request cannot be replayed))';

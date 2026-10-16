@@ -41,7 +41,8 @@ test('Factory Fix Phases 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9: typecheck, compile a
       'scripts/factory-fix/result.cases.mjs', 'scripts/factory-fix/write-readiness.cases.mjs',
       'scripts/factory-fix/writer.cases.mjs', 'scripts/factory-fix/fixer-launcher.cases.mjs',
       'scripts/factory-fix/execution.cases.mjs', 'scripts/factory-fix/inference-broker.cases.mjs',
-      'scripts/factory-fix/inference-http.cases.mjs', 'scripts/factory-fix/inference-https-adapter.cases.mjs'], {
+      'scripts/factory-fix/inference-http.cases.mjs', 'scripts/factory-fix/inference-https-adapter.cases.mjs',
+      'scripts/factory-fix/inference-preflight.cases.mjs'], {
       cwd: projectRoot, encoding: 'utf8', timeout: 1740000, shell: false,
       env: {
         NODE_DISABLE_COMPILE_CACHE: '1', NODE_PATH: path.join(projectRoot, 'node_modules'),

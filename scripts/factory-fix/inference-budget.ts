@@ -33,11 +33,14 @@ export function inspectOfflineInferenceBudget(budget: OfflineInferenceBudget) {
   return Object.freeze({ ...state(budget), rateVersion: OFFLINE_RATE_CARD.version, model: OFFLINE_RATE_CARD.model,
     accounting: 'SIMULATED_NOT_BILLING' as const, realMoneyReserved: false, networkAuthorized: false });
 }
+// Estimate only; this is never an economic grant or a commercial count quote.
+export function offlineInferenceReservationMicroUsd(): number {
+  return Math.ceil(INFERENCE_PROFILE.proposedMaxInputTokens * OFFLINE_RATE_CARD.reservedInputMicroUsdPerMillion / 1000000)
+    + Math.ceil(INFERENCE_PROFILE.maxOutputTokens * OFFLINE_RATE_CARD.outputMicroUsdPerMillion / 1000000);
+}
 // Internal host bridges; reservation objects carry private one-shot provenance.
 export function reserveOfflineInference(budget: OfflineInferenceBudget): object {
-  const s = state(budget);
-  const reserved = Math.ceil(INFERENCE_PROFILE.proposedMaxInputTokens * OFFLINE_RATE_CARD.reservedInputMicroUsdPerMillion / 1000000)
-    + Math.ceil(INFERENCE_PROFILE.maxOutputTokens * OFFLINE_RATE_CARD.outputMicroUsdPerMillion / 1000000);
+  const s = state(budget), reserved = offlineInferenceReservationMicroUsd();
   if (s.active) inferenceFail('CONCURRENCY_EXCEEDED');
   if (s.attempts >= s.maxAttempts || reserved > s.maxAttemptMicroUsd || reserved > s.maxBatchMicroUsd - s.allocatedMicroUsd) inferenceFail('BUDGET_EXHAUSTED');
   s.attempts++; s.active++; s.allocatedMicroUsd += reserved;

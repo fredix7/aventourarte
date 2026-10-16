@@ -15,7 +15,9 @@ export const INFERENCE_ERROR_CODES = ['INFERENCE_INPUT_INVALID', 'PROJECTION_INV
   'HTTP_BAD_REQUEST', 'HTTP_UNAUTHORIZED', 'HTTP_FORBIDDEN', 'HTTP_TIMEOUT', 'HTTP_RATE_LIMIT',
   'HTTP_SERVER_ERROR', 'TOKEN_COUNT_INVALID', 'TOKEN_LIMIT_EXCEEDED', 'TOKEN_BINDING_INVALID',
   'HTTPS_DNS_FAILED', 'HTTPS_ADDRESS_FORBIDDEN', 'HTTPS_TLS_INVALID', 'HTTPS_HOSTNAME_INVALID',
-  'HTTPS_CONNECTION_FAILED', 'HTTPS_UNEXPECTED_CLOSE', 'HTTPS_EVENT_INVALID', 'HTTPS_SECRET_ECHO'] as const;
+  'HTTPS_CONNECTION_FAILED', 'HTTPS_UNEXPECTED_CLOSE', 'HTTPS_EVENT_INVALID', 'HTTPS_SECRET_ECHO',
+  'BOOTSTRAP_INVALID', 'BOOTSTRAP_FAILED', 'BOOTSTRAP_RUNTIME_UNVERIFIED', 'PREFLIGHT_INVALID',
+  'PREFLIGHT_INACTIVE', 'PREFLIGHT_REQUIREMENT_UNVERIFIED'] as const;
 export type InferenceErrorCode = typeof INFERENCE_ERROR_CODES[number];
 export class InferenceError extends Error {
   constructor(readonly code: InferenceErrorCode) { super(`Factory inference: ${code}.`); }
@@ -41,3 +43,42 @@ export interface FutureHostCredentialSource {
       countEndpoint: 'https://api.openai.com/v1/responses/input_tokens';
       dedicatedApiProject: true; purpose: 'RESPONSES_AND_INPUT_TOKENS' }>): Promise<string>;
 }
+// DESIGN ONLY. No issuer or runtime constructor exists for any of these grants.
+// Visible IDs, amounts and a laboratory receipt must never confer their provenance.
+// Future issuance must live in host-internal, non-exported identity registries:
+// A follows approved host/worker bootstrap + explicit fixed-provider connectivity;
+// B follows project-scoped key/access verification and creates an opaque handle;
+// C follows an atomic durable reservation covering count AND generation, including
+// uncertain spend. Each independent authority can revoke/expire its own grant.
+// The private native gate must join and consume all three once BEFORE asynchronous
+// I/O, with exact request/frames/project/worker/session/expiry/reservation bindings.
+// Replay, mismatched bindings, failed IPC authentication, revoked/expired grants,
+// unknown ledger state and partial joins must reject without any network call.
+// A future IPC message carries bounded authenticated data, never a JSON-minted
+// capability. Test instrumentation cannot be shipped as an issuer or bypass.
+declare const connectivityGrantBrand: unique symbol;
+declare const projectGrantBrand: unique symbol;
+declare const economicGrantBrand: unique symbol;
+export interface FutureConnectivityGrant { readonly [connectivityGrantBrand]: true }
+export interface FutureProjectCredentialGrant { readonly [projectGrantBrand]: true }
+export interface FutureEconomicGrant { readonly [economicGrantBrand]: true }
+export interface FutureSeparatedActivationAuthority {
+  readonly connectivity: FutureConnectivityGrant;
+  readonly projectCredential: FutureProjectCredentialGrant;
+  readonly economic: FutureEconomicGrant;
+  readonly credentialHandle: FutureHostCredentialHandle;
+  // Host metadata only: private issuance must bind all three to the authentic
+  // request, exact frame pair, worker identity, project, expiry and durable reservation.
+  readonly requestFingerprint: string;
+  readonly bindingDigest: string;
+}
+// Future host-only delivery: an authenticated private IPC channel resolves the
+// opaque handle only after independent A/B/C checks and durable reservation.
+// The existing resolver above is intentionally unimplemented. Bearer bytes belong
+// only to the privileged transport, never the model, request/plan, argv, env,
+// diagnostics or TEMP. No JSON message can introduce a handle or mint a grant.
+export const FUTURE_CREDENTIAL_DELIVERY_POLICY = Object.freeze({ implemented: false,
+  owner: 'TRUSTED_HOST_DEDICATED_API_PROJECT', resolver: 'FutureHostCredentialSource',
+  delivery: 'AUTHENTICATED_PRIVATE_IPC_AFTER_A_B_C_AND_DURABLE_RESERVATION',
+  secretConsumer: 'PRIVILEGED_FIXED_PROVIDER_TRANSPORT_ONLY', persistentStorage: 'ABSENT',
+  processEnvironmentDelivery: false, commandLineDelivery: false, modelAccess: false } as const);
