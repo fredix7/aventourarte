@@ -20,3 +20,7 @@ Revisión del 23/10/2026. Inventario: 57 fichas (25 visitas, 9 platos, 10 restau
 - Vendimia y Pisada: [programación municipal de 2026](https://www.aytorota.es/noticias/hemeroteca/rota-unica/rota-rinde-homenaje-a-su-tradicion-vitivinicola-con-la-vendimia-y-la-xvii-pisada-popular-de-tintilla.html). No se fija esta fecha para futuras ediciones.
 
 La aceptación de las fotos provisionales permite entregar este parche; no convierte las imágenes en específicas ni elimina el pendiente de sustituirlas cuando el propietario aporte material.
+
+## Entrega
+
+Fuente: commit 1a17aa8, subido a developer junto con 19429c1. Publicación: 0b473e3. La URL directa de Rota responde HTTP 200 y sirve main-GH4ERN4P.js; el paquete publicado incluye Sopa de urta, Kammala, receptor de avisos y política de privacidad. El repositorio quedó limpio después de guardar los cambios. Las 17 fotos provisionales quedan aceptadas para una mejora posterior.
