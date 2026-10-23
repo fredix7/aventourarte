@@ -1,0 +1,103 @@
+name: Calidad y mantenimiento
+
+on:
+  push:
+    branches: [developer]
+    paths: ['src/**', 'public/**', 'server/**', 'scripts/**', 'package*.json', 'angular.json', 'tsconfig*.json', '.github/workflows/maintenance.yml']
+  pull_request:
+    branches: [developer]
+  schedule:
+    - cron: '17 8 * * 1'
+    - cron: '23 8 23 * *'
+  workflow_dispatch:
+    inputs:
+      monthly_reminder:
+        description: Crear también la revisión mensual del mes actual
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: maintenance-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}-${{ github.event.schedule }}
+  cancel-in-progress: false
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Pruebas de Angular
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: npm test -- --watch=false --browsers=ChromeHeadless --no-progress
+      - name: Pruebas del receptor sin escrituras reales
+        run: npm run test:reports
+      - name: Compilación publicable (no despliega)
+        run: npm run build:pages
+
+  production:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Guías, privacidad y receptor (solo lectura)
+        run: node scripts/check-production.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mantenimiento-produccion
+          path: maintenance-report/
+          retention-days: 30
+
+  monthly:
+    if: github.event.schedule == '23 8 23 * *' || (github.event_name == 'workflow_dispatch' && inputs.monthly_reminder)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const month = new Date().toISOString().slice(0, 7);
+            const marker = `<!-- aventourarte-monthly:${month} -->`;
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              ...context.repo, state: 'all', creator: 'github-actions[bot]', per_page: 100
+            });
+            const existing = issues.find(issue => !issue.pull_request && issue.body?.includes(marker));
+            if (existing) {
+              core.notice(`Revisión ya existente: ${existing.html_url}`);
+              return;
+            }
+            const body = [
+              marker,
+              'Revisión mensual de AvenTourArte. Esta incidencia es pública: no incluir mensajes, correos, claves ni datos personales de lectores.',
+              '',
+              '- [ ] Revisar los resultados de Actions y solucionar incidencias de pruebas, compilación o disponibilidad.',
+              '- [ ] Revisar nuevas funcionalidades y sus datos, permisos, proveedores y cambios de privacidad.',
+              '- [ ] Atender avisos y solicitudes de derechos por los canales privados, sin copiar datos aquí.',
+              '- [ ] Revisar avisos resueltos y eliminar datos personales como máximo seis meses después del cierre; comprobar también copias y correo.',
+              '- [ ] Revisar cuotas, condiciones de proveedores y vigencia de la política.',
+              '- [ ] Revisar tendencias de Umami, excluyendo pruebas y considerando bloqueadores y consentimiento.',
+              '- [ ] Comprobar manualmente formulario, navegación, retirada del permiso y ausencia de datos sensibles en analítica.',
+              '- [ ] Revisar enlaces externos/datos variables de las guías modificadas y fotos nuevas disponibles.',
+              '- [ ] Registrar el resultado sin información personal y comprobar que la siguiente revisión sigue programada.',
+              '',
+              'Las comprobaciones automáticas no borran datos, no envían tickets ni eventos a Umami y no publican cambios. Notion conserva la guía privada de gestión.',
+              'El borrado de datos y la revisión factual siguen siendo manuales.'
+            ].join('\n');
+            const result = await github.rest.issues.create({ ...context.repo, title: `Mantenimiento mensual · ${month}`, body });
+            core.notice(`Revisión creada: ${result.data.html_url}`);
