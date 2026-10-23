@@ -69,7 +69,8 @@ describe('GuideViewerComponent gastronomy accessibility', () => {
     });
     expect(states).toEqual([
       'Compatible con tus filtros', 'Compatible con tus filtros', 'Compatible con tus filtros',
-      'Por confirmar', 'Por confirmar', 'No encaja con tus filtros', 'No encaja con tus filtros'
+      'Por confirmar', 'Por confirmar', 'Por confirmar',
+      'No encaja con tus filtros', 'No encaja con tus filtros', 'No encaja con tus filtros'
     ]);
   });
 

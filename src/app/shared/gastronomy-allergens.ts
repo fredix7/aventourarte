@@ -136,13 +136,15 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Brandy de Jerez', variable([], ['sulfitos'])],
 
     // Rota
-    ['Urta a la roteña', complete(['pescado'], ['sulfitos'])],
+    ['Urta a la roteña', complete(['pescado'], ['gluten', 'sulfitos'])],
+    ['Sopa de urta', variable(['pescado', 'crustaceos', 'moluscos'], ['gluten', 'huevo', 'sulfitos'])],
     ['Arranque roteño', complete(['gluten'])],
     ['Berza roteña', variable([], ['apio', 'gluten', 'sulfitos'])],
-    ['Pizza roteña', variable(['gluten', 'leche'], ['huevo', 'pescado', 'crustaceos'])],
+    ['Pizza roteña', variable(['gluten', 'leche'], ['huevo', 'pescado', 'crustaceos', 'mostaza', 'soja'])],
     ['Arroz al Shorty’s', variable(['crustaceos', 'soja'], ['gluten', 'huevo'])],
-    ['Mayetito', complete(['huevo', 'frutos-cascara'], ['gluten', 'leche', 'soja'])],
-    ['Tintilla de Rota', complete([], ['sulfitos'])],
+    ['Carne al Shorty’s', variable([], ['soja', 'gluten'])],
+    ['Mayetito', variable(['huevo', 'frutos-cascara'], ['gluten', 'leche', 'soja', 'sulfitos'])],
+    ['Tintilla de Rota', variable([], ['sulfitos', 'huevo', 'leche'])],
 
     // San Fernando
     ['Camarón de la Bahía', complete(['crustaceos'])],

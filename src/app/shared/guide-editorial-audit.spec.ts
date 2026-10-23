@@ -79,20 +79,20 @@ describe('guide editorial audit', () => {
     const report = auditGuideEditorial(ROTA_GUIDE);
 
     expect(report.status).toBe('ready-with-warnings');
-    expect(report.entities).toEqual({ total: 50, complete: 50 });
+    expect(report.entities).toEqual({ total: 57, complete: 57 });
     expect(report.photos).toEqual({
-      total: 29,
-      useful: 16,
-      placeholder: 13,
+      total: 34,
+      useful: 17,
+      placeholder: 17,
       missing: 0,
-      notApplicable: 21
+      notApplicable: 23
     });
-    expect(report.practical).toEqual({ total: 43, complete: 43 });
-    expect(report.links).toEqual({ total: 61, valid: 61 });
-    expect(report.allergens).toEqual({ total: 7, complete: 7 });
-    expect(report.cloudinary.uniqueReferences).toBe(21);
+    expect(report.practical).toEqual({ total: 48, complete: 48 });
+    expect(report.links).toEqual({ total: 70, valid: 70 });
+    expect(report.allergens).toEqual({ total: 9, complete: 9 });
+    expect(report.cloudinary.uniqueReferences).toBe(22);
     expect(report.errors).toEqual([]);
-    expect(report.warnings.length).toBe(13);
+    expect(report.warnings.length).toBe(17);
   });
 
   it('keeps the first Almensilla version reviewable while placeholder images remain', () => {
