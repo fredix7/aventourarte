@@ -63,7 +63,13 @@ Production builds keep Angular's font inlining disabled. This avoids a build-tim
 
 If font inlining is enabled again behind a company proxy or antivirus that inspects TLS, export its real root or intermediate certificate as PEM and configure Node with `NODE_EXTRA_CA_CERTS`; also configure `HTTPS_PROXY` when the network requires it. Install the same trusted certificate in the operating system or browser if runtime requests are intercepted. Never bypass the error with `NODE_TLS_REJECT_UNAUTHORIZED=0`. Self-hosting Roboto and Material Icons is the fully offline alternative.
 
-## Cloudinary
+## Analytics and guide feedback
+
+See [AVA-13 setup and event reference](docs/analytics.md). The Umami integration is disabled until a real Website ID, allowed production hosts, and privacy review are configured. Navigation measurement is opt-in; guide ratings are submitted independently and explicitly.
+
+Reader tickets use a separate form and private Notion inbox. See [receiver setup and ticket workflow](docs/reader-reports.md). Local previews do not store tickets; production submissions require deploying and configuring the receiver.
+
+## Cloudinary delivery
 
 The frontend only needs the public `cloudName` value from `src/environments/environment.ts` to build delivery URLs. Upload presets, API keys, API secrets, and upload-folder configuration must not be added to the client bundle. If browser uploads are added in the future, their permissions and upload preset must be reviewed and configured explicitly before exposing any new public value.
 

@@ -1,0 +1,47 @@
+<section *ngIf="analytics.controlsAvailable" class="postcard" aria-labelledby="feedback-title">
+  <div class="postcard-heading">
+    <div class="stamp" aria-hidden="true"><mat-icon>mark_email_read</mat-icon><span>DE VUELTA</span></div>
+    <div>
+      <span class="eyebrow">Una postal para seguir mejorando</span>
+      <h2 id="feedback-title">¿{{ guideName }} te queda un poco más cerca?</h2>
+      <p>Cuéntanos si esta guía te ha servido. Tu próxima escapada nos inspira.</p>
+    </div>
+  </div>
+
+  <p *ngIf="analytics.preview" class="preview-note" role="note">Vista previa local. Puedes probar la valoración; no se enviará a Umami.</p>
+
+  <ng-container *ngIf="!sent; else thanks">
+    <div class="ratings" role="group" aria-label="Utilidad de la guía">
+      <button *ngFor="let option of ratings" type="button" [disabled]="busy"
+        [attr.aria-pressed]="rating === option.value" [class.selected]="rating === option.value"
+        (click)="choose(option.value)">
+        <mat-icon aria-hidden="true">{{ option.icon }}</mat-icon>
+        <strong>{{ option.label }}</strong><span>{{ option.detail }}</span>
+      </button>
+    </div>
+    <div *ngIf="rating" class="follow-up">
+      <fieldset *ngIf="rating !== 'yes'" [disabled]="busy">
+        <legend>¿Qué haría esta guía más útil? <span>(Opcional)</span></legend>
+        <label *ngFor="let option of reasons" [class.checked]="reason === option.value">
+          <input type="radio" name="feedback-reason" [value]="option.value"
+            [checked]="reason === option.value" (change)="reason = option.value" />
+          {{ option.label }}
+        </label>
+      </fieldset>
+      <p *ngIf="!analytics.preview" class="permission">Al enviar, permites que Umami procese esta respuesta para mejorar las guías.
+        No activa la medición de tu navegación. <a href="#measurement-privacy">Privacidad</a></p>
+      <button type="button" class="send" (click)="submit()" [disabled]="busy">
+        {{ busy ? 'Enviando tu postal…' : analytics.preview ? 'Probar mi respuesta' : 'Enviar mi respuesta' }}
+        <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+      </button>
+    </div>
+  </ng-container>
+  <ng-template #thanks>
+    <div class="thanks" role="status"><mat-icon aria-hidden="true">check_circle</mat-icon>
+      <div><strong>{{ analytics.preview ? '¡Prueba completada!' : '¡Postal recibida!' }}</strong>
+        <p>{{ analytics.preview ? 'La respuesta solo se ha guardado en esta sesión local. No se ha enviado a Umami.' : 'Gracias por ayudarnos a viajar con más arte.' }}</p></div>
+    </div>
+  </ng-template>
+  <p *ngIf="error" class="error" role="alert">{{ error }}</p>
+  <p class="footnote">Sin pedirte nombre ni correo. Solo una pista para crear mejores guías.</p>
+</section>

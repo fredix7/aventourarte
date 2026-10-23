@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
+import { MeasurementPrivacyComponent } from '../components/measurement-privacy/measurement-privacy.component';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
+  imports: [MeasurementPrivacyComponent],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })

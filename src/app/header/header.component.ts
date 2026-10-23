@@ -1,9 +1,10 @@
-import { Component, ElementRef, HostListener, Input } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TravelNode } from '../data/travel-data';
 import { HeaderSubmenuComponent } from '../header-submenu.component/header-submenu.component';
 import { AppLanguage, LanguageService } from '../shared/language.service';
+import { AnalyticsService } from '../shared/analytics.service';
 
 interface DestinationSearchResult {
   name: string;
@@ -29,7 +30,17 @@ interface HeaderText {
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnDestroy {
+  private readonly analytics = inject(AnalyticsService);
+  private searchTimer?: ReturnType<typeof setTimeout>;
+
+  ngOnDestroy(): void { clearTimeout(this.searchTimer); }
+
+  private measureSearch(): void {
+    clearTimeout(this.searchTimer);
+    this.searchTimer = undefined;
+    if (this.hasSearchQuery) this.analytics.action('search', { results: this.searchResults.length ? 'some' : 'none' });
+  }
   @Input() treeData: TravelNode[] = [];
 
   constructor(
@@ -130,6 +141,7 @@ export class HeaderComponent {
   }
 
   closeMenu() {
+    if (this.searchTimer !== undefined) this.measureSearch();
     this.menuOpen = false;
     this.languageMenuOpen = false;
     this.searchQuery = '';
@@ -146,6 +158,9 @@ export class HeaderComponent {
 
   onSearchInput(event: Event) {
     this.searchQuery = (event.target as HTMLInputElement).value;
+    clearTimeout(this.searchTimer);
+    this.searchTimer = undefined;
+    if (this.hasSearchQuery) this.searchTimer = setTimeout(() => this.measureSearch(), 800);
   }
 
   @HostListener('document:click', ['$event'])

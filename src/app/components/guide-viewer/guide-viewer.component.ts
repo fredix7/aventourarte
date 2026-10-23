@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy } from '@angular/core';
+import { Component, HostListener, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -10,6 +10,11 @@ import { ImgUrlPipe } from '../../shared/img-url.pipe';
 import { GuideEditorialAuditComponent } from '../guide-editorial-audit/guide-editorial-audit.component';
 import { PlanFilterComponent } from '../plan-filter/plan-filter.component';
 import { GuideShareComponent } from '../guide-share/guide-share.component';
+import { GuideFeedbackComponent } from '../guide-feedback/guide-feedback.component';
+import { AnalyticsService } from '../../shared/analytics.service';
+import { MeasureLinkDirective } from '../../shared/measure-link.directive';
+import { ReaderReportComponent } from '../reader-report/reader-report.component';
+import { ReaderReportService } from '../../shared/reader-report.service';
 import { filterPlanSections, sectionPlanItems } from '../../shared/plan-filter';
 import {
   AllergenDefinition,
@@ -90,12 +95,17 @@ export const GUIDE_REGISTRY: Readonly<Record<string, any>> = {
     ImgUrlPipe,
     GuideEditorialAuditComponent,
     PlanFilterComponent,
-    GuideShareComponent
+    GuideShareComponent,
+    GuideFeedbackComponent,
+    MeasureLinkDirective,
+    ReaderReportComponent
   ],
   templateUrl: './guide-viewer.component.html',
   styleUrls: ['./guide-viewer.component.scss']
 })
 export class GuideViewerComponent implements OnDestroy {
+  readonly analytics = inject(AnalyticsService);
+  readonly reports = inject(ReaderReportService);
   guide: any = null;
   pageStyle: Record<string, string> = {};
   requestedGuidePath: string | null = null;
@@ -189,9 +199,11 @@ export class GuideViewerComponent implements OnDestroy {
     else nextSelection.add(typeId);
     this.selectedPlanTypes = nextSelection;
     this.updateVisiblePlans();
+    this.analytics.action('plan_filter', { action: nextSelection.has(typeId) ? 'select' : 'remove', plan: typeId });
   }
 
-  clearPlanFilters() {
+  clearPlanFilters(measure = false) {
+    if (measure && this.selectedPlanTypes.size) this.analytics.action('plan_filter', { action: 'clear' });
     this.selectedPlanTypes = new Set();
     this.updateVisiblePlans();
   }
@@ -765,6 +777,7 @@ export class GuideViewerComponent implements OnDestroy {
     const routePath = this.route.snapshot.paramMap.get('guidePath');
     const cleanUrl = this.router.url.split('?')[0].split('#')[0];
     const placePath = routePath ?? decodeURIComponent(cleanUrl.replace(/^\/guia\/?/, '')).replace(/^\/+/, '');
+    this.analytics.visit(this.guides[placePath] ? placePath : '', this.editorialMode);
 
     if (placePath && this.guides[placePath]) {
       this.closePhoto();

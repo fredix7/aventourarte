@@ -1,5 +1,6 @@
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { TestBed } from '@angular/core/testing';
 
 import { TravelNode, TRAVEL_TREE } from '../../data/travel-data';
 import { ImageService } from '../../shared/image.service';
@@ -50,7 +51,7 @@ describe('GuideViewerComponent', () => {
     imageService.background.and.returnValue('resolved:background');
 
     spyOn(window, 'matchMedia').and.returnValue({ matches: false } as MediaQueryList);
-    component = new GuideViewerComponent(route, router, imageService);
+    component = TestBed.runInInjectionContext(() => new GuideViewerComponent(route, router, imageService));
   });
 
   afterEach(() => {

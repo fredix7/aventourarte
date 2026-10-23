@@ -1,0 +1,27 @@
+:host { display: block; color: #193c4e; }
+:host:empty { display: none; }
+.reader-report { border: 1px solid #cbbda6; border-radius: 18px; background: #fffaf2; padding: 14px clamp(18px, 4vw, 32px); }
+summary { cursor: pointer; font-weight: 600; padding: 8px 0; line-height: 1.5; }
+summary span { margin-left: 8px; }
+.report-body { padding-top: 12px; max-width: 760px; }
+h3 { margin: 0 0 8px; font-family: Georgia, serif; font-size: 24px; }
+p { line-height: 1.6; }
+.context { margin: 0 0 18px; }
+fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+label { display: block; margin: 18px 0 8px; font-weight: 600; }
+input:not([type=checkbox]), select, textarea { box-sizing: border-box; width: 100%; border: 1px solid #aab8b5; border-radius: 10px; padding: 12px; color: #193c4e; background: #fffdf8; font: inherit; }
+textarea { resize: vertical; min-height: 125px; }
+.optional, .help { font-size: 12px; font-weight: 400; color: #4e6568; }
+.help { margin: 8px 0; }
+.help span { white-space: nowrap; }
+.permission { display: flex; gap: 12px; font-size: 13px; line-height: 1.6; font-weight: 400; }
+.permission input { flex: 0 0 auto; width: 18px; height: 18px; margin-top: 3px; accent-color: #24584d; }
+a { color: #24584d; text-underline-offset: 3px; }
+button { margin: 12px 0; padding: 12px 20px; border-radius: 24px; border: 0; font: inherit; font-weight: 600; color: white; background: #214e49; cursor: pointer; }
+button:disabled { opacity: .6; cursor: wait; }
+summary:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible { outline: 3px solid #b26935; outline-offset: 3px; }
+.honeypot { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.preview { background: #edf2f4; padding: 10px 14px; border-radius: 10px; font-size: 13px; }
+.error { color: #9b3327; }
+.receipt { padding: 22px; background: #e8f0ed; border-radius: 14px; }
+.reference { display: inline-block; padding: 7px 12px; border: 1px dashed #648879; border-radius: 8px; font-weight: 700; }

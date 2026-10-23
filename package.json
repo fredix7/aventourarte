@@ -9,6 +9,7 @@
     "deploy:pages": "npm run build:pages && angular-cli-ghpages --dir=dist/aventourarte/browser",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test:reports": "node --test server/reader-reports/worker.test.mjs",
     "serve:ssr:aventourarte": "node dist/aventourarte/server/server.mjs"
   },
   "prettier": {

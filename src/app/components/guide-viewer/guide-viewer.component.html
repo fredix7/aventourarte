@@ -63,7 +63,7 @@
           [total]="totalPlanCount"
           [matching]="matchingPlanCount"
           (toggleType)="togglePlanType($event)"
-          (clearFilters)="clearPlanFilters()"
+          (clearFilters)="clearPlanFilters(true)"
         ></app-plan-filter>
 
         <section
@@ -343,7 +343,7 @@
                     <mat-icon>location_on</mat-icon>
                     <span>
                       <strong>Dirección</strong>
-                      <a [href]="mapUrl(zona)" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Abrir en el mapa la dirección ' + zona.direccion">
+                      <a appMeasureLink="maps" [href]="mapUrl(zona)" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Abrir en el mapa la dirección ' + zona.direccion">
                         {{ zona.direccion }}
                         <mat-icon class="external-icon" aria-hidden="true">open_in_new</mat-icon>
                       </a>
@@ -363,7 +363,7 @@
                     <span>
                       <strong>Web oficial</strong>
                       <a
-                        [href]="zona.web"
+                        appMeasureLink="web" [href]="zona.web"
                         target="_blank"
                         rel="noopener noreferrer"
                         [attr.aria-label]="'Abrir la web oficial de ' + zona.nombre"
@@ -379,7 +379,7 @@
                     <span>
                       <strong>Reserva / entradas</strong>
                       <a
-                        [href]="zona.reserva"
+                        appMeasureLink="booking" [href]="zona.reserva"
                         target="_blank"
                         rel="noopener noreferrer"
                         [attr.aria-label]="'Reservar o comprar entradas para ' + zona.nombre"
@@ -630,7 +630,7 @@
                       <mat-icon>location_on</mat-icon>
                       <span>
                         <strong>Dirección</strong>
-                        <a [href]="mapUrl(item)" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Abrir en el mapa la dirección ' + item.direccion">
+                        <a appMeasureLink="maps" [href]="mapUrl(item)" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Abrir en el mapa la dirección ' + item.direccion">
                           {{ item.direccion }}
                           <mat-icon class="external-icon" aria-hidden="true">open_in_new</mat-icon>
                         </a>
@@ -650,7 +650,7 @@
                       <span>
                         <strong>Web oficial</strong>
                         <a
-                          [href]="item.web"
+                          appMeasureLink="web" [href]="item.web"
                           target="_blank"
                           rel="noopener noreferrer"
                           [attr.aria-label]="'Abrir la web oficial de ' + item.nombre"
@@ -666,7 +666,7 @@
                       <span>
                         <strong>Reserva / entradas</strong>
                         <a
-                          [href]="item.reserva"
+                          appMeasureLink="booking" [href]="item.reserva"
                           target="_blank"
                           rel="noopener noreferrer"
                           [attr.aria-label]="'Reservar o comprar entradas para ' + item.nombre"
@@ -692,6 +692,8 @@
         </section>
       </div>
     </ng-container>
+    <app-guide-feedback *ngIf="!editorialMode && analytics.controlsAvailable" [guidePath]="currentGuidePath" [guideName]="guide.nombre"></app-guide-feedback>
+    <app-reader-report *ngIf="!editorialMode && reports.available" [guidePath]="currentGuidePath" [guideName]="guide.nombre"></app-reader-report>
   </main>
 
   <button class="scroll-top" *ngIf="showScrollTop" (click)="scrollToTop()" aria-label="Subir arriba">

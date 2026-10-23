@@ -1,4 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { AnalyticsService } from '../shared/analytics.service';
 import { provideRouter, Router, UrlTree } from '@angular/router';
 
 import { TravelNode } from '../data/travel-data';
@@ -46,6 +47,31 @@ describe('HeaderComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('measures a completed search without recording keystrokes or search text', fakeAsync(() => {
+    const measure = spyOn(TestBed.inject(AnalyticsService), 'action');
+    component.onSearchInput({ target: { value: 'chi' } } as unknown as Event);
+    tick(300);
+    component.onSearchInput({ target: { value: 'chipiona' } } as unknown as Event);
+    tick(799);
+    expect(measure).not.toHaveBeenCalled();
+    tick(1);
+    expect(measure).toHaveBeenCalledOnceWith('search', { results: 'some' });
+    component.closeMenu();
+    expect(measure).toHaveBeenCalledTimes(1);
+  }));
+
+  it('flushes a pending search when choosing a result and cancels empty queries', fakeAsync(() => {
+    const measure = spyOn(TestBed.inject(AnalyticsService), 'action');
+    component.onSearchInput({ target: { value: 'missing destination' } } as unknown as Event);
+    component.closeMenu();
+    tick(1000);
+    expect(measure).toHaveBeenCalledOnceWith('search', { results: 'none' });
+    component.onSearchInput({ target: { value: 'chi' } } as unknown as Event);
+    component.onSearchInput({ target: { value: '' } } as unknown as Event);
+    tick(1000);
+    expect(measure).toHaveBeenCalledTimes(1);
+  }));
 
   it('finds nested destinations without accents and preserves their inherited flag', () => {
     component.searchQuery = 'cadiz';

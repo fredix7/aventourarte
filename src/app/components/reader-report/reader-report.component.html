@@ -1,0 +1,43 @@
+<details *ngIf="reports.available" class="reader-report">
+  <summary>Sugerir una mejora o avisar de un error <span aria-hidden="true">↗</span></summary>
+  <div class="report-body">
+    <ng-container *ngIf="!reference; else receipt">
+      <h3>Tu mirada mejora esta guía</h3>
+      <p class="context">Sobre <strong>{{ guideName }}</strong>. Añadimos la página de origen automáticamente.</p>
+      <p *ngIf="reports.preview" class="preview" role="note">Vista previa local: puedes probar el formulario. No se creará un ticket en Notion.</p>
+      <form #reportForm="ngForm" (ngSubmit)="submit(reportForm)">
+        <fieldset [disabled]="busy">
+          <label for="report-type">¿Qué quieres contarnos?</label>
+          <select id="report-type" name="type" [(ngModel)]="type" required>
+            <option *ngFor="let option of types" [value]="option.id">{{ option.label }}</option>
+          </select>
+          <label for="report-message">Tu mensaje</label>
+          <textarea id="report-message" name="message" [(ngModel)]="message" required minlength="10" maxlength="2000" rows="5"
+            aria-describedby="report-message-help" placeholder="Cuéntanos qué has encontrado o cómo podríamos mejorar la guía."></textarea>
+          <p id="report-message-help" class="help">Entre 10 y 2.000 caracteres. No incluyas contraseñas ni información sensible. <span>{{ message.length }}/2000</span></p>
+          <label for="report-email">Correo <span class="optional">(opcional, si quieres que te respondamos)</span></label>
+          <input id="report-email" name="email" type="email" email maxlength="254" [(ngModel)]="email" autocomplete="email" />
+          <div class="honeypot" aria-hidden="true" inert>
+            <label for="report-website">Deja este campo vacío</label>
+            <input id="report-website" name="website" [(ngModel)]="website" tabindex="-1" autocomplete="off" />
+          </div>
+          <label class="permission"><input type="checkbox" name="consent" [(ngModel)]="consent" required />
+            <span>Permito que AvenTourArte trate este mensaje y el correo que facilite para gestionar el aviso en Notion y responderme.
+              Responsable: Alfredo Velasco Japón. Puedes ejercer tus derechos en alfredovejapon@gmail.com.
+              <a href="privacidad.html" target="_blank" rel="noopener">Política de privacidad</a>.</span></label>
+          <button type="submit" [disabled]="busy">{{ busy ? 'Guardando el aviso…' : reports.preview ? 'Probar el envío' : 'Enviar aviso' }}</button>
+        </fieldset>
+      </form>
+      <p *ngIf="error" class="error" role="alert">{{ error }}</p>
+      <p class="help">Tu mensaje y tu correo no se envían a Umami. Enviar un aviso no activa la medición de navegación.</p>
+    </ng-container>
+    <ng-template #receipt>
+      <div class="receipt" role="status" aria-live="polite">
+        <strong>{{ previewReceipt ? '¡Prueba completada!' : '¡Aviso recibido!' }}</strong>
+        <p>{{ previewReceipt ? 'No se ha enviado a Notion ni se ha guardado el mensaje.' : 'Gracias. Lo revisaremos junto con la guía.' }}</p>
+        <span class="reference">{{ reference }}</span>
+        <p *ngIf="!previewReceipt" class="help">Guarda esta referencia. El envío no genera un correo automático de confirmación.</p>
+      </div>
+    </ng-template>
+  </div>
+</details>

@@ -1,0 +1,16 @@
+name = "aventourarte-reader-reports"
+main = "worker.mjs"
+compatibility_date = "2026-10-22"
+preview_urls = false
+
+[vars]
+ALLOWED_ORIGIN = "https://fredix7.github.io"
+NOTION_DATA_SOURCE_ID = "852f1b4c-6f27-4497-a3b1-b35acc0b566d"
+
+[[ratelimits]]
+name = "REPORT_LIMITER"
+namespace_id = "10222026"
+simple = { limit = 5, period = 60 }
+
+[observability]
+enabled = false

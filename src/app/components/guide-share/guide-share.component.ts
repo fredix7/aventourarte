@@ -1,8 +1,9 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
 import {
-  AfterViewChecked, Component, ElementRef, Inject, Input, OnChanges, OnDestroy, ViewChild
+  AfterViewChecked, Component, ElementRef, Inject, Input, OnChanges, OnDestroy, ViewChild, inject
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { AnalyticsService } from '../../shared/analytics.service';
 
 export function guideShareUrl(path: string, baseUri: string): string {
   if (!/^[a-z0-9-]+(?:\/[a-z0-9-]+)*$/.test(path)) return '';
@@ -22,6 +23,7 @@ export function guideShareUrl(path: string, baseUri: string): string {
   styleUrls: ['./guide-share.component.scss']
 })
 export class GuideShareComponent implements OnChanges, OnDestroy, AfterViewChecked {
+  private readonly analytics = inject(AnalyticsService);
   @Input() guidePath = '';
   @Input() guideName = '';
   @ViewChild('manualLink') manualLink?: ElementRef<HTMLInputElement>;
@@ -90,6 +92,7 @@ export class GuideShareComponent implements OnChanges, OnDestroy, AfterViewCheck
     try {
       // Invoke directly from the click: native sharing needs user activation.
       await navigator!.share(data);
+      if (revision === this.revision) this.analytics.action('share', { method: 'native' }, this.guidePath);
     } catch (error) {
       if (revision !== this.revision) return;
       if ((error as { name?: string } | null)?.name !== 'AbortError') {
@@ -112,6 +115,7 @@ export class GuideShareComponent implements OnChanges, OnDestroy, AfterViewCheck
       await clipboard.writeText(this.url);
       if (revision !== this.revision) return;
       this.copied = true;
+      this.analytics.action('share', { method: 'clipboard' }, this.guidePath);
       this.message = 'Enlace copiado. Ya puedes enviarlo a quien se apunta al viaje.';
       this.resetTimer = setTimeout(() => {
         this.copied = false;

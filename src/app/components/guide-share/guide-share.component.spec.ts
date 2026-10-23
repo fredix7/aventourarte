@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { AnalyticsService } from '../../shared/analytics.service';
 import { GuideShareComponent, guideShareUrl } from './guide-share.component';
 
 describe('Guide sharing', () => {
@@ -9,13 +10,15 @@ describe('Guide sharing', () => {
   let share: jasmine.Spy;
   let writeText: jasmine.Spy;
   let navigator: Navigator;
+  let measure: jasmine.Spy;
 
   beforeEach(() => {
     share = jasmine.createSpy('share').and.returnValue(Promise.resolve());
     writeText = jasmine.createSpy('writeText').and.returnValue(Promise.resolve());
     navigator = { share, clipboard: { writeText } } as unknown as Navigator;
     const document = { baseURI: baseUri, defaultView: { navigator } } as unknown as Document;
-    component = new GuideShareComponent(document);
+    component = TestBed.runInInjectionContext(() => new GuideShareComponent(document));
+    measure = spyOn(TestBed.inject(AnalyticsService), 'action');
     component.guidePath = path;
     component.guideName = 'Jerez de la Frontera';
     component.ngOnChanges();
@@ -48,6 +51,7 @@ describe('Guide sharing', () => {
     expect(writeText).not.toHaveBeenCalled();
     expect(component.message).toBe('');
     expect(component.busy).toBeFalse();
+    expect(measure).toHaveBeenCalledOnceWith('share', { method: 'native' }, path);
   });
 
   it('copies directly when native sharing is unavailable', async () => {
@@ -68,6 +72,7 @@ describe('Guide sharing', () => {
   it('silently cancels without changing the clipboard', async () => {
     share.and.returnValue(Promise.reject(new DOMException('Canceled', 'AbortError')));
     await component.share();
+    expect(measure).not.toHaveBeenCalled();
     expect(component.message).toBe('');
     expect(component.nativeSharing).toBeTrue();
     expect(writeText).not.toHaveBeenCalled();
@@ -86,6 +91,7 @@ describe('Guide sharing', () => {
   it('offers a manual link when clipboard permission is denied', async () => {
     writeText.and.returnValue(Promise.reject(new DOMException('Blocked', 'NotAllowedError')));
     await component.copyLink();
+    expect(measure).not.toHaveBeenCalled();
     expect(component.copied).toBeFalse();
     expect(component.manualCopy).toBeTrue();
     expect(component.message).toContain('Selecciona y copia');
