@@ -4,7 +4,8 @@ import {
   dishAllergenProfile,
   resolveDishAllergenProfile,
   profileAvoidsSelectedAllergens,
-  profileHasSelectedAllergen
+  profileHasSelectedAllergen,
+  classifySelectedAllergens
 } from './gastronomy-allergens';
 
 describe('gastronomy allergens', () => {
@@ -65,7 +66,7 @@ describe('gastronomy allergens', () => {
     ).not.toContain('huevo');
   });
 
-  it('uses the card recipe before the registry and keeps variable recipes uncertain', () => {
+  it('keeps the card ingredients and preserves registry risks for variable recipes', () => {
     const profile = resolveDishAllergenProfile({
       nombre: 'Carbonara',
       alergenos: ['gluten'],
@@ -74,12 +75,42 @@ describe('gastronomy allergens', () => {
     });
 
     expect(profile?.contains).toEqual(['gluten']);
-    expect(profile?.possible).toEqual(['leche']);
+    expect(profile?.possible).toEqual(['leche', 'huevo']);
     expect(profileAvoidsSelectedAllergens(profile, ['pescado'])).toBeFalse();
     expect(profileHasSelectedAllergen(profile, ['leche'])).toBeTrue();
+    expect(profileHasSelectedAllergen(profile, ['huevo'])).toBeTrue();
     expect(resolveDishAllergenProfile({ nombre: 'Carbonara' }))
       .toEqual(dishAllergenProfile('Carbonara'));
     expect(resolveDishAllergenProfile(null)).toBeNull();
+  });
+
+  it('lets explicitly complete recipes override registry variants', () => {
+    const profile = resolveDishAllergenProfile({
+      nombre: 'Carbonara', alergenos: ['gluten'], perfilAlergenos: 'complete',
+      posiblesAlergenos: ['leche']
+    });
+    expect(profile).toEqual({ status: 'complete', contains: ['gluten'], possible: ['leche'] });
+    expect(profileAvoidsSelectedAllergens(profile, ['huevo'])).toBeTrue();
+  });
+
+  it('deduplicates inline and registry allergens without listing confirmed ingredients as possible', () => {
+    const profile = resolveDishAllergenProfile({
+      nombre: 'Carbonara', alergenos: ['gluten', 'huevo', 'gluten'],
+      perfilAlergenos: 'variable', posiblesAlergenos: ['leche', 'huevo', 'leche']
+    });
+    expect(profile).toEqual({ status: 'variable', contains: ['gluten', 'huevo'], possible: ['leche'] });
+  });
+
+  it('distinguishes confirmed and possible allergens from missing data and no selection', () => {
+    const variable = { status: 'variable' as const, contains: ['gluten'] as const, possible: ['huevo'] as const };
+    const profile = { ...variable, contains: [...variable.contains], possible: [...variable.possible] };
+    expect(classifySelectedAllergens(profile, [])).toBe('sin-filtro');
+    expect(classifySelectedAllergens(null, ['huevo'])).toBe('sin-datos');
+    expect(classifySelectedAllergens(profile, ['gluten', 'huevo'])).toBe('contiene');
+    expect(classifySelectedAllergens(profile, ['huevo'])).toBe('posible');
+    expect(classifySelectedAllergens(profile, ['leche'])).toBe('sin-datos');
+    expect(classifySelectedAllergens({ ...profile, status: 'complete' }, ['leche']))
+      .toBe('no-identificado-en-receta');
   });
 
   it('does not highlight variable profiles or recipes with possible matches', () => {

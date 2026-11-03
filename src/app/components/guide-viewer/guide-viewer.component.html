@@ -327,76 +327,7 @@
 
                 <div class="detail-list" *ngIf="hasDetails(zona)">
                   <ng-container *ngTemplateOutlet="relatedGuide; context: { $implicit: zona.guiaRelacionada }"></ng-container>
-                  <p *ngIf="zona.acceso" class="info-line">
-                    <mat-icon>badge</mat-icon>
-                    <span><strong>Acceso</strong>{{ zona.acceso }}</span>
-                  </p>
-                  <p *ngIf="zona.fecha" class="info-line">
-                    <mat-icon>event</mat-icon>
-                    <span><strong>Fecha</strong>{{ zona.fecha }}</span>
-                  </p>
-                  <p *ngIf="zona.horario" class="info-line">
-                    <mat-icon>schedule</mat-icon>
-                    <span><strong>Horario</strong>{{ zona.horario }}</span>
-                  </p>
-                  <p *ngIf="zona.direccion" class="info-line contact-line">
-                    <mat-icon>location_on</mat-icon>
-                    <span>
-                      <strong>Dirección</strong>
-                      <a appMeasureLink="maps" [href]="mapUrl(zona)" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Abrir en el mapa la dirección ' + zona.direccion">
-                        {{ zona.direccion }}
-                        <mat-icon class="external-icon" aria-hidden="true">open_in_new</mat-icon>
-                      </a>
-                    </span>
-                  </p>
-                  <p *ngIf="zona.telefono" class="info-line contact-line">
-                    <mat-icon>phone</mat-icon>
-                    <span>
-                      <strong>Teléfono</strong>
-                      <a [href]="phoneUrl(zona.telefono)" [attr.aria-label]="'Llamar al ' + zona.telefono">
-                        {{ zona.telefono }}
-                      </a>
-                    </span>
-                  </p>
-                  <p *ngIf="zona.web" class="info-line contact-line">
-                    <mat-icon>language</mat-icon>
-                    <span>
-                      <strong>Web oficial</strong>
-                      <a
-                        appMeasureLink="web" [href]="zona.web"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        [attr.aria-label]="'Abrir la web oficial de ' + zona.nombre"
-                      >
-                        Visitar web
-                        <mat-icon class="external-icon" aria-hidden="true">open_in_new</mat-icon>
-                      </a>
-                    </span>
-                  </p>
-
-                  <p *ngIf="zona.reserva" class="info-line contact-line">
-                    <mat-icon>confirmation_number</mat-icon>
-                    <span>
-                      <strong>Reserva / entradas</strong>
-                      <a
-                        appMeasureLink="booking" [href]="zona.reserva"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        [attr.aria-label]="'Reservar o comprar entradas para ' + zona.nombre"
-                      >
-                        Reservar
-                        <mat-icon class="external-icon" aria-hidden="true">open_in_new</mat-icon>
-                      </a>
-                    </span>
-                  </p>
-                  <p *ngIf="zona.precio" class="info-line">
-                    <mat-icon>payments</mat-icon>
-                    <span><strong>Precio</strong>{{ zona.precio }}</span>
-                  </p>
-                  <p *ngIf="zona.precioOrientativo" class="info-line">
-                    <mat-icon>payments</mat-icon>
-                    <span><strong>Precio</strong>{{ zona.precioOrientativo }}</span>
-                  </p>
+                  <app-practical-info [item]="zona" [mapHref]="zona.direccion || zona.maps || zona.mapaUrl ? mapUrl(zona) : ''"></app-practical-info>
                 </div>
               </div>
             </mat-expansion-panel>
@@ -614,76 +545,7 @@
 
                   <div class="detail-list" *ngIf="hasDetails(item)">
                     <ng-container *ngTemplateOutlet="relatedGuide; context: { $implicit: item.guiaRelacionada }"></ng-container>
-                    <p *ngIf="item.acceso" class="info-line">
-                      <mat-icon>badge</mat-icon>
-                      <span><strong>Acceso</strong>{{ item.acceso }}</span>
-                    </p>
-                    <p *ngIf="item.fecha" class="info-line">
-                      <mat-icon>event</mat-icon>
-                      <span><strong>Fecha</strong>{{ item.fecha }}</span>
-                    </p>
-                    <p *ngIf="item.horario" class="info-line">
-                      <mat-icon>schedule</mat-icon>
-                      <span><strong>Horario</strong>{{ item.horario }}</span>
-                    </p>
-                    <p *ngIf="item.direccion" class="info-line contact-line">
-                      <mat-icon>location_on</mat-icon>
-                      <span>
-                        <strong>Dirección</strong>
-                        <a appMeasureLink="maps" [href]="mapUrl(item)" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Abrir en el mapa la dirección ' + item.direccion">
-                          {{ item.direccion }}
-                          <mat-icon class="external-icon" aria-hidden="true">open_in_new</mat-icon>
-                        </a>
-                      </span>
-                    </p>
-                    <p *ngIf="item.telefono" class="info-line contact-line">
-                      <mat-icon>phone</mat-icon>
-                      <span>
-                        <strong>Teléfono</strong>
-                        <a [href]="phoneUrl(item.telefono)" [attr.aria-label]="'Llamar al ' + item.telefono">
-                          {{ item.telefono }}
-                        </a>
-                      </span>
-                    </p>
-                    <p *ngIf="item.web" class="info-line contact-line">
-                      <mat-icon>language</mat-icon>
-                      <span>
-                        <strong>Web oficial</strong>
-                        <a
-                          appMeasureLink="web" [href]="item.web"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          [attr.aria-label]="'Abrir la web oficial de ' + item.nombre"
-                        >
-                          Visitar web
-                          <mat-icon class="external-icon" aria-hidden="true">open_in_new</mat-icon>
-                        </a>
-                      </span>
-                    </p>
-
-                    <p *ngIf="item.reserva" class="info-line contact-line">
-                      <mat-icon>confirmation_number</mat-icon>
-                      <span>
-                        <strong>Reserva / entradas</strong>
-                        <a
-                          appMeasureLink="booking" [href]="item.reserva"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          [attr.aria-label]="'Reservar o comprar entradas para ' + item.nombre"
-                        >
-                          Reservar
-                          <mat-icon class="external-icon" aria-hidden="true">open_in_new</mat-icon>
-                        </a>
-                      </span>
-                    </p>
-                    <p *ngIf="item.precio" class="info-line">
-                      <mat-icon>payments</mat-icon>
-                      <span><strong>Precio</strong>{{ item.precio }}</span>
-                    </p>
-                    <p *ngIf="item.precioOrientativo" class="info-line">
-                      <mat-icon>payments</mat-icon>
-                      <span><strong>Precio</strong>{{ item.precioOrientativo }}</span>
-                    </p>
+                    <app-practical-info [item]="item" [mapHref]="item.direccion || item.maps || item.mapaUrl ? mapUrl(item) : ''"></app-practical-info>
                   </div>
                 </article>
               </div>

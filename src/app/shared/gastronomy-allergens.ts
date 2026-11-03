@@ -14,6 +14,36 @@ export type AllergenId =
   | 'altramuces'
   | 'moluscos';
 
+
+export type AllergenMatch =
+  | 'contiene'
+  | 'posible'
+  | 'no-identificado-en-receta'
+  | 'sin-datos'
+  | 'sin-filtro';
+
+export function classifySelectedAllergens(
+  profile: DishAllergenProfile | null,
+  selectedAllergens: Iterable<AllergenId>
+): AllergenMatch {
+  const selected = new Set(selectedAllergens);
+
+  if (!selected.size) return 'sin-filtro';
+  if (!profile) return 'sin-datos';
+
+  if (profile.contains.some(id => selected.has(id))) {
+    return 'contiene';
+  }
+
+  if ((profile.possible ?? []).some(id => selected.has(id))) {
+    return 'posible';
+  }
+
+  return profile.status === 'complete'
+    ? 'no-identificado-en-receta'
+    : 'sin-datos';
+}
+
 export interface AllergenDefinition {
   id: AllergenId;
   label: string;
@@ -113,26 +143,26 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Helado de moscatel con pasas', variable(['leche'], ['sulfitos', 'huevo'])],
 
     // Jerez
-    ['Riñones al Jerez', complete([], ['sulfitos', 'gluten'])],
-    ['Cola de toro al Jerez', variable([], ['gluten', 'sulfitos', 'apio'])],
+    ['Riñones al Jerez', variable([], ['sulfitos', 'gluten'])],
+    ['Cola de toro al Jerez', variable([], ['gluten', 'sulfitos', 'apio', 'leche'])],
     ['Berza jerezana', variable([], ['gluten', 'apio'])],
     ['Menudo a la jerezana', variable([], ['gluten', 'sulfitos', 'apio', 'soja', 'leche'])],
     ['Ajo jerezano o ajo caliente', variable(['gluten'], ['huevo', 'sulfitos'])],
-    ['Chicharrones de Jerez', variable([], ['gluten'])],
-    ['Alcauciles a la jerezana', variable([], ['sulfitos', 'gluten'])],
+    ['Chicharrones de Jerez', variable([], ['gluten', 'sulfitos'])],
+    ['Alcauciles a la jerezana', variable([], ['sulfitos', 'gluten', 'huevo'])],
     ['Tagarninas esparragás', variable(['gluten'], ['huevo', 'sulfitos'])],
     ['Aneto jerezano', variable(['gluten', 'huevo', 'leche'], ['sulfitos'])],
-    ['Tocino de cielo', variable(['huevo'], ['leche'])],
+    ['Tocino de cielo', variable(['huevo'], ['leche', 'gluten', 'sulfitos'])],
     ['Carmelas de Jerez (Carmelitas)', variable(['gluten', 'leche', 'huevo'], ['soja', 'frutos-cascara'])],
     ['Pocitos de Jerez', variable(['gluten', 'huevo'], ['leche', 'sulfitos'])],
-    ['Vinagre de Jerez', variable([], ['sulfitos'])],
-    ['Vino Fino', complete([], ['sulfitos'])],
-    ['Vino Amontillado', complete([], ['sulfitos'])],
-    ['Vino Oloroso', complete([], ['sulfitos'])],
-    ['Vino Palo Cortado', complete([], ['sulfitos'])],
-    ['Vino Pedro Ximénez (PX)', complete([], ['sulfitos'])],
-    ['Vino Cream', complete([], ['sulfitos'])],
-    ['Vino Mosto de Jerez', complete([], ['sulfitos'])],
+    ['Vinagre de Jerez', variable([], ['sulfitos', 'huevo'])],
+    ['Vino Fino', variable([], ['sulfitos', 'huevo', 'leche'])],
+    ['Vino Amontillado', variable([], ['sulfitos', 'huevo', 'leche'])],
+    ['Vino Oloroso', variable([], ['sulfitos', 'huevo', 'leche'])],
+    ['Vino Palo Cortado', variable([], ['sulfitos', 'huevo', 'leche'])],
+    ['Vino Pedro Ximénez (PX)', variable([], ['sulfitos', 'huevo', 'leche'])],
+    ['Vino Cream', variable([], ['sulfitos', 'huevo', 'leche'])],
+    ['Vino Mosto de Jerez', variable([], ['sulfitos', 'huevo', 'leche'])],
     ['Brandy de Jerez', variable([], ['sulfitos'])],
 
     // Rota
@@ -307,21 +337,34 @@ export function dishAllergenProfile(name: string, guidePath = ''): DishAllergenP
 }
 
 /** La ficha y su auditoría deben usar la misma receta y las mismas variantes. */
+
 export function resolveDishAllergenProfile(item: {
   nombre?: string;
   alergenos?: AllergenId[];
   perfilAlergenos?: string;
   posiblesAlergenos?: AllergenId[];
 } | null | undefined, guidePath = ''): DishAllergenProfile | null {
-  if (Array.isArray(item?.alergenos)) {
-    return {
-      status: item.perfilAlergenos === 'complete' ? 'complete' : 'variable',
-      contains: item.alergenos,
-      possible: Array.isArray(item.posiblesAlergenos) ? item.posiblesAlergenos : []
-    };
-  }
+  const base = dishAllergenProfile(item?.nombre ?? '', guidePath);
 
-  return dishAllergenProfile(item?.nombre ?? '', guidePath);
+  if (!Array.isArray(item?.alergenos)) return base;
+
+  const contains = [...new Set(item.alergenos)];
+
+  const possible = [...new Set([
+    ...(item.posiblesAlergenos ?? []),
+    ...(item.perfilAlergenos === 'complete'
+      ? [] : (base?.contains ?? [])),
+    ...(item.perfilAlergenos === 'complete'
+      ? [] : (base?.possible ?? []))
+  ])].filter(id => !contains.includes(id));
+
+  return {
+    status: item.perfilAlergenos === 'complete'
+      ? 'complete'
+      : 'variable',
+    contains,
+    possible
+  };
 }
 
 export function profileAvoidsSelectedAllergens(

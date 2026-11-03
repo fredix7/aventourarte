@@ -10,9 +10,9 @@ import { ImgUrlPipe } from '../../shared/img-url.pipe';
 import { GuideEditorialAuditComponent } from '../guide-editorial-audit/guide-editorial-audit.component';
 import { PlanFilterComponent } from '../plan-filter/plan-filter.component';
 import { GuideShareComponent } from '../guide-share/guide-share.component';
+import { PracticalInfoComponent } from '../practical-info/practical-info.component';
 import { GuideFeedbackComponent } from '../guide-feedback/guide-feedback.component';
 import { AnalyticsService } from '../../shared/analytics.service';
-import { MeasureLinkDirective } from '../../shared/measure-link.directive';
 import { ReaderReportComponent } from '../reader-report/reader-report.component';
 import { ReaderReportService } from '../../shared/reader-report.service';
 import { filterPlanSections, sectionPlanItems } from '../../shared/plan-filter';
@@ -96,8 +96,8 @@ export const GUIDE_REGISTRY: Readonly<Record<string, any>> = {
     GuideEditorialAuditComponent,
     PlanFilterComponent,
     GuideShareComponent,
+    PracticalInfoComponent,
     GuideFeedbackComponent,
-    MeasureLinkDirective,
     ReaderReportComponent
   ],
   templateUrl: './guide-viewer.component.html',
@@ -179,6 +179,8 @@ export class GuideViewerComponent implements OnDestroy {
       item.fecha ||
       item.horario ||
       item.direccion ||
+      item.maps ||
+      item.mapaUrl ||
       item.telefono ||
       item.web ||
       item.guiaRelacionada ||
@@ -250,11 +252,6 @@ export class GuideViewerComponent implements OnDestroy {
     }
 
     return `https://www.google.com/maps/search/?api=1&query=${query}`;
-  }
-
-  phoneUrl(phone: string): string {
-    const firstPhone = phone.split('/')[0].trim();
-    return `tel:${firstPhone.replace(/[^\d+]/g, '')}`;
   }
 
   buildGuideTabs(): { id: string; label: string; icon: string; sections: any[] }[] {

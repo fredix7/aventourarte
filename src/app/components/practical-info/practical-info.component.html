@@ -1,0 +1,40 @@
+<div *ngIf="hasContent" class="practical-card" role="group" [attr.aria-label]="'Información práctica' + (name ? ' de ' + name : '')">
+  <div *ngIf="hasContact" class="practical-heading">
+    <span class="practical-icon"><mat-icon aria-hidden="true">explore</mat-icon></span>
+    <div><span class="practical-eyebrow">Información práctica</span><p class="practical-title">Prepara tu visita</p></div>
+  </div>
+
+  <p *ngIf="address" class="practical-address"><mat-icon aria-hidden="true">place</mat-icon><span>{{ address }}</span></p>
+
+  <ng-template #actionLink let-action>
+    <a class="practical-action" [class.primary-action]="action.primary"
+      [appMeasureLink]="action.kind" [href]="action.href" [attr.target]="action.external ? '_blank' : null"
+      [attr.rel]="action.external ? 'noopener noreferrer' : null" [attr.aria-label]="actionLabel(action)">
+      <mat-icon class="action-icon" aria-hidden="true">{{ action.icon }}</mat-icon>
+      <span>{{ action.label }}</span>
+      <mat-icon *ngIf="action.external" class="action-arrow" aria-hidden="true">north_east</mat-icon>
+    </a>
+  </ng-template>
+
+  <div *ngIf="mapActions.length" class="practical-actions practical-map">
+    <ng-container *ngFor="let action of mapActions" [ngTemplateOutlet]="actionLink" [ngTemplateOutletContext]="{ $implicit: action }"></ng-container>
+  </div>
+
+  <div *ngIf="facts.length" class="practical-facts">
+    <details *ngFor="let fact of facts" class="practical-fact">
+      <summary><mat-icon class="fact-icon" aria-hidden="true">{{ fact.icon }}</mat-icon><span>{{ fact.label }}</span><mat-icon class="fact-chevron" aria-hidden="true">expand_more</mat-icon></summary>
+      <p>{{ fact.value }}</p>
+    </details>
+  </div>
+
+  <div *ngIf="bookingActions.length" class="practical-actions">
+    <ng-container *ngFor="let action of bookingActions" [ngTemplateOutlet]="actionLink" [ngTemplateOutletContext]="{ $implicit: action }"></ng-container>
+  </div>
+
+  <app-phone-contact *ngIf="telephone" class="practical-phones" [value]="telephone" [name]="name" [embedded]="true"
+    [reservationHref]="reservationPhone" (reservationClick)="measurePhoneReservation()"></app-phone-contact>
+
+  <div *ngIf="websiteActions.length" class="practical-website">
+    <ng-container *ngFor="let action of websiteActions" [ngTemplateOutlet]="actionLink" [ngTemplateOutletContext]="{ $implicit: action }"></ng-container>
+  </div>
+</div>
