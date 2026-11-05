@@ -60,7 +60,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://www.jerez.es/ciudad/centenario-lola/centro-lola-flores',
           reserva:
-            'https://www.tickentradas.com/lugar/centro-cultural-lola-flores-jerez'
+            'https://www.tickentradas.com/lugar/centro-cultural-lola-flores-jerez',
+          tipoReserva: 'entradas' as const satisfies TipoReserva
         },
         {
           nombre: 'Iglesia de San Lucas · Real Santuario Diocesano',
@@ -122,7 +123,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://brandyfundador.com/visita-bodega/',
           reserva:
-            'https://brandyfundador.com/visita-bodega/'
+            'https://brandyfundador.com/visita-bodega/',
+          tipoReserva: 'visita' as const satisfies TipoReserva
         },
         {
           nombre: 'Plaza del Arroyo, Palacio Bertemati y Puerta del Arroyo',
@@ -187,7 +189,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://www.tiopepe.com/es/experiencias',
           reserva:
-            'https://www.tiopepe.com/es/experiencias'
+            'https://www.tiopepe.com/es/experiencias',
+          tipoReserva: 'visita' as const satisfies TipoReserva
         },
         {
           nombre: 'Alcázar de Jerez',
@@ -295,7 +298,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://iglesiadesanmiguel.com/',
           reserva:
-            'https://shop.articketing.com/monuments/iglesia-san-miguel-jerez-frontera/tickets?s=venta-online-iglesia-de-san-miguel'
+            'https://shop.articketing.com/monuments/iglesia-san-miguel-jerez-frontera/tickets?s=venta-online-iglesia-de-san-miguel',
+          tipoReserva: 'entradas' as const satisfies TipoReserva
         },
         {
           nombre: 'Casa Natal de Lola Flores y Plaza de la Cruz Vieja',
@@ -337,7 +341,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://www.alvarodomecq.com/visitas/',
           reserva:
-            'https://reservas.alvarodomecq.com/'
+            'https://reservas.alvarodomecq.com/',
+          tipoReserva: 'visita' as const satisfies TipoReserva
         },
         {
           nombre: 'Estación de Ferrocarril de Jerez',
@@ -379,7 +384,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://lustau.es/visita-bodegas-lustau/',
           reserva:
-            'https://www.reservaonline.support/lustau/index.html'
+            'https://www.reservaonline.support/lustau/index.html',
+          tipoReserva: 'visita' as const satisfies TipoReserva
         },
         {
           nombre: 'Plaza de Toros de Jerez',
@@ -441,7 +447,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://www.teatrovillamarta.es/',
           reserva:
-            'https://www.tickentradas.com/lugar/teatro-villamarta-jerez'
+            'https://www.tickentradas.com/lugar/teatro-villamarta-jerez',
+          tipoReserva: 'entradas' as const satisfies TipoReserva
         },
         {
           nombre: 'Mercado Central de Abastos y Churrería Manuel',
@@ -505,7 +512,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://palaciodomecq.com/',
           reserva:
-            'https://tickets.palaciodomecq.com/'
+            'https://tickets.palaciodomecq.com/',
+          tipoReserva: 'entradas' as const satisfies TipoReserva
         },
         {
           nombre: 'Iglesia y Claustros de Santo Domingo',
@@ -597,7 +605,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://www.realescuela.org/visitas-y-exhibiciones/',
           reserva:
-            'https://ventas.realescuela.org/'
+            'https://ventas.realescuela.org/',
+          tipoReserva: 'entradas' as const satisfies TipoReserva
         },
         {
           nombre: 'Murallas medievales de Jerez · Calle Ancha y Calle Muro',
@@ -700,7 +709,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://bodegastradicion.es/visitas-responsive/',
           reserva:
-            'https://bodegastradicion.es/tienda-online/visitas/visita/'
+            'https://bodegastradicion.es/tienda-online/visitas/visita/',
+          tipoReserva: 'visita' as const satisfies TipoReserva
         },
         {
           nombre: 'Plaza del Mercado y Palacio Riquelme',
@@ -961,7 +971,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://circuitodejerez.com/',
           reserva:
-            'https://circuitodejerez.com/museo/'
+            'https://circuitodejerez.com/museo/',
+          tipoReserva: 'visita' as const satisfies TipoReserva
         },
         {
           nombre: 'Bodegas Luis Pérez · Hacienda Vistahermosa',
@@ -983,7 +994,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://bodegasluisperez.com/',
           reserva:
-            'https://bodegasluisperez.com/experiencias'
+            'https://bodegasluisperez.com/experiencias',
+          tipoReserva: 'visita' as const satisfies TipoReserva
         },
         {
           nombre: 'Rancho Cortesano · Museo de la Miel y las Abejas',
@@ -1027,7 +1039,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://www.cartujadejerez.es/',
           reserva:
-            'https://tienda.eltornodeasidonia.es/'
+            'https://tienda.eltornodeasidonia.es/',
+          tipoReserva: 'entradas' as const satisfies TipoReserva
         },
         {
           nombre: 'Yeguada Cartuja · Hierro del Bocado',
@@ -1458,7 +1471,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://atuverajerez.com/',
           reserva:
-            'https://reserve.dish.co/337402'
+            'https://reserve.dish.co/337402',
+          tipoReserva: 'mesa' as const satisfies TipoReserva
         },
         {
           nombre: 'Tabanco El Pasaje',
@@ -1477,7 +1491,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://tabancoelpasaje.com/',
           reserva:
-            'https://tabancoelpasaje.com/reservas/'
+            'https://tabancoelpasaje.com/reservas/',
+          tipoReserva: 'mesa' as const satisfies TipoReserva
         },
         {
           nombre: 'Tabanco El Guitarrón de San Pedro',
@@ -1528,7 +1543,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://bar-juanito.com/',
           reserva:
-            'https://bar-juanito.hosteler.es/'
+            'https://bar-juanito.hosteler.es/',
+          tipoReserva: 'mesa' as const satisfies TipoReserva
         },
         {
           nombre: 'La Carboná',
@@ -1547,7 +1563,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://www.lacarbona.com/',
           reserva:
-            'https://www.lacarbona.com/reservas/'
+            'https://www.lacarbona.com/reservas/',
+          tipoReserva: 'mesa' as const satisfies TipoReserva
         },
         {
           nombre: 'LÚ Cocina y Alma',
@@ -1566,7 +1583,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://lucocinayalma.com/',
           reserva:
-            'https://lucocinayalma.com/reservas/'
+            'https://lucocinayalma.com/reservas/',
+          tipoReserva: 'mesa' as const satisfies TipoReserva
         },
         {
           nombre: 'El Rincón de Castro',
