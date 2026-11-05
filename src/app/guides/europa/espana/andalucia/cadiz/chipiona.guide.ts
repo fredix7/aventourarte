@@ -59,7 +59,8 @@ export const CHIPIONA_GUIDE = {
           web:
             'https://www.rociojurado.es/',
           reserva:
-            'https://cirociojurado.aytochipiona.es/'
+            'https://cirociojurado.aytochipiona.es/',
+          tipoReserva: 'entradas' as const
         },
         {
           nombre: 'Mausoleo de Rocío Jurado en el Cementerio de Chipiona',
@@ -590,7 +591,8 @@ export const CHIPIONA_GUIDE = {
           web:
             'https://restaurantegatochipiona.com/',
           reserva:
-            'https://wa.me/34664877125'
+            'https://wa.me/34664877125',
+          tipoReserva: 'mesa' as const
         },
         {
           nombre: 'Casa Ricardo · Náutico',
@@ -711,7 +713,8 @@ export const CHIPIONA_GUIDE = {
           web:
             'https://www.instagram.com/ghoagastro/',
           reserva:
-            'https://www.thefork.es/restaurante/ghoa-r850854'
+            'https://www.thefork.es/restaurante/ghoa-r850854',
+          tipoReserva: 'mesa' as const
         },
         {
           nombre: 'La Manuela',
