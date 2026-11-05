@@ -29,5 +29,21 @@ describe('guideRouteMatcher', () => {
 
   it('rejects the guide prefix when no destination path follows it', () => {
     expect(match([new UrlSegment('guia', {})])).toBeNull();
+    expect(match([new UrlSegment('guia', {}), new UrlSegment('', {})])).toBeNull();
+    expect(match([])).toBeNull();
+  });
+
+  it('consumes the trailing slash used by Pages without adding it to the catalog key', () => {
+    const segments = [
+      new UrlSegment('guia', {}),
+      new UrlSegment('europa', {}),
+      new UrlSegment('dinamarca', {}),
+      new UrlSegment('copenhague', {}),
+      new UrlSegment('', {})
+    ];
+
+    const result = match(segments);
+    expect(result?.consumed).toEqual(segments);
+    expect(result?.posParams?.['guidePath'].path).toBe('europa/dinamarca/copenhague');
   });
 });

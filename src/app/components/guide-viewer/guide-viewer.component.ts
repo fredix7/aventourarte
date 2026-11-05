@@ -1,6 +1,7 @@
 import { Component, HostListener, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { TRAVEL_TREE, TravelNode } from '../../data/travel-data';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { filter, Subscription } from 'rxjs';
@@ -109,6 +110,7 @@ export class GuideViewerComponent implements OnDestroy {
   guide: any = null;
   pageStyle: Record<string, string> = {};
   requestedGuidePath: string | null = null;
+  pageNotFound = false;
   currentGuidePath = '';
   editorialMode = false;
   showScrollTop = false;
@@ -771,14 +773,15 @@ export class GuideViewerComponent implements OnDestroy {
 
   private loadGuideFromUrl() {
     this.editorialMode = this.route.snapshot.queryParamMap.get('editorial') === '1';
-    const routePath = this.route.snapshot.paramMap.get('guidePath');
-    const cleanUrl = this.router.url.split('?')[0].split('#')[0];
-    const placePath = routePath ?? decodeURIComponent(cleanUrl.replace(/^\/guia\/?/, '')).replace(/^\/+/, '');
-    this.analytics.visit(this.guides[placePath] ? placePath : '', this.editorialMode);
+    const placePath = this.route.snapshot.paramMap.get('guidePath') ?? '';
+    const publishedGuide = Object.hasOwn(this.guides, placePath) ? this.guides[placePath] : null;
+    this.pageNotFound = Boolean(this.route.snapshot.data?.['notFound']) ||
+      Boolean(placePath && !publishedGuide && !this.isRegisteredDestination(placePath));
+    this.analytics.visit(publishedGuide ? placePath : '', this.editorialMode);
 
-    if (placePath && this.guides[placePath]) {
+    if (publishedGuide) {
       this.closePhoto();
-      this.guide = this.guides[placePath];
+      this.guide = publishedGuide;
       this.currentGuidePath = placePath;
       this.requestedGuidePath = null;
       this.activeTabId = '';
@@ -800,6 +803,10 @@ export class GuideViewerComponent implements OnDestroy {
     this.clearFoodPreferenceSelection();
     this.tabs = [];
     this.initializePlanFilters();
+  }
+
+  private isRegisteredDestination(path: string, nodes: TravelNode[] = TRAVEL_TREE): boolean {
+    return nodes.some(node => node.path === path || this.isRegisteredDestination(path, node.hijos ?? []));
   }
 
   private normalizeTitle(title: string): string {

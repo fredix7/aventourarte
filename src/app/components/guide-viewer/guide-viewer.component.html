@@ -647,6 +647,14 @@
 </ng-template>
 
 <ng-template #emptyState>
+  <section *ngIf="pageNotFound; else destinationState" class="welcome unavailable" aria-labelledby="not-found-title">
+    <h2 id="not-found-title">Página no encontrada</h2>
+    <p class="slogan">La dirección solicitada no corresponde a un destino registrado.</p>
+    <a routerLink="/">Volver a la portada</a>
+  </section>
+</ng-template>
+
+<ng-template #destinationState>
   <section *ngIf="requestedGuidePath; else welcome" class="welcome unavailable">
     <img src="assets/logo.png" alt="AvenTourArte" class="welcome-logo" />
     <h2>Guía en preparación</h2>

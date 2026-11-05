@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { AnalyticsService } from '../shared/analytics.service';
 import { provideRouter, Router, UrlTree } from '@angular/router';
 
-import { TravelNode } from '../data/travel-data';
+import { TRAVEL_TREE, TravelNode } from '../data/travel-data';
+import { GUIDE_REGISTRY } from '../components/guide-viewer/guide-viewer.component';
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
@@ -113,5 +114,54 @@ describe('HeaderComponent', () => {
     expect(component.menuOpen).toBeFalse();
     expect(component.languageMenuOpen).toBeFalse();
     expect(component.searchQuery).toBe('');
+  });
+
+  it('suggests the published Jerez guide from the real navigation tree', () => {
+    fixture.componentRef.setInput('treeData', TRAVEL_TREE);
+    component.searchQuery = 'Jerez';
+    fixture.detectChanges();
+
+    const link = fixture.nativeElement.querySelector('a.search-result') as HTMLAnchorElement;
+    expect(component.searchResults.map(result => result.path)).toEqual([
+      'europa/espana/andalucia/cadiz/jerez-de-la-frontera'
+    ]);
+    expect(link.getAttribute('href')).toBe(
+      '/guia/europa/espana/andalucia/cadiz/jerez-de-la-frontera'
+    );
+    expect(link.tabIndex).toBe(0);
+  });
+
+  for (const query of ['Lebrija', 'Nueva York']) {
+    it(`shows no suggestions for ${query}, which has no published guide`, () => {
+      fixture.componentRef.setInput('treeData', TRAVEL_TREE);
+      component.searchQuery = query;
+      fixture.detectChanges();
+
+      expect(component.searchResults).toEqual([]);
+      expect(fixture.nativeElement.querySelector('a.search-result')).toBeNull();
+      expect(fixture.nativeElement.querySelector('.search-empty')?.textContent)
+        .toContain(component.text.searchEmpty);
+    });
+  }
+
+  it('indexes exactly the published paths and keeps planned destinations in the menu', () => {
+    const originalTree = JSON.stringify(TRAVEL_TREE);
+    fixture.componentRef.setInput('treeData', TRAVEL_TREE);
+    fixture.detectChanges();
+
+    expect([...new Set(component.allDestinations.map(result => result.path))].sort())
+      .toEqual(Object.keys(GUIDE_REGISTRY).sort());
+    const plannedLink = fixture.nativeElement.querySelector(
+      '.main-menu a[href="/guia/america/norteamerica/usa/new-york"]'
+    ) as HTMLAnchorElement;
+    expect(plannedLink?.textContent).toContain('Nueva York');
+    expect(plannedLink?.tabIndex).toBe(0);
+    expect(JSON.stringify(TRAVEL_TREE)).toBe(originalTree);
+
+    const toggle = fixture.nativeElement.querySelector('.menu-toggle') as HTMLButtonElement;
+    toggle.click();
+    fixture.detectChanges();
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    expect(fixture.nativeElement.querySelector('.main-menu.open')).not.toBeNull();
   });
 });

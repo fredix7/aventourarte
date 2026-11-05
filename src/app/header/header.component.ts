@@ -2,6 +2,7 @@ import { Component, ElementRef, HostListener, Input, OnDestroy, inject } from '@
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TravelNode } from '../data/travel-data';
+import { GUIDE_REGISTRY } from '../components/guide-viewer/guide-viewer.component';
 import { HeaderSubmenuComponent } from '../header-submenu.component/header-submenu.component';
 import { AppLanguage, LanguageService } from '../shared/language.service';
 import { AnalyticsService } from '../shared/analytics.service';
@@ -129,7 +130,8 @@ export class HeaderComponent implements OnDestroy {
   }
 
   get allDestinations(): DestinationSearchResult[] {
-    return this.flattenDestinations(this.treeData);
+    return this.flattenDestinations(this.treeData)
+      .filter(destination => Object.hasOwn(GUIDE_REGISTRY, destination.path));
   }
 
   get hasSearchQuery(): boolean {

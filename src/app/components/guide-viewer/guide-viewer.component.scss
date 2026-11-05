@@ -1389,6 +1389,11 @@ app-info-general {
   line-height: 1;
 }
 
+.welcome a:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 4px;
+}
+
 .slogan {
   margin: 0;
   color: #5f6b76;
