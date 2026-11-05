@@ -1,3 +1,5 @@
+import type { TipoReserva } from '../../../../../shared/practical-info';
+
 export const SAN_FERNANDO_GUIDE = {
   path: 'europa/espana/andalucia/cadiz/san-fernando',
   nombre: 'San Fernando',
@@ -279,7 +281,8 @@ export const SAN_FERNANDO_GUIDE = {
               web:
                 'https://turismosanfernando.es/monumento/sala-historica-de-batallones/',
               reserva:
-                'https://turismosanfernando.sacatuentrada.es/es/entradas/visita-a-la-sala-historica-del-quartel-de-batallones-'
+                'https://turismosanfernando.sacatuentrada.es/es/entradas/visita-a-la-sala-historica-del-quartel-de-batallones-',
+              tipoReserva: 'visita' as const satisfies TipoReserva
             },
             {
               nombre: 'Panteón de Marinos Ilustres (Opcional)',
@@ -300,7 +303,8 @@ export const SAN_FERNANDO_GUIDE = {
               web:
                 'https://turismosanfernando.es/monumento/panteon-de-marinos-ilustres/',
               reserva:
-                'https://turismosanfernando.sacatuentrada.es/es/entradas/visita-guiada-al-panteon-de-marinos-ilustres-'
+                'https://turismosanfernando.sacatuentrada.es/es/entradas/visita-guiada-al-panteon-de-marinos-ilustres-',
+              tipoReserva: 'visita' as const satisfies TipoReserva
             },
             {
               nombre: 'Salina San Vicente (Opcional)',
@@ -715,7 +719,8 @@ export const SAN_FERNANDO_GUIDE = {
           web:
             'https://ventadevargas.es/',
           reserva:
-            'https://ventadevargas.es/reservas'
+            'https://ventadevargas.es/reservas',
+          tipoReserva: 'mesa' as const satisfies TipoReserva
         },
         {
           nombre: 'Freidor Real 109',
@@ -783,7 +788,8 @@ export const SAN_FERNANDO_GUIDE = {
           web:
             'https://www.facebook.com/lacorchuela/',
           reserva:
-            'https://restaurante.covermanager.com/casa-muriel-la-corchuela/'
+            'https://restaurante.covermanager.com/casa-muriel-la-corchuela/',
+          tipoReserva: 'mesa' as const satisfies TipoReserva
         },
         {
           nombre: 'Casa Pepe',
