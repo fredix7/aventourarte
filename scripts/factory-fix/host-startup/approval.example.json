@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 2,
+  "purpose": "AVA76_LOCAL_STARTUP_ONLY",
+  "baselineCommit": "626bf03d8785c986d76eb77942f1bba28dacaf2c",
+  "node": {
+    "path": "C:\\Program Files\\nodejs\\node.exe",
+    "version": "v22.13.1",
+    "sha256": "REPLACE_WITH_INDEPENDENTLY_REVIEWED_SHA256"
+  },
+  "artifacts": {
+    "supervisorSha256": "REPLACE_WITH_INDEPENDENTLY_REVIEWED_SHA256",
+    "observerSha256": "REPLACE_WITH_INDEPENDENTLY_REVIEWED_SHA256",
+    "observerAssemblySha256": "REPLACE_WITH_SEPARATELY_APPROVED_BINARY_SHA256",
+    "childSha256": "REPLACE_WITH_INDEPENDENTLY_REVIEWED_SHA256"
+  },
+  "environment": {
+    "windowsDirectory": "C:\\Windows",
+    "temporaryDirectory": "REPLACE_WITH_EXISTING_REVIEWED_LOCAL_DIRECTORY_OUTSIDE_REPOSITORY"
+  },
+  "codexSandboxUsersSid": null,
+  "build": {
+    "toolchainReference": "REPLACE_WITH_INDEPENDENT_BUILD_REVIEW_REFERENCE",
+    "sourceSha256": "REPLACE_WITH_SAME_APPROVED_OBSERVER_SOURCE_SHA256"
+  },
+  "review": {
+    "operator": "REPLACE_WITH_REVIEWER_REFERENCE",
+    "approvedUtc": "REPLACE_WITH_APPROVAL_TIME"
+  }
+}
