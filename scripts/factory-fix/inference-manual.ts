@@ -14,7 +14,8 @@ import { createSimulatedFixerTransport, launchFixer, assertOpenFixRequest } from
 import { FixerError, type FixPlan } from './fixer-contracts';
 import { inferenceEnvelope } from './inference-data';
 import { InferenceError } from './inference-contracts';
-import { receivePreparedManualHttpsAttempt } from './inference-https-native';
+import { receivePreparedManualHttpsAttempt, consumePreparedManualHttpsObservation,
+  type PreparedHttpsObservationBinding } from './inference-https-native';
 import { createInterface } from 'node:readline/promises';
 
 // Reviewed public documentation is not account access or authority to spend.
@@ -32,16 +33,18 @@ export const MANUAL_NATIVE_SMOKE_POLICY = Object.freeze({ enabled: false, runtim
 // Deliberately empty. A separate reviewed activation must supply host evidence,
 // not a public flag, environment variable, JSON assertion or model response.
 type NativeReview = { projectId: string; countMaximumMicroUsd: number;
-  generationMaximumMicroUsd: number; exclusiveProcessId: number; expires: number };
+  generationMaximumMicroUsd: number; exclusiveProcessId: number; expires: number;
+  transportEvidence: PreparedHttpsObservationBinding['origin'] };
 const nativeReviews = new WeakMap<object, NativeReview>();
 const nativeSessions = new WeakMap<ManualLabSession, NativeReview>();
 const nativeAttempts = new WeakMap<object, { session: ManualLabSession; frame: OfflineHttpRequests['count'];
-  count: boolean; secret: string; expires: number; signal: AbortSignal; timeoutMs: number }>();
+  count: boolean; secret: string; expires: number; signal: AbortSignal; timeoutMs: number;
+  binding: PreparedHttpsObservationBinding }>();
 
 // Consume-only bridge. No issuer, credential setter or callback is exported.
 // Native transport joins private provenance before reading any caller frame.
 export function consumePreparedManualHttpsAttempt(token: object, frame: OfflineHttpRequests['count'], count: boolean,
-  signal: AbortSignal, timeoutMs: number): string {
+  signal: AbortSignal, timeoutMs: number) {
   const permit = nativeAttempts.get(token); nativeAttempts.delete(token);
   if (!permit) throw new FixerError('RUNTIME_NOT_ISOLATED');
   const s = state(permit.session);
@@ -50,7 +53,8 @@ export function consumePreparedManualHttpsAttempt(token: object, frame: OfflineH
     || permit.signal !== signal || permit.timeoutMs !== timeoutMs) {
     permit.secret = ''; throw new FixerError('RUNTIME_NOT_ISOLATED');
   }
-  const secret = permit.secret; permit.secret = ''; return secret;
+  const secret = permit.secret; permit.secret = '';
+  return Object.freeze({ secret, binding: permit.binding });
 }
 
 // Public inspection/preparation cannot release the dormant host entry below.
@@ -116,6 +120,7 @@ async function privateTerminalCredential(): Promise<string> {
 async function runPreparedNativeSmoke(reviewToken: object) {
   const review = nativeReviews.get(reviewToken); nativeReviews.delete(reviewToken);
   if (!review || review.exclusiveProcessId !== process.pid || performance.now() >= review.expires
+    || !['SIMULATED_NATIVE_HTTPS', 'NATIVE_HTTPS_UNATTESTED'].includes(review.transportEvidence)
     || !/^[A-Za-z0-9_-]{1,128}$/.test(review.projectId)
     || !Number.isSafeInteger(review.countMaximumMicroUsd) || review.countMaximumMicroUsd < 0
     || review.countMaximumMicroUsd > 1000000000 - review.generationMaximumMicroUsd
@@ -140,12 +145,12 @@ async function runPreparedNativeSmoke(reviewToken: object) {
       const economic = authorizeManualLabBudget({ session: s, maxAttemptMicroUsd: workflowMaximum });
       const transcript = createManualLabTranscript({ session: s, events: [] });
       const input = { session: s, connectivity, credential, projectCredential, economic, transcript, timeoutMs: 30000 };
-      return stage === 'COUNT' ? runManualLabCount(input) : runManualLabInference(input);
+      return runManualLabAttempt(input, stage === 'COUNT', true);
     };
     const counted = await attempt('COUNT');
-    if (counted.status !== 'LAB_COUNT_VALID') return counted;
+    if (counted.status !== 'NATIVE_COUNT_VALID') return counted;
     await humanApproval('TRANSICION explicita: esperar al menos 60 segundos tras conteo. No se envia otra solicitud al esperar.');
-    advanceManualLabGeneration({ session: s, countResult: counted });
+    advanceGeneration({ session: s, countResult: counted }, true);
     return await attempt('GENERATION');
   } catch (error) {
     // The dormant ceremony must not propagate raw TTY failures/stacks either.
@@ -250,7 +255,7 @@ type State = { fixture: ReturnType<typeof createManualSyntheticFixture>; frame: 
   requests: OfflineHttpRequests; stage: 'SINGLE' | 'COUNT' | 'GENERATION';
   phase: 'OPEN' | 'RUNNING' | 'COUNTED' | 'CLOSED'; expires: number; issued: Set<string>; abort: AbortController;
   budget?: OfflineInferenceBudget; simulatedPosts: number; outcome: string; cleanup: string;
-  tokens: object[]; countPosts: number; inputTokens?: number; receipt?: ManualLabCountResult; workflowCap?: number };
+  tokens: object[]; countPosts: number; inputTokens?: number; receipt?: CountReceipt; workflowCap?: number };
 type Binding = { session: ManualLabSession; request: object; digest: string; stage: State['stage']; expires: number };
 declare const countResultBrand: unique symbol;
 export interface ManualLabCountResult {
@@ -258,9 +263,11 @@ export interface ManualLabCountResult {
   readonly evidence: 'SIMULATED_UNVERIFIED_NOT_BILLING'; readonly bindingDigest: string;
   readonly realExecutionEnabled: false; readonly persistence: 'NOT_ATTEMPTED';
 }
-const countResults = new WeakMap<ManualLabCountResult, Binding & { readyAt: number; inputTokens: number }>();
+type CountReceipt = ManualLabCountResult | NativeCountResult;
+const countResults = new WeakMap<CountReceipt, Binding & { readyAt: number; inputTokens: number; native: boolean }>();
 export function isManualLabCountResult(value: unknown): value is ManualLabCountResult {
-  return typeof value === 'object' && value !== null && countResults.has(value as ManualLabCountResult);
+  const entry = typeof value === 'object' && value !== null ? countResults.get(value as CountReceipt) : undefined;
+  return !!entry && !entry.native;
 }
 const sessions = new WeakMap<ManualLabSession, State>();
 const grants = new WeakMap<ManualLabGrant, Binding & { type: 'A' | 'B' | 'C'; credential?: ManualLabCredential; max?: number }>();
@@ -395,15 +402,19 @@ export function cancelManualLabSession(session: ManualLabSession): void { close(
 // Explicit host action, never a timer/automatic second request. A copied count or
 // caller token number is not authority. Waiting does not extend workflow expiry.
 export function advanceManualLabGeneration(input: { readonly session: ManualLabSession; readonly countResult: ManualLabCountResult }) {
+  advanceGeneration(input, false);
+  return Object.freeze({ status: 'LAB_GENERATION_READY', realExecutionEnabled: false, networkEnabled: false } as const);
+}
+function advanceGeneration(input: { readonly session: ManualLabSession; readonly countResult: CountReceipt }, native: boolean) {
   const d = inferenceEnvelope(input, ['session', 'countResult']), session = d['session'] as ManualLabSession, s = state(session);
   if (s.phase !== 'COUNTED' || s.stage !== 'COUNT') denied('MANUAL_COUNT_REQUIRED');
   fresh(session, s);
-  const receipt = d['countResult'] as ManualLabCountResult, r = countResults.get(receipt);
-  if (!matches(r, session, s) || s.receipt !== receipt) denied('MANUAL_COUNT_RECEIPT_INVALID');
+  const receipt = d['countResult'] as CountReceipt, r = countResults.get(receipt);
+  if (!matches(r, session, s) || s.receipt !== receipt || r!.native !== native) denied('MANUAL_COUNT_RECEIPT_INVALID');
   if (performance.now() < Math.max(r!.readyAt, nextProjectAttemptAt)) denied('MANUAL_RATE_LIMIT');
   countResults.delete(receipt); s.receipt = undefined; s.issued.clear();
   s.stage = 'GENERATION'; s.frame = s.requests.inference; s.phase = 'OPEN'; s.outcome = 'GENERATION_REQUIRES_FRESH_A_B_C';
-  return Object.freeze({ status: 'LAB_GENERATION_READY', realExecutionEnabled: false, networkEnabled: false } as const);
+  return Object.freeze({ status: native ? 'NATIVE_GENERATION_READY' : 'LAB_GENERATION_READY', realExecutionEnabled: false, networkEnabled: false } as const);
 }
 
 // Laboratory entry only. No real/verified/testMode switch, URL, callback, resolver,
@@ -413,12 +424,38 @@ type ManualLabAttemptInput = { readonly session: ManualLabSession;
   readonly credential: ManualLabCredential; readonly transcript: ManualLabTranscript; readonly timeoutMs: number };
 export function runManualLabInference(input: ManualLabAttemptInput) { return runManualLabAttempt(input, false); }
 export function runManualLabCount(input: ManualLabAttemptInput) { return runManualLabAttempt(input, true); }
-async function runManualLabAttempt(input: ManualLabAttemptInput, count: boolean) {
+type LabBlocked = Readonly<{ status: 'BLOCKED'; code: string; realExecutionEnabled: false;
+  runtimeStatus: 'RUNTIME_NOT_ISOLATED'; evidence: 'SIMULATED_UNVERIFIED_NOT_BILLING' }>;
+function nativeEvidence(s: State | undefined, observed: boolean, validation: 'NOT_VALIDATED' | 'REJECTED' | 'COUNT_VALID' | 'PLAN_VALID',
+  origin: PreparedHttpsObservationBinding['origin'] | undefined, attempted: boolean) {
+  const budget = s?.budget ? inspectOfflineInferenceBudget(s.budget) : undefined;
+  const estimate = s?.stage === 'GENERATION' && budget && budget.knownMicroUsd > 0 ? budget.knownMicroUsd : null;
+  return Object.freeze({ origin: origin ?? 'UNVERIFIED_NATIVE_ATTEMPT',
+    evidence: origin === 'SIMULATED_NATIVE_HTTPS' ? 'SIMULATED_NATIVE_TRANSPORT_NOT_PROVIDER_EVIDENCE' : 'UNATTESTED_NATIVE_TRANSPORT_NOT_BILLING',
+    observation: observed ? 'RESPONSE_OBSERVED' : 'NO_SUCCESS_OBSERVATION', semanticValidation: validation,
+    commercialAuthenticity: 'NOT_ATTESTED', realExecutionEnabled: false, writeAuthorized: false, sourceWrite: false,
+    runtimeStatus: 'RUNTIME_NOT_ISOLATED', persistence: 'NOT_ATTEMPTED',
+    economic: Object.freeze({ state: origin === 'SIMULATED_NATIVE_HTTPS' ? 'SIMULATED_ONLY'
+      : attempted ? 'PENDING_RECONCILIATION' : 'UNKNOWN', knownBilledMicroUsd: null, countPriceMicroUsd: null,
+      usageIsBillingEvidence: false, generationEstimateMicroUsd: estimate, estimateState: estimate === null ? 'UNKNOWN' : 'KNOWN_ESTIMATE_ONLY',
+      estimateSource: 'HISTORICAL_RATE_SNAPSHOT_NOT_BILLING', heldUncertainAllowanceMicroUsd: budget?.uncertainMicroUsd ?? null }) } as const);
+}
+type NativeEvidence = ReturnType<typeof nativeEvidence>;
+type NativeCountResult = NativeEvidence & Readonly<{ status: 'NATIVE_COUNT_VALID'; inputTokens: number; bindingDigest: string; outcome: 'VALIDATED' }>;
+type NativeResult = NativeCountResult | NativeEvidence & (Readonly<{ status: 'NATIVE_PLAN_VALID'; plan: FixPlan; outcome: 'VALIDATED' }>
+  | Readonly<{ status: 'BLOCKED'; code: string; outcome: 'UNCERTAIN' }>);
+function runManualLabAttempt(input: ManualLabAttemptInput, count: boolean, native?: false): Promise<ManualLabCountResult | ManualLabValidatedResult | LabBlocked>;
+function runManualLabAttempt(input: ManualLabAttemptInput, count: boolean, native: true): Promise<NativeResult>;
+async function runManualLabAttempt(input: ManualLabAttemptInput, count: boolean, native = false): Promise<ManualLabCountResult | ManualLabValidatedResult | LabBlocked | NativeResult> {
   let session: ManualLabSession | undefined, s: State | undefined, reservation: object | undefined;
   let exchange: OfflineSingleHttpsExchange | undefined, timer: ReturnType<typeof setTimeout> | undefined, owns = false, settled = false, keepOpen = false, attempted = false;
+  let observed = false, origin: PreparedHttpsObservationBinding['origin'] | undefined;
+  let semanticValidation: 'NOT_VALIDATED' | 'REJECTED' | 'COUNT_VALID' | 'PLAN_VALID' = 'NOT_VALIDATED';
   try {
     const d = inferenceEnvelope(input, ['session', 'connectivity', 'projectCredential', 'economic', 'credential', 'transcript', 'timeoutMs']);
     session = d['session'] as ManualLabSession; s = open(session);
+    if (nativeSessions.has(session) !== native) denied('MANUAL_TRANSPORT_DOMAIN_INVALID');
+    origin = nativeSessions.get(session)?.transportEvidence;
     if (active) denied('MANUAL_CONCURRENCY_EXCEEDED');
     if (s.stage !== 'SINGLE' && performance.now() < nextProjectAttemptAt) denied('MANUAL_RATE_LIMIT');
     // Own and close even a failed authorization attempt; no correction/retry on
@@ -464,9 +501,17 @@ async function runManualLabAttempt(input: ManualLabAttemptInput, count: boolean)
     if (nativeSessions.has(session)) {
       const permit = Object.freeze({});
       const timeoutMs = Math.max(1, Math.ceil(deadline - performance.now()));
-      nativeAttempts.set(permit, { session, frame: s.frame, count, secret: key!.secret, expires: deadline, signal, timeoutMs });
+      const observationBinding: PreparedHttpsObservationBinding = Object.freeze({ attempt: permit, session, request: s.fixture.request,
+        requestFingerprint: s.fixture.request.requestFingerprint, bindingDigest: s.requests.bindingDigest,
+        frame: s.frame, count, pid: process.pid, expires: deadline, signal, origin: origin! });
+      nativeAttempts.set(permit, { session, frame: s.frame, count, secret: key!.secret, expires: deadline, signal, timeoutMs,
+        binding: observationBinding });
       key!.secret = '';
-      try { body = await receivePreparedManualHttpsAttempt(permit, s.frame, count, signal, timeoutMs); }
+      try {
+        const received = await receivePreparedManualHttpsAttempt(permit, s.frame, count, signal, timeoutMs);
+        const observation = consumePreparedManualHttpsObservation(received.observation, observationBinding, received.body);
+        body = observation.body; observed = true;
+      }
       finally { nativeAttempts.delete(permit); }
     } else body = await receiveOfflineSingleHttpsExchange(exchange, s.frame, signal, key!.secret);
     const check = (requestMustBeOpen = true): void => {
@@ -484,18 +529,23 @@ async function runManualLabAttempt(input: ManualLabAttemptInput, count: boolean)
     };
     check();
     if (count) {
+      semanticValidation = 'REJECTED';
       const inputTokens = decodeOfflineInputTokens(body);
       check();
       if (inputTokens + MANUAL_COUNTED_LAB_POLICY.maxOutputTokens > MANUAL_COUNTED_LAB_POLICY.reportedTpm) denied('MANUAL_TPM_EXCEEDED');
+      semanticValidation = 'COUNT_VALID';
       settleOfflineInference(reservation); settled = true; // Count price/usage UNKNOWN, never assumed free.
       check();
       nextProjectAttemptAt = Math.max(nextProjectAttemptAt, performance.now() + 60000);
-      const result = Object.freeze({ status: 'LAB_COUNT_VALID', inputTokens, bindingDigest: s.requests.bindingDigest,
-        evidence: 'SIMULATED_UNVERIFIED_NOT_BILLING', realExecutionEnabled: false, persistence: 'NOT_ATTEMPTED' }) as ManualLabCountResult;
-      countResults.set(result, { ...binding(session, s), expires: s.expires, readyAt: nextProjectAttemptAt, inputTokens });
+      const result: CountReceipt = native ? Object.freeze({ ...nativeEvidence(s, observed, semanticValidation, origin, attempted),
+        status: 'NATIVE_COUNT_VALID', inputTokens, bindingDigest: s.requests.bindingDigest, outcome: 'VALIDATED' })
+        : Object.freeze({ status: 'LAB_COUNT_VALID', inputTokens, bindingDigest: s.requests.bindingDigest,
+          evidence: 'SIMULATED_UNVERIFIED_NOT_BILLING', realExecutionEnabled: false, persistence: 'NOT_ATTEMPTED' }) as ManualLabCountResult;
+      countResults.set(result, { ...binding(session, s), expires: s.expires, readyAt: nextProjectAttemptAt, inputTokens, native });
       s.receipt = result; s.inputTokens = inputTokens; s.phase = 'COUNTED'; s.outcome = 'COUNT_VALIDATED_WAIT_MANUAL_TRANSITION';
       keepOpen = true; return result;
     }
+    semanticValidation = 'REJECTED';
     const decoded = decodeOfflineResponsesReply({ status: 200, body, delayMs: 0 });
     check();
     // Equal immutable input does not prove equal provider accounting. Divergence
@@ -511,10 +561,13 @@ async function runManualLabAttempt(input: ManualLabAttemptInput, count: boolean)
     check(false);
     if (validation.status !== 'PROPOSAL_VALID') throw new FixerError(validation.code);
     const plan = decodeFixerJson(decoded.text);
+    semanticValidation = 'PLAN_VALID';
     check(false);
     s.outcome = 'VALIDATED_IN_MEMORY';
     close(session);
     if (s.cleanup !== 'REMOVED') denied('MANUAL_CLEANUP_BLOCKED');
+    if (native) return Object.freeze({ ...nativeEvidence(s, observed, semanticValidation, origin, attempted), status: 'NATIVE_PLAN_VALID',
+      outcome: 'VALIDATED', plan: plan as unknown as FixPlan });
     const result = Object.freeze({ status: 'LAB_PLAN_VALID', plan, evidence: 'SIMULATED_UNVERIFIED_NOT_BILLING',
       persistence: 'NOT_ATTEMPTED', realExecutionEnabled: false, sourceWrite: false,
       writeAuthorized: false, runtimeStatus: 'RUNTIME_NOT_ISOLATED' }) as unknown as ManualLabValidatedResult;
@@ -528,6 +581,11 @@ async function runManualLabAttempt(input: ManualLabAttemptInput, count: boolean)
       code = s.abort.signal.reason instanceof FixerError && s.abort.signal.reason.code === 'TIMEOUT' ? 'TIMEOUT' : 'INFERENCE_CANCELLED';
     }
     if (s && owns) s.outcome = code;
+    if (native) {
+      if (reservation && !settled) { try { settleOfflineInference(reservation); } catch { /* Hold uncertainty, never refund. */ } settled = true; }
+      return Object.freeze({ ...nativeEvidence(s, observed, semanticValidation, origin, attempted),
+        status: 'BLOCKED', code, outcome: 'UNCERTAIN' });
+    }
     return Object.freeze({ status: 'BLOCKED' as const, code, realExecutionEnabled: false,
       runtimeStatus: 'RUNTIME_NOT_ISOLATED', evidence: 'SIMULATED_UNVERIFIED_NOT_BILLING' });
   } finally {

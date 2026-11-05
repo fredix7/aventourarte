@@ -1,6 +1,8 @@
 import { request as httpsRequest, type RequestOptions } from 'node:https';
 import { lookup } from 'node:dns/promises';
 import { checkServerIdentity, rootCertificates, TLSSocket } from 'node:tls';
+import { createHash } from 'node:crypto';
+import { performance } from 'node:perf_hooks';
 import { InferenceError, inferenceFail } from './inference-contracts';
 import { FixerError } from './fixer-contracts';
 import { OFFLINE_HTTPS_POLICY, type OfflineHttpRequests } from './inference-http';
@@ -16,6 +18,35 @@ export const DORMANT_HTTPS_CLIENT_POLICY = Object.freeze({ implemented: true, en
   exportedInvocation: true, guardedManualBridgeOnly: true, capabilityIssuer: false, credentialStorage: false,
   dnsTlsSocketsVerified: false, runtimeStatus: 'RUNTIME_NOT_ISOLATED' } as const);
 
+// Host-internal context, not an authority constructor. Only an already consumed
+// private call permit supplies this immutable binding. No observation can issue
+// a call permit, human grant, credential, request or persistence capability.
+export interface PreparedHttpsObservationBinding {
+  readonly attempt: object; readonly session: object; readonly request: object;
+  readonly requestFingerprint: string; readonly bindingDigest: string;
+  readonly frame: OfflineHttpRequests['count']; readonly count: boolean;
+  readonly pid: number; readonly expires: number; readonly signal: AbortSignal;
+  readonly origin: 'SIMULATED_NATIVE_HTTPS' | 'NATIVE_HTTPS_UNATTESTED';
+}
+declare const observationBrand: unique symbol;
+interface HttpsObservation { readonly [observationBrand]: true }
+const observations = new WeakMap<HttpsObservation, { binding: PreparedHttpsObservationBinding; body: string; responseDigest: string }>();
+const responseDigest = (body: string): string => createHash('sha256').update(body, 'utf8').digest('hex');
+
+// Consume-only evidence reader. Identity, exact context and body are joined and
+// burned before semantic decoding. Even a valid receipt attests neither parent
+// trust, commercial authenticity, provider billing nor correctness of its JSON.
+export function consumePreparedManualHttpsObservation(observation: object, binding: PreparedHttpsObservationBinding, body: string) {
+  const entry = observations.get(observation as HttpsObservation); observations.delete(observation as HttpsObservation);
+  if (arguments.length !== 3 || !entry || entry.binding !== binding || binding.pid !== process.pid
+    || binding.signal.aborted || performance.now() >= binding.expires || typeof body !== 'string'
+    || body !== entry.body || responseDigest(body) !== entry.responseDigest) {
+    throw new FixerError('RUNTIME_NOT_ISOLATED');
+  }
+  return Object.freeze({ body, origin: binding.origin, responseDigest: entry.responseDigest,
+    commercialAuthenticity: 'NOT_ATTESTED', billingEvidence: 'NONE' } as const);
+}
+
 async function dormantHttpsRequest(capability: object, frame: OfflineHttpRequests['count'], count: boolean,
   bearer: string, signal: AbortSignal, timeoutMs: number): Promise<string> {
   if (!liveCapabilities.has(capability)) throw new FixerError('RUNTIME_NOT_ISOLATED');
@@ -24,8 +55,13 @@ async function dormantHttpsRequest(capability: object, frame: OfflineHttpRequest
 // Consumption happens before touching frame/signal or creating DNS/socket state.
 // Only the dormant manual host closure can produce this private one-shot permit.
 export async function receivePreparedManualHttpsAttempt(permit: object, frame: OfflineHttpRequests['count'], count: boolean,
-  signal: AbortSignal, timeoutMs: number): Promise<string> {
-  return fixedHttpsRequest(frame, count, consumePreparedManualHttpsAttempt(permit, frame, count, signal, timeoutMs), signal, timeoutMs);
+  signal: AbortSignal, timeoutMs: number) {
+  const context = consumePreparedManualHttpsAttempt(permit, frame, count, signal, timeoutMs);
+  const body = await fixedHttpsRequest(frame, count, context.secret, signal, timeoutMs);
+  if (signal.aborted || performance.now() >= context.binding.expires) throw new FixerError('TIMEOUT');
+  const observation = Object.freeze(Object.create(null)) as HttpsObservation;
+  observations.set(observation, { binding: context.binding, body, responseDigest: responseDigest(body) });
+  return Object.freeze({ body, observation });
 }
 async function fixedHttpsRequest(frame: OfflineHttpRequests['count'], count: boolean,
   bearer: string, signal: AbortSignal, timeoutMs: number): Promise<string> {

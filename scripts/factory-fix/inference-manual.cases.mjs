@@ -815,6 +815,7 @@ for (const operator of ['UPDATE_VALUE', 'ADD_PROPERTY', 'ADD_ELEMENT', 'REMOVE_P
 function preparedSmokeHarness(x, mode = 'ok') {
   const { EventEmitter } = require('node:events'), vm = require('node:vm');
   const key = 'LAB_FAKE_NATIVE_' + originalRandom(24).toString('hex'), prompts = [], terminalOutput = [], requests = [], sockets = [], sessions = [], permits = [];
+  const observations = [], observationBindings = [], countResults = [];
   const input = new EventEmitter(); input.isTTY = true; input.isRaw = false;
   input.isPaused = () => true; input.setRawMode = value => { input.isRaw = value;
     if (mode === 'raw-open-error' && value || mode === 'raw-close-error' && !value) throw Error(key);
@@ -837,7 +838,8 @@ function preparedSmokeHarness(x, mode = 'ok') {
     if (cache.has(name)) return cache.get(name).exports;
     const mod = { exports: {} }; cache.set(name, mod);
     const filename = path.join(out, 'scripts/factory-fix', name + '.js');
-    const access = name === 'inference-manual' ? '\nmodule.exports.testAccess={runPreparedNativeSmoke,nativeReviews,nativeAttempts};' : '';
+    const access = name === 'inference-manual' ? '\nmodule.exports.testAccess={runPreparedNativeSmoke,nativeReviews,nativeAttempts,sessions,transcripts};'
+      : '\nmodule.exports.testAccess={observations};';
     const loader = vm.runInThisContext('(function(exports,require,module,process,setTimeout,clearTimeout,Buffer){' + originalRead(filename, 'utf8') + access + '\n})', { filename: 'smoke-210-offline-' + name, timeout: 1000 });
     const imports = specifier => {
       if (specifier === 'node:readline/promises') return { createInterface() { return {
@@ -845,7 +847,13 @@ function preparedSmokeHarness(x, mode = 'ok') {
           prompts.push(label);
           if (mode === 'question-error') throw Error(key);
           if (label.includes('A:') && prompts.length === 1) x.tick(60000);
-          if (label.includes('TRANSICION')) x.tick(mode === 'early-transition' ? 59999 : 60000);
+          if (label.includes('TRANSICION')) {
+            const api = get('inference-manual'), session = sessions.at(-1), receipt = api.testAccess.sessions.get(session).receipt;
+            assert.equal(api.isManualLabCountResult(receipt), false, 'An active native count is not a LAB receipt');
+            assert.throws(() => api.advanceManualLabGeneration({ session, countResult: receipt }), /MANUAL_COUNT_RECEIPT_INVALID/);
+            countResults.push(receipt);
+            x.tick(mode === 'early-transition' ? 59999 : 60000);
+          }
           if (mode === 'expired' && label.includes('C:')) x.tick(30000);
           if (mode === 'timeout-swap' && label.includes('C:')) x.tick(1000);
           const authority = label.includes('A:') ? 'A' : label.includes('B:') ? 'B' : 'C';
@@ -873,6 +881,7 @@ function preparedSmokeHarness(x, mode = 'ok') {
           if (mode === 'cancel') { get('inference-manual').cancelManualLabSession(sessions.at(-1)); return; }
           if (mode === 'timeout') { x.tick(30000); }
           let reply = count ? { object: 'response.input_tokens', input_tokens: 8000 } : responseForRequest(JSON.parse(payload.input[0].content[0].text));
+          if (mode === 'observation-unicode') reply.note = '\ufffd';
           if (!count && mode === 'malicious') reply.output.push({ type: 'function_call', name: 'writer' });
           if (!count && mode === 'crossed') { const p = JSON.parse(reply.output[0].content[0].text); p.nonce = 'wrong'; reply.output[0].content[0].text = JSON.stringify(p); }
           if (!count && mode === 'usage') { reply.usage.input_tokens--; reply.usage.total_tokens--; }
@@ -886,6 +895,10 @@ function preparedSmokeHarness(x, mode = 'ok') {
         queueMicrotask(() => { const socket = new Socket(); sockets.push(socket); req.socket = socket; req.emit('socket', socket); socket.emit('secureConnect'); });
         return req;
       } };
+      if (specifier === './fixer-json' && mode === 'validated-expiry') {
+        const api = compiled('fixer-json');
+        return { ...api, decodeFixerJson(...args) { const plan = api.decodeFixerJson(...args); x.tick(30000); return plan; } };
+      }
       if (specifier === './inference-manual') {
         const api = get('inference-manual');
         return { ...api, consumePreparedManualHttpsAttempt(token, ...args) {
@@ -895,11 +908,49 @@ function preparedSmokeHarness(x, mode = 'ok') {
           return secret;
         } };
       }
-      if (specifier === './inference-https-native' && ['signal-swap', 'timeout-swap'].includes(mode)) {
+      if (specifier === './inference-https-native') {
         const api = get('inference-https-native');
-        return { ...api, receivePreparedManualHttpsAttempt(permit, frame, count, signal, timeout) {
-          return api.receivePreparedManualHttpsAttempt(permit, frame, count,
+        return { ...api, async receivePreparedManualHttpsAttempt(permit, frame, count, signal, timeout) {
+          const received = await api.receivePreparedManualHttpsAttempt(permit, frame, count,
             mode === 'signal-swap' ? new AbortController().signal : signal, mode === 'timeout-swap' ? 30000 : timeout);
+          observations.push(received);
+          if (mode === 'observation-forged') return { ...received, observation: {} };
+          if (mode === 'observation-copy') return { ...received, observation: { ...received.observation } };
+          if (mode === 'observation-json') return { ...received, observation: JSON.parse(JSON.stringify(received.observation)) };
+          if (mode === 'observation-proxy') return { ...received, observation: new Proxy(received.observation, { get() { throw Error('TRAP'); } }) };
+          if (mode === 'observation-body') return { ...received, body: received.body + ' ' };
+          // These distinct JS strings encode to identical UTF-8 bytes. A hash
+          // alone must not allow substitution of the exact observed body.
+          if (mode === 'observation-unicode') {
+            const body = received.body.replace('\ufffd', '\ud800');
+            assert.notEqual(body, received.body); assert.deepEqual(Buffer.from(body), Buffer.from(received.body));
+            return { ...received, body };
+          }
+          if (mode === 'observation-transcript') {
+            assert.ok(transcript, 'Inject an existing LAB transcript, never undefined');
+            assert.equal(typeof transcript, 'object');
+            assert.equal(get('inference-manual').testAccess.transcripts.has(transcript), true, 'Inject an authentic live LAB transcript');
+            return { ...received, observation: transcript };
+          }
+          if (mode === 'observation-replay' && !count) return { ...received, observation: observations[0].observation };
+          return received;
+        }, consumePreparedManualHttpsObservation(receipt, binding, body) {
+          observationBindings.push(binding);
+          if (mode === 'observation-burn') {
+            assert.throws(() => api.consumePreparedManualHttpsObservation(receipt, binding, body + ' '), e => e.code === 'RUNTIME_NOT_ISOLATED');
+            assert.throws(() => api.consumePreparedManualHttpsObservation(receipt, binding, body), e => e.code === 'RUNTIME_NOT_ISOLATED');
+          }
+          if (mode === 'observation-expired') x.tick(30000);
+          if (mode === 'observation-cancelled') get('inference-manual').cancelManualLabSession(binding.session);
+          const swaps = { 'observation-session': { session: {} }, 'observation-request': { request: {} },
+            'observation-stage': { count: !binding.count }, 'observation-attempt': { attempt: {} },
+            'observation-frames': { bindingDigest: 'foreign' }, 'observation-fingerprint': { requestFingerprint: 'foreign' } };
+          if (mode === 'observation-session' || mode === 'observation-request') {
+            const foreign = x.create(), request = hostRequests.get(inspect(foreign).request.requestId);
+            assert.equal(launcher.isHostFixRequest(request), true);
+            swaps[mode] = mode === 'observation-session' ? { session: foreign } : { request };
+          }
+          return api.consumePreparedManualHttpsObservation(receipt, swaps[mode] ? Object.freeze({ ...binding, ...swaps[mode] }) : binding, body);
         } };
       }
       if (specifier.startsWith('./')) return get(specifier.slice(2));
@@ -908,13 +959,20 @@ function preparedSmokeHarness(x, mode = 'ok') {
     loader(mod.exports, imports, mod, fakeProcess, setTimeout, clearTimeout, Buffer); return mod.exports;
   };
   const api = get('inference-manual'), token = Object.freeze({});
+  // Create before native single flight; keep this real LAB transcript unconsumed.
+  const transcriptSession = mode === 'observation-transcript' ? api.createManualCountedLabSession() : undefined;
+  const transcript = transcriptSession ? api.createManualLabTranscript({ session: transcriptSession, events: [] }) : undefined;
   // Fictitious count allowance 17 is deliberately unrelated to the old 4048.
   // Production has NO setter/issuer for this private host review.
   api.testAccess.nativeReviews.set(token, { projectId: 'proj_LAB_ONLY', countMaximumMicroUsd: 17,
-    generationMaximumMicroUsd: 4048, exclusiveProcessId: process.pid, expires: require('node:perf_hooks').performance.now() + 600000 });
-  return { api, token, prompts, requests, sessions, sockets, permits, fakeProcess, key,
+    generationMaximumMicroUsd: 4048, exclusiveProcessId: process.pid, expires: require('node:perf_hooks').performance.now() + 600000,
+    transportEvidence: 'SIMULATED_NATIVE_HTTPS' });
+  return { api, token, prompts, requests, sessions, sockets, permits, fakeProcess, key, observations, observationBindings, countResults,
     native: get('inference-https-native'), review: () => api.testAccess.nativeReviews.get(token),
-    run: () => api.testAccess.runPreparedNativeSmoke(token),
+    async run() {
+      try { return await api.testAccess.runPreparedNativeSmoke(token); }
+      finally { if (transcriptSession) api.cancelManualLabSession(transcriptSession); }
+    },
     check() {
       assert.equal(input.isRaw, false); assert.equal(closedTerminals, prompts.length);
       assert.equal(terminalOutput.join('').includes(key), false);
@@ -924,7 +982,9 @@ function preparedSmokeHarness(x, mode = 'ok') {
 }
 stageTest('Paso 210: actual manual -> human ABC twice -> native TLS wiring -> FixPlan memory, fake IO only', async x => {
   const h = preparedSmokeHarness(x), r = await h.run();
-  assert.equal(r.status, 'LAB_PLAN_VALID', JSON.stringify(r)); assert.equal(r.persistence, 'NOT_ATTEMPTED');
+  assert.equal(r.status, 'NATIVE_PLAN_VALID', JSON.stringify(r)); assert.equal(r.persistence, 'NOT_ATTEMPTED');
+  assert.equal(r.origin, 'SIMULATED_NATIVE_HTTPS'); assert.equal(r.commercialAuthenticity, 'NOT_ATTESTED');
+  assert.equal(r.semanticValidation, 'PLAN_VALID'); assert.equal(r.economic.knownBilledMicroUsd, null);
   assert.equal(r.realExecutionEnabled, false); assert.equal(r.writeAuthorized, false); assert.equal('handoff' in r, false);
   assert.equal(h.prompts.length, 7); assert.deepEqual(h.requests.map(r => r.path), ['/v1/responses/input_tokens', '/v1/responses']);
   for (const [key, value] of Object.entries(h.requests[0].payload)) assert.deepEqual(h.requests[1].payload[key], value);
@@ -934,7 +994,7 @@ stageTest('Paso 210: actual manual -> human ABC twice -> native TLS wiring -> Fi
 });
 for (const [mode, code] of [['dns', 'HTTPS_DNS_FAILED'], ['private', 'HTTPS_ADDRESS_FORBIDDEN'], ['tls', 'HTTPS_TLS_INVALID'],
   ['hostname', 'HTTPS_HOSTNAME_INVALID'], ['auth', 'HTTP_UNAUTHORIZED'], ['billing', 'HTTP_RATE_LIMIT'],
-  ['rate', 'HTTP_RATE_LIMIT'], ['redirect', 'HTTP_REDIRECT_FORBIDDEN'], ['timeout', 'MANUAL_TIMEOUT'],
+  ['rate', 'HTTP_RATE_LIMIT'], ['redirect', 'HTTP_REDIRECT_FORBIDDEN'], ['timeout', 'TIMEOUT'],
   ['cancel', 'INFERENCE_CANCELLED'], ['malicious', 'PROVIDER_TOOL_FORBIDDEN'], ['crossed', 'CORRELATION_MISMATCH'], ['usage', 'TOKEN_COUNT_INVALID'],
   ['frame-swap', 'RUNTIME_NOT_ISOLATED']]) {
   stageTest(`Paso 210: full native prepared path rejects ${mode}, no retry or authority`, async x => {
@@ -1049,15 +1109,94 @@ stageTest('AUDIT 211: native preparation never reads inherited env or argv', asy
   const h = preparedSmokeHarness(x); let reads = 0;
   const trap = () => { reads++; throw Error(h.key); };
   Object.defineProperties(h.fakeProcess, { env: { get: trap }, argv: { get: trap } });
-  assert.equal((await h.run()).status, 'LAB_PLAN_VALID'); assert.equal(reads, 0); h.check();
+  assert.equal((await h.run()).status, 'NATIVE_PLAN_VALID'); assert.equal(reads, 0); h.check();
 });
+stageTest('AVA-76 observation: fake native IO, semantics and billing are independent', async x => {
+  const h = preparedSmokeHarness(x), r = await h.run(), count = h.countResults[0];
+  assert.equal(r.status, 'NATIVE_PLAN_VALID'); assert.equal(count.status, 'NATIVE_COUNT_VALID');
+  for (const result of [count, r]) {
+    assert.equal(result.origin, 'SIMULATED_NATIVE_HTTPS'); assert.equal(result.observation, 'RESPONSE_OBSERVED');
+    assert.equal(result.outcome, 'VALIDATED'); assert.equal(result.evidence, 'SIMULATED_NATIVE_TRANSPORT_NOT_PROVIDER_EVIDENCE');
+    assert.equal(result.commercialAuthenticity, 'NOT_ATTESTED'); assert.equal(result.economic.state, 'SIMULATED_ONLY');
+    assert.equal(result.economic.usageIsBillingEvidence, false); assert.equal(result.economic.knownBilledMicroUsd, null);
+    assert.equal(result.economic.countPriceMicroUsd, null); assert.equal(result.writeAuthorized, false);
+    assert.equal(result.runtimeStatus, 'RUNTIME_NOT_ISOLATED'); assert.equal(result.realExecutionEnabled, false);
+    assert.equal(h.api.isManualLabCountResult(result), false); assert.equal(h.api.isManualLabValidatedResult(result), false);
+    assert.equal('observationReceipt' in result, false); assert.equal('handoff' in result, false);
+  }
+  assert.equal(count.semanticValidation, 'COUNT_VALID'); assert.equal(count.economic.generationEstimateMicroUsd, null);
+  assert.equal(r.semanticValidation, 'PLAN_VALID'); assert.equal(r.economic.generationEstimateMicroUsd, 1800);
+  assert.equal(r.economic.estimateState, 'KNOWN_ESTIMATE_ONLY'); assert.equal(count.economic.estimateState, 'UNKNOWN');
+  for (let i = 0; i < h.observations.length; i++) {
+    const received = h.observations[i], binding = h.observationBindings[i];
+    assert.equal(h.native.testAccess.observations.has(received.observation), false);
+    assert.throws(() => h.native.consumePreparedManualHttpsObservation(received.observation, binding, received.body), e => e.code === 'RUNTIME_NOT_ISOLATED');
+    assert.throws(() => h.api.consumePreparedManualHttpsAttempt(received.observation, binding.frame, binding.count, binding.signal, 1), e => e.code === 'RUNTIME_NOT_ISOLATED');
+    await assert.rejects(h.native.receivePreparedManualHttpsAttempt(received.observation, {}, true, {}, 1), e => e.code === 'RUNTIME_NOT_ISOLATED');
+  }
+  assert.equal(h.requests.length, 2); h.check();
+});
+for (const mode of ['forged', 'copy', 'json', 'proxy', 'body', 'unicode', 'transcript', 'session', 'request', 'stage', 'attempt', 'frames', 'fingerprint', 'expired', 'replay', 'burn']) {
+  stageTest(`AVA-76 observation: ${mode} cannot mint, rebind or reuse a receipt`, async x => {
+    const h = preparedSmokeHarness(x, 'observation-' + mode), r = await h.run(); blocked(r, 'RUNTIME_NOT_ISOLATED');
+    assert.equal(r.outcome, 'UNCERTAIN'); assert.equal(r.semanticValidation, 'NOT_VALIDATED');
+    assert.equal(r.economic.knownBilledMicroUsd, null); assert.equal(r.economic.countPriceMicroUsd, null);
+    assert.equal(h.api.isManualLabCountResult(r), false); assert.equal(h.api.isManualLabValidatedResult(r), false);
+    const budget = h.api.inspectManualLabSession(h.sessions.at(-1)).budget;
+    assert.equal(budget.uncertainMicroUsd, mode === 'replay' ? 4065 : 17);
+    assert.equal(budget.active, 0); assert.equal(budget.knownMicroUsd, 0);
+    assert.equal(h.requests.length, mode === 'replay' ? 2 : 1); h.check();
+  });
+}
+stageTest('AVA-76 observation: expiry after plan validation is uncertain, not a published plan or known charge', async x => {
+  const h = preparedSmokeHarness(x, 'validated-expiry'), r = await h.run(); blocked(r, 'MANUAL_TIMEOUT');
+  assert.equal(r.outcome, 'UNCERTAIN'); assert.equal(r.observation, 'RESPONSE_OBSERVED');
+  assert.equal(r.semanticValidation, 'PLAN_VALID'); assert.equal(r.economic.knownBilledMicroUsd, null);
+  assert.equal(r.economic.estimateState, 'KNOWN_ESTIMATE_ONLY'); assert.equal(h.requests.length, 2);
+  assert.equal(h.api.isManualLabValidatedResult(r), false); h.check();
+});
+for (const mode of ['timeout', 'cancel', 'observation-cancelled', 'dns']) {
+  stageTest(`AVA-76 observation: ${mode} has no success receipt or known-zero bill`, async x => {
+    const h = preparedSmokeHarness(x, mode), r = await h.run(); blocked(r);
+    assert.equal(r.outcome, 'UNCERTAIN'); assert.equal(r.observation, 'NO_SUCCESS_OBSERVATION');
+    assert.equal(r.semanticValidation, 'NOT_VALIDATED'); assert.equal(r.economic.knownBilledMicroUsd, null);
+    assert.equal(r.economic.heldUncertainAllowanceMicroUsd, 17); assert.equal(h.countResults.length, 0);
+    if (mode !== 'observation-cancelled') assert.equal(h.observations.length, 0);
+    else assert.equal(h.native.testAccess.observations.has(h.observations[0].observation), false);
+    h.check();
+  });
+}
+for (const mode of ['malformed', 'malicious', 'crossed', 'usage']) {
+  stageTest(`AVA-76 observation: ${mode} observation does not validate semantics or billing`, async x => {
+    const h = preparedSmokeHarness(x, mode), r = await h.run(); blocked(r);
+    assert.equal(r.observation, 'RESPONSE_OBSERVED'); assert.equal(r.semanticValidation, 'REJECTED');
+    assert.equal(r.economic.knownBilledMicroUsd, null); assert.equal(r.economic.usageIsBillingEvidence, false);
+    assert.equal(r.commercialAuthenticity, 'NOT_ATTESTED'); assert.equal(h.api.isManualLabValidatedResult(r), false); h.check();
+  });
+}
+stageTest('AVA-76 observation: unknown classification rejects before TTY or DNS', async x => {
+  for (const origin of [undefined, null, 'REAL', 'SIMULATED_UNVERIFIED_NOT_BILLING']) {
+    const h = preparedSmokeHarness(x); h.review().transportEvidence = origin;
+    await assert.rejects(h.run(), e => e.code === 'RUNTIME_NOT_ISOLATED');
+    assert.equal(h.prompts.length, 0); assert.equal(h.stats().dns, 0); h.check();
+  }
+});
+stageTest('AVA-76 observation: public lab results and transcripts are not observations', async x => {
+  const s = x.create(), { i, result } = await x.count(s), native = compiled('inference-https-native');
+  let traps = 0; const proxy = new Proxy({}, { get() { traps++; throw Error('TRAP'); } });
+  for (const receipt of [i.transcript, result, { ...result }, i.connectivity, i.economic, proxy, null, Symbol('receipt')]) {
+    assert.throws(() => native.consumePreparedManualHttpsObservation(receipt, proxy, '{}'), e => e.code === 'RUNTIME_NOT_ISOLATED');
+  }
+  assert.equal(traps, 0); assert.equal(manual.isManualLabCountResult(result), true);
+});
+
 test('AUDIT 211: TS and compiled production artifacts expose no review issuer, raw client, key reader or test access', async () => {
   const ts = require('typescript');
   for (const name of ['inference-manual', 'inference-https-native']) {
     const source = originalRead(path.join(root, 'scripts/factory-fix', name + '.ts'), 'utf8');
     const js = originalRead(path.join(out, 'scripts/factory-fix', name + '.js'), 'utf8');
     assert.doesNotMatch(source, /nativeReviews\.set|liveCapabilities\.add|process\.(?:env|argv)/);
-    assert.doesNotMatch(js, /exports\.(?:runPreparedNativeSmoke|humanApproval|privateTerminalCredential|fixedHttpsRequest|dormantHttpsRequest|nativeReviews|nativeAttempts|testAccess)\s*=/);
+    assert.doesNotMatch(js, /exports\.(?:runPreparedNativeSmoke|humanApproval|privateTerminalCredential|fixedHttpsRequest|dormantHttpsRequest|nativeReviews|nativeAttempts|observations|nativeEvidence|advanceGeneration|testAccess)\s*=/);
     assert.equal((source.match(/runPreparedNativeSmoke\(/g) ?? []).length, name === 'inference-manual' ? 1 : 0);
     const ast = ts.createSourceFile(name, source, ts.ScriptTarget.ES2022, true);
     const exported = ast.statements.filter(s => ts.isFunctionDeclaration(s) && s.modifiers?.some(m => m.kind === ts.SyntaxKind.ExportKeyword)).map(s => s.name.text);

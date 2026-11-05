@@ -52,7 +52,10 @@ test('AVA-76 offline smoke entry: isolated synthetic suites, no network/writer/r
       run(suite, ['--require', path.join(root, 'scripts/factory-fix/inference-smoke-guard.cjs'),
         // node:test also runs directly. Avoid an extra --test worker: the guard,
         // cases, counters and timeout ownership must live in the same process.
-        `scripts/factory-fix/${suite}.cases.mjs`], 120000, true);
+        // The manual suite includes the additional observation regressions and
+        // completed in ~156s under the guarded Windows host. This is a test
+        // supervisor budget only; the inference deadline remains <=30000ms.
+        `scripts/factory-fix/${suite}.cases.mjs`], suite === 'inference-manual' ? 240000 : 120000, true);
     }
     // This trusted supervisor launches guarded children and expects deliberate
     // denials/nonzero exits. It must not inherit the child's process tripwire.

@@ -159,7 +159,7 @@ instrumentación de pruebas, no una frontera frente a código host comprometido.
 El timeout global de 900000 ms es nominal: no es un watchdog estricto mientras el
 runner usa spawnSync y bloquea el event loop. Los controles filesystem tienen un
 timeout de proceso de 420000 ms; sus errores o vencimientos hacen fallar el
-wrapper. Los límites secuenciales configurados suman 1140000 ms, sin contar el
+wrapper. Los límites secuenciales configurados suman 1260000 ms, sin contar el
 resto del trabajo; no se garantiza un techo global de quince minutos. Esto es una
 limitación de supervisión, no una medida del tiempo de la ejecución comprobada.
 
@@ -287,9 +287,9 @@ No se ejecutó regresión global, Jasmine, writer/readiness/leases, bootstrap 9G
 fixtures Git ni canales operacionales. Estos resultados históricos no superan el
 gate operacional.
 
-### Última ejecución comprobada y auditoría final independiente
+### Verificación histórica del commit experimental y auditoría final independiente
 
-Última ejecución comprobada en Windows: **826 casos PASS, 0 FAIL, 0 SKIP y 0
+Ejecución comprobada en Windows previa al commit experimental: **826 casos PASS, 0 FAIL, 0 SKIP y 0
 CANCELLED**, más un wrapper PASS contado por separado, con **20/20 hashes
 protegidos idénticos**. Entrada: 102; ceremonia manual: 238; broker: 108; HTTP: 141;
 adaptador HTTPS: 118; controles filesystem: **119, de los cuales 108 son negativos
@@ -312,3 +312,93 @@ nativos y host modificado descritos arriba. Los PASS y el dictamen no acreditan
 aislamiento operacional ni autorizan tráfico real, credenciales API, gasto o
 writer operacional. RUNTIME_NOT_ISOLATED y todos los gates siguen vigentes.
 El commit experimental offline no completa Phase 9 ni cambia AVA-76 a Finalizadas.
+
+### Preparación offline: observación del transporte y clasificación de resultados
+
+La vía nativa sigue dormida, sin emisor de nativeReviews ni caller productivo.
+El puerto preparado devuelve ahora cuerpo y recibo opaco de observación. El
+registro privado del transporte liga el recibo al intento, sesión, request,
+fingerprint, etapa, frames, PID, vencimiento, cuerpo exacto y SHA-256 del cuerpo. Su consumidor
+quema el recibo antes de contrastar contexto y respuesta; una copia, sustitución
+o replay no permite corregir y reintentar. El recibo no es un permiso de llamada,
+una credencial, un handoff ni una autorización de escritura.
+
+Una observación de transporte y la validación semántica son hechos separados.
+El consumidor preparado distingue NATIVE_COUNT_VALID y NATIVE_PLAN_VALID de los
+estados públicos LAB_COUNT_VALID y LAB_PLAN_VALID, que conserva el recorrido de
+transcripciones. El prefijo NATIVE identifica el cableado preparado, no prueba
+comercial: sus mocks llevan expresamente origin=SIMULATED_NATIVE_HTTPS y evidencia
+SIMULATED_NATIVE_TRANSPORT_NOT_PROVIDER_EVIDENCE. Una futura observación nativa
+sin confianza independiente del host lleva NATIVE_HTTPS_UNATTESTED; ninguna de
+estas etiquetas acredita autenticidad comercial ni aislamiento del proceso.
+
+semanticValidation distingue NOT_VALIDATED, REJECTED, COUNT_VALID y PLAN_VALID.
+RESPONSE_OBSERVED no implica JSON válido ni FixPlan aceptado. Fallos, timeout y
+cancelación devuelven BLOCKED con outcome=UNCERTAIN; sin observación consumida no
+se declara una respuesta observada con éxito. No se emite un recibo COUNT válido
+ni un plan de éxito tras esos fallos. Los resultados nativos no son reconocidos
+como recibos/resultados LAB ni entran en su transición pública.
+
+La economía distingue SIMULATED_ONLY, UNKNOWN y PENDING_RECONCILIATION.
+knownBilledMicroUsd y countPriceMicroUsd permanecen null: no hay fuente de
+conciliación auténtica ni prueba suficiente de precio COUNT. Una estimación de
+generación calculada con el snapshot histórico de tarifas se identifica como
+KNOWN_ESTIMATE_ONLY, nunca como cargo conocido. usageIsBillingEvidence permanece false;
+un timeout, cancelación o fallo no transforma incertidumbre en una factura cero.
+Las reservas conservan el tratamiento de incertidumbre previo; no se habilita un
+ledger económico operativo ni se convierte el presupuesto simulado en dinero.
+
+Las pruebas de esta preparación instrumentan únicamente módulos en memoria e IO
+ficticio; no acreditan DNS/TLS externos, procedencia del host ni respuesta comercial.
+No se añade acceso de test en los artefactos productivos. Continúan intactos
+RUNTIME_NOT_ISOLATED, realExecutionEnabled=false, el FixPlan en memoria y las
+exclusiones de writer/readiness/leases, bootstrap 9G y guías reales. Esta entrega
+queda pendiente de auditoría independiente, sin staging, commit ni activación.
+
+El presupuesto del supervisor de la suite manual pasa de 120000 a 240000 ms para
+acomodar las regresiones de observación: una ejecución completa de 263 casos
+terminó en unos 156 segundos tras agotar el límite inicial de 120 segundos. No se
+modifica el deadline de inferencia de 30000 ms ni el límite filesystem de 420000 ms;
+el timeout exterior de 900000 ms continúa siendo nominal. La ampliación no relaja
+aserciones ni acredita aislamiento, rendimiento del proveedor o autorización.
+
+### Verificación de la separación de observación, 05/11/2026
+
+Ejecución completa del wrapper offline con Node 22.13.1 en Windows:
+**854 casos PASS, 0 FAIL, 0 SKIP y 0 CANCELLED**, más **un wrapper PASS** separado.
+Desglose: entrada 102; manual 266; broker 108; HTTP 141; adaptador HTTPS 118;
+controles filesystem 119. Los 28 casos nuevos están incluidos en los 266 manuales;
+no se suman las pasadas focalizadas, intermedias ni los resúmenes duplicados.
+Los 826 anteriores se conservan como resultado histórico del commit experimental.
+
+Typecheck y compilación solo a TEMP PASS; sintaxis de los tres archivos de pruebas
+modificados PASS. Las cinco suites funcionales tienen networkAttempts,
+processAttempts, privilegedAttempts, forbiddenGuideReads, forbiddenMutations y
+forbiddenFilesystemCalls en cero. Mutaciones sintéticas permitidas observadas:
+2.093 / 5.378 / 2.209 / 2.942 / 1.999. Los controles filesystem negativos exigen sus
+rechazos deliberados; no se interpretan sus contadores como los ceros de las cinco
+suites funcionales. El wrapper confirma **20/20 SHA-256 protegidos idénticos**.
+
+Las nuevas regresiones cubren falsificación, copias/JSON/proxies, consumo único,
+replay, cruce de etapa/intento, sesiones y requests auténticas distintas, digest y
+fingerprint, cuerpo sustituido, alias UTF-8, caducidad y cancelación. Verifican que
+un recibo activo nativo no se reconozca como LAB ni entre en su transición pública;
+un transcript o recibo de observación tampoco autoriza otra llamada. Una respuesta
+observada inválida se rechaza semánticamente; un plan ya validado cuyo intento
+vence después no se publica como éxito. Ninguna estimación se convierte en factura.
+
+Incidencias de las pasadas previas, sin ocultarlas en el total final: una suite
+manual alcanzó el límite de supervisor de 120 segundos sin resumen; después
+completó 263/263 casos en unos 156 segundos. En una pasada paralela HTTP tuvo
+140 PASS y 1 FAIL en el caso preexistente de single flight (BLOCKED en lugar de
+PROPOSAL_VALID). Su deadline es 1000 ms y el caso tardó unos 2642 ms; sensibilidad a
+carga es una hipótesis, no una causa demostrada. Pasó aislado y en el wrapper
+secuencial final, sin modificar su código, aserciones o deadline. Conservar esta
+observación para la auditoría y no declarar demostrada la ausencia de flakiness.
+
+No se ejecutaron regresión global, Jasmine, writer/readiness/leases, persistencia,
+bootstrap/preflight 9G, fixtures Git ni canales operacionales. No hubo DNS/HTTPS
+externos, credenciales reales, inferencia real ni gasto. Los módulos instrumentados
+en memoria y los hashes no acreditan aislamiento OS ni procedencia confiable del
+host. La implementación permanece sin staging ni commit y pendiente de auditoría
+independiente; ningún gate operacional queda superado por estos PASS.
