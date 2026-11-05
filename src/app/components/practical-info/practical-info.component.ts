@@ -52,12 +52,14 @@ export class PracticalInfoComponent implements OnChanges {
     this.reservationPhone = '';
     const web = this.webUrl(item.web);
     const booking = this.webUrl(item.reserva);
+    const emailBooking = this.emailReservationUrl(item.reserva);
     const map = this.mapUrl(this.mapHref);
     const sameWebsite = Boolean(web && booking && this.comparable(web) === this.comparable(booking));
 
     if (map) this.actions.push({ label: 'Cómo llegar', icon: 'near_me', href: map, kind: 'maps', external: /^https?:/i.test(map), primary: false });
     if (web && !sameWebsite) this.actions.push({ label: 'Web oficial', icon: 'language', href: web, kind: 'web', external: true, primary: false });
     if (booking) this.actions.push({ label: sameWebsite ? 'Web y reservas' : 'Reservar', icon: 'confirmation_number', href: booking, kind: 'booking', external: true, primary: true });
+    if (emailBooking) this.actions.push({ label: 'Reservar por correo', icon: 'mail', href: emailBooking, kind: 'booking', external: false, primary: true });
 
     const reservation = this.text(item.reserva);
     if (/^tel:[+\d\s().-]+$/i.test(reservation)) {
@@ -114,6 +116,19 @@ export class PracticalInfoComponent implements OnChanges {
 
   private mapUrl(value: string): string {
     return this.webUrl(value) || (/^geo:-?\d+(?:\.\d+)?,-?\d+(?:\.\d+)?(?:\?[^\s]*)?$/i.test(value) ? value : '');
+  }
+
+  private emailReservationUrl(value: unknown): string {
+    const text = this.text(value);
+    if (!/^mailto:/i.test(text)) return '';
+    try {
+      const url = new URL(text);
+      const recipient = decodeURIComponent(url.pathname);
+      // Only a single recipient; reject malformed escapes and raw or encoded controls.
+      if (url.hash || /[\u0000-\u001f\u007f]/.test(decodeURIComponent(text)) ||
+          !/^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/.test(recipient)) return '';
+      return url.href;
+    } catch { return ''; }
   }
 
   private comparable(value: string): string {

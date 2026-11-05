@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AnalyticsService } from '../../shared/analytics.service';
+import { CHIPIONA_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/chipiona.guide';
 import { PracticalInfoComponent } from './practical-info.component';
 
 describe('PracticalInfoComponent', () => {
@@ -55,6 +56,63 @@ describe('PracticalInfoComponent', () => {
 
     setItem({ web: 'https://example.test/visitas?idioma=es', reserva: 'https://example.test/visitas?idioma=en' });
     expect(actions()).toHaveSize(2);
+  });
+
+  it('renders the Chipiona email reservations as independent booking actions without changing the cards', () => {
+    const measure = spyOn(TestBed.inject(AnalyticsService), 'action');
+    const restaurants = CHIPIONA_GUIDE.secciones.find(section => section.titulo === 'Dónde comer en Chipiona')!.lugares!;
+    for (const [name, href] of [
+      ['Restaurante Casa Paco', 'mailto:restaurantepacomuelle@gmail.com'],
+      ['Restaurante El Quinto Pino', 'mailto:hrquintopino@gmail.com']
+    ]) {
+      const restaurant = restaurants.find(restaurant => restaurant.nombre === name)!;
+      if (!('maps' in restaurant) || !('web' in restaurant)) throw new Error(`Missing contact data: ${name}`);
+      const item = Object.freeze({ ...restaurant });
+      const before = JSON.stringify(item);
+      setItem(item, item.maps);
+      const booking = root.querySelector<HTMLAnchorElement>('.practical-actions:not(.practical-map):not(.practical-website) .practical-action');
+      expect(booking).withContext(name).not.toBeNull();
+      expect(booking?.getAttribute('href')).toBe(href);
+      expect(booking?.textContent).toContain('Reservar por correo');
+      expect(booking?.getAttribute('aria-label')).toBe(`Reservar por correo: ${name}`);
+      expect(booking?.getAttribute('target')).toBeNull();
+      expect(booking?.getAttribute('rel')).toBeNull();
+      expect(booking?.querySelector('.action-arrow')).toBeNull();
+      expect(root.querySelector('.practical-website a')?.getAttribute('href')).toBe(item.web);
+      expect(root.querySelectorAll('.phone-link')).toHaveSize(1);
+      expect(root.querySelectorAll('.practical-fact')).toHaveSize(2);
+      booking?.click();
+      expect(JSON.stringify(item)).toBe(before);
+    }
+    expect(measure.calls.allArgs()).toEqual([
+      ['outbound', { kind: 'booking' }], ['outbound', { kind: 'booking' }]
+    ]);
+    expect(cancelledBeforeNavigation).toEqual([false, false]);
+  });
+
+  it('preserves encoded email reservation fields while keeping mailto out of website and map actions', () => {
+    const href = 'mailto:reservas@example.test?subject=Mesa%20para%20dos&body=Hola%2C%20gracias';
+    setItem({ nombre: 'Restaurante', web: 'mailto:web@example.test', reserva: href }, 'mailto:mapa@example.test');
+    expect(actions()).toHaveSize(1);
+    expect(actions()[0].getAttribute('href')).toBe(href);
+    expect(actions()[0].textContent).toContain('Reservar por correo');
+    expect(root.querySelector('.practical-map')).toBeNull();
+    expect(root.querySelector('.practical-website')).toBeNull();
+    expect(root.textContent).toContain('mailto:web@example.test');
+  });
+
+  it('keeps malformed email reservations and unsupported protocols as non-executable text', () => {
+    for (const reserva of [
+      'Consultar en recepción', 'javascript:alert(1)', 'data:text/html,<script>alert(1)</script>',
+      'file:///tmp/reserva', 'mailto:', 'mailto:sin-arroba', 'mailto:mal%20correo@example.test',
+      'mailto:a@example.test,b@example.test', 'mailto:reservas@example.test#fragment',
+      'mailto:reservas@example.test?subject=Hola%0D%0ABcc:otro@example.test',
+      'mailto:reservas@example.test?subject=%ZZ', 'mailto:reservas@example.test\n?subject=Hola'
+    ]) {
+      setItem({ reserva });
+      expect(root.querySelectorAll('a')).withContext(reserva).toHaveSize(0);
+      expect(root.querySelector('.practical-fact p')?.textContent).toBe(reserva);
+    }
   });
 
   it('reuses an existing telephone for reservations and measures only the reservation action', () => {
