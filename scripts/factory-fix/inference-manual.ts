@@ -343,6 +343,14 @@ export function inspectManualLabSession(session: ManualLabSession) {
     countedFrames: s.stage === 'SINGLE' ? null : s.requests,
     simulatedInputTokens: s.inputTokens ?? null });
 }
+// Host-only freshness check for an offline entry's preflight. It grants nothing,
+// returns no authentic request/session data, and never emits native authority.
+export function assertManualLabSessionCurrent(session: ManualLabSession): void {
+  if (arguments.length !== 1) denied('MANUAL_SESSION_INVALID');
+  const s = state(session);
+  if (s.phase !== 'OPEN' && s.phase !== 'COUNTED') denied('MANUAL_SESSION_INACTIVE');
+  fresh(session, s);
+}
 export function inspectManualLiveReadiness(session: ManualLabSession) {
   state(session);
   return Object.freeze({ decision: 'BLOCKED', code: 'RUNTIME_NOT_ISOLATED',
@@ -461,7 +469,16 @@ async function runManualLabAttempt(input: ManualLabAttemptInput, count: boolean)
       try { body = await receivePreparedManualHttpsAttempt(permit, s.frame, count, signal, timeoutMs); }
       finally { nativeAttempts.delete(permit); }
     } else body = await receiveOfflineSingleHttpsExchange(exchange, s.frame, signal, key!.secret);
-    const check = (): void => {
+    const check = (requestMustBeOpen = true): void => {
+      if (performance.now() >= deadline) denied('MANUAL_TIMEOUT');
+      if (signal.aborted || s!.phase !== 'RUNNING') denied('MANUAL_CANCELLED');
+      // Revalidate after transport/decoding and before accepting a receipt or
+      // plan. After launchFixer the request is VALIDATED rather than OPEN;
+      // the fixture must still be physically unchanged at that boundary too.
+      try {
+        s!.fixture.assertData();
+        if (requestMustBeOpen) assertOpenFixRequest(s!.fixture.request);
+      } catch { denied('MANUAL_SYNTHETIC_CONTEXT_CHANGED'); }
       if (performance.now() >= deadline) denied('MANUAL_TIMEOUT');
       if (signal.aborted || s!.phase !== 'RUNNING') denied('MANUAL_CANCELLED');
     };
@@ -491,10 +508,10 @@ async function runManualLabAttempt(input: ManualLabAttemptInput, count: boolean)
     const validation = await launchFixer({ request: s.fixture.request,
       transport: createSimulatedFixerTransport({ request: s.fixture.request,
         events: [{ type: 'stdout', text: decoded.text, delayMs: 0 }, { type: 'exit', code: 0, delayMs: 0 }] }) });
-    check();
+    check(false);
     if (validation.status !== 'PROPOSAL_VALID') throw new FixerError(validation.code);
     const plan = decodeFixerJson(decoded.text);
-    check();
+    check(false);
     s.outcome = 'VALIDATED_IN_MEMORY';
     close(session);
     if (s.cleanup !== 'REMOVED') denied('MANUAL_CLEANUP_BLOCKED');

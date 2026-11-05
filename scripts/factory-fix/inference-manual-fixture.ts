@@ -29,40 +29,59 @@ export function createManualSyntheticFixture() {
       { nombre: 'Zona inventada', descripcion: 'Visita de prueba', tiposPlan: ['ruta'] }
     ] }] }] };\n`;
   let request: FixRequest | undefined, closed = false;
+  type OwnedIdentity = { dev: bigint; ino: bigint; birthtimeNs: bigint; directory: boolean };
+  const owned = new Map<string, OwnedIdentity>();
+  function remember(file: string, directory: boolean): void {
+    const stat = fs.lstatSync(file, { bigint: true });
+    if (stat.ino === 0n || stat.isSymbolicLink() || fs.realpathSync.native(file) !== file
+      || (directory ? !stat.isDirectory() : !stat.isFile() || stat.nlink !== 1n)) throw Error('MANUAL_FIXTURE_CHANGED');
+    owned.set(file, { dev: stat.dev, ino: stat.ino, birthtimeNs: stat.birthtimeNs, directory });
+  }
+  function assertOwned(file: string): void {
+    const expected = owned.get(file), stat = fs.lstatSync(file, { bigint: true });
+    if (!expected || stat.isSymbolicLink() || fs.realpathSync.native(file) !== file
+      || stat.dev !== expected.dev || stat.ino !== expected.ino || stat.birthtimeNs !== expected.birthtimeNs
+      || (expected.directory ? !stat.isDirectory() : !stat.isFile() || stat.nlink !== 1n)) throw Error('MANUAL_FIXTURE_CHANGED');
+  }
+  function assertOwnedPath(file: string): void {
+    for (let cursor = file; ; cursor = path.dirname(cursor)) {
+      assertOwned(cursor);
+      if (cursor === workspace.root) break;
+    }
+  }
   function assertData(): void {
     syntheticWorkspaceRepository(workspace);
-    for (const dir of dirs) {
-      const stat = fs.lstatSync(dir);
-      if (!stat.isDirectory() || stat.isSymbolicLink() || fs.realpathSync.native(dir) !== dir) throw Error('MANUAL_FIXTURE_CHANGED');
-    }
+    for (const file of owned.keys()) assertOwned(file);
     for (const [file, text] of [[sourceFile, source], [catalogFile, syntheticFixtureCatalogText()]]) {
-      const stat = fs.lstatSync(file);
-      if (!stat.isFile() || stat.isSymbolicLink() || fs.realpathSync.native(file) !== file
-        || fs.readFileSync(file, 'utf8') !== text) throw Error('MANUAL_FIXTURE_CHANGED');
+      if (fs.readFileSync(file, 'utf8') !== text) throw Error('MANUAL_FIXTURE_CHANGED');
     }
   }
   function close(): void {
     if (closed) return; closed = true;
     if (request) invalidateFixRequest(request);
-    // Known owned files only; rmdir never removes injected/unknown contents.
-    // Check physical parents before every deletion, with no recursive rm.
-    syntheticWorkspaceRepository(workspace);
-    for (const file of [sourceFile, catalogFile]) if (fs.existsSync(file)) {
-      const parent = path.dirname(file), stat = fs.lstatSync(file);
-      if (fs.realpathSync.native(parent) !== parent || !stat.isFile() || stat.isSymbolicLink()) throw Error('MANUAL_CLEANUP_BLOCKED');
-      fs.unlinkSync(file);
-    }
-    for (const dir of [dirs[3], dirs[2], dirs[1], dirs[0], repo, workspace.root]) if (fs.existsSync(dir)) {
-      const stat = fs.lstatSync(dir);
-      if (!stat.isDirectory() || stat.isSymbolicLink() || fs.realpathSync.native(dir) !== dir) throw Error('MANUAL_CLEANUP_BLOCKED');
-      fs.rmdirSync(dir);
-    }
-    revokeSyntheticExecutionWorkspace(workspace);
+    // Check the complete ownership set before deleting anything, then check
+    // physical parents again per operation. A replacement is never adopted.
+    // Node's check -> unlink/rmdir is not atomic against a concurrent OS actor;
+    // this is best-effort TEMP cleanup, not an isolated filesystem capability.
+    try {
+      syntheticWorkspaceRepository(workspace);
+      for (const file of owned.keys()) assertOwned(file);
+      for (const file of [sourceFile, catalogFile]) if (owned.has(file)) {
+        assertOwnedPath(file); fs.unlinkSync(file);
+      }
+      for (const dir of [dirs[3], dirs[2], dirs[1], dirs[0], repo, workspace.root]) if (owned.has(dir)) {
+        assertOwnedPath(dir); fs.rmdirSync(dir);
+      }
+    } catch { throw Error('MANUAL_CLEANUP_BLOCKED'); }
+    finally { revokeSyntheticExecutionWorkspace(workspace); }
   }
   try {
-    for (const dir of dirs) fs.mkdirSync(dir);
+    remember(workspace.root, true); remember(repo, true);
+    for (const dir of dirs) { fs.mkdirSync(dir); remember(dir, true); }
     fs.writeFileSync(sourceFile, source, { flag: 'wx', mode: 0o600 });
+    remember(sourceFile, false);
     fs.writeFileSync(catalogFile, syntheticFixtureCatalogText(), { flag: 'wx', mode: 0o600 });
+    remember(catalogFile, false);
     assertData();
     const sourceIdentity = resolveFactoryGuideSourceIdentity({ repoRoot: repo, guidePath: 'fixture/ciudad' });
     const snapshot = buildGuideSnapshot({ repoRoot: repo, sourceIdentity });
