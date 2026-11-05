@@ -1,3 +1,5 @@
+import type { TipoReserva } from '../../../../../shared/practical-info';
+
 export const JEREZ_GUIDE = {
   path: 'europa/espana/andalucia/cadiz/jerez-de-la-frontera',
   nombre: 'Jerez de la Frontera',
@@ -162,7 +164,8 @@ export const JEREZ_GUIDE = {
           web:
             'https://catedraldejerez.es/',
           reserva:
-            'https://catedraldejerez.es/comprar-entradas/'
+            'https://catedraldejerez.es/comprar-entradas/',
+          tipoReserva: 'entradas' as const satisfies TipoReserva
         },
         {
           nombre: 'Bodegas Tío Pepe · González Byass',

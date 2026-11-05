@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AnalyticsService } from '../../shared/analytics.service';
 import { CHIPIONA_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/chipiona.guide';
+import { JEREZ_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/jerez.guide';
+import { PracticalInfoItem, TipoReserva } from '../../shared/practical-info';
 import { PracticalInfoComponent } from './practical-info.component';
 
 describe('PracticalInfoComponent', () => {
@@ -56,6 +58,95 @@ describe('PracticalInfoComponent', () => {
 
     setItem({ web: 'https://example.test/visitas?idioma=es', reserva: 'https://example.test/visitas?idioma=en' });
     expect(actions()).toHaveSize(2);
+  });
+
+  const bookingLabels: [TipoReserva, string][] = [
+    ['entradas', 'Comprar entradas'],
+    ['mesa', 'Reservar mesa'],
+    ['visita', 'Reservar visita'],
+    ['inscripcion', 'Inscribirse']
+  ];
+
+  for (const [tipoReserva, label] of bookingLabels) {
+    it(`labels HTTP reservations as ${label} without changing navigation or measurement`, () => {
+      const measure = spyOn(TestBed.inject(AnalyticsService), 'action');
+      const item = Object.freeze({
+        nombre: 'Destino', reserva: 'https://example.test/reservar', tipoReserva
+      } satisfies PracticalInfoItem);
+      setItem(item);
+      const anchor = actions()[0];
+
+      expect(actions()).toHaveSize(1);
+      expect(anchor.querySelector('span')?.textContent).toBe(label);
+      expect(anchor.getAttribute('aria-label')).toBe(`${label}: Destino (se abre en otra pestaña)`);
+      expect(anchor.getAttribute('href')).toBe(item.reserva);
+      expect(anchor.target).toBe('_blank');
+      expect(anchor.rel).toBe('noopener noreferrer');
+      expect(anchor.classList.contains('primary-action')).toBeTrue();
+      expect(anchor.tabIndex).toBe(0);
+      anchor.click();
+      expect(measure).toHaveBeenCalledOnceWith('outbound', { kind: 'booking' });
+      expect(cancelledBeforeNavigation).toEqual([false]);
+      expect(item.tipoReserva).toBe(tipoReserva);
+    });
+  }
+
+  it('keeps the default label for old cards and unrecognized reservation types', () => {
+    for (const tipoReserva of [undefined, null, 'otro', 'constructor', '__proto__', 42]) {
+      setItem({ reserva: 'http://example.test/reservar', tipoReserva });
+      expect(actions()[0].querySelector('span')?.textContent).toBe('Reservar');
+      expect(actions()[0].getAttribute('href')).toBe('http://example.test/reservar');
+    }
+  });
+
+  it('keeps the combined web label when a contextual booking type is present', () => {
+    for (const [tipoReserva] of bookingLabels) {
+      setItem({ web: 'https://example.test/visita', reserva: 'https://example.test/visita/', tipoReserva });
+      expect(actions()).toHaveSize(1);
+      expect(actions()[0].querySelector('span')?.textContent).toBe('Web y reservas');
+      expect(actions()[0].getAttribute('href')).toBe('https://example.test/visita/');
+      expect(actions()[0].getAttribute('aria-label')).toBe('Web y reservas (se abre en otra pestaña)');
+    }
+  });
+
+  it('keeps email and telephone reservation labels when a contextual type is present', () => {
+    const measure = spyOn(TestBed.inject(AnalyticsService), 'action');
+    for (const [reserva, label] of [
+      ['mailto:reservas@example.test', 'Reservar por correo'],
+      ['tel:+34956123456', 'Reservar por teléfono']
+    ]) {
+      setItem({ reserva, tipoReserva: 'entradas' });
+      expect(actions()).toHaveSize(1);
+      expect(actions()[0].querySelector('span')?.textContent).toBe(label);
+      expect(actions()[0].getAttribute('href')).toBe(reserva);
+      expect(actions()[0].getAttribute('target')).toBeNull();
+      actions()[0].click();
+    }
+    expect(measure.calls.allArgs()).toEqual([
+      ['outbound', { kind: 'booking' }], ['outbound', { kind: 'booking' }]
+    ]);
+    expect(cancelledBeforeNavigation).toEqual([false, false]);
+    setItem({ telefono: '+34 956 123 456 / +34 608 908 038', reserva: 'tel:+34956123456', tipoReserva: 'mesa' });
+    expect(actions()).toHaveSize(0);
+    expect(root.querySelectorAll('.phone-link')).toHaveSize(2);
+    expect(root.querySelector('.phone-link')?.getAttribute('aria-label')).toContain('Llamar para reservar');
+  });
+
+  it('offers Comprar entradas for the current Jerez Cathedral card with its original URLs', () => {
+    const cathedral = JEREZ_GUIDE.secciones.flatMap<PracticalInfoItem & { maps?: string }>(section => section.lugares ?? [])
+      .find(item => item.nombre === 'Catedral de Jerez · Nuestro Señor San Salvador')!;
+    expect(cathedral).toBeDefined();
+    const before = JSON.stringify(cathedral);
+    const item = Object.freeze({ ...cathedral });
+    setItem(item, item.maps);
+
+    expect(actions().map(anchor => anchor.getAttribute('href'))).toEqual([
+      'https://www.google.com/maps/place/?q=place_id:ChIJN2WzkJDGDQ0R0YPpZOmXExw',
+      'https://catedraldejerez.es/comprar-entradas/',
+      'https://catedraldejerez.es/'
+    ]);
+    expect(root.querySelector('.primary-action span')?.textContent).toBe('Comprar entradas');
+    expect(JSON.stringify(cathedral)).toBe(before);
   });
 
   it('renders the Chipiona email reservations as independent booking actions without changing the cards', () => {

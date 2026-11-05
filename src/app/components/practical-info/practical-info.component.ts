@@ -5,6 +5,7 @@ import { PhoneContactComponent } from '../phone-contact/phone-contact.component'
 import { parsePhoneContact } from '../../shared/phone-contact';
 import { AnalyticsService } from '../../shared/analytics.service';
 import { MeasureLinkDirective } from '../../shared/measure-link.directive';
+import { PracticalInfoItem, TipoReserva } from '../../shared/practical-info';
 
 interface PracticalAction {
   label: string;
@@ -27,7 +28,7 @@ interface PracticalFact { label: string; icon: string; value: string; }
   host: { '[class.is-empty]': '!hasContent' }
 })
 export class PracticalInfoComponent implements OnChanges {
-  @Input() item: any = null;
+  @Input() item: PracticalInfoItem | null = null;
   @Input() mapHref = '';
   private readonly analytics = inject(AnalyticsService);
   actions: PracticalAction[] = [];
@@ -58,7 +59,7 @@ export class PracticalInfoComponent implements OnChanges {
 
     if (map) this.actions.push({ label: 'Cómo llegar', icon: 'near_me', href: map, kind: 'maps', external: /^https?:/i.test(map), primary: false });
     if (web && !sameWebsite) this.actions.push({ label: 'Web oficial', icon: 'language', href: web, kind: 'web', external: true, primary: false });
-    if (booking) this.actions.push({ label: sameWebsite ? 'Web y reservas' : 'Reservar', icon: 'confirmation_number', href: booking, kind: 'booking', external: true, primary: true });
+    if (booking) this.actions.push({ label: sameWebsite ? 'Web y reservas' : this.bookingLabel(item.tipoReserva), icon: 'confirmation_number', href: booking, kind: 'booking', external: true, primary: true });
     if (emailBooking) this.actions.push({ label: 'Reservar por correo', icon: 'mail', href: emailBooking, kind: 'booking', external: false, primary: true });
 
     const reservation = this.text(item.reserva);
@@ -103,6 +104,16 @@ export class PracticalInfoComponent implements OnChanges {
 
   private text(value: unknown): string {
     return typeof value === 'string' ? value.trim() : typeof value === 'number' && Number.isFinite(value) ? String(value) : '';
+  }
+
+  private bookingLabel(type: TipoReserva | undefined): string {
+    switch (type) {
+      case 'entradas': return 'Comprar entradas';
+      case 'mesa': return 'Reservar mesa';
+      case 'visita': return 'Reservar visita';
+      case 'inscripcion': return 'Inscribirse';
+      default: return 'Reservar';
+    }
   }
 
   private webUrl(value: unknown): string {
