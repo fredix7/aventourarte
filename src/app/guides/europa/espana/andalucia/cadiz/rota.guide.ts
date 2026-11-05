@@ -434,7 +434,8 @@ export const ROTA_GUIDE = {
           web:
             'https://www.loscorralesderota.com/',
           reserva:
-            'https://reservas.loscorralesderota.com/'
+            'https://reservas.loscorralesderota.com/',
+          tipoReserva: 'visita' as const
         },
         {
           nombre: 'Centro de Recuperación de la Mayetería',
