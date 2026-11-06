@@ -271,7 +271,8 @@ export const CORIA_GUIDE = {
           web:
             'https://www.museodelaautonomia.es/',
           reserva:
-            'https://www.museodelaautonomia.es/informacion-visitas'
+            'https://www.museodelaautonomia.es/informacion-visitas',
+          tipoReserva: 'visita' as const
         }
       ]
     },
@@ -431,7 +432,8 @@ export const CORIA_GUIDE = {
           web:
             'https://www.sevruga.es/',
           reserva:
-            'https://www.sevruga.es/reservas'
+            'https://www.sevruga.es/reservas',
+          tipoReserva: 'mesa' as const
         },
         {
           nombre: 'Restaurante El Esturión',
@@ -450,7 +452,8 @@ export const CORIA_GUIDE = {
           web:
             'https://www.esturion.es/',
           reserva:
-            'https://www.covermanager.com/reservation/module_restaurant/resturante-elesturion/spanish'
+            'https://www.covermanager.com/reservation/module_restaurant/resturante-elesturion/spanish',
+          tipoReserva: 'mesa' as const
         },
         {
           nombre: 'Bar Venta El Mellizo',

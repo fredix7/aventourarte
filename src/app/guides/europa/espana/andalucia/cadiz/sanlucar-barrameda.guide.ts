@@ -456,7 +456,8 @@ export const SANLUCAR_BARRAMEDA_GUIDE = {
           web:
             'https://espacioexploraterra.org/',
           reserva:
-            'https://ticket.fundacionnaovictoria.org/es/2027-exploraterra-sanlucar'
+            'https://ticket.fundacionnaovictoria.org/es/2027-exploraterra-sanlucar',
+          tipoReserva: 'entradas' as const
         },
         {
           nombre: 'Bodegas Delgado Zuleta (Opcional)',
