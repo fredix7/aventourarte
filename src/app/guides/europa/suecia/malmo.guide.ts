@@ -350,7 +350,8 @@ export const MALMO_GUIDE = {
           web:
             'https://www.bullen.nu/',
           reserva:
-            'https://www.bullen.nu/boka-bord'
+            'https://book.easytable.com/book/?id=23498&lang=se',
+          tipoReserva: 'mesa' as const
         },
         {
           nombre: 'Clemens Kött & Husman — Malmö Saluhall',
