@@ -131,7 +131,8 @@ export const MALMO_GUIDE = {
             'Adultos: 230 SEK. Estudiantes y mayores: 185 SEK. Niños de 6 a 15 años: 80 SEK y deben ir acompañados por un adulto. Menores de 6 años: hasta dos niños gratis por adulto o tutor',
           telefono: '+46 40 10 17 71',
           web: 'https://disgustingfoodmuseum.com/prices_hours/',
-          reserva: 'https://disgustingfoodmuseum.com/buy-tickets-2/'
+          reserva: 'https://disgustingfoodmuseum.com/buy-tickets-2/',
+          tipoReserva: 'entradas' as const
         },
         {
           nombre: 'Stortorget, Ayuntamiento y Apoteket Lejonet',
