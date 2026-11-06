@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AnalyticsService } from '../../shared/analytics.service';
 import { CHIPIONA_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/chipiona.guide';
 import { JEREZ_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/jerez.guide';
+import { COPENHAGUE_GUIDE } from '../../guides/europa/dinamarca/copenhague.guide';
 import { PracticalInfoItem, TipoReserva } from '../../shared/practical-info';
 import { PracticalInfoComponent } from './practical-info.component';
 
@@ -15,6 +16,15 @@ describe('PracticalInfoComponent', () => {
     fixture.detectChanges();
   };
   const actions = () => [...root.querySelectorAll<HTMLAnchorElement>('.practical-action')];
+  const copenhagenItem = (name: string) => {
+    const item = COPENHAGUE_GUIDE.secciones.flatMap<PracticalInfoItem & { maps?: string }>(section => [
+      ...(section.itinerario ?? []).flatMap<PracticalInfoItem & { maps?: string }>(day => day.zonas ?? []),
+      ...(section.subsecciones ?? []).flatMap<PracticalInfoItem & { maps?: string }>(subsection => subsection.lugares ?? [])
+    ])
+      .find(item => item.nombre === name);
+    expect(item).withContext(name).toBeDefined();
+    return item!;
+  };
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PracticalInfoComponent);
@@ -62,6 +72,7 @@ describe('PracticalInfoComponent', () => {
 
   const bookingLabels: [TipoReserva, string][] = [
     ['entradas', 'Comprar entradas'],
+    ['pases-atracciones', 'Comprar pases de atracciones'],
     ['mesa', 'Reservar mesa'],
     ['visita', 'Reservar visita'],
     ['inscripcion', 'Inscribirse']
@@ -130,6 +141,59 @@ describe('PracticalInfoComponent', () => {
     expect(actions()).toHaveSize(0);
     expect(root.querySelectorAll('.phone-link')).toHaveSize(2);
     expect(root.querySelector('.phone-link')?.getAttribute('aria-label')).toContain('Llamar para reservar');
+  });
+
+  it('labels the current Bakken shop as attraction passes without implying paid park admission', () => {
+    const measure = spyOn(TestBed.inject(AnalyticsService), 'action');
+    const item = Object.freeze({ ...copenhagenItem('Bakken y Jægersborg Dyrehave') });
+    setItem(item);
+    const anchor = root.querySelector<HTMLAnchorElement>('.primary-action')!;
+
+    expect(anchor.querySelector('span')?.textContent).toBe('Comprar pases de atracciones');
+    expect(anchor.getAttribute('href')).toBe('https://shop.bakken.dk/en/');
+    expect(anchor.getAttribute('aria-label')).toBe(
+      'Comprar pases de atracciones: Bakken y Jægersborg Dyrehave (se abre en otra pestaña)');
+    expect(anchor.target).toBe('_blank');
+    expect(anchor.rel).toBe('noopener noreferrer');
+    expect(anchor.tabIndex).toBe(0);
+    anchor.click();
+    expect(measure).toHaveBeenCalledOnceWith('outbound', { kind: 'booking' });
+    expect(cancelledBeforeNavigation).toEqual([false]);
+  });
+
+  it('keeps the confirmed Kastellet guided visit action', () => {
+    setItem(copenhagenItem('Kastellet · la fortaleza estrella de Copenhague'));
+    const anchor = root.querySelector<HTMLAnchorElement>('.primary-action')!;
+    expect(anchor.querySelector('span')?.textContent).toBe('Reservar visita');
+    expect(anchor.getAttribute('href')).toBe(
+      'https://www.kastelletsvenner.dk/j4/index.php/om-foreningen/rundvisning');
+  });
+
+  it('renders Copenhagen visitor information as website links without fictitious booking actions', () => {
+    const measure = spyOn(TestBed.inject(AnalyticsService), 'action');
+    for (const [name, href] of [
+      ['Iglesia de Mármol · Frederikskirken', 'https://www.marmorkirken.dk/'],
+      ['Langelinie, St. Alban y Fuente de Gefion', 'https://www.st-albans.dk/'],
+      ['Frederiksberg Have y Palacio de Frederiksberg', 'https://slks.dk/omraader/slotte-og-ejendomme/slotte-og-anlaeg/frederiksberg-have-og-soendermarken-med-frederiksberg-slot']
+    ]) {
+      setItem(copenhagenItem(name));
+      expect(actions()).toHaveSize(1);
+      expect(actions()[0].querySelector('span')?.textContent).toBe('Web oficial');
+      expect(actions()[0].getAttribute('href')).toBe(href);
+      expect(root.querySelector('.primary-action')).toBeNull();
+      expect(fixture.componentInstance.bookingActions).toHaveSize(0);
+      actions()[0].click();
+    }
+    expect(measure.calls.allArgs()).toEqual([
+      ['outbound', { kind: 'web' }], ['outbound', { kind: 'web' }], ['outbound', { kind: 'web' }]
+    ]);
+    expect(cancelledBeforeNavigation).toEqual([false, false, false]);
+  });
+
+  it('links the Tivoli booking action to single-day entrance and ride passes', () => {
+    setItem(copenhagenItem('Jardines Tívoli'));
+    expect(root.querySelector<HTMLAnchorElement>('.primary-action')?.getAttribute('href')).toBe(
+      'https://www.tivoli.dk/en/shop/entrance-and-ride-pass');
   });
 
   it('offers Comprar entradas for the current Jerez Cathedral card with its original URLs', () => {

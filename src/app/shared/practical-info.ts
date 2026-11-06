@@ -1,4 +1,4 @@
-export type TipoReserva = 'entradas' | 'mesa' | 'visita' | 'inscripcion';
+export type TipoReserva = 'entradas' | 'mesa' | 'visita' | 'inscripcion' | 'pases-atracciones';
 
 export interface PracticalInfoItem {
   nombre?: string;

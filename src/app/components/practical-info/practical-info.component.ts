@@ -109,6 +109,7 @@ export class PracticalInfoComponent implements OnChanges {
   private bookingLabel(type: TipoReserva | undefined): string {
     switch (type) {
       case 'entradas': return 'Comprar entradas';
+      case 'pases-atracciones': return 'Comprar pases de atracciones';
       case 'mesa': return 'Reservar mesa';
       case 'visita': return 'Reservar visita';
       case 'inscripcion': return 'Inscribirse';

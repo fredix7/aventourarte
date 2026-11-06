@@ -265,7 +265,6 @@ export const COPENHAGUE_GUIDE = {
               precio:
                 'Interior: gratis. Subida a la cúpula: adultos 50 DKK; niños de 0 a 12 años gratis. No se ha confirmado una tarifa reducida específica para otras categorías. Aforo máximo de 15 personas por visita, sin reserva anticipada. Conciertos y actividades especiales: según programación',
               web: 'https://www.marmorkirken.dk/',
-              reserva: 'https://www.marmorkirken.dk/visitthedome',
               telefono: '+45 61 62 03 01'
             },
             {
@@ -306,6 +305,7 @@ export const COPENHAGUE_GUIDE = {
                 'Kastellet, murallas y zonas públicas, Kastelskirken y exposición Danmarks Indsats: gratis. Antigua prisión, molino y pequeños museos históricos: acceso sujeto a programación. Visitas guiadas de Kastellets Venner: 75 DKK por persona, con un mínimo de 750 DKK por recorrido de grupo; duración aproximada de 1 hora y 30 minutos, con solicitud al menos 14 días antes. Consulta las condiciones vigentes y posibles actividades gratuitas en jornadas especiales',
               web: 'https://www.forsvaret.dk/da/side/kastellet/',
               reserva: 'https://www.kastelletsvenner.dk/j4/index.php/om-foreningen/rundvisning',
+              tipoReserva: 'visita' as const,
               telefono: '+45 72 81 11 43'
             },
             {
@@ -339,7 +339,6 @@ export const COPENHAGUE_GUIDE = {
               precio:
                 'Paseo de Langelinie, Churchillparken y Fuente de Gefion: gratis. St. Alban: no se publica tarifa ordinaria de entrada turística; donaciones voluntarias. Visitas especiales y actividades: consulta las condiciones del organizador antes de acudir',
               web: 'https://www.st-albans.dk/',
-              reserva: 'https://www.st-albans.dk/worship/where-to-find-us',
               telefono: '+45 39 62 77 36'
             },
             {
@@ -461,7 +460,7 @@ export const COPENHAGUE_GUIDE = {
               precio:
                 'Entrada general y Ride Pass se adquieren por separado o mediante paquetes combinados y utilizan precios variables según fecha y modalidad. Copenhagen Card incluye actualmente una entrada a Tívoli, pero no el Ride Pass ordinario; ofrece un Ride Pass con descuento bajo sus condiciones vigentes. Precio variable; consulta la venta oficial antes de reservar',
               web: 'https://www.tivoli.dk/en/opening-hours-and-seasons',
-              reserva: 'https://shop.tivoli.dk/en/billetter-og-tivolikort?direct=true',
+              reserva: 'https://www.tivoli.dk/en/shop/entrance-and-ride-pass',
               telefono: '+45 33 15 10 01'
             },
             {
@@ -476,7 +475,6 @@ export const COPENHAGUE_GUIDE = {
               precio:
                 'Frederiksberg Have y Søndermarken: gratis. Visita pública del Palacio de Frederiksberg: adultos 100 DKK; menores de 15 años gratis. Visitas especiales y otras actividades: según modalidad. Confirma las condiciones vigentes antes de acudir',
               web: 'https://slks.dk/omraader/slotte-og-ejendomme/slotte-og-anlaeg/frederiksberg-have-og-soendermarken-med-frederiksberg-slot',
-              reserva: 'https://www.klartilkamp.dk/rundvisninger',
               telefono: '+45 72 81 77 73'
             },
             {
@@ -553,6 +551,7 @@ export const COPENHAGUE_GUIDE = {
                 'Jægersborg Dyrehave y acceso general a Bakken: gratis. Atracciones y juegos de Bakken: pago independiente mediante pulsera, tarjeta de cupones o modalidad disponible en la venta vigente. Precio variable; consulta la venta oficial antes de comprar. Transporte desde Copenhague: según billete o cobertura vigente de Copenhagen Card Discover',
               web: 'https://www.visitcopenhagen.com/copenhagen/planning/bakken-gdk443528',
               reserva: 'https://shop.bakken.dk/en/',
+              tipoReserva: 'pases-atracciones' as const,
               telefono: '+45 39 63 35 44'
             },
             {
