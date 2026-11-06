@@ -137,7 +137,8 @@ export const SANLUCAR_BARRAMEDA_GUIDE = {
           web:
             'https://www.barbadillo.com/visitas-bodegas-barbadillo/',
           reserva:
-            'https://museodelamanzanilla.com/reservar/'
+            'https://museodelamanzanilla.com/reservar/',
+          tipoReserva: 'visita' as const
         },
         {
           nombre: 'Palacio Ducal de Medina Sidonia',
@@ -345,7 +346,8 @@ export const SANLUCAR_BARRAMEDA_GUIDE = {
           web:
             'https://bodegashidalgolagitana.com/visitas/',
           reserva:
-            'https://bodegashidalgolagitana.com/visitas/experiencia/visita-diaria/'
+            'https://bodegashidalgolagitana.com/visitas/experiencia/visita-diaria/',
+          tipoReserva: 'visita' as const
         },
         {
           nombre: 'Calzada de la Duquesa Isabel y Playa de la Calzada',
@@ -396,7 +398,8 @@ export const SANLUCAR_BARRAMEDA_GUIDE = {
           web:
             'https://www.manolosanlucar.org/visita',
           reserva:
-            'https://www.manolosanlucar.org/museo/entradas'
+            'https://www.manolosanlucar.org/museo/entradas',
+          tipoReserva: 'entradas' as const
         },
         {
           nombre: 'Parque Nacional de Doñana y Navegación por el Guadalquivir (Opcional)',
@@ -672,7 +675,8 @@ export const SANLUCAR_BARRAMEDA_GUIDE = {
           web:
             'https://restaurantecasabigote.com/',
           reserva:
-            'https://www.covermanager.com/reserve/module_restaurant/restaurante-casabigote/spanish'
+            'https://www.covermanager.com/reserve/module_restaurant/restaurante-casabigote/spanish',
+          tipoReserva: 'mesa' as const
         },
         {
           nombre: 'El Mirador de Doñana',
