@@ -609,9 +609,13 @@ export const MALTA_GUIDE = {
               foto:
                 'cld:europa/malta/comino/blue-lagoon',
               horario:
-                'Acceso libre durante todo el año',
+                'Visita dentro de la franja horaria reservada. Consulta las franjas vigentes en el portal oficial y coordina el transporte con tu pase QR.',
               precio:
-                'Gratis'
+                'Acceso y pase QR gratuitos. El transporte marítimo no está incluido y se contrata aparte.',
+              acceso:
+                'Para visitar y permanecer en Blue Lagoon es obligatorio reservar un pase QR gratuito por franja y presentarlo en los controles. No necesitan pase los menores de cinco años acompañados por un progenitor o tutor, ni quienes solo transitan por los caminos habilitados hacia otras zonas sin detenerse en Blue Lagoon. Consulta las demás excepciones en las condiciones oficiales.',
+              reserva: 'https://blcomino.com/product/blue-lagoon/',
+              tipoReserva: 'visita' as const
             },
             {
               nombre: 'Crystal Lagoon (La Laguna de Cristal)',
