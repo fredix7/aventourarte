@@ -125,6 +125,7 @@ export const COPENHAGUE_GUIDE = {
                 'Adultos: 110 DKK. Menores de 18 años: gratis. Personas mayores: entrada gratuita los martes. Miércoles: entrada gratuita para todos. Incluido con Copenhagen Card Discover. Consulta posibles campañas especiales de gratuidad juvenil',
               web: 'https://www.thorvaldsensmuseum.dk/en/visit-the-museet',
               reserva: 'https://billetto.dk/e/thorvaldsens-museum-entrebillet-billetter-1787928',
+              tipoReserva: 'entradas' as const,
               telefono: '+45 21 68 75 68'
             },
             {
@@ -186,7 +187,8 @@ export const COPENHAGUE_GUIDE = {
               precio:
                 'Acceso general al edificio y exposición permanente TREASURES: gratis. Exposiciones temporales: precio variable; consulta la venta oficial antes de reservar. Visita guiada pública: adultos 120 DKK; jóvenes de 18 a 26 años 60 DKK; menores de 18 años y titulares del pase anual, gratis. La visita guiada incluye las exposiciones del día. Sala de Lectura Antigua: visita dominical con entrada válida de exposiciones. Conciertos y actividades: según programación',
               web: 'https://www.kb.dk/en/visit-us/black-diamond-copenhagen',
-              reserva: 'https://www.kb.dk/en/visit-us/guided-tours',
+              reserva: 'https://billet.kb.dk/webshop/webticket/shop?page=timeslot&tsproduction=11',
+              tipoReserva: 'visita' as const,
               telefono: '+45 33 47 47 47'
             },
             {
