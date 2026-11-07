@@ -15127,7 +15127,7 @@ Es uno de esos lugares donde merece much\xEDsimo la pena detenerse, escuchar la 
 \u2022 Las horas centrales suelen estar muy masificadas
 
 \u{1F4A1} Consejo viajero:
-Las mejores horas para visitarla son a primera hora de la ma\xF1ana o despu\xE9s de las 14:30.`,foto:"cld:europa/malta/la-valeta/concatedral-san-juan",horario:"Lun\u2013S\xE1b: 09:00\u201316:45 | \xDAltimo acceso: 16:15 | Domingos y festivos religiosos cerrada al turismo",precio:"Adultos: 15\u20AC | Estudiantes y mayores de 60: 12\u20AC | Menores de 12 a\xF1os: Gratis | Audiogu\xEDa incluida"},{nombre:"Museo Nacional de Arqueolog\xEDa",tiposPlan:["ruta","urbano","museo","coste-variable"],descripcion:`A pocos minutos de la Concatedral, seguimos por Republic Street para cambiar completamente de \xE9poca: de la Malta barroca de los Caballeros al pasado m\xE1s antiguo y misterioso de la isla.
+Las mejores horas para visitarla son a primera hora de la ma\xF1ana o despu\xE9s de las 14:30.`,foto:"cld:europa/malta/la-valeta/concatedral-san-juan",horario:"Lun\u2013S\xE1b: 09:00\u201316:45 | \xDAltimo acceso: 16:00 | Domingos y festivos religiosos cerrada al turismo",precio:"Adultos: 15\u20AC | Estudiantes y mayores de 60: 12\u20AC | Menores de 12 a\xF1os: Gratis | Audiogu\xEDa incluida"},{nombre:"Museo Nacional de Arqueolog\xEDa",tiposPlan:["ruta","urbano","museo","coste-variable"],descripcion:`A pocos minutos de la Concatedral, seguimos por Republic Street para cambiar completamente de \xE9poca: de la Malta barroca de los Caballeros al pasado m\xE1s antiguo y misterioso de la isla.
 
 El Museo Nacional de Arqueolog\xEDa es una de las visitas m\xE1s importantes de Malta para comprender el misterioso pasado prehist\xF3rico de la isla.
 
@@ -15256,7 +15256,7 @@ Aunque la visita tur\xEDstica merece much\xEDsimo la pena, la mejor experiencia 
 La ac\xFAstica del teatro es tan buena que incluso los susurros se escuchan perfectamente desde cualquier palco.
 
 \u{1F4A1} Consejo pr\xE1ctico:
-Las visitas tur\xEDsticas pueden modificarse si hay ensayos generales o preparativos para espect\xE1culos.`,horario:"Visitas: Lun\u2013Vie 10:00\u201316:30 | S\xE1b: 10:00\u201312:30 | Dom: Cerrado salvo funciones",precio:"Visita tur\xEDstica: 5\u20AC | Funciones y conciertos: \u2248 15\u20AC\u201360\u20AC"},{nombre:"Procatedral de San Pablo",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Continuando hacia la zona occidental de La Valeta, el perfil de la ciudad cambia con una aguja alt\xEDsima que recuerda la etapa brit\xE1nica de Malta.
+Las visitas tur\xEDsticas pueden modificarse si hay ensayos generales o preparativos para espect\xE1culos.`,horario:"Visitas por turnos: Lun\u2013Vie, invierno (1 sep\u201319 jun): 11:00 y 15:00; verano (20 jun\u201331 ago): 10:30 y 12:00 | S\xE1b: 10:30, 11:30 y 12:30 | Dom: sin visitas tur\xEDsticas | Pueden cancelarse o reprogramarse por ensayos o trabajos t\xE9cnicos",precio:"Visita tur\xEDstica: 10\u20AC | Funciones y conciertos: seg\xFAn programaci\xF3n y localidad"},{nombre:"Procatedral de San Pablo",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Continuando hacia la zona occidental de La Valeta, el perfil de la ciudad cambia con una aguja alt\xEDsima que recuerda la etapa brit\xE1nica de Malta.
 
 La Procatedral de San Pablo es uno de los edificios m\xE1s reconocibles del skyline de Malta gracias a su enorme aguja de 60 metros que domina completamente el perfil de La Valeta.
 
@@ -15375,7 +15375,7 @@ No pases demasiado r\xE1pido por los pasillos y galer\xEDas.
 Muchos de los mejores detalles aparecen precisamente en los techos, armaduras y frescos secundarios.
 
 \u{1F482} Consejo pr\xE1ctico:
-A las 10:00 suele celebrarse el Cambio de Guardia frente al palacio en la Plaza de San Jorge, una ceremonia heredada de la \xE9poca brit\xE1nica muy interesante para ver antes de entrar.`,foto:"cld:europa/malta/la-valeta/palacio-del-gran-maestre",horario:"Lun\u2013Dom: 09:00\u201317:00 | \xDAltimo acceso: 16:30",precio:"Adultos: 15\u20AC | J\xF3venes, estudiantes y mayores de 60: 12\u20AC | Ni\xF1os 6\u201311 a\xF1os: 7\u20AC | Menores de 5 a\xF1os: Gratis"},{nombre:"Casa Rocca Piccola",tiposPlan:["ruta","urbano","coste-variable"],descripcion:`Tras visitar el gran palacio del poder oficial, continuamos por Republic Street hacia una cara mucho m\xE1s \xEDntima y dom\xE9stica de la historia maltesa.
+A las 10:00 suele celebrarse el Cambio de Guardia frente al palacio en la Plaza de San Jorge, una ceremonia heredada de la \xE9poca brit\xE1nica muy interesante para ver antes de entrar.`,foto:"cld:europa/malta/la-valeta/palacio-del-gran-maestre",horario:"Lun\u2013Dom: 09:00\u201317:00 | \xDAltimo acceso: 16:30",precio:"Adultos: 12\u20AC | J\xF3venes (12\u201317), estudiantes y personas de 60 a\xF1os o m\xE1s: 10\u20AC | Ni\xF1os 6\u201311 a\xF1os: 8\u20AC | Ni\xF1os 1\u20135 a\xF1os: Gratis",acceso:"Avisos oficiales consultados el 7/11/2026: la Sala del Trono est\xE1 cerrada hasta nuevo aviso. Hay fechas con cierre de las Salas de Estado y acceso limitado a la Armer\xEDa, y otras con cierre horario de ambas zonas. Consulta los avisos vigentes de Heritage Malta antes de visitar."},{nombre:"Casa Rocca Piccola",tiposPlan:["ruta","urbano","coste-variable"],descripcion:`Tras visitar el gran palacio del poder oficial, continuamos por Republic Street hacia una cara mucho m\xE1s \xEDntima y dom\xE9stica de la historia maltesa.
 
 Casa Rocca Piccola es una de las visitas m\xE1s especiales, \xEDntimas y sorprendentes de toda La Valeta.
 
@@ -15468,7 +15468,7 @@ Gran parte de la visita es al aire libre y el sol malt\xE9s puede ser muy intens
 Llevar agua, gorra y evitar las horas centrales del d\xEDa es muy recomendable.
 
 \u{1F3AD} Curiosidad:
-En determinadas fechas se celebran recreaciones hist\xF3ricas militares con uniformes, mosquetes y disparos de ca\xF1\xF3n dentro del fuerte.`,foto:"cld:europa/malta/la-valeta/fuerte-san-telmo",horario:"Lun\u2013Dom: 09:00\u201317:00 | \xDAltimo acceso: 16:30",precio:"Adultos: 10\u20AC | J\xF3venes, estudiantes y mayores de 60: 7,50\u20AC | Ni\xF1os 6\u201311 a\xF1os: 5,50\u20AC | Menores de 5 a\xF1os: Gratis"},{nombre:"Jardines Inferiores de Barrakka",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Despu\xE9s de recorrer las murallas y el extremo defensivo de San Telmo, los Jardines Inferiores de Barrakka ofrecen una pausa m\xE1s serena antes de despedirnos de La Valeta.
+En determinadas fechas se celebran recreaciones hist\xF3ricas militares con uniformes, mosquetes y disparos de ca\xF1\xF3n dentro del fuerte.`,foto:"cld:europa/malta/la-valeta/fuerte-san-telmo",horario:"Horario general: Lun\u2013Dom 09:00\u201317:00 | \xDAltimo acceso: 16:30 | En las fechas programadas de In Guardia, la visita ordinaria al fuerte y al museo comienza a las 12:00",precio:"Adultos: 10\u20AC | J\xF3venes, estudiantes y mayores de 60: 7,50\u20AC | Ni\xF1os 6\u201311 a\xF1os: 5,50\u20AC | Menores de 5 a\xF1os: Gratis",acceso:"Aviso oficial consultado el 7/11/2026: la exposici\xF3n de la Primera Guerra Mundial de la secci\xF3n 4 est\xE1 cerrada hasta nuevo aviso; no se trata de un cierre de todo el fuerte ni del museo. Consulta los avisos vigentes y el calendario de In Guardia antes de ir."},{nombre:"Jardines Inferiores de Barrakka",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Despu\xE9s de recorrer las murallas y el extremo defensivo de San Telmo, los Jardines Inferiores de Barrakka ofrecen una pausa m\xE1s serena antes de despedirnos de La Valeta.
 
 Los Jardines Inferiores de Barrakka son uno de los rincones m\xE1s tranquilos, elegantes y relajantes de toda La Valeta.
 
@@ -16001,38 +16001,31 @@ No tengas prisa por volver al alojamiento.
 
 Dedica un rato a caminar junto al mar mientras cae la tarde.
 
-La luz sobre La Valeta al otro lado del puerto regala algunas de las estampas m\xE1s bonitas de todo el viaje.`},{nombre:"Teatro Orpheum",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Continuando la ruta por Sliema y alej\xE1ndonos unos minutos del paseo mar\xEDtimo m\xE1s concurrido, encontramos uno de los espacios culturales m\xE1s singulares y menos conocidos de la ciudad: el Teatro Orpheum.
+La luz sobre La Valeta al otro lado del puerto regala algunas de las estampas m\xE1s bonitas de todo el viaje.`},{nombre:"Teatro Orpheum",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Continuando la ruta desde Sliema hacia la vecina G\u017Cira, encontramos uno de sus espacios culturales hist\xF3ricos: el Teatro Orpheum.
 
 A diferencia de los grandes monumentos hist\xF3ricos de La Valeta o de la arquitectura militar de las Tres Ciudades, aqu\xED descubrimos la Malta del entretenimiento, el espect\xE1culo y la vida cultural del siglo XX.
 
 \u{1F3DB}\uFE0F Un viaje al Malta de entreguerras:
-El Orpheum abri\xF3 sus puertas en 1925, en plena \xE9poca de prosperidad bajo la administraci\xF3n brit\xE1nica.
-
-Inspirado en los grandes teatros y salas de variedades europeas de la \xE9poca, r\xE1pidamente se convirti\xF3 en uno de los centros culturales m\xE1s importantes de la isla.
+El Orpheum fue construido en 1932 seg\xFAn el dise\xF1o del arquitecto Harold J. Borg, durante la administraci\xF3n brit\xE1nica.
 
 Durante d\xE9cadas acogi\xF3 representaciones teatrales, conciertos, proyecciones cinematogr\xE1ficas y espect\xE1culos musicales que marcaron la vida social de varias generaciones de malteses.
 
 \u2728 Qu\xE9 hace especial este lugar:
-Lo m\xE1s sorprendente del Orpheum es que conserva gran parte de su atm\xF3sfera original.
+El Orpheum forma parte del patrimonio teatral hist\xF3rico de G\u017Cira.
 
-Su interior mantiene la elegancia de los teatros cl\xE1sicos del primer tercio del siglo XX, con una combinaci\xF3n de influencias Art D\xE9co y decoraciones de inspiraci\xF3n mediterr\xE1nea.
+El cat\xE1logo teatral de Valletta 2018 documenta elementos Art Nouveau y coloniales espa\xF1oles. Esta referencia hist\xF3rica no acredita el estado ni el acceso interior actuales.
 
 \u{1F4A1} Qu\xE9 observar:
 \u2022 La fachada hist\xF3rica del edificio
-\u2022 La sala principal restaurada
-\u2022 Los detalles decorativos originales
-\u2022 La ac\xFAstica del auditorio
-\u2022 Los elementos arquitect\xF3nicos conservados desde su inauguraci\xF3n
+\u2022 Si se autoriza el acceso, la sala principal y sus elementos decorativos
 
-\u{1F3AD} Renacimiento cultural:
-Tras varios periodos de declive y transformaci\xF3n, el teatro fue recuperado y restaurado para devolverle su papel dentro de la vida cultural maltesa.
-
-Hoy contin\xFAa acogiendo conciertos, festivales, espect\xE1culos esc\xE9nicos y eventos culturales que atraen tanto a locales como a visitantes.
+\u{1F3AD} Acceso actual:
+Las fuentes hist\xF3ricas no confirman una programaci\xF3n ni un horario tur\xEDstico vigentes. Antes de planificar una visita interior o asistir a un espect\xE1culo, comprueba el acceso y la programaci\xF3n actuales.
 
 \u{1F30D} Experiencia viajera:
 Visitar el Orpheum permite descubrir una faceta menos conocida de Malta.
 
-Aqu\xED la historia no gira en torno a caballeros, fortalezas o asedios, sino a la evoluci\xF3n cultural de la isla durante el siglo XX y al papel que desempe\xF1\xF3 Sliema en la modernizaci\xF3n del pa\xEDs.
+Aqu\xED la historia no gira en torno a caballeros, fortalezas o asedios, sino a la evoluci\xF3n cultural de la isla durante el siglo XX y al papel que desempe\xF1\xF3 G\u017Cira en la modernizaci\xF3n del pa\xEDs.
 
 \u2728 Consejo AvenTourArte:
 Si coincide alguna actuaci\xF3n durante tu estancia, merece mucho m\xE1s la pena asistir a un espect\xE1culo que limitarse a ver el edificio desde fuera.
@@ -16040,7 +16033,7 @@ Si coincide alguna actuaci\xF3n durante tu estancia, merece mucho m\xE1s la pena
 La experiencia permite disfrutar de uno de los espacios esc\xE9nicos hist\xF3ricos m\xE1s carism\xE1ticos de Malta.
 
 \u{1F4F8} Consejo fotogr\xE1fico:
-La fachada iluminada al anochecer ofrece una imagen muy distinta de la Malta monumental que hemos recorrido durante el d\xEDa y refleja perfectamente el car\xE1cter cosmopolita de Sliema.`,fotos:["cld:europa/malta/sliema/teatro-orpheum","cld:europa/malta/sliema/teatro-orpheum-interior"],horario:"Seg\xFAn programaci\xF3n de eventos",precio:"Exterior gratuito | Espect\xE1culos seg\xFAn evento"},{nombre:"Paseo Mar\xEDtimo de Sliema (The Promenade)",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Tras visitar el Teatro Orpheum, la ruta regresa de nuevo hacia el mar para recorrer uno de los lugares m\xE1s agradables y animados de toda Malta: el Paseo Mar\xEDtimo de Sliema.
+La fachada hist\xF3rica permite descubrir una imagen distinta de la Malta monumental recorrida durante el d\xEDa.`,fotos:["cld:europa/malta/sliema/teatro-orpheum","cld:europa/malta/sliema/teatro-orpheum-interior"],horario:"Sin horario de visita tur\xEDstica confirmado | Consultar el acceso y la programaci\xF3n actuales antes de ir",precio:"Exterior gratuito | Espect\xE1culos seg\xFAn evento"},{nombre:"Paseo Mar\xEDtimo de Sliema (The Promenade)",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Tras visitar el Teatro Orpheum, la ruta regresa de nuevo hacia el mar para recorrer uno de los lugares m\xE1s agradables y animados de toda Malta: el Paseo Mar\xEDtimo de Sliema.
 
 Con varios kil\xF3metros de longitud, este gran bulevar peatonal bordea pr\xE1cticamente toda la pen\xEDnsula y conecta de forma continua Sliema con San Juli\xE1n, convirti\xE9ndose en el lugar favorito de locales y viajeros para caminar, correr, relajarse o simplemente disfrutar de las vistas.
 
@@ -16429,7 +16422,7 @@ Aqu\xED el protagonismo pertenece al mar, a la roca y a la luz mediterr\xE1nea, 
 \u2728 Consejo AvenTourArte:
 La mejor combinaci\xF3n posible es visitar Blue Grotto a primera hora de la ma\xF1ana y continuar despu\xE9s hacia los cercanos templos megal\xEDticos de \u0126a\u0121ar Qim y Mnajdra.
 
-El contraste entre una maravilla natural creada por el mar y algunos de los monumentos m\xE1s antiguos del mundo convierte esta parte del d\xEDa en una de las m\xE1s memorables de todo el viaje.`,horario:"Paseos en barca: aprox. 09:00\u201316:30 (seg\xFAn estado del mar) | Mirador accesible 24h",precio:"Mirador: Gratis | Paseo en barca: Adultos \u2248 8\u20AC | Ni\xF1os \u2248 4\u20AC"},{nombre:"Templos de \u0126a\u0121ar Qim y Mnajdra",tiposPlan:["ruta","urbano","coste-variable"],descripcion:`Si el Hipogeo de \u0126al Saflieni muestra la dimensi\xF3n subterr\xE1nea y funeraria de la prehistoria maltesa, los templos de \u0126a\u0121ar Qim y Mnajdra revelan su cara monumental al aire libre.
+El contraste entre una maravilla natural creada por el mar y algunos de los monumentos m\xE1s antiguos del mundo convierte esta parte del d\xEDa en una de las m\xE1s memorables de todo el viaje.`,horario:"Paseos en barca: verano 09:00\u201317:00; invierno 09:00\u201315:30, siempre seg\xFAn el estado del mar; las salidas no est\xE1n garantizadas | Mirador accesible 24h",precio:"Mirador: Gratis | Paseo en barca: Adultos 10\u20AC | Ni\xF1os 5\u20AC"},{nombre:"Templos de \u0126a\u0121ar Qim y Mnajdra",tiposPlan:["ruta","urbano","coste-variable"],descripcion:`Si el Hipogeo de \u0126al Saflieni muestra la dimensi\xF3n subterr\xE1nea y funeraria de la prehistoria maltesa, los templos de \u0126a\u0121ar Qim y Mnajdra revelan su cara monumental al aire libre.
 
 Tras contemplar la fuerza del Mediterr\xE1neo en la Gruta Azul, la ruta contin\xFAa hacia uno de los lugares m\xE1s extraordinarios de todo el viaje y, posiblemente, de toda Europa.
 
@@ -16744,7 +16737,7 @@ La audiogu\xEDa incluida est\xE1 especialmente bien realizada y convierte la vis
 Merece la pena recorrer el palacio sin prisas para descubrir peque\xF1os detalles que suelen pasar desapercibidos.
 
 \u{1F4A1} Consejo pr\xE1ctico:
-La visita suele durar entre 45 minutos y 1 hora.`,foto:"cld:europa/malta/mdina/palacio-falson",horario:"Mar\u2013Dom: 10:00\u201317:00 | \xDAltimo acceso: 16:00 | Lunes cerrado",precio:"Adultos: 10\u20AC | Estudiantes y mayores de 60: 6\u20AC | Ni\xF1os 6\u201312 a\xF1os: Gratis"},{nombre:"Rabat",tiposPlan:["ruta","urbano"],descripcion:`Al abandonar las silenciosas calles medievales de Mdina y cruzar la antigua puerta de la ciudad, el viaje contin\xFAa en Rabat, la hist\xF3rica zona extramuros que durante siglos comparti\xF3 origen, historia y habitantes con la antigua capital.
+La visita suele durar entre 45 minutos y 1 hora.`,foto:"cld:europa/malta/mdina/palacio-falson",horario:"Mar\u2013Dom: 10:00\u201317:00 | \xDAltimo acceso: 16:00 | Lunes cerrado",precio:"Adultos: 12,50\u20AC | Estudiantes y mayores de 60: 6\u20AC | Ni\xF1os 6\u201312 a\xF1os: Gratis acompa\xF1ados por un adulto",acceso:"No se permite el acceso al museo a menores de 6 a\xF1os."},{nombre:"Rabat",tiposPlan:["ruta","urbano"],descripcion:`Al abandonar las silenciosas calles medievales de Mdina y cruzar la antigua puerta de la ciudad, el viaje contin\xFAa en Rabat, la hist\xF3rica zona extramuros que durante siglos comparti\xF3 origen, historia y habitantes con la antigua capital.
 
 Mientras Mdina muestra la cara noble y aristocr\xE1tica de Malta, Rabat revela una realidad mucho m\xE1s cotidiana, espiritual y aut\xE9ntica. Sus calles tranquilas, sus fachadas decoradas con im\xE1genes religiosas y sus peque\xF1as plazas esconden algunos de los lugares m\xE1s importantes para comprender los or\xEDgenes del cristianismo y la historia antigua de la isla.
 
