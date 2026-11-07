@@ -14852,10 +14852,7 @@ El plato superior lleg\xF3 incluso a colapsar en los a\xF1os 70, obligando a ins
 Tras una restauraci\xF3n integral inaugurada en 2018, la fuente recuper\xF3 finalmente su aspecto original.
 
 \u{1F319} Experiencia viajera:
-Aunque impresiona de d\xEDa por su tama\xF1o y la fuerza del agua, uno de los mejores momentos para verla es por la noche, cuando la iluminaci\xF3n crea un contraste precioso con las murallas fortificadas de La Valeta.
-
-\u{1F4F8} Consejo AvenTourArte:
-Es uno de los mejores puntos para empezar o terminar una ruta por La Valeta.`,foto:"cld:europa/malta/la-valeta/fuente-tritones"},{nombre:"Puerta de la Ciudad",tiposPlan:["ruta","urbano"],descripcion:`Desde la Fuente de los Tritones solo hay que avanzar unos metros para atravesar el acceso principal a la capital maltesa.
+Aunque impresiona de d\xEDa por su tama\xF1o y la fuerza del agua, uno de los mejores momentos para verla es por la noche, cuando la iluminaci\xF3n crea un contraste precioso con las murallas fortificadas de La Valeta.`,foto:"cld:europa/malta/la-valeta/fuente-tritones",direccion:"Triton Square, junto a Vjal Nelson y a la Puerta de la Ciudad, Floriana, Malta",maps:"https://www.google.com/maps/search/?api=1&query=Triton%20Fountain%2C%20Floriana%2C%20Malta",web:"https://www.florianalocalcouncil.com/2017/04/03/triton-fountain/"},{nombre:"Puerta de la Ciudad",tiposPlan:["ruta","urbano"],descripcion:`Desde la Fuente de los Tritones solo hay que avanzar unos metros para atravesar el acceso principal a la capital maltesa.
 
 La Puerta de la Ciudad (City Gate) es la entrada principal a La Valeta y uno de los lugares donde mejor se entiende la mezcla entre historia militar y arquitectura contempor\xE1nea que define Malta.
 
@@ -14882,7 +14879,7 @@ Cruzar esta entrada es realmente el momento en el que empieza la experiencia de 
 Nada m\xE1s atravesarla aparecen Republic Street, el moderno Parlamento malt\xE9s y las evocadoras ruinas del antiguo Teatro Real bombardeado durante la Segunda Guerra Mundial.
 
 \u{1F4F8} Consejo AvenTourArte:
-Merece la pena detenerse unos segundos justo antes de cruzarla para apreciar el contraste entre las murallas hist\xF3ricas, la Fuente de los Tritones y la arquitectura contempor\xE1nea integrada en la fortificaci\xF3n.`,foto:"cld:europa/malta/la-valeta/puerta-ciudad"},{nombre:"Teatro de la \xD3pera Real (Pjazza Teatru Rjal)",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Nada m\xE1s atravesar la Puerta de la Ciudad, a mano derecha aparecen las evocadoras ruinas del antiguo Teatro de la \xD3pera Real.
+Merece la pena detenerse unos segundos justo antes de cruzarla para apreciar el contraste entre las murallas hist\xF3ricas, la Fuente de los Tritones y la arquitectura contempor\xE1nea integrada en la fortificaci\xF3n.`,foto:"cld:europa/malta/la-valeta/puerta-ciudad",direccion:"City Gate, inicio de Republic Street, Valletta, Malta",maps:"https://www.google.com/maps/search/?api=1&query=Valletta%20City%20Gate%2C%20Republic%20Street%2C%20Valletta%2C%20Malta",web:"https://ghrc.gov.mt/portfolio/valletta-city-gate/"},{nombre:"Teatro de la \xD3pera Real (Pjazza Teatru Rjal)",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Nada m\xE1s atravesar la Puerta de la Ciudad, a mano derecha aparecen las evocadoras ruinas del antiguo Teatro de la \xD3pera Real.
 
 El antiguo Teatro de la \xD3pera Real es uno de los lugares con m\xE1s carga hist\xF3rica y emocional de toda La Valeta.
 
@@ -14915,10 +14912,7 @@ Tras m\xE1s de setenta a\xF1os de debates sobre qu\xE9 hacer con el edificio, el
 Inaugurado en 2013 como Pjazza Teatru Rjal, el recinto conserva las columnas da\xF1adas por las bombas y combina la arquitectura hist\xF3rica con un moderno escenario abierto bajo el cielo malt\xE9s.
 
 \u{1F3AD} Experiencia viajera:
-El contraste entre las ruinas neocl\xE1sicas, la piedra marcada por la guerra y la estructura contempor\xE1nea convierte este lugar en una de las estampas arquitect\xF3nicas m\xE1s impactantes de La Valeta.
-
-\u{1F4F8} Consejo AvenTourArte:
-Incluso si no hay espect\xE1culo, merece much\xEDsimo la pena detenerse unos minutos y observar c\xF3mo Malta ha transformado una herida hist\xF3rica en un espacio cultural vivo.`,foto:"cld:europa/malta/la-valeta/teatro-real",horario:"Exterior visitable 24h | Eventos y espect\xE1culos seg\xFAn programaci\xF3n",precio:"Exterior gratis | Espect\xE1culos seg\xFAn evento"},{nombre:"Palazzo Parisio (Republic Street)",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Continuando el paseo por Republic Street y adentr\xE1ndonos en el coraz\xF3n de La Valeta, encontramos uno de los ejemplos m\xE1s curiosos de c\xF3mo la ciudad ha sabido integrar su patrimonio hist\xF3rico en la vida cotidiana.
+El contraste entre las ruinas neocl\xE1sicas, la piedra marcada por la guerra y la estructura contempor\xE1nea convierte este lugar en una de las estampas arquitect\xF3nicas m\xE1s impactantes de La Valeta.`,foto:"cld:europa/malta/la-valeta/teatro-real",horario:"Exterior desde el espacio p\xFAblico | Acceso al recinto y espect\xE1culos: seg\xFAn programaci\xF3n",precio:"Exterior gratis | Espect\xE1culos seg\xFAn evento",direccion:"Pjazza Teatru Rjal, Republic Street, Valletta, Malta",maps:"https://www.google.com/maps/search/?api=1&query=Pjazza%20Teatru%20Rjal%2C%20Republic%20Street%2C%20Valletta%2C%20Malta",telefono:"+356 2247 8100",web:"https://pjazzateatrurjal.gov.mt/",acceso:"El exterior puede contemplarse desde el espacio p\xFAblico. El acceso al recinto y a los espect\xE1culos depende de la programaci\xF3n y de las condiciones de cada evento."},{nombre:"Palazzo Parisio (Republic Street)",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Continuando el paseo por Republic Street y adentr\xE1ndonos en el coraz\xF3n de La Valeta, encontramos uno de los ejemplos m\xE1s curiosos de c\xF3mo la ciudad ha sabido integrar su patrimonio hist\xF3rico en la vida cotidiana.
 
 El Palazzo Parisio es uno de los palacios barrocos m\xE1s elegantes y curiosos de toda La Valeta.
 
@@ -14992,9 +14986,7 @@ Aunque el interior no puede visitarse al tratarse de un edificio gubernamental a
 La plaza donde se encuentra es una de las zonas m\xE1s elegantes y abiertas de La Valeta, adem\xE1s de estar situada justo junto a los Jardines Superiores de Barrakka.
 
 \u{1F4F8} Consejo AvenTourArte:
-Merece much\xEDsimo la pena detenerse unos minutos antes de continuar hacia Barrakka para observar la fachada con calma.
-
-Especialmente al atardecer, la piedra dorada adquiere un color espectacular.`,foto:"cld:europa/malta/la-valeta/albergue-castilla",horario:"Exterior visitable 24h | Interior no visitable al p\xFAblico general",precio:"Gratis"},{nombre:"Jardines Superiores de Barrakka",tiposPlan:["ruta","urbano","coste-variable"],descripcion:`Apenas unos pasos separan el Albergue de Castilla del mirador m\xE1s espectacular de toda Malta.
+Especialmente al atardecer, la piedra dorada adquiere un color espectacular.`,foto:"cld:europa/malta/la-valeta/albergue-castilla",horario:"Exterior visitable 24h | Interior no visitable al p\xFAblico general",precio:"Gratis",direccion:"Misra\u0127 Kastilja (Castille Place), Valletta, Malta",maps:"https://www.google.com/maps/search/?api=1&query=Auberge%20de%20Castille%2C%20Castille%20Place%2C%20Valletta%2C%20Malta",web:"https://primeminister.gov.mt/office-of-the-prime-minister-2/"},{nombre:"Jardines Superiores de Barrakka",tiposPlan:["ruta","urbano","coste-variable"],descripcion:`Apenas unos pasos separan el Albergue de Castilla del mirador m\xE1s espectacular de toda Malta.
 
 Los Jardines Superiores de Barrakka son el mirador m\xE1s famoso, espectacular y fotografiado de toda Malta.
 
@@ -15008,14 +15000,14 @@ Desde aqu\xED tambi\xE9n pueden verse ferries, embarcaciones tradicionales malte
 \u2694\uFE0F Historia del lugar:
 Originalmente este espacio no era un jard\xEDn p\xFAblico.
 
-Fue construido en el siglo XVI como zona privada de descanso y entrenamiento para los caballeros italianos de la Orden de San Juan.
+Los jardines se establecieron en 1661 como zona privada de recreo para los caballeros italianos de la Orden de San Juan.
 
 Con la llegada de los brit\xE1nicos en el siglo XIX, el lugar fue transformado en jardines p\xFAblicos, a\xF1adiendo \xE1rboles, senderos, fuentes y monumentos conmemorativos.
 
 \u{1F4A3} La Bater\xEDa de Salva:
 Justo debajo de la terraza se encuentra la famosa Saluting Battery, una antigua plataforma defensiva con ca\xF1ones hist\xF3ricos alineados frente al puerto.
 
-Todos los d\xEDas se realiza una recreaci\xF3n ceremonial donde artilleros vestidos con uniformes hist\xF3ricos disparan uno de los ca\xF1ones.
+De lunes a s\xE1bado, a las 12:00 y a las 16:00, se realizan disparos ceremoniales con personal vestido con uniformes hist\xF3ricos, salvo cierres y excepciones del gestor.
 
 \u2728 Consejo AvenTourArte:
 Conviene colocarse junto a la barandilla unos 10 o 15 minutos antes para tener buena vista del disparo.
@@ -15028,12 +15020,7 @@ Es especialmente \xFAtil para coger el ferry hacia Las Tres Ciudades sin tener q
 \u{1F319} Experiencia viajera:
 Aunque durante el d\xEDa las vistas son espectaculares, uno de los momentos m\xE1s especiales para volver es al atardecer o por la noche.
 
-Las Tres Ciudades iluminadas reflej\xE1ndose sobre el agua crean una de las atm\xF3sferas m\xE1s m\xE1gicas de toda Malta.
-
-\u{1F4F8} Consejo AvenTourArte:
-Es uno de esos lugares donde merece la pena parar m\xE1s tiempo del previsto.
-
-No solo por las vistas, sino porque aqu\xED realmente entiendes la importancia estrat\xE9gica e hist\xF3rica del Gran Puerto de Malta.`,fotos:["cld:europa/malta/la-valeta/jardines-superiores-barrakka","cld:europa/malta/la-valeta/jardines-superiores-barrakka-battery","cld:europa/malta/la-valeta/jardines-superiores-barrakka-saluting-battery","cld:europa/malta/la-valeta/jardines-superiores-barrakka-ascensor"],horario:"Todos los d\xEDas: 07:00\u201322:00 aprox. | Disparos de la Saluting Battery: 12:00 y 16:00",precio:"Jardines gratis | Barrakka Lift: \u2248 1\u20AC | Saluting Battery: exterior gratis"},{nombre:"St. Lucia\u2019s Street, Triq Sant\u2019 Orsla y Old Theatre Street",tiposPlan:["ruta","urbano"],descripcion:`Despu\xE9s de contemplar las vistas del Gran Puerto desde Barrakka, toca volver a perderse por el interior de La Valeta.
+Las Tres Ciudades iluminadas reflej\xE1ndose sobre el agua crean una de las atm\xF3sferas m\xE1s m\xE1gicas de toda Malta.`,fotos:["cld:europa/malta/la-valeta/jardines-superiores-barrakka","cld:europa/malta/la-valeta/jardines-superiores-barrakka-battery","cld:europa/malta/la-valeta/jardines-superiores-barrakka-saluting-battery","cld:europa/malta/la-valeta/jardines-superiores-barrakka-ascensor"],horario:"Jardines: consulta los horarios de apertura y los avisos de cierre | Barrakka Lift: horario independiente seg\xFAn temporada | Saluting Battery: Lun\u2013S\xE1b, disparos a las 12:00 y 16:00, salvo cierres y excepciones del gestor",precio:"Jardines y vista de la bater\xEDa desde la terraza: gratis | Barrakka Lift: 1\u20AC ida y vuelta en el mismo d\xEDa | Entrada a la Saluting Battery: de pago; consulta la tarifa vigente antes de comprar",direccion:"Upper Barrakka Gardens, junto a Castille Place, Valletta, Malta",maps:"https://www.google.com/maps/search/?api=1&query=Upper%20Barrakka%20Gardens%2C%20Valletta%2C%20Malta",web:"https://ambjentmalta.gov.mt/what-we-do/managed-sites/upper-barrakka/",acceso:"Los jardines, el ascensor y la Saluting Battery tienen accesos y horarios independientes. Consulta los avisos antes de ir: puede haber cierres de los jardines por eventos."},{nombre:"St. Lucia\u2019s Street, Triq Sant\u2019 Orsla y Old Theatre Street",tiposPlan:["ruta","urbano"],descripcion:`Despu\xE9s de contemplar las vistas del Gran Puerto desde Barrakka, toca volver a perderse por el interior de La Valeta.
 
 Estas tres calles forman una de las zonas con m\xE1s encanto y personalidad de toda La Valeta.
 
@@ -15127,7 +15114,7 @@ Es uno de esos lugares donde merece much\xEDsimo la pena detenerse, escuchar la 
 \u2022 Las horas centrales suelen estar muy masificadas
 
 \u{1F4A1} Consejo viajero:
-Las mejores horas para visitarla son a primera hora de la ma\xF1ana o despu\xE9s de las 14:30.`,foto:"cld:europa/malta/la-valeta/concatedral-san-juan",horario:"Lun\u2013S\xE1b: 09:00\u201316:45 | \xDAltimo acceso: 16:00 | Domingos y festivos religiosos cerrada al turismo",precio:"Adultos: 15\u20AC | Estudiantes y mayores de 60: 12\u20AC | Menores de 12 a\xF1os: Gratis | Audiogu\xEDa incluida"},{nombre:"Museo Nacional de Arqueolog\xEDa",tiposPlan:["ruta","urbano","museo","coste-variable"],descripcion:`A pocos minutos de la Concatedral, seguimos por Republic Street para cambiar completamente de \xE9poca: de la Malta barroca de los Caballeros al pasado m\xE1s antiguo y misterioso de la isla.
+Las mejores horas para visitarla son a primera hora de la ma\xF1ana o despu\xE9s de las 14:30.`,foto:"cld:europa/malta/la-valeta/concatedral-san-juan",horario:"Lun\u2013S\xE1b: 09:00\u201316:45 | \xDAltimo acceso: 16:00 | Domingos y festivos: cerrada al turismo",precio:"Adultos: 15\u20AC | Estudiantes y mayores de 60: 12\u20AC | Menores de 12 a\xF1os acompa\xF1ados de un adulto: Gratis | Audiogu\xEDa incluida",direccion:"St John\u2019s Square, Valletta VLT 1156, Malta",maps:"https://www.google.com/maps/search/?api=1&query=St%20Johns%20Co-Cathedral%2C%20Valletta%2C%20Malta",telefono:"+356 2122 0536",web:"https://www.stjohnscocathedral.com/visit/",reserva:"https://www.showshappening.com/st-johns-co-cathedral-foundation/st-john-s-co-cathedral-admissions-ticket",tipoReserva:"entradas",acceso:"El museo anexo est\xE1 cerrado por obras de ampliaci\xF3n y reforma: no cuentes con visitarlo y consulta su reapertura antes de ir. La visita general a la concatedral es independiente y est\xE1 sujeta a sus horarios y a posibles restricciones en algunas zonas. Se permiten fotograf\xEDas sin flash, sujetas a las restricciones del recinto."},{nombre:"Museo Nacional de Arqueolog\xEDa",tiposPlan:["ruta","urbano","museo","coste-variable"],descripcion:`A pocos minutos de la Concatedral, seguimos por Republic Street para cambiar completamente de \xE9poca: de la Malta barroca de los Caballeros al pasado m\xE1s antiguo y misterioso de la isla.
 
 El Museo Nacional de Arqueolog\xEDa es una de las visitas m\xE1s importantes de Malta para comprender el misterioso pasado prehist\xF3rico de la isla.
 
@@ -15162,10 +15149,10 @@ De hecho, visitar primero el museo hace que luego lugares como Hagar Qim o Mnajd
 \u2728 Consejo AvenTourArte:
 No te limites solo a las vitrinas arqueol\xF3gicas.
 
-Subir al Gran Sal\xF3n del antiguo Albergue de Provenza permite entender tambi\xE9n el enorme poder y refinamiento cultural que alcanzaron los caballeros de Malta.
+Si el Gran Sal\xF3n est\xE1 abierto al p\xFAblico, ac\xE9rcate para descubrir tambi\xE9n el poder y el refinamiento cultural que alcanzaron los caballeros de Malta.
 
 \u{1F4A1} Consejo pr\xE1ctico:
-La visita suele recorrerse c\xF3modamente en aproximadamente 1h\u20131h 30min.`,foto:"cld:europa/malta/la-valeta/national-archaeology-museum",horario:"Lun\u2013Dom: 09:00\u201316:30 | \xDAltimo acceso: 16:00 | Cerrado: 24, 25 y 31 diciembre, 1 enero y Viernes Santo",precio:"Adultos: 5\u20AC | J\xF3venes, estudiantes y mayores de 60: 3,50\u20AC | Ni\xF1os 6\u201311 a\xF1os: 2,50\u20AC | Menores de 5 a\xF1os: Gratis"},{nombre:"Merchants Street y Strait Street",tiposPlan:["ruta","urbano","coste-variable"],descripcion:`Al salir del museo, la ruta contin\xFAa por las calles paralelas a Republic Street, donde La Valeta deja ver su lado m\xE1s comercial, cotidiano y nocturno.
+La visita suele recorrerse c\xF3modamente en aproximadamente 1h\u20131h 30min.`,foto:"cld:europa/malta/la-valeta/national-archaeology-museum",horario:"Lun\u2013Dom: 09:00\u201317:00 | \xDAltimo acceso: 16:30 | Cerrado: 24, 25 y 31 diciembre, 1 enero y Viernes Santo | Consulta el calendario de temporada antes de ir",precio:"Tarifa general: adultos: 5\u20AC; j\xF3venes (12\u201317), estudiantes y personas de 60 a\xF1os o m\xE1s: 3,50\u20AC; ni\xF1os (6\u201311): 2,50\u20AC; ni\xF1os (1\u20135): gratis | Del 21 de noviembre de 2026 al 16 de mayo de 2027: adultos: 8\u20AC; j\xF3venes, estudiantes y personas de 60 a\xF1os o m\xE1s: 6\u20AC; ni\xF1os (6\u201311): 4\u20AC; ni\xF1os (1\u20135): gratis",direccion:"Auberge de Provence, Republic Street, Valletta, Malta",maps:"https://www.google.com/maps/search/?api=1&query=35.897431962131655%2C14.511117259373833",telefono:"+356 2122 1623",web:"https://heritagemalta.mt/explore/national-museum-of-archaeology/",reserva:"https://heritagemalta.mt/store/s7/",tipoReserva:"entradas",acceso:"La sala infantil puede estar temporalmente cerrada por reformas. Consulta las zonas disponibles antes de ir; el Gran Sal\xF3n tambi\xE9n se utiliza para exposiciones y eventos."},{nombre:"Merchants Street y Strait Street",tiposPlan:["ruta","urbano","coste-variable"],descripcion:`Al salir del museo, la ruta contin\xFAa por las calles paralelas a Republic Street, donde La Valeta deja ver su lado m\xE1s comercial, cotidiano y nocturno.
 
 Estas dos calles paralelas representan dos caras completamente distintas de La Valeta.
 
@@ -15256,7 +15243,7 @@ Aunque la visita tur\xEDstica merece much\xEDsimo la pena, la mejor experiencia 
 La ac\xFAstica del teatro es tan buena que incluso los susurros se escuchan perfectamente desde cualquier palco.
 
 \u{1F4A1} Consejo pr\xE1ctico:
-Las visitas tur\xEDsticas pueden modificarse si hay ensayos generales o preparativos para espect\xE1culos.`,horario:"Visitas por turnos: Lun\u2013Vie, invierno (1 sep\u201319 jun): 11:00 y 15:00; verano (20 jun\u201331 ago): 10:30 y 12:00 | S\xE1b: 10:30, 11:30 y 12:30 | Dom: sin visitas tur\xEDsticas | Pueden cancelarse o reprogramarse por ensayos o trabajos t\xE9cnicos",precio:"Visita tur\xEDstica: 10\u20AC | Funciones y conciertos: precio seg\xFAn la funci\xF3n y la categor\xEDa de asiento"},{nombre:"Procatedral de San Pablo",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Continuando hacia la zona occidental de La Valeta, el perfil de la ciudad cambia con una aguja alt\xEDsima que recuerda la etapa brit\xE1nica de Malta.
+Las visitas tur\xEDsticas pueden modificarse si hay ensayos generales o preparativos para espect\xE1culos.`,horario:"Visitas por turnos: Lun\u2013Vie, invierno (1 sep\u201319 jun): 11:00 y 15:00; verano (20 jun\u201331 ago): 10:30 y 12:00 | S\xE1b: 10:30, 11:30 y 12:30 | Dom: sin visitas tur\xEDsticas | Pueden cancelarse o reprogramarse por ensayos o trabajos t\xE9cnicos",precio:"Visita tur\xEDstica: 10\u20AC | Funciones y conciertos: precio seg\xFAn la funci\xF3n y la categor\xEDa de asiento",direccion:"Triq it-Teatru l-Antik, Valletta VLT 1426, Malta",maps:"https://www.google.com/maps/search/?api=1&query=Teatru%20Manoel%2C%20Valletta%2C%20Malta",telefono:"+356 2124 6389",web:"https://teatrumanoel.mt/visit/",reserva:"https://booking.teatrumanoel.mt/eng/comingsoon",tipoReserva:"entradas",acceso:"El cat\xE1logo de entradas incluye visitas y espect\xE1culos: comprueba la modalidad y su tarifa antes de comprar. El acceso al auditorio puede estar limitado por ensayos o trabajos t\xE9cnicos, y las visitas pueden cancelarse o reprogramarse."},{nombre:"Procatedral de San Pablo",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Continuando hacia la zona occidental de La Valeta, el perfil de la ciudad cambia con una aguja alt\xEDsima que recuerda la etapa brit\xE1nica de Malta.
 
 La Procatedral de San Pablo es uno de los edificios m\xE1s reconocibles del skyline de Malta gracias a su enorme aguja de 60 metros que domina completamente el perfil de La Valeta.
 
