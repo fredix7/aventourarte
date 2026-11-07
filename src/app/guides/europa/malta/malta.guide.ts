@@ -225,7 +225,7 @@ export const MALTA_GUIDE = {
                 precio:
                   'Gratis | Donativos bienvenidos',
                 direccion: 'St. Paul’s Pro-Cathedral, Independence Square, Valletta VLT 1535, Malta | Entrada por West Street',
-                maps: 'https://www.google.com/maps/dir//35.900801,+14.512103',
+                maps: 'https://www.google.com/maps/search/?api=1&query=St%20Paul%27s%20Pro-Cathedral%2C%20Independence%20Square%2C%20West%20Street%2C%20Valletta%2C%20Malta',
                 telefono: '+356 7905 9215 / +356 7902 7807',
                 web: 'https://www.stpaulspromalta.org/',
                 acceso: 'Entrada por West Street. Es un lugar de culto: respeta las celebraciones y el silencio. Para fotografías se solicita un pequeño donativo.'
@@ -260,7 +260,7 @@ export const MALTA_GUIDE = {
                 acceso:
                   'La Sala del Trono, las Salas de Estado y la Armería pueden tener restricciones de acceso o cierres parciales en determinadas fechas y franjas horarias. Antes de ir, comprueba con Heritage Malta qué espacios están disponibles para organizar tu visita.',
                 direccion: 'Grand Master’s Palace, St George’s Square, Valletta, Malta',
-                maps: 'https://www.google.com/maps/dir//35.898487835896105,14.513867475131354/',
+                maps: 'https://www.google.com/maps/search/?api=1&query=Grand%20Master%27s%20Palace%2C%20St%20George%27s%20Square%2C%20Valletta%2C%20Malta',
                 telefono: '+356 2124 9349',
                 web: 'https://heritagemalta.mt/explore/grand-masters-palace/',
                 reserva: 'https://heritagemalta.mt/store/s87/',
@@ -297,7 +297,7 @@ export const MALTA_GUIDE = {
                 acceso:
                   'Algunas exposiciones, incluida la dedicada a la Primera Guerra Mundial en la sección 4, pueden tener restricciones temporales sin que necesariamente cierre el resto del fuerte o del museo. Antes de ir, comprueba qué espacios están abiertos y consulta el calendario de In Guardia: los días de representación, la visita ordinaria comienza a las 12:00.',
                 direccion: 'Fort St Elmo and National War Museum, Mediterranean Street, Valletta, Malta',
-                maps: 'https://www.google.com/maps/dir//35.90115867933051,14.51890064016454/',
+                maps: 'https://www.google.com/maps/search/?api=1&query=Fort%20St%20Elmo%20and%20National%20War%20Museum%2C%20Mediterranean%20Street%2C%20Valletta%2C%20Malta',
                 telefono: '+356 2123 3088',
                 web: 'https://heritagemalta.mt/explore/fort-st-elmo-national-war-museum/',
                 reserva: 'https://heritagemalta.mt/store/s29/',
@@ -323,17 +323,27 @@ export const MALTA_GUIDE = {
                 foto:
                   'cld:europa/malta/la-valeta/cruce-tres-ciudades',
                 horario:
-                  'Ferry y barcas operativos durante todo el día',
+                  'Ferry regular: consulta las salidas de Valletta–3 Cities para tu fecha; cambian según temporada y día | Dgħajsa: confirma el servicio con el barquero',
                 precio:
-                  'Ferry: ≈ 2,80€–3,80€ ida y vuelta | Dgħajsa tradicional: ≈ 2€ por trayecto'
+                  'Ferry regular, tarifa diurna publicada: adultos 3€ ida / 5€ ida y vuelta | Dgħajsa: consulta el precio y el recorrido antes de embarcar',
+                direccion: 'Salida del ferry regular: Lascaris Wharf, al pie del Barrakka Lift, Valletta, Malta | Llegada: terminal de Cospicua (Bormla), en Dockyard Creek',
+                maps: 'https://www.google.com/maps/search/?api=1&query=Lascaris%20Wharf%2C%20Valletta%2C%20Malta%2C%20ferry%20to%20Cospicua',
+                telefono: 'Ferry regular (oficina): +356 2346 3862',
+                web: 'https://www.vallettaferryservices.com/',
+                acceso: 'El ferry regular sale de Lascaris Wharf, en el Gran Puerto, y llega a Cospicua/Bormla; el servicio de Sliema utiliza otro muelle de La Valeta, en Marsamxett. Las dgħajsa tienen embarques propios, como Xatt ir-Riżq en Birgu: confirma el punto de salida, el destino y la tarifa con el barquero. Son servicios independientes del ferry regular y la navegación depende del estado del mar.'
               },
               {
                 nombre: 'Vittoriosa (Birgu)',
-                tiposPlan: ['ruta', 'urbano'],
+                tiposPlan: ['ruta', 'urbano', 'gratuito'],
                 descripcion:
-                  'Tras cruzar el Gran Puerto desde La Valeta, la ruta llega a Vittoriosa, una de las ciudades donde mejor se entiende la Malta anterior a la construcción de la capital.\n\nVittoriosa, conocida originalmente como Birgu, es una de las ciudades más históricas, auténticas y encantadoras de Malta.\n\nSituada frente a La Valeta, al otro lado del Gran Puerto, forma junto a Senglea y Cospicua el conjunto histórico conocido como Las Tres Ciudades.\n\n⚔️ La primera capital de los Caballeros:\nCuando la Orden de San Juan llegó a Malta en 1530, estableció aquí su primera sede antes de la construcción de La Valeta.\n\nDesde estas calles se organizó la defensa de la isla durante el Gran Sitio de 1565, uno de los acontecimientos más importantes de la historia europea.\n\n💡 El origen del nombre Vittoriosa:\nTras resistir heroicamente el asedio otomano, la ciudad recibió el título honorífico de Vittoriosa, que significa «La Victoriosa».\n\n🏛️ Qué hace especial este lugar:\nA diferencia de La Valeta, Birgu conserva una atmósfera mucho más tranquila, residencial y auténtica.\n\nAquí predominan las callejuelas medievales, las fachadas de piedra dorada, los balcones tradicionales malteses y la sensación de estar caminando por una ciudad que todavía pertenece a sus habitantes.\n\n🌊 El Gran Puerto:\nGran parte del encanto de Birgu se encuentra en su relación con el mar.\n\nDesde sus murallas y paseos marítimos se obtienen algunas de las mejores vistas de La Valeta y de las fortificaciones que protegieron Malta durante siglos.\n\n🏆 Lugares imprescindibles:\n• Fuerte de San Ángel\n• Palacio del Inquisidor\n• Vittoriosa Waterfront\n• Collachio (casco histórico medieval)\n• Iglesia de San Lorenzo\n• Victory Square\n\n🌍 Experiencia viajera:\nPasear por Birgu es descubrir una Malta mucho más pausada y auténtica.\n\nLejos de las grandes avenidas de la capital, aquí las calles estrechas, los vecinos conversando en las puertas y los pequeños rincones históricos crean una atmósfera única.\n\n✨ Consejo AvenTourArte:\nLa mejor forma de descubrir Birgu es perderse sin rumbo por sus callejuelas medievales.\n\nMuchos de los rincones más bonitos no aparecen en los mapas.\n\n📸 Consejo fotográfico:\nLas mejores fotografías se consiguen al final de la tarde, cuando el sol ilumina las fachadas de piedra caliza y las murallas del Fuerte de San Ángel se reflejan sobre las aguas del puerto.\n\n🍴 Recomendación:\nSi el tiempo lo permite, termina la visita cenando junto al paseo marítimo mientras contemplas las luces de La Valeta reflejadas en el Gran Puerto.',
+                  'Tras cruzar el Gran Puerto desde La Valeta, la ruta llega a Vittoriosa, una de las ciudades donde mejor se entiende la Malta anterior a la construcción de la capital.\n\nVittoriosa, conocida originalmente como Birgu, es una de las ciudades más históricas, auténticas y encantadoras de Malta.\n\nSituada frente a La Valeta, al otro lado del Gran Puerto, forma junto a Senglea y Cospicua el conjunto histórico conocido como Las Tres Ciudades.\n\n⚔️ La primera capital de los Caballeros:\nCuando la Orden de San Juan llegó a Malta en 1530, estableció aquí su primera sede antes de la construcción de La Valeta.\n\nDesde estas calles se organizó la defensa de la isla durante el Gran Sitio de 1565, uno de los acontecimientos más importantes de la historia europea.\n\n💡 El origen del nombre Vittoriosa:\nTras resistir heroicamente el asedio otomano, la ciudad recibió el título honorífico de Vittoriosa, que significa «La Victoriosa».\n\n🏛️ Qué hace especial este lugar:\nA diferencia de La Valeta, Birgu conserva una atmósfera mucho más tranquila, residencial y auténtica.\n\nAquí predominan las callejuelas medievales, las fachadas de piedra dorada, los balcones tradicionales malteses y la sensación de estar caminando por una ciudad que todavía pertenece a sus habitantes.\n\n🌊 El Gran Puerto:\nGran parte del encanto de Birgu se encuentra en su relación con el mar.\n\nDesde sus murallas y paseos marítimos se obtienen algunas de las mejores vistas de La Valeta y de las fortificaciones que protegieron Malta durante siglos.\n\n🏆 Lugares imprescindibles:\n• Fuerte de San Ángel\n• Palacio del Inquisidor\n• Vittoriosa Waterfront\n• Collachio (casco histórico medieval)\n• Iglesia de San Lorenzo\n• Victory Square\n\n🌍 Experiencia viajera:\nPasear por Birgu es descubrir una Malta mucho más pausada y auténtica.\n\nLejos de las grandes avenidas de la capital, aquí las calles estrechas, los vecinos conversando en las puertas y los pequeños rincones históricos crean una atmósfera única.\n\n📸 Consejo fotográfico:\nLas mejores fotografías se consiguen al final de la tarde, cuando el sol ilumina las fachadas de piedra caliza y las murallas del Fuerte de San Ángel se reflejan sobre las aguas del puerto.\n\n🍴 Recomendación:\nSi el tiempo lo permite, termina la visita cenando junto al paseo marítimo mientras contemplas las luces de La Valeta reflejadas en el Gran Puerto.',
                 foto:
-                  'cld:europa/malta/tres-ciudades/vittoriosa'
+                  'cld:europa/malta/tres-ciudades/vittoriosa',
+                direccion: 'Inicio orientativo: Victory Square, Birgu (Vittoriosa), Malta | Recorrido por el casco histórico y el frente marítimo',
+                maps: 'https://www.google.com/maps/search/?api=1&query=Victory%20Square%2C%20Birgu%2C%20Malta',
+                horario: 'Paseo exterior sin horario de visita | Monumentos, iglesias y otros recintos: según sus propios horarios',
+                precio: 'Recorrido urbano exterior gratuito | Entradas y consumos: aparte',
+                web: 'https://birgulc.gov.mt/en/'
               },
               {
                 nombre: 'Iglesia de San Lorenzo',
@@ -343,21 +353,33 @@ export const MALTA_GUIDE = {
                 foto:
                   'cld:europa/malta/tres-ciudades/vittoriosa/iglesia-san-lorenzo',
                 horario:
-                  'Lun–Sáb: aprox. 09:30–12:00 y tardes para oficios religiosos | Dom: principalmente horario de misas',
+                  'Visitas al interior: consulta previamente la apertura con la parroquia | Acceso condicionado por misas y celebraciones',
                 precio:
-                  'Gratis | Donativos bienvenidos'
+                  'Exterior: gratuito | Consulta con la parroquia las condiciones de acceso al interior',
+                direccion: 'St Lawrence Collegiate Church, Triq San Lawrenz, Birgu (Vittoriosa), Malta',
+                maps: 'https://www.google.com/maps/search/?api=1&query=St%20Lawrence%20Collegiate%20Church%2C%20Triq%20San%20Lawrenz%2C%20Birgu%2C%20Malta',
+                telefono: 'Parroquia: +356 2182 7057',
+                web: 'https://parishes.church.mt/parish/il-birgu/',
+                acceso: 'Es una iglesia en uso: respeta las celebraciones y confirma con la parroquia cuándo puedes visitar el interior. El museo parroquial y los oratorios son espacios con condiciones de visita propias.'
               },
               {
                 nombre: 'Fuerte de San Ángel',
                 tiposPlan: ['ruta', 'urbano', 'coste-variable'],
                 descripcion:
-                  'Continuando hacia la punta de la península de Vittoriosa, la ruta culmina en el lugar más simbólico de toda la historia de Malta.\n\nEl Fuerte de San Ángel es el auténtico corazón militar del Gran Puerto y uno de los escenarios más importantes de la historia mediterránea.\n\nMucho antes de la llegada de los Caballeros de San Juan, este promontorio ya estaba fortificado bajo el nombre de Castrum Maris o Castillo del Mar. Sin embargo, su época más gloriosa comenzó en 1530, cuando la Orden eligió este lugar como residencia oficial y cuartel general tras su llegada a Malta.\n\n⚔️ El bastión que salvó Malta:\nDurante el Gran Sitio de 1565, el fuerte se convirtió en el centro de mando de la resistencia cristiana.\n\nDesde aquí, el Gran Maestre Jean Parisot de La Valette dirigió la defensa de la isla frente al inmenso ejército otomano.\n\nMientras San Telmo caía tras semanas de resistencia heroica, San Ángel permaneció firme y se convirtió en el símbolo de la supervivencia de Malta.\n\n🏛️ Qué hace especial este lugar:\nA diferencia de otros fuertes de la isla, San Ángel combina historia medieval, arquitectura militar, patrimonio de los Caballeros y algunas de las mejores vistas de todo el archipiélago.\n\n🌊 Las vistas del Gran Puerto:\nRecorrer sus murallas permite contemplar una panorámica espectacular de La Valeta, Senglea, Cospicua y la inmensidad del puerto histórico.\n\nPocos lugares permiten comprender tan bien la importancia estratégica de Malta en el Mediterráneo.\n\n⛪ La Capilla de Santa Ana:\nEn la zona superior del fuerte se encuentra esta pequeña capilla histórica vinculada a los primeros años de la Orden en Malta.\n\nSu atmósfera tranquila contrasta completamente con la intensa historia militar que la rodea.\n\n⚔️ Las antiguas prisiones:\nEntre los episodios más curiosos de la historia del fuerte destaca el encarcelamiento de Caravaggio en 1608.\n\nTras verse implicado en una violenta pelea con un caballero de la Orden, el célebre pintor fue recluido aquí antes de protagonizar una espectacular fuga hacia Sicilia.\n\n💡 Una curiosidad única:\nLa parte más alta del fuerte sigue vinculada actualmente a la Soberana Orden Militar de Malta.\n\nGracias a un acuerdo con el gobierno maltés, algunas dependencias mantienen un estatus diplomático especial y continúan siendo utilizadas por la Orden en la actualidad.\n\n🌍 Experiencia viajera:\nPasear por San Ángel transmite una sensación muy distinta a la de otros monumentos de Malta.\n\nAquí todo gira alrededor del mar, las fortificaciones y la supervivencia.\n\nCada muralla, cada bastión y cada plataforma defensiva recuerda que durante siglos este fue uno de los enclaves militares más importantes de Europa.\n\n✨ Consejo AvenTourArte:\nDedica tiempo a recorrer los baluartes sin prisas.\n\nLas vistas cambian constantemente y cada plataforma ofrece una perspectiva diferente del Gran Puerto.\n\n📸 Consejo fotográfico:\nLas mejores imágenes se obtienen desde las murallas orientadas hacia La Valeta, especialmente a última hora de la tarde, cuando la piedra caliza adquiere tonos dorados y la capital comienza a iluminarse al otro lado del agua.\n\n💡 Consejo práctico:\nLa visita requiere caminar por rampas y zonas empedradas al aire libre.\n\nLlevar agua y protección solar resulta muy recomendable, especialmente durante los meses más cálidos.',
+                  'Continuando hacia la punta de la península de Vittoriosa, la ruta culmina en el lugar más simbólico de toda la historia de Malta.\n\nEl Fuerte de San Ángel es el auténtico corazón militar del Gran Puerto y uno de los escenarios más importantes de la historia mediterránea.\n\nMucho antes de la llegada de los Caballeros de San Juan, este promontorio ya estaba fortificado bajo el nombre de Castrum Maris o Castillo del Mar. Sin embargo, su época más gloriosa comenzó en 1530, cuando la Orden eligió este lugar como residencia oficial y cuartel general tras su llegada a Malta.\n\n⚔️ El bastión que salvó Malta:\nDurante el Gran Sitio de 1565, el fuerte se convirtió en el centro de mando de la resistencia cristiana.\n\nDesde aquí, el Gran Maestre Jean Parisot de La Valette dirigió la defensa de la isla frente al inmenso ejército otomano.\n\nMientras San Telmo caía tras semanas de resistencia heroica, San Ángel permaneció firme y se convirtió en el símbolo de la supervivencia de Malta.\n\n🏛️ Qué hace especial este lugar:\nA diferencia de otros fuertes de la isla, San Ángel combina historia medieval, arquitectura militar, patrimonio de los Caballeros y algunas de las mejores vistas de todo el archipiélago.\n\n🌊 Las vistas del Gran Puerto:\nRecorrer sus murallas permite contemplar una panorámica espectacular de La Valeta, Senglea, Cospicua y la inmensidad del puerto histórico.\n\nPocos lugares permiten comprender tan bien la importancia estratégica de Malta en el Mediterráneo.\n\n⛪ La Capilla de Santa Ana:\nEn la zona superior del fuerte se encuentra esta pequeña capilla histórica vinculada a los primeros años de la Orden en Malta.\n\nSu atmósfera tranquila contrasta completamente con la intensa historia militar que la rodea.\n\n⚔️ Las antiguas prisiones:\nEntre los episodios más curiosos de la historia del fuerte destaca el encarcelamiento de Caravaggio en 1608.\n\nTras verse implicado en una violenta pelea con un caballero de la Orden, el célebre pintor fue recluido aquí antes de protagonizar una espectacular fuga hacia Sicilia.\n\n💡 Una curiosidad única:\nLa parte más alta del fuerte sigue vinculada actualmente a la Soberana Orden Militar de Malta.\n\nGracias a un acuerdo con el gobierno maltés, algunas dependencias mantienen un estatus diplomático especial y continúan siendo utilizadas por la Orden en la actualidad.\n\n🌍 Experiencia viajera:\nPasear por San Ángel transmite una sensación muy distinta a la de otros monumentos de Malta.\n\nAquí todo gira alrededor del mar, las fortificaciones y la supervivencia.\n\nCada muralla, cada bastión y cada plataforma defensiva recuerda que durante siglos este fue uno de los enclaves militares más importantes de Europa.\n\n✨ Consejo AvenTourArte:\nDedica tiempo a recorrer los baluartes sin prisas.\n\nLas vistas cambian constantemente y cada plataforma ofrece una perspectiva diferente del Gran Puerto.\n\n📸 Consejo fotográfico:\nDesde las murallas orientadas hacia La Valeta puedes encuadrar la capital al otro lado del Gran Puerto. Organiza las fotografías dentro del horario de visita del fuerte.\n\n💡 Consejo práctico:\nLa visita requiere caminar por rampas y zonas empedradas al aire libre.\n\nLlevar agua y protección solar resulta muy recomendable, especialmente durante los meses más cálidos.',
                 foto:
                   'cld:europa/malta/tres-ciudades/vittoriosa/fuerte-san-angel',
                 horario:
-                  'Lun–Dom: 09:00–17:00 | Último acceso: 16:30',
+                  'Consulta los días y horarios de apertura en Heritage Malta | Último acceso: 30 minutos antes del cierre',
                 precio:
-                  'Adultos: 10€ | Jóvenes, estudiantes y mayores de 60: 7,50€ | Niños 6–11 años: 5,50€ | Menores de 5 años: Gratis'
+                  'Adultos: 10€ | Jóvenes de 12–17 años, estudiantes y personas de 60 años o más: 6€ | Niños 6–11 años: 4€ | Niños 1–5 años: Gratis',
+                direccion: 'Fort St Angelo, Xatt l-Assedju l-Kbir 1565, Birgu (Vittoriosa), Malta',
+                maps: 'https://www.google.com/maps/search/?api=1&query=Fort%20St%20Angelo%2C%20Xatt%20l-Assedju%20l-Kbir%201565%2C%20Birgu%2C%20Malta',
+                telefono: '+356 2540 1800',
+                web: 'https://heritagemalta.mt/explore/fort-st-angelo/',
+                reserva: 'https://heritagemalta.mt/store/s28/',
+                tipoReserva: 'entradas' as const,
+                acceso: 'La parte superior del fuerte solo se alcanza por escaleras. Los vehículos de apoyo a la movilidad de las zonas gestionadas por Heritage Malta no funcionan con mal tiempo; consulta antes de ir si los necesitas. Cierra el 1 de enero, Viernes Santo y los días 24, 25 y 31 de diciembre.'
               },
               {
                 nombre: 'Palacio del Inquisidor',
@@ -367,17 +389,29 @@ export const MALTA_GUIDE = {
                 foto:
                   'cld:europa/malta/tres-ciudades/vittoriosa/palacio-del-inquisidor',
                 horario:
-                  'Lun–Dom: 09:00–17:00 | Último acceso: 16:30',
+                  'Consulta los días y horarios de apertura en Heritage Malta | Último acceso: 30 minutos antes del cierre',
                 precio:
-                  'Adultos: 6€ | Jóvenes, estudiantes y mayores de 60: 4,50€ | Niños 6–11 años: 3€ | Menores de 5 años: Gratis'
+                  'Adultos: 6€ | Jóvenes de 12–17 años, estudiantes y personas de 60 años o más: 4,50€ | Niños 6–11 años: 3€ | Niños 1–5 años: Gratis',
+                direccion: 'Inquisitor’s Palace, Main Gate Street, Birgu BRG 1023, Malta',
+                maps: 'https://www.google.com/maps/search/?api=1&query=Inquisitor%E2%80%99s%20Palace%2C%20Main%20Gate%20Street%2C%20Birgu%20BRG%201023%2C%20Malta',
+                telefono: '+356 2182 7006',
+                web: 'https://heritagemalta.mt/explore/the-inquisitors-palace/',
+                reserva: 'https://heritagemalta.mt/store/s5/',
+                tipoReserva: 'entradas' as const,
+                acceso: 'Hay suelos irregulares, zonas con poca luz y pasos bajos; algunas áreas tienen accesibilidad limitada. Cierra el 1 de enero, Viernes Santo y los días 24, 25 y 31 de diciembre.'
               },
               {
                 nombre: 'Cospicua (Bormla)',
-                tiposPlan: ['ruta', 'urbano'],
+                tiposPlan: ['ruta', 'urbano', 'gratuito'],
                 descripcion:
                   'Tras recorrer las callejuelas medievales de Vittoriosa y descubrir lugares tan fascinantes como el Fuerte de San Ángel o el Palacio del Inquisidor, la ruta continúa de forma natural hacia Cospicua, la más grande y poblada de las Tres Ciudades.\n\nBasta caminar unos minutos bordeando el puerto para notar el cambio de ambiente. Si Birgu representa el pasado nobiliario y caballeresco de Malta, Cospicua muestra la cara más popular, marinera y trabajadora de la isla.\n\nConocida localmente como Bormla, recibió el título honorífico de Città Cospicua tras el Gran Sitio de 1565 en reconocimiento a la valentía demostrada por sus habitantes durante la defensa de Malta.\n\n⚔️ La ciudad de los astilleros:\nDurante siglos, Cospicua fue el motor naval del país.\n\nAquí se encontraban algunos de los principales muelles y arsenales de la Orden de San Juan, posteriormente ampliados por la Royal Navy británica.\n\nSu historia siempre ha estado ligada al mar, a los trabajadores portuarios y a los grandes barcos que dieron vida al Gran Puerto.\n\n🏛️ Las grandes fortificaciones:\nLa ciudad está protegida por dos de los sistemas defensivos más impresionantes de Malta: las Líneas de Santa Margarita y las Líneas Cottonera.\n\nEstas gigantescas murallas fueron construidas para crear un segundo cinturón defensivo alrededor de las Tres Ciudades tras el Gran Sitio.\n\n💡 Qué mirar:\n• La monumental Puerta de Santa Elena\n• Los enormes baluartes de piedra caliza\n• Los fosos defensivos\n• Los escudos de armas de los Grandes Maestres\n\n⛪ La Colegiata de la Inmaculada Concepción:\nPresidiendo el casco histórico se encuentra el principal templo de la ciudad, una de las iglesias más queridas por los habitantes de Cospicua y símbolo de la resistencia local durante la Segunda Guerra Mundial.\n\n🌊 Dock 1:\nUno de los espacios más agradables para pasear es el renovado Dock 1, antiguo muelle naval transformado hoy en un elegante paseo marítimo.\n\nLas antiguas instalaciones portuarias conviven ahora con cafeterías, espacios universitarios, terrazas y zonas ajardinadas que ofrecen una imagen completamente distinta de la Malta contemporánea.\n\n🏘️ El casco histórico:\nMás allá del frente marítimo, Cospicua conserva calles empinadas, escalinatas de piedra, balcones tradicionales y rincones donde todavía se respira una atmósfera muy local y alejada de las grandes rutas turísticas.\n\n🌍 Experiencia viajera:\nLa visita permite descubrir una Malta más cotidiana y auténtica.\n\nAquí la historia sigue estando presente, pero el protagonismo lo tienen las tradiciones locales, la vida de barrio y la profunda relación que la ciudad mantiene con el mar desde hace siglos.\n\n✨ Consejo AvenTourArte:\nNo te limites al paseo marítimo.\n\nDedica tiempo a perderte por las calles interiores, donde aparecen algunas de las escenas más genuinas de la vida cotidiana maltesa.\n\n🍺 Consejo gastronómico:\nCospicua es uno de los mejores lugares de las Tres Ciudades para hacer una pausa, tomar una cerveza Cisk bien fría o probar unos pastizzi rodeado principalmente de ambiente local.',
                 foto:
-                  'cld:europa/malta/tres-ciudades/cospicua'
+                  'cld:europa/malta/tres-ciudades/cospicua',
+                direccion: 'Inicio orientativo: Gavino Gulia Square, Cospicua (Bormla), Malta | Recorrido por Dock 1 y el casco histórico',
+                maps: 'https://www.google.com/maps/search/?api=1&query=Gavino%20Gulia%20Square%2C%20Cospicua%2C%20Malta',
+                horario: 'Paseo exterior sin horario de visita | Monumentos, iglesias y otros recintos: según sus propios horarios',
+                precio: 'Recorrido urbano exterior gratuito | Entradas y consumos: aparte',
+                web: 'https://bormlalc.gov.mt/en/'
               },
               {
                 nombre: 'Colegiata de la Inmaculada Concepción',
@@ -387,15 +421,25 @@ export const MALTA_GUIDE = {
                 foto:
                   'cld:europa/malta/tres-ciudades/copiscua/colegiata-inmaculada-concepcion',
                 horario:
-                  'Lun–Sáb: 07:30–11:30 y desde las 17:00 | Dom: principalmente horario de misas',
+                  'Visitas al interior: consulta previamente la apertura con la parroquia | Acceso condicionado por misas y celebraciones',
                 precio:
-                  'Gratis'
+                  'Exterior: gratuito | Consulta con la parroquia las condiciones de acceso al interior',
+                direccion: 'Immaculate Conception Parish Church, Cospicua (Bormla), Malta',
+                maps: 'https://www.google.com/maps/search/?api=1&query=Immaculate%20Conception%20Parish%20Church%2C%20Cospicua%2C%20Malta',
+                telefono: 'Parroquia: +356 2182 8413',
+                web: 'https://parishes.church.mt/parish/bormla/',
+                acceso: 'Es una iglesia en uso: respeta las celebraciones y confirma con la parroquia cuándo puedes visitar el interior. Los horarios del despacho parroquial no son horarios de visita al templo.'
               },
               {
                 nombre: 'Senglea (L-Isla)',
-                tiposPlan: ['ruta', 'naturaleza'],
+                tiposPlan: ['ruta', 'urbano', 'gratuito'],
                 descripcion:
                   'Tras descubrir la cara más popular y marinera de Cospicua, la ruta continúa hacia Senglea, la más pequeña, compacta y fotogénica de las Tres Ciudades.\n\nConocida localmente como L-Isla, esta estrecha península fortificada se adentra en el Gran Puerto como la proa de un gigantesco barco de piedra, ofreciendo algunas de las vistas más espectaculares de todo Malta.\n\nSu nombre actual honra al Gran Maestre Claude de la Sengle, responsable de reforzar sus defensas a mediados del siglo XVI. Sin embargo, su momento de gloria llegó durante el Gran Sitio de 1565, cuando resistió heroicamente los ataques otomanos y recibió el título honorífico de Civitas Invicta, la Ciudad Invicta.\n\n⚔️ Una fortaleza entre dos mares:\nCaminar por Senglea permite entender perfectamente la importancia estratégica de las Tres Ciudades.\n\nA ambos lados aparecen murallas, bastiones y vistas permanentes sobre el puerto, recordando que toda la ciudad fue concebida como una pieza clave del sistema defensivo maltés.\n\n🏛️ Lo imprescindible:\n• Los Jardines Safe Haven\n• La famosa Gardjola\n• La Basílica de la Natividad de la Virgen María\n• El paseo marítimo Juan B. Azzopardi Wharf\n• Las callejuelas escalonadas del casco histórico\n\n👁️ La Gardjola:\nEn la punta de la península se encuentra uno de los símbolos más reconocibles de Malta.\n\nEsta pequeña garita de vigilancia construida por los Caballeros de San Juan conserva todavía los famosos símbolos esculpidos del ojo, la oreja y la grulla, representación de la vigilancia permanente sobre el puerto.\n\nDesde aquí se obtienen algunas de las mejores vistas de La Valeta, el Fuerte de San Ángel y el conjunto de las Tres Ciudades.\n\n⛪ La Basílica de la Natividad de la Virgen:\nConocida cariñosamente por los malteses como Il-Bambina, constituye el corazón espiritual de Senglea y uno de los centros de devoción más importantes de la isla.\n\n🌊 El paseo marítimo:\nA diferencia de las zonas más monumentales de Birgu, el frente marítimo de Senglea transmite una atmósfera mucho más tranquila y relajada.\n\nLas terrazas junto al agua, las fachadas históricas y las vistas hacia los yates de Vittoriosa crean uno de los rincones más agradables para pasear o hacer una pausa.\n\n🏘️ El interior de la ciudad:\nAlejándose unos metros del paseo aparecen callejuelas estrechas, escaleras de piedra, balcones de colores y pequeños altares religiosos que muestran la cara más auténtica y cotidiana de Senglea.\n\n🌍 Experiencia viajera:\nSi Birgu impresiona por su patrimonio histórico y Cospicua por su legado marítimo, Senglea conquista por su atmósfera.\n\nEs una ciudad para caminar despacio, sentarse frente al mar y disfrutar de algunas de las panorámicas más bellas de todo el viaje.\n\n✨ Consejo AvenTourArte:\nIntenta llegar a la Gardjola a última hora de la tarde.\n\nLa luz dorada iluminando las murallas de La Valeta y del Fuerte de San Ángel crea una de las imágenes más espectaculares de Malta.',
+                direccion: 'Inicio orientativo: Senglea Main Gate, Senglea (L-Isla), Malta | Recorrido por el casco histórico y el frente marítimo',
+                maps: 'https://www.google.com/maps/search/?api=1&query=Senglea%20Main%20Gate%2C%20Senglea%2C%20Malta',
+                horario: 'Paseo exterior sin horario de visita | Monumentos, iglesias y otros recintos: según sus propios horarios',
+                precio: 'Recorrido urbano exterior gratuito | Entradas y consumos: aparte',
+                web: 'https://islalc.gov.mt/en/',
               },
               {
                 nombre: 'Jardines Safe Haven y La Gardjola',
