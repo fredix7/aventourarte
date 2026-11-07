@@ -167,7 +167,7 @@ export const MALTA_GUIDE = {
                 horario:
                   'Visitas por turnos: Lun–Vie, invierno (1 sep–19 jun): 11:00 y 15:00; verano (20 jun–31 ago): 10:30 y 12:00 | Sáb: 10:30, 11:30 y 12:30 | Dom: sin visitas turísticas | Pueden cancelarse o reprogramarse por ensayos o trabajos técnicos',
                 precio:
-                  'Visita turística: 10€ | Funciones y conciertos: según programación y localidad'
+                  'Visita turística: 10€ | Funciones y conciertos: precio según la función y la categoría de asiento'
               },
               {
                 nombre: 'Procatedral de San Pablo',
@@ -203,7 +203,7 @@ export const MALTA_GUIDE = {
                 precio:
                   'Adultos: 12€ | Jóvenes (12–17), estudiantes y personas de 60 años o más: 10€ | Niños 6–11 años: 8€ | Niños 1–5 años: Gratis',
                 acceso:
-                  'Avisos oficiales consultados el 7/11/2026: la Sala del Trono está cerrada hasta nuevo aviso. Hay fechas con cierre de las Salas de Estado y acceso limitado a la Armería, y otras con cierre horario de ambas zonas. Consulta los avisos vigentes de Heritage Malta antes de visitar.'
+                  'La Sala del Trono, las Salas de Estado y la Armería pueden tener restricciones de acceso o cierres parciales en determinadas fechas y franjas horarias. Antes de ir, comprueba con Heritage Malta qué espacios están disponibles para organizar tu visita.'
               },
               {
                 nombre: 'Casa Rocca Piccola',
@@ -229,7 +229,7 @@ export const MALTA_GUIDE = {
                 precio:
                   'Adultos: 10€ | Jóvenes, estudiantes y mayores de 60: 7,50€ | Niños 6–11 años: 5,50€ | Menores de 5 años: Gratis',
                 acceso:
-                  'Aviso oficial consultado el 7/11/2026: la exposición de la Primera Guerra Mundial de la sección 4 está cerrada hasta nuevo aviso; no se trata de un cierre de todo el fuerte ni del museo. Consulta los avisos vigentes y el calendario de In Guardia antes de ir.'
+                  'Algunas exposiciones, incluida la dedicada a la Primera Guerra Mundial en la sección 4, pueden tener restricciones temporales sin que necesariamente cierre el resto del fuerte o del museo. Antes de ir, comprueba qué espacios están abiertos y consulta el calendario de In Guardia: los días de representación, la visita ordinaria comienza a las 12:00.'
               },
               {
                 nombre: 'Jardines Inferiores de Barrakka',
@@ -357,12 +357,12 @@ export const MALTA_GUIDE = {
                 nombre: 'Teatro Orpheum',
                 tiposPlan: ['ruta', 'urbano', 'gratuito'],
                 descripcion:
-                  'Continuando la ruta desde Sliema hacia la vecina Gżira, encontramos uno de sus espacios culturales históricos: el Teatro Orpheum.\n\nA diferencia de los grandes monumentos históricos de La Valeta o de la arquitectura militar de las Tres Ciudades, aquí descubrimos la Malta del entretenimiento, el espectáculo y la vida cultural del siglo XX.\n\n🏛️ Un viaje al Malta de entreguerras:\nEl Orpheum fue construido en 1932 según el diseño del arquitecto Harold J. Borg, durante la administración británica.\n\nDurante décadas acogió representaciones teatrales, conciertos, proyecciones cinematográficas y espectáculos musicales que marcaron la vida social de varias generaciones de malteses.\n\n✨ Qué hace especial este lugar:\nEl Orpheum forma parte del patrimonio teatral histórico de Gżira.\n\nEl catálogo teatral de Valletta 2018 documenta elementos Art Nouveau y coloniales españoles. Esta referencia histórica no acredita el estado ni el acceso interior actuales.\n\n💡 Qué observar:\n• La fachada histórica del edificio\n• Si se autoriza el acceso, la sala principal y sus elementos decorativos\n\n🎭 Acceso actual:\nLas fuentes históricas no confirman una programación ni un horario turístico vigentes. Antes de planificar una visita interior o asistir a un espectáculo, comprueba el acceso y la programación actuales.\n\n🌍 Experiencia viajera:\nVisitar el Orpheum permite descubrir una faceta menos conocida de Malta.\n\nAquí la historia no gira en torno a caballeros, fortalezas o asedios, sino a la evolución cultural de la isla durante el siglo XX y al papel que desempeñó Gżira en la modernización del país.\n\n✨ Consejo AvenTourArte:\nSi coincide alguna actuación durante tu estancia, merece mucho más la pena asistir a un espectáculo que limitarse a ver el edificio desde fuera.\n\nLa experiencia permite disfrutar de uno de los espacios escénicos históricos más carismáticos de Malta.\n\n📸 Consejo fotográfico:\nLa fachada histórica permite descubrir una imagen distinta de la Malta monumental recorrida durante el día.',
+                  'Continuando la ruta desde Sliema hacia la vecina Gżira, encontramos uno de sus espacios culturales históricos: el Teatro Orpheum.\n\nA diferencia de los grandes monumentos históricos de La Valeta o de la arquitectura militar de las Tres Ciudades, aquí descubrimos la Malta del entretenimiento, el espectáculo y la vida cultural del siglo XX.\n\n🏛️ Un viaje al Malta de entreguerras:\nEl Orpheum fue construido en 1932 según el diseño del arquitecto Harold J. Borg, durante la administración británica.\n\nDurante décadas acogió representaciones teatrales, conciertos, proyecciones cinematográficas y espectáculos musicales que marcaron la vida social de varias generaciones de malteses.\n\n✨ Qué hace especial este lugar:\nEl Orpheum forma parte del patrimonio teatral histórico de Gżira.\n\nSu arquitectura combina elementos Art Nouveau y coloniales españoles. Antes de acercarte, consulta si es posible visitar el interior.\n\n💡 Qué observar:\n• La fachada histórica del edificio\n• Si se autoriza el acceso, la sala principal y sus elementos decorativos\n\n🎭 Acceso actual:\nSi quieres visitar el interior o asistir a un espectáculo, consulta previamente las posibilidades de acceso, la programación y los horarios. No cuentes con una visita interior sin confirmarla antes.\n\n🌍 Experiencia viajera:\nVisitar el Orpheum permite descubrir una faceta menos conocida de Malta.\n\nAquí la historia no gira en torno a caballeros, fortalezas o asedios, sino a la evolución cultural de la isla durante el siglo XX y al papel que desempeñó Gżira en la modernización del país.\n\n✨ Consejo AvenTourArte:\nSi coincide alguna actuación durante tu estancia, merece mucho más la pena asistir a un espectáculo que limitarse a ver el edificio desde fuera.\n\nLa experiencia permite disfrutar de uno de los espacios escénicos históricos más carismáticos de Malta.\n\n📸 Consejo fotográfico:\nLa fachada histórica permite descubrir una imagen distinta de la Malta monumental recorrida durante el día.',
                 fotos: ['cld:europa/malta/sliema/teatro-orpheum',
                   'cld:europa/malta/sliema/teatro-orpheum-interior',
                 ],
                 horario:
-                  'Sin horario de visita turística confirmado | Consultar el acceso y la programación actuales antes de ir',
+                  'Visitas al interior: consulta previamente la disponibilidad y los horarios | Espectáculos: según programación',
                 precio:
                   'Exterior gratuito | Espectáculos según evento'
               },
