@@ -2,6 +2,7 @@ export interface PhoneContactEntry {
   number: string;
   href: string | null;
   note: string;
+  channel: 'phone' | 'whatsapp';
 }
 
 export interface PhoneContactGroup {
@@ -28,13 +29,17 @@ function contactSegments(value: string): string[] {
   return segments.map(segment => segment.trim()).filter(Boolean);
 }
 
-function phoneEntry(value: string): PhoneContactEntry {
-  const unlinked: PhoneContactEntry = { number: value, href: null, note: '' };
+function phoneEntry(value: string, label: string): PhoneContactEntry {
+  const explicitLabel = /^whatsapp$/iu.test(label);
+  const unlinked: PhoneContactEntry = { number: value, href: null, note: '', channel: explicitLabel ? 'whatsapp' : 'phone' };
   const match = value.match(/^((?:\+\s*)?(?:\(\d+\)|\d)[\d\t \u00a0().-]*\d\)?)(.*)$/u);
   if (!match) return unlinked;
 
   const number = match[1].trim().replace(/[.\s]+$/u, '');
   const suffix = match[2];
+  const denied = /\b(?:sin|no)\s+(?:admite\s+)?whatsapp\b/iu.test(label + ' ' + suffix);
+  const channel = !denied && (explicitLabel || /^\(\s*whatsapp\s*\)$/iu.test(suffix.trim())) ? 'whatsapp' : 'phone';
+  unlinked.channel = channel;
   // A word attached to the digits or a second, unseparated number is ambiguous.
   if (suffix && !/^[\s(.,]/u.test(suffix)) return unlinked;
   if ((suffix.match(/\d/g) ?? []).length >= 7) return unlinked;
@@ -52,14 +57,18 @@ function phoneEntry(value: string): PhoneContactEntry {
   if (!/^\d{7,15}$/.test(digits) || /^0+$/.test(digits)) return unlinked;
   if (normalized.startsWith('+') && digits.startsWith('0')) return unlinked;
 
-  return { number, href: `tel:${normalized}`, note: suffix.trim() };
+  // A messaging link requires an explicit international prefix; never infer a country.
+  const href = channel === 'whatsapp'
+    ? normalized.startsWith('+') ? `https://wa.me/${digits}` : null
+    : `tel:${normalized}`;
+  return { number, href, note: suffix.trim(), channel };
 }
 
 /** Interpret presentation only: the original editorial field remains untouched. */
 export function parsePhoneContact(value: unknown): PhoneContactGroup[] {
   if (typeof value !== 'string' || !value.trim()) return [];
   if (/\b(?:https?|javascript|data|mailto):/iu.test(value)) {
-    return [{ label: '', entries: [{ number: value.trim(), href: null, note: '' }] }];
+    return [{ label: '', entries: [{ number: value.trim(), href: null, note: '', channel: 'phone' }] }];
   }
   const groups: PhoneContactGroup[] = [];
   for (const segment of contactSegments(value)) {
@@ -73,7 +82,8 @@ export function parsePhoneContact(value: unknown): PhoneContactGroup[] {
       group = { label, entries: [] };
       groups.push(group);
     }
-    if (content) group.entries.push(phoneEntry(content));
+    // Only the explicitly labelled segment inherits its label, not subsequent numbers.
+    if (content) group.entries.push(phoneEntry(content, label));
   }
   return groups;
 }

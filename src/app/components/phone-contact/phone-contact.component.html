@@ -1,12 +1,12 @@
-<div *ngIf="groups.length" class="phone-contact" [class.is-embedded]="embedded" role="group" [attr.aria-label]="name ? 'Contacto telefónico de ' + name : 'Contacto telefónico'">
+<div *ngIf="groups.length" class="phone-contact" [class.is-embedded]="embedded" role="group" [attr.aria-label]="(hasWhatsApp ? 'Contacto' : 'Contacto telefónico') + (name ? ' de ' + name : '')">
   <div *ngIf="!embedded" class="contact-heading">
-    <span class="heading-icon"><mat-icon aria-hidden="true">call</mat-icon></span>
+    <span class="heading-icon"><mat-icon aria-hidden="true">{{ hasWhatsApp ? 'contacts' : 'call' }}</mat-icon></span>
     <div>
       <span class="contact-eyebrow">Información práctica</span>
-      <p class="contact-title">{{ phoneCount > 1 ? 'Contacto telefónico' : 'Teléfono' }}</p>
+      <p class="contact-title">{{ hasWhatsApp ? 'Contacto' : phoneCount > 1 ? 'Contacto telefónico' : 'Teléfono' }}</p>
     </div>
   </div>
-  <p *ngIf="embedded" class="embedded-heading"><mat-icon aria-hidden="true">call</mat-icon>{{ phoneCount > 1 ? 'Teléfonos' : 'Teléfono' }}</p>
+  <p *ngIf="embedded" class="embedded-heading"><mat-icon aria-hidden="true">{{ hasWhatsApp ? 'contacts' : 'call' }}</mat-icon>{{ hasWhatsApp ? 'Contacto' : phoneCount > 1 ? 'Teléfonos' : 'Teléfono' }}</p>
 
   <div *ngFor="let group of groups" class="contact-group">
     <p *ngIf="group.label" class="group-label">{{ group.label }}</p>
@@ -14,12 +14,16 @@
       <a *ngIf="entry.href; else unlinked" class="phone-link" [href]="entry.href"
         [class.reservation-phone]="entry.href === reservationHref"
         (click)="onPhoneClick(entry.href)"
-        [attr.aria-label]="callLabel(group, entry.number, entry.note)">
+        [attr.aria-label]="actionLabel(group, entry)">
         <span class="phone-copy">
           <span class="phone-number">{{ entry.number }}</span>
           <span *ngIf="entry.note" class="phone-note">{{ entry.note }}</span>
         </span>
-        <span class="call-action" aria-hidden="true"><mat-icon>call</mat-icon><span>{{ entry.href === reservationHref ? 'Reservar' : 'Llamar' }}</span></span>
+        <span class="call-action" aria-hidden="true">
+          <img *ngIf="entry.channel === 'whatsapp'; else callIcon" class="whatsapp-icon" src="assets/icons/whatsapp.svg" width="20" height="20" alt="" aria-hidden="true">
+          <ng-template #callIcon><mat-icon>call</mat-icon></ng-template>
+          <span>{{ entry.channel === 'whatsapp' ? 'Enviar WhatsApp' : entry.href === reservationHref ? 'Reservar' : 'Llamar' }}</span>
+        </span>
       </a>
       <ng-template #unlinked><p class="contact-text">{{ entry.number }}</p></ng-template>
     </ng-container>

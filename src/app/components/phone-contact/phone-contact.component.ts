@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { parsePhoneContact, PhoneContactGroup } from '../../shared/phone-contact';
+import { parsePhoneContact, PhoneContactEntry, PhoneContactGroup } from '../../shared/phone-contact';
 
 @Component({
   selector: 'app-phone-contact',
@@ -20,9 +20,11 @@ export class PhoneContactComponent implements OnChanges {
   @Output() reservationClick = new EventEmitter<void>();
   groups: PhoneContactGroup[] = [];
   phoneCount = 0;
+  hasWhatsApp = false;
 
   ngOnChanges(): void {
     this.groups = parsePhoneContact(this.value);
+    this.hasWhatsApp = this.groups.some(group => group.entries.some(entry => entry.channel === 'whatsapp'));
     this.phoneCount = this.groups.reduce(
       (count, group) => count + group.entries.filter(entry => entry.href).length, 0
     );
@@ -32,8 +34,12 @@ export class PhoneContactComponent implements OnChanges {
     if (href && href === this.reservationHref) this.reservationClick.emit();
   }
 
-  callLabel(group: PhoneContactGroup, number: string, note: string): string {
-    const entity = group.label || this.name;
+  actionLabel(group: PhoneContactGroup, entry: PhoneContactEntry): string {
+    const { number, note } = entry;
+    const entity = /^whatsapp$/iu.test(group.label) ? this.name : group.label || this.name;
+    if (entry.channel === 'whatsapp') {
+      return `Enviar WhatsApp a ${entity ? entity + ' al ' : ''}${number}`;
+    }
     const booking = this.reservationHref && this.groups.some(contact => contact.entries.some(
       entry => entry.number === number && entry.href === this.reservationHref
     ));

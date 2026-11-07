@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AnalyticsService } from '../../shared/analytics.service';
 import { CHIPIONA_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/chipiona.guide';
 import { JEREZ_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/jerez.guide';
+import { CORIA_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/coria.guide';
 import { COPENHAGUE_GUIDE } from '../../guides/europa/dinamarca/copenhague.guide';
 import { PracticalInfoItem, TipoReserva } from '../../shared/practical-info';
 import { PracticalInfoComponent } from './practical-info.component';
@@ -36,6 +37,59 @@ describe('PracticalInfoComponent', () => {
         event.preventDefault();
       }
     });
+  });
+
+  it('keeps Coria visit booking separate from its telephone and WhatsApp contacts without measuring chats as bookings', () => {
+    const measure = spyOn(TestBed.inject(AnalyticsService), 'action');
+    const museum = CORIA_GUIDE.secciones.flatMap<PracticalInfoItem>(section => section.lugares ?? [])
+      .find(item => item.nombre === 'Museo de la Autonomía de Andalucía y Casa de Blas Infante')!;
+    const before = JSON.stringify(museum);
+    setItem(Object.freeze({ ...museum }));
+    const phones = [...root.querySelectorAll<HTMLAnchorElement>('.phone-link')];
+    expect(phones.map(anchor => anchor.getAttribute('href'))).toEqual(['tel:+34955656990', 'https://wa.me/34699628524']);
+    phones.forEach(anchor => anchor.click());
+    expect(measure).not.toHaveBeenCalled();
+    const booking = actions().find(anchor => anchor.getAttribute('href') === museum.reserva)!;
+    expect(booking.textContent).toContain('Reservar visita');
+    booking.click();
+    expect(measure).toHaveBeenCalledOnceWith('outbound', { kind: 'booking' });
+    expect(cancelledBeforeNavigation).toEqual([false, false, false]);
+    expect(JSON.stringify(museum)).toBe(before);
+  });
+
+  it('preserves one explicit telephone reservation when the same number is also marked WhatsApp', () => {
+    const measure = spyOn(TestBed.inject(AnalyticsService), 'action');
+    setItem({ nombre: 'Visitas', telefono: '+34 955 65 69 90 / WhatsApp: +34 699 62 85 24', reserva: 'tel:+34699628524' });
+    const anchors = [...root.querySelectorAll<HTMLAnchorElement>('a')];
+    expect(anchors.map(anchor => anchor.getAttribute('href'))).toEqual([
+      'tel:+34699628524', 'tel:+34955656990', 'https://wa.me/34699628524'
+    ]);
+    expect(anchors[0].textContent).toContain('Reservar por teléfono');
+    anchors[2].click();
+    anchors[1].click();
+    expect(measure).not.toHaveBeenCalled();
+    anchors[0].click();
+    expect(measure).toHaveBeenCalledOnceWith('outbound', { kind: 'booking' });
+    expect(cancelledBeforeNavigation).toEqual([false, false, false]);
+  });
+
+  it('keeps El Gato HTTPS WhatsApp booking and its ordinary telephone independent', () => {
+    const measure = spyOn(TestBed.inject(AnalyticsService), 'action');
+    const restaurant = CHIPIONA_GUIDE.secciones.flatMap<PracticalInfoItem>(section => section.lugares ?? [])
+      .find(item => item.nombre === 'Restaurante El Gato')!;
+    const before = JSON.stringify(restaurant);
+    setItem(Object.freeze({ ...restaurant }));
+    const phone = root.querySelector<HTMLAnchorElement>('.phone-link')!;
+    expect(phone.getAttribute('href')).toBe('tel:+34664877125');
+    expect(phone.textContent).toContain('Llamar');
+    phone.click();
+    expect(measure).not.toHaveBeenCalled();
+    const booking = actions().find(anchor => anchor.getAttribute('href') === 'https://wa.me/34664877125')!;
+    expect(booking.textContent).toContain('Reservar mesa');
+    expect(booking.target).toBe('_blank');
+    booking.click();
+    expect(measure).toHaveBeenCalledOnceWith('outbound', { kind: 'booking' });
+    expect(JSON.stringify(restaurant)).toBe(before);
   });
 
   it('groups address, maps, web, bookings and entity-labelled phones without editing the item', () => {
