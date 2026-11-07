@@ -135,12 +135,16 @@ export const MALTA_GUIDE = {
               },
               {
                 nombre: 'St. Lucia’s Street, Triq Sant’ Orsla y Old Theatre Street',
-                tiposPlan: ['ruta', 'urbano'],
+                tiposPlan: ['ruta', 'urbano', 'gratuito'],
                 descripcion:
-                  'Después de contemplar las vistas del Gran Puerto desde Barrakka, toca volver a perderse por el interior de La Valeta.\n\nEstas tres calles forman una de las zonas con más encanto y personalidad de toda La Valeta.\n\nAquí aparece la imagen más icónica de la capital maltesa: calles estrechas de piedra caliza, balcones tradicionales de colores, escalinatas interminables y vistas que desembocan directamente hacia el mar.\n\n🏛️ St. Lucia’s Street:\nEs probablemente la calle más fotogénica de toda La Valeta.\n\nSu famoso tramo escalonado desciende hacia el puerto mediante una larga sucesión de peldaños de piedra diseñados originalmente en el siglo XVI para facilitar el movimiento de los Caballeros de la Orden de San Juan incluso llevando armaduras pesadas.\n\n💡 Qué la hace especial:\nLos escalones son muy anchos y bajos, algo que no responde solo a motivos estéticos, sino también militares.\n\n🌍 Experiencia viajera:\nHoy en día la calle se ha convertido en uno de los rincones más bohemios y atmosféricos de la ciudad.\n\nPor las tardes y noches, cafeterías, vinotecas y pequeños restaurantes colocan mesas, cojines y taburetes directamente sobre los peldaños, creando una de las escenas más especiales de Malta.\n\n✨ Consejo AvenTourArte:\nTomarse algo aquí al atardecer con la brisa del puerto es una de las experiencias más auténticas de La Valeta.\n\n🏘️ Triq Sant’ Orsla:\nMuy cerca de Barrakka, esta calle conserva una de las atmósferas más señoriales y residenciales de la ciudad.\n\nAquí destacan las fachadas barrocas, los pequeños nichos religiosos incrustados en las esquinas y los juegos de luces y sombras que generan las estrechas calles de piedra.\n\n💡 Experiencia viajera:\nEs una de las mejores zonas para entender cómo era realmente la vida cotidiana durante la época de los Caballeros de San Juan.\n\n🎭 Old Theatre Street:\nEsta calle debe su nombre al histórico Teatro Manoel, uno de los teatros en funcionamiento más antiguos de Europa.\n\nAdemás de su importancia histórica, ofrece una de las perspectivas urbanas más famosas de Malta.\n\n📸 Qué mirar:\nDesde ciertos puntos de la calle se obtiene una vista espectacular de la cúpula de la Basílica de Nuestra Señora del Monte Carmelo perfectamente enmarcada entre los edificios de piedra caliza.\n\n🌅 Experiencia viajera:\nEste pequeño cuadrante de calles resume perfectamente la esencia de La Valeta: historia, pendientes imposibles, balcones de madera, piedra dorada y ambiente mediterráneo.\n\n📸 Consejo AvenTourArte:\nAunque La Valeta tiene monumentos impresionantes, gran parte de su magia aparece simplemente perdiéndose por calles como estas sin mirar demasiado el mapa.',
+                  'Después de contemplar las vistas del Gran Puerto desde Barrakka, toca volver a perderse por el interior de La Valeta.\n\nEstas tres calles forman una de las zonas con más encanto y personalidad de toda La Valeta.\n\nAquí aparece la imagen más icónica de la capital maltesa: calles estrechas de piedra caliza, balcones tradicionales de colores, escalinatas interminables y vistas que desembocan directamente hacia el mar.\n\n🏛️ St. Lucia’s Street:\nEs probablemente la calle más fotogénica de toda La Valeta.\n\nSu famoso tramo escalonado desciende hacia el puerto mediante una larga sucesión de peldaños de piedra diseñados originalmente en el siglo XVI para facilitar el movimiento de los Caballeros de la Orden de San Juan incluso llevando armaduras pesadas.\n\n💡 Qué la hace especial:\nLos escalones son muy anchos y bajos, algo que no responde solo a motivos estéticos, sino también militares.\n\n🌍 Experiencia viajera:\nHoy en día la calle se ha convertido en uno de los rincones más bohemios y atmosféricos de la ciudad.\n\nPor las tardes y noches, cafeterías, vinotecas y pequeños restaurantes colocan mesas, cojines y taburetes directamente sobre los peldaños, creando una de las escenas más especiales de Malta.\n\n✨ Consejo AvenTourArte:\nTomarse algo aquí al atardecer con la brisa del puerto es una de las experiencias más auténticas de La Valeta.\n\n🏘️ Triq Sant’ Orsla:\nMuy cerca de Barrakka, esta calle conserva una de las atmósferas más señoriales y residenciales de la ciudad.\n\nAquí destacan las fachadas barrocas, los pequeños nichos religiosos incrustados en las esquinas y los juegos de luces y sombras que generan las estrechas calles de piedra.\n\n💡 Experiencia viajera:\nEs una de las mejores zonas para entender cómo era realmente la vida cotidiana durante la época de los Caballeros de San Juan.\n\n🎭 Old Theatre Street:\nEsta calle debe su nombre al histórico Teatro Manoel, uno de los teatros en funcionamiento más antiguos de Europa.\n\nAdemás de su importancia histórica, ofrece una de las perspectivas urbanas más famosas de Malta.\n\n📸 Qué mirar:\nDesde ciertos puntos de la calle se obtiene una vista espectacular de la cúpula de la Basílica de Nuestra Señora del Monte Carmelo perfectamente enmarcada entre los edificios de piedra caliza.\n\n🌅 Experiencia viajera:\nEste pequeño cuadrante de calles resume perfectamente la esencia de La Valeta: historia, pendientes imposibles, balcones de madera, piedra dorada y ambiente mediterráneo.',
                 fotos: ['cld:europa/malta/la-valeta/st-lucia-street',
                   'cld:europa/malta/la-valeta/triq-sant-orsla'
-                ]
+                ],
+                direccion: 'Inicio orientativo: St. Lucia’s Street, junto al cruce con Merchants Street, Valletta, Malta | Otros tramos: Triq Sant’ Orsla y Old Theatre Street',
+                maps: 'https://www.google.com/maps/search/?api=1&query=St%20Lucia%20Street%20and%20Merchants%20Street%2C%20Valletta%2C%20Malta',
+                horario: 'Paseo exterior sin horario de visita | Los locales y edificios tienen sus propios horarios',
+                precio: 'Paseo exterior gratuito'
               },
               {
                 nombre: 'Concatedral de San Juan',
@@ -181,15 +185,18 @@ export const MALTA_GUIDE = {
               },
               {
                 nombre: 'Merchants Street y Strait Street',
-                tiposPlan: ['ruta', 'urbano', 'coste-variable'],
+                tiposPlan: ['ruta', 'urbano', 'gratuito'],
                 descripcion:
-                  'Al salir del museo, la ruta continúa por las calles paralelas a Republic Street, donde La Valeta deja ver su lado más comercial, cotidiano y nocturno.\n\nEstas dos calles paralelas representan dos caras completamente distintas de La Valeta.\n\nMientras Merchants Street conserva el alma comercial, tradicional y artesanal de la ciudad histórica, Strait Street muestra la parte más bohemia, nocturna y canalla de la capital maltesa.\n\n🛍️ Merchants Street:\nDurante siglos fue el gran eje comercial de La Valeta.\n\nAquí aparecen antiguos palacios barrocos, balcones tradicionales de madera y algunos de los edificios históricos más elegantes de la ciudad.\n\nLa calle mantiene todavía una atmósfera mucho más local y auténtica que otras zonas más turísticas.\n\n🏛️ Qué ver:\n• El histórico mercado Is-Suq tal-Belt\n• El antiguo Albergue de Italia\n• Fachadas barrocas y balcones corridos\n• Tiendas tradicionales y cafeterías históricas\n\n🍴 Is-Suq tal-Belt:\nEl gran mercado cubierto de La Valeta ocupa una espectacular estructura metálica del siglo XIX restaurada tras los bombardeos de la Segunda Guerra Mundial.\n\nActualmente funciona como mercado gastronómico con puestos de cocina maltesa e internacional.\n\n⚓ Strait Street:\nA pocos pasos aparece una atmósfera completamente distinta.\n\nStrait Street fue durante décadas el corazón de la vida nocturna de los marineros británicos destinados en Malta.\n\nConocida históricamente como “The Gut”, la calle estaba llena de bares, cabarets, locales de jazz y tabernas donde soldados y marineros pasaban las noches durante la época colonial.\n\n💡 Curiosidad histórica:\nTras años de decadencia, hoy Strait Street se ha transformado en una de las zonas con más ambiente de La Valeta.\n\n🍷 Qué hacer aquí:\n• Tomar cócteles o vino maltés\n• Escuchar música en directo\n• Cenar en pequeños gastrobares\n• Descubrir fachadas vintage y neones históricos\n\n🌙 Experiencia viajera:\nEl contraste entre ambas calles resume perfectamente la esencia de La Valeta:\n\nhistoria, comercio, decadencia, renacimiento cultural y vida mediterránea.\n\n✨ Consejo AvenTourArte:\nMerchants Street funciona mejor de día.\n\nStrait Street cobra verdadera vida al anochecer.\n\n📸 Consejo fotográfico:\nLas mejores imágenes aparecen cuando las luces cálidas empiezan a iluminar las fachadas estrechas y los balcones de piedra de la ciudad.',
+                  'Al salir del museo, la ruta continúa por las calles paralelas a Republic Street, donde La Valeta deja ver su lado más comercial, cotidiano y nocturno.\n\nEstas dos calles paralelas representan dos caras completamente distintas de La Valeta.\n\nMientras Merchants Street conserva el alma comercial, tradicional y artesanal de la ciudad histórica, Strait Street muestra la parte más bohemia, nocturna y canalla de la capital maltesa.\n\n🛍️ Merchants Street:\nDurante siglos fue el gran eje comercial de La Valeta.\n\nAquí aparecen antiguos palacios barrocos, balcones tradicionales de madera y algunos de los edificios históricos más elegantes de la ciudad.\n\nLa calle mantiene todavía una atmósfera mucho más local y auténtica que otras zonas más turísticas.\n\n🏛️ Qué ver:\n• El histórico mercado Is-Suq tal-Belt\n• El antiguo Albergue de Italia\n• Fachadas barrocas y balcones corridos\n• Tiendas tradicionales y cafeterías históricas\n\n🍴 Is-Suq tal-Belt:\nEl gran mercado cubierto de La Valeta ocupa una espectacular estructura metálica del siglo XIX restaurada tras los bombardeos de la Segunda Guerra Mundial.\n\nActualmente funciona como mercado gastronómico con puestos de cocina maltesa e internacional.\n\n⚓ Strait Street:\nA pocos pasos aparece una atmósfera completamente distinta.\n\nStrait Street fue durante décadas el corazón de la vida nocturna de los marineros británicos destinados en Malta.\n\nConocida históricamente como “The Gut”, la calle estaba llena de bares, cabarets, locales de jazz y tabernas donde soldados y marineros pasaban las noches durante la época colonial.\n\n💡 Curiosidad histórica:\nTras años de decadencia, hoy Strait Street se ha transformado en una de las zonas con más ambiente de La Valeta.\n\n🍷 Qué hacer aquí:\n• Tomar cócteles o vino maltés\n• Escuchar música en directo\n• Cenar en pequeños gastrobares\n• Descubrir fachadas vintage y neones históricos\n\n🌙 Experiencia viajera:\nEl contraste entre ambas calles resume perfectamente la esencia de La Valeta:\n\nhistoria, comercio, decadencia, renacimiento cultural y vida mediterránea.\n\n✨ Consejo AvenTourArte:\nMerchants Street funciona mejor de día.\n\nStrait Street cobra verdadera vida al anochecer.',
                 foto:
                   'cld:europa/malta/la-valeta/merchants-street-strait-street',
                 horario:
-                  'Acceso libre 24h | Comercios y mercado: aprox. 09:00–19:30 | Mejor ambiente nocturno en Strait Street: 19:00–02:00',
+                  'Paseo exterior sin horario de visita | Mercado, comercios y locales: consulta los horarios de cada establecimiento',
                 precio:
-                  'Gratis | Mercado gastronómico y restaurantes: ≈ 10€–30€ por persona'
+                  'Paseo exterior gratuito | Consumos, compras y actividades: según establecimiento',
+                direccion: 'Inicio orientativo: Is-Suq tal-Belt, Triq il-Merkanti, Valletta VLT 1175, Malta | Continúa por Merchants Street y Strait Street (Triq id-Dejqa)',
+                maps: 'https://g.page/suqtalbelt?share',
+                web: 'https://valletta2018.org/infrastructure-projects/strait-street-a-brand-name-of-art-culture-and-entertainment/'
               },
               {
                 nombre: 'Teatro Manoel',
@@ -214,9 +221,14 @@ export const MALTA_GUIDE = {
                 descripcion:
                   'Continuando hacia la zona occidental de La Valeta, el perfil de la ciudad cambia con una aguja altísima que recuerda la etapa británica de Malta.\n\nLa Procatedral de San Pablo es uno de los edificios más reconocibles del skyline de Malta gracias a su enorme aguja de 60 metros que domina completamente el perfil de La Valeta.\n\nSituada en Independence Square, esta iglesia anglicana representa perfectamente la profunda huella británica que dejó el Imperio en la isla durante los siglos XIX y XX.\n\n🏛️ Origen histórico:\nLa catedral fue construida entre 1839 y 1844 para servir como lugar de culto a los oficiales, soldados y residentes británicos anglicanos establecidos en Malta.\n\nGran parte de la financiación fue aportada por la reina Adelaida de Inglaterra durante su estancia en la isla.\n\n💡 Qué la hace especial:\nA diferencia del barroco exuberante y dorado que domina las iglesias católicas maltesas, aquí todo cambia completamente.\n\nLa arquitectura es neoclásica, sobria, elegante y muy influenciada por el estilo británico.\n\n⚪ El contraste visual:\nEl interior destaca por sus paredes blancas, techos altos de madera y una atmósfera tranquila y luminosa que rompe completamente con la intensidad decorativa de lugares como la Concatedral de San Juan.\n\n🎼 El órgano histórico:\nLa catedral alberga un impresionante órgano de tubos construido originalmente en Inglaterra en el siglo XVII.\n\nSegún la tradición, el propio compositor Georg Friedrich Händel habría llegado a tocar este instrumento antes de que fuese trasladado a Malta.\n\n🌍 Experiencia viajera:\nAunque el interior se visita relativamente rápido, la verdadera fuerza visual del edificio aparece desde el exterior.\n\nSu enorme aguja sobresaliendo entre los tejados de piedra caliza se ha convertido en una de las imágenes más icónicas de toda La Valeta.\n\n✨ Consejo AvenTourArte:\nEs uno de los mejores lugares para entender el contraste entre la Malta barroca de los Caballeros y la posterior influencia británica.\n\n📸 Consejo fotográfico:\nLas mejores vistas de la procatedral no se obtienen desde dentro de La Valeta.\n\nLa postal más famosa aparece desde el paseo marítimo de Sliema o desde el ferry que conecta ambas ciudades, especialmente al atardecer cuando la piedra dorada se ilumina frente al mar.',
                 horario:
-                  'Lun–Vie: 10:00–16:00 | Sáb: 10:00–13:00 | Dom: abierta principalmente para servicios religiosos',
+                  'Lun–Vie: 09:00–17:00 | Sáb: 10:00–15:00 | Puede variar por celebraciones; consulta antes de ir',
                 precio:
-                  'Gratis | Donativos bienvenidos'
+                  'Gratis | Donativos bienvenidos',
+                direccion: 'St. Paul’s Pro-Cathedral, Independence Square, Valletta VLT 1535, Malta | Entrada por West Street',
+                maps: 'https://www.google.com/maps/dir//35.900801,+14.512103',
+                telefono: '+356 7905 9215 / +356 7902 7807',
+                web: 'https://www.stpaulspromalta.org/',
+                acceso: 'Entrada por West Street. Es un lugar de culto: respeta las celebraciones y el silencio. Para fotografías se solicita un pequeño donativo.'
               },
               {
                 nombre: 'Biblioteca Nacional de Malta',
@@ -228,7 +240,11 @@ export const MALTA_GUIDE = {
                 horario:
                   'Invierno (1 oct–15 jun): Lun–Vie 08:15–17:00 | Sáb 08:15–13:15 || Verano (16 jun–30 sep): Lun–Sáb 08:15–13:15 | Dom y festivos: Cerrado',
                 precio:
-                  'Gratis'
+                  'Gratis',
+                direccion: '36, Old Treasury Street (Triq it-Teżorerija), Valletta VLT 1410, Malta',
+                maps: 'https://www.google.com/maps/search/?api=1&query=National%20Library%20of%20Malta%2C%2036%20Old%20Treasury%20Street%2C%20Valletta%2C%20Malta',
+                telefono: '+356 2598 3550',
+                web: 'https://maltalibraries.gov.mt/'
               },
               {
                 nombre: 'Palacio del Gran Maestre',
@@ -242,7 +258,13 @@ export const MALTA_GUIDE = {
                 precio:
                   'Adultos: 12€ | Jóvenes (12–17), estudiantes y personas de 60 años o más: 10€ | Niños 6–11 años: 8€ | Niños 1–5 años: Gratis',
                 acceso:
-                  'La Sala del Trono, las Salas de Estado y la Armería pueden tener restricciones de acceso o cierres parciales en determinadas fechas y franjas horarias. Antes de ir, comprueba con Heritage Malta qué espacios están disponibles para organizar tu visita.'
+                  'La Sala del Trono, las Salas de Estado y la Armería pueden tener restricciones de acceso o cierres parciales en determinadas fechas y franjas horarias. Antes de ir, comprueba con Heritage Malta qué espacios están disponibles para organizar tu visita.',
+                direccion: 'Grand Master’s Palace, St George’s Square, Valletta, Malta',
+                maps: 'https://www.google.com/maps/dir//35.898487835896105,14.513867475131354/',
+                telefono: '+356 2124 9349',
+                web: 'https://heritagemalta.mt/explore/grand-masters-palace/',
+                reserva: 'https://heritagemalta.mt/store/s87/',
+                tipoReserva: 'entradas' as const
               },
               {
                 nombre: 'Casa Rocca Piccola',
@@ -254,7 +276,12 @@ export const MALTA_GUIDE = {
                 horario:
                   'Lun–Sáb: 10:00–17:00 | Último acceso: 16:00 | Dom: Cerrado',
                 precio:
-                  'Adultos: 9€ | Estudiantes: 5€ | Menores de 14 años: Gratis'
+                  'Adultos: 12€ | Estudiantes: 8€ | Niños de 0 a 13 años: Gratis',
+                direccion: '74, Republic Street, Valletta VLT 1117, Malta',
+                maps: 'https://www.google.com/maps/search/?api=1&query=Casa%20Rocca%20Piccola%2C%2074%20Republic%20Street%2C%20Valletta%2C%20Malta',
+                telefono: '+356 2122 1499',
+                web: 'https://casaroccapiccola.com/',
+                acceso: 'Las salas principales disponen de ascensor desde 53 St Dominic Street; solicita el acceso en recepción. Los refugios tienen alrededor de 100 escalones y túneles estrechos, por lo que no son adecuados para personas con movilidad reducida.'
               },
               {
                 nombre: 'Fuerte de San Telmo',
@@ -266,9 +293,15 @@ export const MALTA_GUIDE = {
                 horario:
                   'Horario general: Lun–Dom 09:00–17:00 | Último acceso: 16:30 | En las fechas programadas de In Guardia, la visita ordinaria al fuerte y al museo comienza a las 12:00',
                 precio:
-                  'Adultos: 10€ | Jóvenes, estudiantes y mayores de 60: 7,50€ | Niños 6–11 años: 5,50€ | Menores de 5 años: Gratis',
+                  'Adultos: 10€ | Jóvenes de 12–17 años, estudiantes y personas de 60 años o más: 7,50€ | Niños 6–11 años: 5,50€ | Niños 1–5 años: Gratis',
                 acceso:
-                  'Algunas exposiciones, incluida la dedicada a la Primera Guerra Mundial en la sección 4, pueden tener restricciones temporales sin que necesariamente cierre el resto del fuerte o del museo. Antes de ir, comprueba qué espacios están abiertos y consulta el calendario de In Guardia: los días de representación, la visita ordinaria comienza a las 12:00.'
+                  'Algunas exposiciones, incluida la dedicada a la Primera Guerra Mundial en la sección 4, pueden tener restricciones temporales sin que necesariamente cierre el resto del fuerte o del museo. Antes de ir, comprueba qué espacios están abiertos y consulta el calendario de In Guardia: los días de representación, la visita ordinaria comienza a las 12:00.',
+                direccion: 'Fort St Elmo and National War Museum, Mediterranean Street, Valletta, Malta',
+                maps: 'https://www.google.com/maps/dir//35.90115867933051,14.51890064016454/',
+                telefono: '+356 2123 3088',
+                web: 'https://heritagemalta.mt/explore/fort-st-elmo-national-war-museum/',
+                reserva: 'https://heritagemalta.mt/store/s29/',
+                tipoReserva: 'entradas' as const
               },
               {
                 nombre: 'Jardines Inferiores de Barrakka',
