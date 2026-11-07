@@ -332,7 +332,7 @@ export const ALMENSILLA_GUIDE = {
             'https://www.google.com/maps/place/?q=place_id:ChIJ_6JqH4ANEg0RFXctC0riGQg',
           telefono: '+34 605 29 27 29',
           web: 'https://www.lasacristiabodega.com/',
-          reserva: 'https://www.lasacristiabodega.com/contacto.html'
+          reserva: 'tel:+34605292729'
         },
         {
           nombre: 'La Atarazana 1920',
