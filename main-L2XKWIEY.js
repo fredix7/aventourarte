@@ -15256,7 +15256,7 @@ Aunque la visita tur\xEDstica merece much\xEDsimo la pena, la mejor experiencia 
 La ac\xFAstica del teatro es tan buena que incluso los susurros se escuchan perfectamente desde cualquier palco.
 
 \u{1F4A1} Consejo pr\xE1ctico:
-Las visitas tur\xEDsticas pueden modificarse si hay ensayos generales o preparativos para espect\xE1culos.`,horario:"Visitas por turnos: Lun\u2013Vie, invierno (1 sep\u201319 jun): 11:00 y 15:00; verano (20 jun\u201331 ago): 10:30 y 12:00 | S\xE1b: 10:30, 11:30 y 12:30 | Dom: sin visitas tur\xEDsticas | Pueden cancelarse o reprogramarse por ensayos o trabajos t\xE9cnicos",precio:"Visita tur\xEDstica: 10\u20AC | Funciones y conciertos: seg\xFAn programaci\xF3n y localidad"},{nombre:"Procatedral de San Pablo",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Continuando hacia la zona occidental de La Valeta, el perfil de la ciudad cambia con una aguja alt\xEDsima que recuerda la etapa brit\xE1nica de Malta.
+Las visitas tur\xEDsticas pueden modificarse si hay ensayos generales o preparativos para espect\xE1culos.`,horario:"Visitas por turnos: Lun\u2013Vie, invierno (1 sep\u201319 jun): 11:00 y 15:00; verano (20 jun\u201331 ago): 10:30 y 12:00 | S\xE1b: 10:30, 11:30 y 12:30 | Dom: sin visitas tur\xEDsticas | Pueden cancelarse o reprogramarse por ensayos o trabajos t\xE9cnicos",precio:"Visita tur\xEDstica: 10\u20AC | Funciones y conciertos: precio seg\xFAn la funci\xF3n y la categor\xEDa de asiento"},{nombre:"Procatedral de San Pablo",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Continuando hacia la zona occidental de La Valeta, el perfil de la ciudad cambia con una aguja alt\xEDsima que recuerda la etapa brit\xE1nica de Malta.
 
 La Procatedral de San Pablo es uno de los edificios m\xE1s reconocibles del skyline de Malta gracias a su enorme aguja de 60 metros que domina completamente el perfil de La Valeta.
 
@@ -15375,7 +15375,7 @@ No pases demasiado r\xE1pido por los pasillos y galer\xEDas.
 Muchos de los mejores detalles aparecen precisamente en los techos, armaduras y frescos secundarios.
 
 \u{1F482} Consejo pr\xE1ctico:
-A las 10:00 suele celebrarse el Cambio de Guardia frente al palacio en la Plaza de San Jorge, una ceremonia heredada de la \xE9poca brit\xE1nica muy interesante para ver antes de entrar.`,foto:"cld:europa/malta/la-valeta/palacio-del-gran-maestre",horario:"Lun\u2013Dom: 09:00\u201317:00 | \xDAltimo acceso: 16:30",precio:"Adultos: 12\u20AC | J\xF3venes (12\u201317), estudiantes y personas de 60 a\xF1os o m\xE1s: 10\u20AC | Ni\xF1os 6\u201311 a\xF1os: 8\u20AC | Ni\xF1os 1\u20135 a\xF1os: Gratis",acceso:"Avisos oficiales consultados el 7/11/2026: la Sala del Trono est\xE1 cerrada hasta nuevo aviso. Hay fechas con cierre de las Salas de Estado y acceso limitado a la Armer\xEDa, y otras con cierre horario de ambas zonas. Consulta los avisos vigentes de Heritage Malta antes de visitar."},{nombre:"Casa Rocca Piccola",tiposPlan:["ruta","urbano","coste-variable"],descripcion:`Tras visitar el gran palacio del poder oficial, continuamos por Republic Street hacia una cara mucho m\xE1s \xEDntima y dom\xE9stica de la historia maltesa.
+A las 10:00 suele celebrarse el Cambio de Guardia frente al palacio en la Plaza de San Jorge, una ceremonia heredada de la \xE9poca brit\xE1nica muy interesante para ver antes de entrar.`,foto:"cld:europa/malta/la-valeta/palacio-del-gran-maestre",horario:"Lun\u2013Dom: 09:00\u201317:00 | \xDAltimo acceso: 16:30",precio:"Adultos: 12\u20AC | J\xF3venes (12\u201317), estudiantes y personas de 60 a\xF1os o m\xE1s: 10\u20AC | Ni\xF1os 6\u201311 a\xF1os: 8\u20AC | Ni\xF1os 1\u20135 a\xF1os: Gratis",acceso:"La Sala del Trono, las Salas de Estado y la Armer\xEDa pueden tener restricciones de acceso o cierres parciales en determinadas fechas y franjas horarias. Antes de ir, comprueba con Heritage Malta qu\xE9 espacios est\xE1n disponibles para organizar tu visita."},{nombre:"Casa Rocca Piccola",tiposPlan:["ruta","urbano","coste-variable"],descripcion:`Tras visitar el gran palacio del poder oficial, continuamos por Republic Street hacia una cara mucho m\xE1s \xEDntima y dom\xE9stica de la historia maltesa.
 
 Casa Rocca Piccola es una de las visitas m\xE1s especiales, \xEDntimas y sorprendentes de toda La Valeta.
 
@@ -15468,7 +15468,7 @@ Gran parte de la visita es al aire libre y el sol malt\xE9s puede ser muy intens
 Llevar agua, gorra y evitar las horas centrales del d\xEDa es muy recomendable.
 
 \u{1F3AD} Curiosidad:
-En determinadas fechas se celebran recreaciones hist\xF3ricas militares con uniformes, mosquetes y disparos de ca\xF1\xF3n dentro del fuerte.`,foto:"cld:europa/malta/la-valeta/fuerte-san-telmo",horario:"Horario general: Lun\u2013Dom 09:00\u201317:00 | \xDAltimo acceso: 16:30 | En las fechas programadas de In Guardia, la visita ordinaria al fuerte y al museo comienza a las 12:00",precio:"Adultos: 10\u20AC | J\xF3venes, estudiantes y mayores de 60: 7,50\u20AC | Ni\xF1os 6\u201311 a\xF1os: 5,50\u20AC | Menores de 5 a\xF1os: Gratis",acceso:"Aviso oficial consultado el 7/11/2026: la exposici\xF3n de la Primera Guerra Mundial de la secci\xF3n 4 est\xE1 cerrada hasta nuevo aviso; no se trata de un cierre de todo el fuerte ni del museo. Consulta los avisos vigentes y el calendario de In Guardia antes de ir."},{nombre:"Jardines Inferiores de Barrakka",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Despu\xE9s de recorrer las murallas y el extremo defensivo de San Telmo, los Jardines Inferiores de Barrakka ofrecen una pausa m\xE1s serena antes de despedirnos de La Valeta.
+En determinadas fechas se celebran recreaciones hist\xF3ricas militares con uniformes, mosquetes y disparos de ca\xF1\xF3n dentro del fuerte.`,foto:"cld:europa/malta/la-valeta/fuerte-san-telmo",horario:"Horario general: Lun\u2013Dom 09:00\u201317:00 | \xDAltimo acceso: 16:30 | En las fechas programadas de In Guardia, la visita ordinaria al fuerte y al museo comienza a las 12:00",precio:"Adultos: 10\u20AC | J\xF3venes, estudiantes y mayores de 60: 7,50\u20AC | Ni\xF1os 6\u201311 a\xF1os: 5,50\u20AC | Menores de 5 a\xF1os: Gratis",acceso:"Algunas exposiciones, incluida la dedicada a la Primera Guerra Mundial en la secci\xF3n 4, pueden tener restricciones temporales sin que necesariamente cierre el resto del fuerte o del museo. Antes de ir, comprueba qu\xE9 espacios est\xE1n abiertos y consulta el calendario de In Guardia: los d\xEDas de representaci\xF3n, la visita ordinaria comienza a las 12:00."},{nombre:"Jardines Inferiores de Barrakka",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Despu\xE9s de recorrer las murallas y el extremo defensivo de San Telmo, los Jardines Inferiores de Barrakka ofrecen una pausa m\xE1s serena antes de despedirnos de La Valeta.
 
 Los Jardines Inferiores de Barrakka son uno de los rincones m\xE1s tranquilos, elegantes y relajantes de toda La Valeta.
 
@@ -16013,14 +16013,14 @@ Durante d\xE9cadas acogi\xF3 representaciones teatrales, conciertos, proyeccione
 \u2728 Qu\xE9 hace especial este lugar:
 El Orpheum forma parte del patrimonio teatral hist\xF3rico de G\u017Cira.
 
-El cat\xE1logo teatral de Valletta 2018 documenta elementos Art Nouveau y coloniales espa\xF1oles. Esta referencia hist\xF3rica no acredita el estado ni el acceso interior actuales.
+Su arquitectura combina elementos Art Nouveau y coloniales espa\xF1oles. Antes de acercarte, consulta si es posible visitar el interior.
 
 \u{1F4A1} Qu\xE9 observar:
 \u2022 La fachada hist\xF3rica del edificio
 \u2022 Si se autoriza el acceso, la sala principal y sus elementos decorativos
 
 \u{1F3AD} Acceso actual:
-Las fuentes hist\xF3ricas no confirman una programaci\xF3n ni un horario tur\xEDstico vigentes. Antes de planificar una visita interior o asistir a un espect\xE1culo, comprueba el acceso y la programaci\xF3n actuales.
+Si quieres visitar el interior o asistir a un espect\xE1culo, consulta previamente las posibilidades de acceso, la programaci\xF3n y los horarios. No cuentes con una visita interior sin confirmarla antes.
 
 \u{1F30D} Experiencia viajera:
 Visitar el Orpheum permite descubrir una faceta menos conocida de Malta.
@@ -16033,7 +16033,7 @@ Si coincide alguna actuaci\xF3n durante tu estancia, merece mucho m\xE1s la pena
 La experiencia permite disfrutar de uno de los espacios esc\xE9nicos hist\xF3ricos m\xE1s carism\xE1ticos de Malta.
 
 \u{1F4F8} Consejo fotogr\xE1fico:
-La fachada hist\xF3rica permite descubrir una imagen distinta de la Malta monumental recorrida durante el d\xEDa.`,fotos:["cld:europa/malta/sliema/teatro-orpheum","cld:europa/malta/sliema/teatro-orpheum-interior"],horario:"Sin horario de visita tur\xEDstica confirmado | Consultar el acceso y la programaci\xF3n actuales antes de ir",precio:"Exterior gratuito | Espect\xE1culos seg\xFAn evento"},{nombre:"Paseo Mar\xEDtimo de Sliema (The Promenade)",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Tras visitar el Teatro Orpheum, la ruta regresa de nuevo hacia el mar para recorrer uno de los lugares m\xE1s agradables y animados de toda Malta: el Paseo Mar\xEDtimo de Sliema.
+La fachada hist\xF3rica permite descubrir una imagen distinta de la Malta monumental recorrida durante el d\xEDa.`,fotos:["cld:europa/malta/sliema/teatro-orpheum","cld:europa/malta/sliema/teatro-orpheum-interior"],horario:"Visitas al interior: consulta previamente la disponibilidad y los horarios | Espect\xE1culos: seg\xFAn programaci\xF3n",precio:"Exterior gratuito | Espect\xE1culos seg\xFAn evento"},{nombre:"Paseo Mar\xEDtimo de Sliema (The Promenade)",tiposPlan:["ruta","urbano","gratuito"],descripcion:`Tras visitar el Teatro Orpheum, la ruta regresa de nuevo hacia el mar para recorrer uno de los lugares m\xE1s agradables y animados de toda Malta: el Paseo Mar\xEDtimo de Sliema.
 
 Con varios kil\xF3metros de longitud, este gran bulevar peatonal bordea pr\xE1cticamente toda la pen\xEDnsula y conecta de forma continua Sliema con San Juli\xE1n, convirti\xE9ndose en el lugar favorito de locales y viajeros para caminar, correr, relajarse o simplemente disfrutar de las vistas.
 
