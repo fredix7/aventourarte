@@ -16736,7 +16736,7 @@ Sus famosos hojaldres rellenos de ricotta o crema de guisantes son una aut\xE9nt
 \u2728 Consejo AvenTourArte:
 La combinaci\xF3n Mdina + Rabat es una de las experiencias culturales m\xE1s completas de Malta.
 
-Combina el paseo por Mdina y Rabat seg\xFAn tu ritmo; si quieres entrar en museos o catacumbas, organiza esas visitas primero en funci\xF3n de sus horarios y deja el recorrido exterior para despu\xE9s.`,direccion:"Inicio orientativo: exterior de la Bas\xEDlica de San Pablo y su plaza, centro hist\xF3rico de Rabat, Malta",maps:"https://www.google.com/maps/search/?api=1&query=Basilica%20of%20St%20Paul%2C%20Rabat%2C%20Malta",horario:"Paseo urbano exterior sin horario de visita | Museos, iglesias y catacumbas: consulta sus horarios propios",precio:"Paseo por los espacios p\xFAblicos gratuito | Las visitas a interiores tienen sus propias entradas",web:"https://rabatmaltalc.gov.mt/en/",acceso:"La parada propone recorrer el centro hist\xF3rico a pie desde la plaza de la bas\xEDlica. No incluye entradas a museos, grutas o catacumbas ni garantiza su apertura. Respeta los accesos al culto y las indicaciones locales."},{nombre:"Domvs Romana",tiposPlan:["ruta","urbano","coste-variable"],descripcion:`Nada m\xE1s abandonar las murallas de Mdina en direcci\xF3n a Rabat aparece uno de los yacimientos arqueol\xF3gicos m\xE1s importantes de Malta: la Domvs Romana.
+Combina el paseo por Mdina y Rabat seg\xFAn tu ritmo; si quieres entrar en museos o catacumbas, organiza esas visitas primero en funci\xF3n de sus horarios y deja el recorrido exterior para despu\xE9s.`,direccion:"Inicio orientativo: exterior de la Bas\xEDlica de San Pablo y su plaza, centro hist\xF3rico de Rabat, Malta",maps:"https://maps.app.goo.gl/vxWsE57a151jGCmz5",horario:"Paseo urbano exterior sin horario de visita | Museos, iglesias y catacumbas: consulta sus horarios propios",precio:"Paseo por los espacios p\xFAblicos gratuito | Las visitas a interiores tienen sus propias entradas",web:"https://rabatmaltalc.gov.mt/en/",acceso:"La parada propone recorrer el centro hist\xF3rico a pie desde la plaza de la bas\xEDlica. No incluye entradas a museos, grutas o catacumbas ni garantiza su apertura. Respeta los accesos al culto y las indicaciones locales."},{nombre:"Domvs Romana",tiposPlan:["ruta","urbano","coste-variable"],descripcion:`Nada m\xE1s abandonar las murallas de Mdina en direcci\xF3n a Rabat aparece uno de los yacimientos arqueol\xF3gicos m\xE1s importantes de Malta: la Domvs Romana.
 
 Este museo protege los restos de una lujosa residencia aristocr\xE1tica construida durante la \xE9poca romana, cuando Mdina y Rabat formaban parte de la antigua ciudad de Melite.
 
@@ -16778,7 +16778,7 @@ Es una parada perfecta antes de adentrarse en las catacumbas de Rabat, ya que co
 Al salir del museo, puedes acercarte a Crystal Palace (Is-Serkin), uno de los lugares m\xE1s famosos de Malta para probar los tradicionales pastizzi reci\xE9n horneados.
 
 \u{1F4A1} Consejo pr\xE1ctico:
-La visita suele realizarse c\xF3modamente en unos 30-45 minutos.`,horario:"Calendario de invierno: 09:00\u201317:00, con cierres semanales los lunes y otros d\xEDas seg\xFAn el periodo | \xDAltimo acceso: 16:30 | Consulta los d\xEDas de apertura y festivos en el calendario de Heritage Malta",precio:"Adultos (18+): 6\u20AC | J\xF3venes de 12\u201317 a\xF1os, estudiantes y personas de 60 a\xF1os o m\xE1s: 4,50\u20AC | Ni\xF1os de 6\u201311 a\xF1os: 3\u20AC | Hasta 5 a\xF1os: gratis",direccion:"Domvs Romana, Wesg\u0127et il-Mu\u017Cew, Rabat RBT 1202, Malta",maps:"https://www.google.com/maps/search/?api=1&query=35.88508644266669%2C14.40036122414419",telefono:"+356 2145 4125",web:"https://heritagemalta.mt/explore/domvs-romana/",reserva:"https://heritagemalta.mt/store/s1/",tipoReserva:"entradas",acceso:"La entrada corresponde a Domvs Romana. Heritage Malta identifica el museo como plenamente accesible para personas con movilidad reducida; consulta con el personal si necesitas ayuda. El recorrido y los d\xEDas de apertura pueden verse sujetos a indicaciones de conservaci\xF3n."},{nombre:"Catacumbas de San Pablo",tiposPlan:["ruta","urbano","de-pago"],descripcion:`Despu\xE9s de recorrer la superficie hist\xF3rica de Rabat, llega el momento de descubrir la ciudad oculta que permanece bajo sus calles.
+La visita suele realizarse c\xF3modamente en unos 30-45 minutos.`,horario:"Calendario de invierno: 09:00\u201317:00, con cierres semanales los lunes y otros d\xEDas seg\xFAn el periodo | \xDAltimo acceso: 16:30 | Consulta los d\xEDas de apertura y festivos en el calendario de Heritage Malta",precio:"Adultos (18+): 6\u20AC | J\xF3venes de 12\u201317 a\xF1os, estudiantes y personas de 60 a\xF1os o m\xE1s: 4,50\u20AC | Ni\xF1os de 6\u201311 a\xF1os: 3\u20AC | Hasta 5 a\xF1os: gratis",direccion:"Domvs Romana, Wesg\u0127et il-Mu\u017Cew, Rabat RBT 1202, Malta",maps:"https://maps.app.goo.gl/nBySDgw9joUGs2TT7",telefono:"+356 2145 4125",web:"https://heritagemalta.mt/explore/domvs-romana/",reserva:"https://heritagemalta.mt/store/s1/",tipoReserva:"entradas",acceso:"La entrada corresponde a Domvs Romana. Heritage Malta identifica el museo como plenamente accesible para personas con movilidad reducida; consulta con el personal si necesitas ayuda. El recorrido y los d\xEDas de apertura pueden verse sujetos a indicaciones de conservaci\xF3n."},{nombre:"Catacumbas de San Pablo",tiposPlan:["ruta","urbano","de-pago"],descripcion:`Despu\xE9s de recorrer la superficie hist\xF3rica de Rabat, llega el momento de descubrir la ciudad oculta que permanece bajo sus calles.
 
 Las Catacumbas de San Pablo constituyen el complejo funerario paleocristiano m\xE1s grande e importante de Malta y permiten adentrarse en el fascinante mundo de las primeras comunidades que habitaron la isla durante la \xE9poca romana.
 
@@ -16813,7 +16813,7 @@ El silencio, la temperatura fresca y la tenue iluminaci\xF3n crean una experienc
 Vis\xEDtalas despu\xE9s de la Domvs Romana para entender c\xF3mo evolucion\xF3 la sociedad de Melite desde la \xE9poca romana hacia las primeras comunidades cristianas.
 
 \u26A0\uFE0F Consejo pr\xE1ctico:
-Algunos pasillos son estrechos y la temperatura es notablemente m\xE1s fresca que en el exterior.`,horario:"Calendario de invierno: 09:00\u201317:00; los d\xEDas de apertura var\xEDan seg\xFAn el periodo | \xDAltimo acceso: 16:30 | Consulta los cierres semanales y festivos de Heritage Malta",precio:"Adultos (18+): 6\u20AC | J\xF3venes de 12\u201317 a\xF1os, estudiantes y personas de 60 a\xF1os o m\xE1s: 4,50\u20AC | Ni\xF1os de 6\u201311 a\xF1os: 3,50\u20AC | Hasta 5 a\xF1os: gratis",direccion:"St Paul's Catacombs, Triq \u0126al-Bajjada, Rabat, Malta",maps:"https://www.google.com/maps/search/?api=1&query=35.88043950327771%2C14.397689825905633",telefono:"+356 2145 4562",web:"https://heritagemalta.mt/explore/st-pauls-catacombs/",reserva:"https://heritagemalta.mt/store/s12/",tipoReserva:"entradas",acceso:"El yacimiento tiene accesibilidad parcial: no todas las zonas pueden recorrerse con movilidad reducida. Consulta el recorrido disponible antes de comprar y valora las galer\xEDas subterr\xE1neas si te incomodan los espacios estrechos. Esta entrada no corresponde al complejo de Santa \xC1gueda, que tiene otro gestor."},{nombre:"Catacumbas de Santa \xC1gueda",tiposPlan:["ruta","urbano","de-pago"],descripcion:`A pocos metros de las Catacumbas de San Pablo se esconde uno de los tesoros subterr\xE1neos m\xE1s sorprendentes y menos conocidos de Malta.
+Algunos pasillos son estrechos y la temperatura es notablemente m\xE1s fresca que en el exterior.`,horario:"Calendario de invierno: 09:00\u201317:00; los d\xEDas de apertura var\xEDan seg\xFAn el periodo | \xDAltimo acceso: 16:30 | Consulta los cierres semanales y festivos de Heritage Malta",precio:"Adultos (18+): 6\u20AC | J\xF3venes de 12\u201317 a\xF1os, estudiantes y personas de 60 a\xF1os o m\xE1s: 4,50\u20AC | Ni\xF1os de 6\u201311 a\xF1os: 3,50\u20AC | Hasta 5 a\xF1os: gratis",direccion:"St Paul's Catacombs, Triq \u0126al-Bajjada, Rabat, Malta",maps:"https://maps.app.goo.gl/pXfwcaSfPeVK7VVv9",telefono:"+356 2145 4562",web:"https://heritagemalta.mt/explore/st-pauls-catacombs/",reserva:"https://heritagemalta.mt/store/s12/",tipoReserva:"entradas",acceso:"El yacimiento tiene accesibilidad parcial: no todas las zonas pueden recorrerse con movilidad reducida. Consulta el recorrido disponible antes de comprar y valora las galer\xEDas subterr\xE1neas si te incomodan los espacios estrechos. Esta entrada no corresponde al complejo de Santa \xC1gueda, que tiene otro gestor."},{nombre:"Catacumbas de Santa \xC1gueda",tiposPlan:["ruta","urbano","de-pago"],descripcion:`A pocos metros de las Catacumbas de San Pablo se esconde uno de los tesoros subterr\xE1neos m\xE1s sorprendentes y menos conocidos de Malta.
 
 Las Catacumbas de Santa \xC1gueda son m\xE1s peque\xF1as que las de San Pablo, pero conservan uno de los conjuntos de pintura religiosa medieval m\xE1s importantes de todo el archipi\xE9lago malt\xE9s.
 
@@ -16848,7 +16848,7 @@ Si solo pudieras visitar una de las dos catacumbas, San Pablo ofrece una visi\xF
 Sin embargo, si te interesa el arte medieval y la historia religiosa, Santa \xC1gueda aporta detalles \xFAnicos que no encontrar\xE1s en ning\xFAn otro lugar de Malta.
 
 \u26A0\uFE0F Consejo pr\xE1ctico:
-La visita incluye escaleras y espacios reducidos, por lo que conviene llevar calzado c\xF3modo.`,horario:"Confirma previamente con el gestor los d\xEDas de visita y los turnos de las visitas guiadas",precio:"Consulta con el gestor la tarifa vigente y los espacios incluidos en la visita",direccion:"Complejo de Santa \xC1gueda, junto a la casa madre MSSP, Rabat RBT 2020, Malta",maps:"https://www.google.com/maps/search/?api=1&query=St%20Agatha's%20Crypt%20Catacombs%20and%20Museum%2C%20Rabat%2C%20Malta",telefono:"Casa madre MSSP (consultas): +356 2145 9222",web:"https://web.depiromssp.org/malta/",acceso:"Santa \xC1gueda forma parte del complejo de la Missionary Society of St Paul (MSSP), con gesti\xF3n independiente de las Catacumbas de San Pablo de Heritage Malta. Confirma turnos, tarifa y condiciones de movilidad antes de desplazarte. El tel\xE9fono es el contacto de la casa madre MSSP para consultas."},{nombre:"Rotonda de Mosta (Bas\xEDlica de la Asunci\xF3n)",tiposPlan:["ruta","urbano","de-pago"],descripcion:`Tras abandonar Mdina y Rabat, la ruta contin\xFAa hacia Mosta, donde se alza uno de los edificios m\xE1s impresionantes y queridos de toda Malta.
+La visita incluye escaleras y espacios reducidos, por lo que conviene llevar calzado c\xF3modo.`,horario:"Confirma previamente con el gestor los d\xEDas de visita y los turnos de las visitas guiadas",precio:"Consulta con el gestor la tarifa vigente y los espacios incluidos en la visita",direccion:"Complejo de Santa \xC1gueda, junto a la casa madre MSSP, Rabat RBT 2020, Malta",maps:"https://maps.app.goo.gl/nKUvMUUBjroLTFSA6",telefono:"Casa madre MSSP (consultas): +356 2145 9222",web:"https://web.depiromssp.org/malta/",acceso:"Santa \xC1gueda forma parte del complejo de la Missionary Society of St Paul (MSSP), con gesti\xF3n independiente de las Catacumbas de San Pablo de Heritage Malta. Confirma turnos, tarifa y condiciones de movilidad antes de desplazarte. El tel\xE9fono es el contacto de la casa madre MSSP para consultas."},{nombre:"Rotonda de Mosta (Bas\xEDlica de la Asunci\xF3n)",tiposPlan:["ruta","urbano","de-pago"],descripcion:`Tras abandonar Mdina y Rabat, la ruta contin\xFAa hacia Mosta, donde se alza uno de los edificios m\xE1s impresionantes y queridos de toda Malta.
 
 La Rotonda de Mosta domina el horizonte del centro de la isla gracias a su gigantesca c\xFApula, considerada una de las mayores c\xFApulas no soportadas de Europa e inspirada directamente en el Pante\xF3n de Roma.
 
@@ -16949,58 +16949,24 @@ Si dispones de varias horas, merece much\xEDsimo la pena visitar ambas playas el
 
 Distingue la parada en Golden Bay de la visita a G\u0127ajn Tuffie\u0127a y elige los accesos seg\xFAn tus condiciones de movilidad y el estado del mar.
 
-Juntas representan una de las mejores experiencias costeras de Malta.`,direccion:"Inicio orientativo: Golden Bay (Ir-Ramla tal-Mixquqa), M\u0121arr, Malta | G\u0127ajn Tuffie\u0127a es otra playa, con acceso propio por escaleras",maps:"https://www.google.com/maps/search/?api=1&query=Golden%20Bay%20Ir-Ramla%20tal-Mixquqa%2C%20Mgarr%2C%20Malta",horario:"Visita exterior con luz diurna y seg\xFAn los avisos de seguridad | Servicios y actividades: horarios propios y de temporada",precio:"Acceso a las playas gratuito | Transporte, alquileres y servicios privados: aparte",web:"https://www.visitmalta.com/en/attraction/golden-bay/",acceso:"El Maps identifica Golden Bay, no la entrada de G\u0127ajn Tuffie\u0127a. Para continuar a esta \xFAltima, dir\xEDgete a su entrada en la parte alta y utiliza la escalinata; no sigas atajos por las laderas o junto a los acantilados. Son accesos distintos y el descenso puede no ser adecuado para todas las personas. Comprueba el mar, las banderas y la se\xF1alizaci\xF3n; no se garantiza un ba\xF1o seguro ni servicios permanentes."},{nombre:"Ruta Costera G\u0127ajn Tuffie\u0127a \u2013 \u0120nejna Bay",tiposPlan:["ruta","urbano"],descripcion:`Esta ruta une dos de las playas m\xE1s bonitas del noroeste de Malta atravesando algunos de los paisajes costeros m\xE1s salvajes y fotog\xE9nicos de toda la isla.
+Juntas representan una de las mejores experiencias costeras de Malta.`,direccion:"Inicio orientativo: Golden Bay (Ir-Ramla tal-Mixquqa), M\u0121arr, Malta | G\u0127ajn Tuffie\u0127a es otra playa, con acceso propio por escaleras",maps:"https://www.google.com/maps/search/?api=1&query=Golden%20Bay%20Ir-Ramla%20tal-Mixquqa%2C%20Mgarr%2C%20Malta",horario:"Visita exterior con luz diurna y seg\xFAn los avisos de seguridad | Servicios y actividades: horarios propios y de temporada",precio:"Acceso a las playas gratuito | Transporte, alquileres y servicios privados: aparte",web:"https://www.visitmalta.com/en/attraction/golden-bay/",acceso:"El Maps identifica Golden Bay, no la entrada de G\u0127ajn Tuffie\u0127a. Para continuar a esta \xFAltima, dir\xEDgete a su entrada en la parte alta y utiliza la escalinata; no sigas atajos por las laderas o junto a los acantilados. Son accesos distintos y el descenso puede no ser adecuado para todas las personas. Comprueba el mar, las banderas y la se\xF1alizaci\xF3n; no se garantiza un ba\xF1o seguro ni servicios permanentes."},{nombre:"Ruta Costera G\u0127ajn Tuffie\u0127a \u2013 \u0120nejna Bay",tiposPlan:["ruta","naturaleza","gratuito"],descripcion:`La costa entre G\u0127ajn Tuffie\u0127a y \u0120nejna Bay re\xFAne playas, laderas de arcilla y promontorios como Il-Qarraba. Explorarla a pie permite apreciar un paisaje distinto del de las zonas urbanas, pero exige preparar el recorrido y valorar sus condiciones.
 
-Entre acantilados de arcilla, senderos suspendidos sobre el Mediterr\xE1neo y peque\xF1as calas escondidas, el recorrido ofrece una visi\xF3n completamente distinta de Malta, lejos de las zonas m\xE1s tur\xEDsticas.
+\u{1F97E} Una propuesta de senderismo:
+Plant\xE9ala como una caminata orientativa, sin dar por hecho que exista un paso continuo, abierto y seguro entre las dos bah\xEDas. La distancia, la duraci\xF3n y la dificultad dependen del sendero elegido, los posibles desv\xEDos y el regreso.
 
-\u{1F97E} Ficha t\xE9cnica:
-\u2022 Distancia: 3,5 km (solo ida)
-\u2022 Duraci\xF3n: 1h \u2013 1h 30 min
-\u2022 Dificultad: Moderada
-\u2022 Tipo de ruta: Lineal
+\u{1F6B6} Punto de partida:
+La referencia inicial es el aparcamiento de G\u0127ajn Tuffie\u0127a (Riviera), junto al acceso superior a la playa. El mapa se\xF1ala ese punto, no la llegada a \u0120nejna. Antes de avanzar, comprueba el recorrido en un mapa actualizado y las indicaciones sobre el terreno.
 
-\u{1F6B6} Inicio de la ruta:
-La caminata comienza en la parte alta de G\u0127ajn Tuffie\u0127a.
+\u{1F33F} Il-Qarraba y las laderas de arcilla:
+Disfruta del paisaje desde caminos abiertos y consolidados. No te acerques a los bordes ni atravieses laderas erosionadas, zonas cerradas o terrenos inestables para intentar enlazar las playas. Si no encuentras un paso claro y permitido, da la vuelta.
 
-En lugar de bajar hacia la playa, se toma el sendero que bordea los acantilados en direcci\xF3n sur.
+\u26A0\uFE0F Para organizar la salida:
+Lleva agua, protecci\xF3n solar y calzado con buen agarre. El terreno puede ser irregular, inclinado y resbaladizo; evita la caminata con lluvia, barro, viento fuerte o calor intenso. Calcula tambi\xE9n el regreso y termina con suficiente luz diurna, sin depender del atardecer para completar el trayecto.
 
-\u{1F33F} Il-Qarraba:
-Uno de los paisajes m\xE1s sorprendentes de Malta.
+\u{1F68C} Regreso desde \u0120nejna:
+La prolongaci\xF3n de la l\xEDnea 101 hasta la bah\xEDa es un servicio de verano; en invierno el recorrido termina en M\u0121arr. Consulta el itinerario y los \xFAltimos servicios de Malta Public Transport antes de salir. No cuentes con un autob\xFAs desde la playa durante todo el a\xF1o.
 
-La erosi\xF3n ha modelado una lengua de arcilla gris que recuerda a un paisaje lunar suspendido sobre el mar.
-
-\u{1F4F8} Es uno de los rincones m\xE1s fotog\xE9nicos de la isla.
-
-\u{1F30A} Qarraba Bay:
-Al rodear el promontorio aparece una peque\xF1a bah\xEDa aislada pr\xE1cticamente inaccesible.
-
-Las vistas desde los acantilados son espectaculares.
-
-\u{1F3D6}\uFE0F Llegada a \u0120nejna Bay:
-La ruta finaliza en una amplia playa frecuentada principalmente por locales.
-
-Destacan sus tradicionales casetas de pescadores excavadas en la roca.
-
-\u{1F305} El mejor momento:
-\u2022 Primera hora de la ma\xF1ana
-\u2022 \xDAltimas horas de la tarde
-\u2022 Atardecer
-
-\u26A0\uFE0F Recomendaciones:
-\u2022 Llevar agua abundante
-\u2022 Utilizar calzado deportivo
-\u2022 Evitar chanclas
-\u2022 Extremar la precauci\xF3n tras d\xEDas de lluvia
-
-\u{1F68C} Regreso:
-Desde \u0120nejna puede utilizarse la l\xEDnea de autob\xFAs 101 para regresar sin necesidad de deshacer la ruta.
-
-\u2728 Consejo AvenTourArte:
-Muchos viajeros se quedan en Golden Bay.
-
-Muy pocos contin\xFAan m\xE1s all\xE1 de Il-Qarraba.
-
-Sin embargo, este sendero permite descubrir una de las costas m\xE1s salvajes, silenciosas y aut\xE9nticas de todo Malta.`},{nombre:"Popeye Village (Sweethaven)",tiposPlan:["ruta","urbano","coste-variable"],descripcion:`Continuando hacia el extremo noroeste de Malta, la ruta cambia completamente de registro para descubrir uno de los lugares m\xE1s ins\xF3litos y fotog\xE9nicos de toda la isla.
+Si no hay servicio, organiza previamente otro transporte. Volver a pie solo es una alternativa si el camino sigue abierto, lo conoces y tienes tiempo y luz suficientes. Tambi\xE9n puedes visitar ambas bah\xEDas por sus accesos habituales en salidas independientes, sin enlazarlas por la costa.`,direccion:"Inicio orientativo: aparcamiento de G\u0127ajn Tuffie\u0127a (Riviera), junto al acceso superior a la playa, M\u0121arr, Malta | Final orientativo: \u0120nejna Bay; el mapa se\xF1ala el inicio, no el final",maps:"https://www.google.com/maps/search/?api=1&query=G%C4%A7ajn%20Tuffie%C4%A7a%20%28Riviera%29%20car%20park%2C%20M%C4%A1arr%2C%20Malta",horario:"Caminata exterior con luz diurna, tiempo favorable y caminos abiertos | Comprueba el estado del recorrido y calcula el regreso antes de salir",precio:"Caminata por caminos p\xFAblicos: gratuita | Transporte y servicios privados: aparte",web:"https://www.publictransport.com.mt/goaroundmaltabybus/gnejna/",acceso:"Ruta orientativa por terreno irregular y con pendientes. Valora las condiciones de movilidad antes de salir. No se garantiza la continuidad o se\xF1alizaci\xF3n de todos los pasos. Comprueba cierres y condiciones locales, respeta las zonas balizadas y evita bordes, taludes erosionados y atajos por las laderas. La lluvia, el barro, el viento y el calor pueden desaconsejar la salida. La web enlazada informa del transporte a \u0120nejna: la extensi\xF3n de la l\xEDnea 101 es estacional y no sirve la bah\xEDa en invierno. Prev\xE9 el regreso antes de iniciar la caminata."},{nombre:"Popeye Village (Sweethaven)",tiposPlan:["ruta","urbano","coste-variable"],descripcion:`Continuando hacia el extremo noroeste de Malta, la ruta cambia completamente de registro para descubrir uno de los lugares m\xE1s ins\xF3litos y fotog\xE9nicos de toda la isla.
 
 Popeye Village no naci\xF3 como un pueblo tradicional malt\xE9s ni como una fortificaci\xF3n hist\xF3rica. Naci\xF3 como un gigantesco decorado cinematogr\xE1fico construido para el rodaje de la pel\xEDcula Popeye, protagonizada por Robin Williams y estrenada en 1980.
 
@@ -17022,7 +16988,7 @@ Las calles, viviendas, talleres y edificios conservan gran parte de la est\xE9ti
 \u2022 Espect\xE1culos protagonizados por Popeye, Olivia y otros personajes
 \u2022 Exposiciones dedicadas a la pel\xEDcula
 \u2022 Peque\xF1os museos tem\xE1ticos
-\u2022 Zonas de ba\xF1o y actividades acu\xE1ticas en verano
+\u2022 Actividades acu\xE1ticas estacionales, seg\xFAn el paquete y las condiciones del d\xEDa
 
 \u{1F30A} Anchor Bay:
 Incluso para quienes no sienten especial inter\xE9s por la pel\xEDcula, la ubicaci\xF3n merece la visita.
@@ -17037,13 +17003,10 @@ Si viajas con ni\xF1os o eres amante del cine cl\xE1sico, merece la pena entrar 
 
 Sin embargo, incluso sin comprar entrada, el lugar ofrece una de las panor\xE1micas m\xE1s espectaculares y fotografiadas de toda la costa norte de Malta.
 
-\u{1F4F8} El mirador imprescindible:
-Frente al complejo existe un mirador natural de acceso gratuito desde el que se obtiene la imagen m\xE1s famosa de Popeye Village.
+\u{1F4F8} Anchor Bay desde fuera:
+Desde la v\xEDa p\xFAblica frente al decorado puedes encuadrar las casitas con Anchor Bay en primer plano, sin comprar una entrada al parque, siempre que el acceso exterior est\xE9 abierto.
 
-Desde all\xED se aprecia perfectamente el conjunto completo de casitas de madera reflej\xE1ndose sobre las aguas de Anchor Bay.
-
-\u{1F4A1} Consejo pr\xE1ctico:
-Las mejores fotograf\xEDas suelen conseguirse a media tarde, cuando el sol ilumina directamente las fachadas del pueblo y realza los colores de las casas y del mar.`,fotos:["cld:europa/malta/mellieha/popeye-village-1","cld:europa/malta/mellieha/popeye-village-2","cld:europa/malta/mellieha/popeye-village-3","cld:europa/malta/mellieha/popeye-village-4"],horario:"Todos los d\xEDas | Horarios variables seg\xFAn temporada (aprox. 09:30\u201317:30)",precio:"Entrada: \u2248 15\u20AC\u201324\u20AC seg\xFAn temporada | Mirador exterior: Gratis"},{nombre:"Torre Roja (Torre de Santa \xC1gueda)",tiposPlan:["ruta","urbano","coste-variable"],descripcion:`A medida que la ruta se acerca al extremo norte de Malta, aparece sobre una colina una de las siluetas m\xE1s reconocibles de toda la isla.
+Mantente en las zonas permitidas, respeta cualquier cierre y no te acerques al borde de los acantilados. La visita al recinto y sus actividades se pagan aparte; elige el paquete que corresponda a tu fecha.`,fotos:["cld:europa/malta/mellieha/popeye-village-1","cld:europa/malta/mellieha/popeye-village-2","cld:europa/malta/mellieha/popeye-village-3","cld:europa/malta/mellieha/popeye-village-4"],horario:"Recinto: horario variable seg\xFAn el paquete y la temporada | Temporada baja, 6/11/2026\u201330/4/2027: todos los d\xEDas 09:30\u201317:00; las zonas de atracciones cierran 10 minutos antes | Para otras fechas, consulta el horario vigente | Vistas exteriores: con luz diurna y acceso permitido",precio:"Recinto, temporada baja: 6/11/2026\u20133/1/2027, adultos y adolescentes 15\u20AC; ni\xF1os de 3\u201312 a\xF1os y personas de 60 a\xF1os o m\xE1s 12,50\u20AC | 4/1/2027\u201330/4/2027: adultos y adolescentes 16\u20AC; ni\xF1os de 3\u201312 a\xF1os y personas de 60 a\xF1os o m\xE1s 13\u20AC | Otras temporadas y modalidades: consulta la tarifa de tu fecha | Vistas exteriores desde la v\xEDa p\xFAblica: gratuitas, sin acceso al recinto",direccion:"Popeye Village, Anchor Bay, Triq Tal-Prajjet, Mellie\u0127a MLH 4808, Malta",maps:"https://www.google.com/maps/place/Popeye+Village/@35.9609418,14.3385791,712m/data=!3m2!1e3!4b1!4m6!3m5!1s0x130e4c5303391b07:0x7bc29eb4dba25401!8m2!3d35.9609375!4d14.341154!16zL20vMGRscjd0",telefono:"+356 2152 4781 / +356 2152 4782 / +356 2152 4783 / +356 2152 4784",web:"https://www.popeyemalta.com/",reserva:"https://www.popeyemalta.com/packages/mid-season-2026/07-6-nov-30-april",tipoReserva:"entradas",acceso:"El recinto tiene fuertes pendientes y numerosas escaleras. Consulta previamente la ayuda para personas con movilidad reducida: el parque contempla acercarlas al decorado en veh\xEDculo para evitar la rampa pronunciada, lo que no garantiza el acceso a todas las zonas. Los visitantes de 16 a\xF1os o menos deben ir con un adulto de 18 a\xF1os o m\xE1s. Las actividades y servicios dependen del paquete, la temporada, el tiempo y la disponibilidad. La compra enlazada corresponde a la temporada baja 2026/2027; para otras fechas elige el paquete vigente en la web oficial. Las vistas desde la v\xEDa p\xFAblica no incluyen acceso al parque; respeta cierres y evita los bordes de los acantilados."},{nombre:"Torre Roja (Torre de Santa \xC1gueda)",tiposPlan:["ruta","urbano","coste-variable"],descripcion:`A medida que la ruta se acerca al extremo norte de Malta, aparece sobre una colina una de las siluetas m\xE1s reconocibles de toda la isla.
 
 La Torre Roja, oficialmente conocida como Torre de Santa \xC1gueda, domina el paisaje desde el siglo XVII vigilando el canal que separa Malta de Comino y Gozo.
 
@@ -17057,7 +17020,7 @@ Su posici\xF3n permit\xEDa controlar visualmente todo el norte de la isla y tran
 \u2694\uFE0F Una de las torres m\xE1s importantes de Malta:
 A diferencia de otras torres defensivas m\xE1s peque\xF1as, la Torre Roja fue dise\xF1ada para albergar una importante guarnici\xF3n militar equipada con artiller\xEDa pesada.
 
-Sus muros alcanzan casi cuatro metros de espesor y fueron concebidos para resistir ataques navales y asedios prolongados.
+Sus muros alcanzan casi cinco metros de espesor y fueron concebidos para resistir ataques navales y asedios prolongados.
 
 \u{1F3DB}\uFE0F Qu\xE9 ver en la visita:
 \u2022 Las salas hist\xF3ricas de la antigua guarnici\xF3n
@@ -17067,7 +17030,7 @@ Sus muros alcanzan casi cuatro metros de espesor y fueron concebidos para resist
 \u2022 Los gruesos muros defensivos de piedra caliza
 
 \u{1F30D} El gran atractivo: las vistas panor\xE1micas
-La aut\xE9ntica recompensa llega al subir a la azotea.
+Si el interior y la azotea est\xE1n abiertos, la subida por la escalera permite contemplar el paisaje desde lo alto.
 
 Desde aqu\xED se obtiene una de las mejores panor\xE1micas de todo el norte de Malta.
 
@@ -17084,10 +17047,10 @@ Si contin\xFAas hacia el ferry de Gozo, esta es la \xFAltima gran parada hist\xF
 Las vistas desde la torre ayudan a entender visualmente la geograf\xEDa completa del archipi\xE9lago y anticipan perfectamente la llegada a Comino y Gozo.
 
 \u{1F4F8} Consejo fotogr\xE1fico:
-La imagen m\xE1s ic\xF3nica se obtiene desde cierta distancia, con la torre completamente aislada sobre la colina y el azul intenso del Mediterr\xE1neo como tel\xF3n de fondo.
+Desde el exterior, encuadra la torre sobre la cresta de Marfa; no necesitas entrar ni subir a la azotea para fotografiar su silueta.
 
 \u{1F4A1} Consejo pr\xE1ctico:
-La visita es breve y suele recorrerse c\xF3modamente en unos 20 o 30 minutos, por lo que resulta perfecta como parada antes de dirigirse al puerto de Cirkewwa.`,foto:"cld:europa/malta/mellieha/torre-roja",horario:"Invierno: 10:00\u201316:00 | Verano: 10:00\u201317:00",precio:"Adultos: 2\u20AC | Menores de 12 a\xF1os: Gratis"}]},{dia:"D\xEDa 3 \u2013 Comino y Gozo",zonas:[{nombre:"Isla de Comino (Kemmuna)",tiposPlan:["ruta","naturaleza","gratuito"],descripcion:`Ubicada en el canal que separa Malta y Gozo, Comino es la tercera isla m\xE1s grande del archipi\xE9lago malt\xE9s, aunque sus dimensiones son muy reducidas: apenas 3,5 kil\xF3metros cuadrados.
+Antes de desviarte hacia la torre, confirma la apertura y reserva tiempo para la subida y las vistas; si est\xE1 cerrada, puedes limitarte a contemplar el exterior desde las zonas permitidas.`,foto:"cld:europa/malta/mellieha/torre-roja",horario:"Interior: lun\u2013s\xE1b 10:00\u201316:00 | Domingos cerrado | Confirma por tel\xE9fono la apertura efectiva y la presencia de voluntarios antes de ir",precio:"Interior: adultos 2,50\u20AC | Ni\xF1os de 12 a\xF1os o menos: gratis | Contemplaci\xF3n exterior desde espacios p\xFAblicos permitidos: gratuita",direccion:"St Agatha\u2019s Tower (Red Tower), cresta de Marfa, l-A\u0127rax tal-Mellie\u0127a, Mellie\u0127a, Malta",maps:"https://www.google.com/maps/search/?api=1&query=St%20Agatha%27s%20Tower%20Red%20Tower%2C%20Mellieha%2C%20Malta",telefono:"Apertura y voluntarios: +356 9934 7551",web:"https://www.static.dinlarthelwa.org/heritage-sites/managed-heritage-sites/st-agathas-tower-the-red-tower-mellieha/",acceso:"La visita al interior y a la azotea depende de la apertura efectiva y de la presencia de voluntarios de Din l-Art \u0126elwa. Llama antes de desplazarte. La azotea se alcanza por una escalera de caracol; consulta las condiciones de movilidad antes de ir. Puedes contemplar el exterior desde los espacios p\xFAblicos permitidos, respetando cierres y se\xF1alizaci\xF3n. Las visitas de grupos deben concertarse con antelaci\xF3n."}]},{dia:"D\xEDa 3 \u2013 Comino y Gozo",zonas:[{nombre:"Isla de Comino (Kemmuna)",tiposPlan:["ruta","naturaleza","gratuito"],descripcion:`Ubicada en el canal que separa Malta y Gozo, Comino es la tercera isla m\xE1s grande del archipi\xE9lago malt\xE9s, aunque sus dimensiones son muy reducidas: apenas 3,5 kil\xF3metros cuadrados.
 
 Se trata de una reserva natural protegida pr\xE1cticamente virgen, sin tr\xE1fico rodado ni n\xFAcleos urbanos importantes, donde predominan los paisajes \xE1ridos, los acantilados de piedra caliza y algunas de las aguas m\xE1s cristalinas de todo el Mediterr\xE1neo.
 
