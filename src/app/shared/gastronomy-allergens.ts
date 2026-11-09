@@ -283,13 +283,21 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Gelato', variable([], ['leche', 'huevo', 'frutos-cascara', 'soja'])],
 
     // Malta
-    ['🐇 Fenek (Conejo Maltés)', complete([], ['gluten', 'sulfitos'])],
-    ['🐟 Pescado y Marisco Maltés', variable([], ['pescado', 'moluscos', 'crustaceos', 'gluten', 'sulfitos'])],
-    ['🥖 Ftira', complete(['gluten'], ['pescado', 'leche'])],
-    ['🥐 Pastizzi', complete(['gluten'], ['leche'])],
-    ['🥟 Qassatat', variable(['gluten'], ['leche'])],
-    ['🧀 Ġbejna', complete(['leche'], ['gluten'])],
-    ['🍰 Imqaret', complete(['gluten'], ['leche', 'huevo', 'soja'])],
+    ['Fenek (Conejo Maltés)', variable([], ['gluten', 'sulfitos'])],
+    ['Torta tal-lampuki', variable(['gluten', 'pescado'], ['huevo', 'leche', 'frutos-cascara', 'sesamo'])],
+    ['Ftira', variable(['gluten'], ['pescado', 'leche', 'huevo'])],
+    ['Pastizzi', variable(['gluten'], ['leche', 'huevo'])],
+    ['Qassatat', variable(['gluten'], ['leche', 'huevo', 'pescado'])],
+    // El gluten posible corresponde al pan que puede acompañar al queso, no a los ingredientes propios de la ġbejna
+    ['Ġbejna', variable(['leche'], ['gluten', 'sulfitos'])],
+    ['Imqaret', variable(['gluten'], ['leche', 'huevo', 'soja'])],
+    // Bigilla: el trigo pertenece a los galletti; leche, soja y sésamo dependen de su variante.
+    ['Bigilla con galletti', variable(['gluten'], ['leche', 'soja', 'sesamo'])],
+    ['Timpana', variable(['gluten', 'huevo', 'leche'], ['apio', 'soja'])],
+    // Original: no se identifican alérgenos en la fórmula pública; no es un perfil completo.
+    ['Kinnie', variable()],
+    // Café negro: los posibles alérgenos corresponden a leche o bebidas vegetales añadidas.
+    ['Kafè msajjar', variable([], ['leche', 'soja', 'frutos-cascara', 'gluten'])],
 
     // Rumania
     // Bucarest

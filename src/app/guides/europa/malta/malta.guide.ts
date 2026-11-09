@@ -999,48 +999,122 @@ export const MALTA_GUIDE = {
       titulo: 'Gastronomía',
       platos: [
         {
-          nombre: '🐇 Fenek (Conejo Maltés)',
+          nombre: 'Fenek (Conejo Maltés)',
           descripcion:
-            'El Fenek es el plato nacional de Malta y una de las recetas más tradicionales de todo el archipiélago.\n\nSe elabora principalmente de dos formas: como Stuffat tal-Fenek, un estofado cocinado lentamente con vino tinto, tomate, ajo, cebolla, verduras y hierbas aromáticas, o como Fenek Moqli, una versión frita y más sencilla preparada con ajo, vino blanco y romero.\n\nLa carne queda muy tierna y sabrosa gracias a las largas cocciones, y suele servirse acompañada de patatas, verduras o incluso pasta aliñada con la salsa del propio estofado.\n\nMás que un simple plato, forma parte de la cultura maltesa y es el protagonista de las tradicionales "Fenkatas", reuniones familiares donde amigos y familiares comparten comida, vino y largas sobremesas.',
+            'El conejo ocupa un lugar central en la cocina maltesa y es el protagonista de la fenkata, una comida para compartir en torno a distintas preparaciones de esta carne. Es una de las formas más reconocibles de acercarse a su cocina tradicional.\n\n🍲 Dos preparaciones para elegir:\nEl stuffat tal-fenek es un estofado de cocción lenta con tomate, ajo, cebolla, vino y verduras, que pueden incluir patatas, zanahoria o guisantes. El fenek moqli se prepara en sartén, con ajo y vino: una alternativa para quien prefiera la carne dorada frente a la salsa del guiso. Las hierbas y los acompañamientos cambian según la casa.\n\n🍝 Cómo suele servirse:\nEn una fenkata puede aparecer primero un plato de espaguetis con la salsa del conejo y después la carne. También puedes encontrarlo como plato principal con patatas o verduras; pregunta por el formato antes de pedir para no encargar dos comidas completas.\n\nSi evitas el alcohol, consulta la preparación: el vino forma parte de estas recetas y la cocción no garantiza su ausencia. Conviene preguntar también por las grasas, el caldo y los acompañamientos si tienes otras restricciones alimentarias.',
           foto: 'cld:europa/malta/la-valeta/fenek',
-          precio: 'Moderado'
+          precio: 'Moderado',
+          perfilAlimentario: {
+            dieta: { certeza: 'confirmado' as const, compatibilidad: 'ninguno' as const },
+            alcohol: 'contiene' as const,
+            cerdo: 'desconocido' as const
+          }
         },
         {
-          nombre: '🐟 Pescado y Marisco Maltés',
+          nombre: 'Torta tal-lampuki',
           descripcion:
-            'La cocina marinera es uno de los grandes pilares gastronómicos de Malta. Gracias a su ubicación en pleno Mediterráneo, los restaurantes de las islas ofrecen pescado y marisco fresco capturado diariamente por pequeñas embarcaciones tradicionales.\n\nEl gran protagonista es el Lampuki (Dorado o Mahi-Mahi), considerado el pescado más emblemático del país. También son muy apreciados la lubina, el sargo, la serviola y los cefalópodos como el pulpo, que suele prepararse guisado lentamente con vino, tomate, aceitunas y alcaparras.\n\nEntre las especialidades más recomendables destacan el Stuffat tal-Qarnit (estofado de pulpo), el pescado fresco a la parrilla y la tradicional Torta tal-Lampuki, una deliciosa empanada rellena de pescado, espinacas, aceitunas y alcaparras.\n\nPara disfrutar de la experiencia más auténtica, nada supera una comida frente a los coloridos luzzus del puerto de Marsaxlokk o en alguna cala pesquera de Gozo donde el pescado del día se cocina pocas horas después de haber sido capturado.',
-          precio: 'Moderado'
+            'La torta tal-lampuki es una empanada maltesa de pescado y verduras, con una cubierta dorada que encierra un relleno jugoso. Permite probar una receta concreta de la cocina marinera de las islas, distinta de un pescado a la parrilla. Los lampuki son dorados o mahi-mahi, no doradas; su pesca está ligada al final del verano y al otoño.\n\nEl relleno cambia según la casa: puede combinar pescado con coliflor o espinacas, tomate, aceitunas y alcaparras. Algunas versiones añaden pasas y nueces, que aportan un contraste dulce y crujiente. También varían la masa y el acabado: puede llevar huevo para dorarla o semillas de sésamo por encima.\n\nSi la encuentras en la carta, pregunta si la sirven por porciones y qué lleva el relleno. Fuera de temporada, conviene consultar qué pescado utilizan, sin dar por hecho que se prepara siempre con captura fresca del día.\n\nContiene pescado y trigo. La mantequilla, el huevo, las nueces y el sésamo dependen de la receta. Para una dieta pescetariana, confirma también la grasa de la masa y el caldo del relleno; si evitas el alcohol, pregunta por la preparación.',
+          perfilAlimentario: {
+            dieta: { certeza: 'variable' as const },
+            alcohol: 'desconocido' as const,
+            cerdo: 'desconocido' as const
+          }
         },
         {
-          nombre: '🥖 Ftira',
+          nombre: 'Ftira',
           descripcion:
-            'La Ftira es uno de los alimentos más representativos de Malta y una auténtica institución gastronómica. Su importancia cultural es tal que la tradición de su elaboración fue reconocida por la UNESCO como Patrimonio Cultural Inmaterial de la Humanidad en 2020.\n\nSe trata de un pan tradicional maltés de corteza crujiente y miga aireada que adopta formas distintas según la isla donde se prepare. En Malta suele servirse como un contundente bocadillo relleno de atún, tomate, aceite de oliva, alcaparras, aceitunas y queso local. En Gozo, en cambio, se transforma en una especie de pizza rústica horneada en leña, cubierta con finas rodajas de patata, cebolla, alcaparras, aceitunas, queso Ġbejna y otros ingredientes tradicionales.\n\nEs una de las mejores formas de descubrir la cocina cotidiana de las islas, sencilla, mediterránea y profundamente ligada a la tradición local.',
-          precio: 'Barato'
+            'La ftira permite descubrir dos preparaciones diferentes que comparten nombre y forman parte de la cocina cotidiana de las islas. Conviene distinguirlas al pedir: un bocadillo de pan maltés y una ftira de Gozo horneada con sus ingredientes no son el mismo plato.\n\n🥖 El pan maltés:\nLa ftira es un pan aplanado de masa madre, con corteza crujiente y miga aireada, a menudo con un hueco central. El arte y la cultura de su elaboración se incorporaron a la lista de patrimonio cultural inmaterial de la UNESCO en 2020. Abierta para rellenar, es habitual encontrarla con tomate o kunserva, aceite de oliva, atún, aceitunas y alcaparras, aunque cada casa propone sus combinaciones.\n\nTambién encontrarás ħobż biż-żejt: pan maltés con tomate y aceite de oliva, al que pueden añadirse anchoas, queso, hierbas y otros ingredientes. Comparte sabores con muchas ftiras rellenas, pero el nombre no designa necesariamente el mismo formato de pan. Pregunta por los añadidos si buscas una versión vegetal.\n\n🔥 La ftira Għawdxija:\nEn Gozo, este nombre identifica una preparación horneada con los ingredientes sobre la masa, parecida a una pizza rústica. Son características las patatas en rodajas y combinaciones con tomate, cebolla, anchoas o atún; otras llevan ġbejniet, huevo o zalzett, la salchicha maltesa.\n\nElige según te apetezca una comida para llevar o una pieza horneada para compartir. El nombre por sí solo no indica que sea vegetariana, vegana o pescetariana: comprueba el relleno, los quesos y la grasa de la masa. Las versiones con salchicha o beicon pueden contener cerdo.',
+          precio: 'Barato',
+          perfilAlimentario: {
+            dieta: { certeza: 'variable' as const },
+            alcohol: 'no-contiene' as const,
+            cerdo: 'puede-contener' as const
+          }
         },
         {
-          nombre: '🥐 Pastizzi',
+          nombre: 'Pastizzi',
           descripcion:
-            'Los Pastizzi son el gran icono del street food maltés: pequeños hojaldres salados, crujientes y muy económicos que se comen a cualquier hora del día.\n\nLos dos rellenos clásicos son tal-Irkotta, con ricotta suave y cremosa, y tal-piżelli, con una pasta especiada de guisantes. La masa se hornea hasta quedar dorada, hojaldrada y ligeramente grasienta, justo como manda la tradición.\n\nSon perfectos para desayunar, merendar o recuperar fuerzas durante una ruta. Eso sí: suelen salir del horno ardiendo, así que conviene esperar unos segundos antes del primer bocado.',
+            'Los pastizzi son uno de los grandes iconos de la comida callejera maltesa: pequeños pastelillos salados de masa laminada, crujientes y económicos, que se venden en las pastizzeriji y funcionan muy bien como desayuno o tentempié entre visitas.\n\nLos dos rellenos clásicos son tal-irkotta, con ricotta suave y cremosa, y tal-piżelli, con una pasta de guisantes que puede ir especiada con curry. Las capas de masa se abren en el horno hasta quedar doradas y quebradizas: ese contraste con el relleno es buena parte de su atractivo.\n\nSi quieres comparar los dos sabores, pide uno de cada. Suelen salir del horno muy calientes, así que espera antes del primer bocado.\n\nUn relleno de guisantes no garantiza que toda la pieza sea vegetal: la masa puede elaborarse con manteca de cerdo, mantequilla o margarina, y algunas recetas incorporan huevo. Si sigues una dieta vegetariana, vegana o pescetariana, confirma tanto el relleno como la grasa utilizada; para alergias, pregunta también por la leche y el huevo, además del trigo de la masa.',
           foto: 'cld:europa/malta/la-valeta/pastizzi',
-          precio: 'Barato'
+          precio: 'Barato',
+          perfilAlimentario: {
+            dieta: { certeza: 'variable' as const },
+            alcohol: 'no-contiene' as const,
+            cerdo: 'puede-contener' as const
+          }
         },
         {
-          nombre: '🥟 Qassatat',
+          nombre: 'Qassatat',
           descripcion:
-            'Las Qassatat son uno de los aperitivos tradicionales más populares de Malta. A diferencia de los famosos pastizzi, que se elaboran con hojaldre, las qassatat utilizan una masa más gruesa y consistente, similar a una empanada mediterránea.\n\nSu forma característica es redonda, con los bordes plegados hacia el centro dejando parte del relleno visible. Los rellenos más habituales son ricotta, puré de guisantes especiado, espinacas o habas, aunque también existen variantes modernas con carne o verduras.\n\nTradicionalmente se consumen como desayuno, almuerzo rápido o tentempié a cualquier hora del día. Son muy comunes en panaderías, cafeterías y pastizzeriji de todo el archipiélago, formando parte del recetario popular maltés desde hace generaciones.',
-          precio: 'Barato'
+            'Las qassatat son pequeños pasteles salados de la cocina popular maltesa. A diferencia de los pastizzi, utilizan una masa quebrada más gruesa, que forma una cestita redonda con los bordes plegados hacia el centro y una abertura que deja ver el relleno.\n\nEntre las variedades habituales hay ricotta, guisantes y espinacas. Conviene preguntar por estas últimas: algunas preparaciones combinan las verduras con anchoas o atún, por lo que su color verde no significa que sean vegetarianas. El relleno y la proporción de masa cambian de una panadería a otra.\n\nSon una alternativa a los pastizzi para un almuerzo informal o una pausa durante la ruta: la masa resulta más compacta y menos hojaldrada. Puedes probar una de ricotta y otra de verduras para comparar, siempre confirmando qué contiene cada una.\n\nLa masa puede llevar mantequilla, margarina o manteca, y algunas piezas se pintan con huevo antes de hornearse. Si evitas el cerdo o sigues una dieta vegetal, pregunta por la grasa utilizada y por el relleno completo. El trigo es característico de la masa; leche, huevo y pescado dependen de la versión.',
+          precio: 'Barato',
+          perfilAlimentario: {
+            dieta: { certeza: 'variable' as const },
+            alcohol: 'no-contiene' as const,
+            cerdo: 'puede-contener' as const
+          }
         },
         {
-          nombre: '🧀 Ġbejna',
+          nombre: 'Ġbejna',
           descripcion:
-            'La Ġbejna es el queso tradicional de Malta y Gozo, elaborado artesanalmente con leche de oveja o cabra. Se puede encontrar fresco, curado, seco o recubierto de pimienta negra.\n\nTiene un sabor intenso y ligeramente salado, y forma parte de numerosos platos tradicionales malteses. Es habitual encontrarlo en ensaladas, ftiras, tablas de quesos o servido simplemente con aceite de oliva y pan local.\n\nLa versión elaborada en Gozo está especialmente valorada por los propios malteses y constituye uno de los productos gastronómicos más representativos del archipiélago.',
-          precio: 'Barato'
+            'La ġbejna —ġbejniet en plural— es un pequeño queso redondo de Malta y Gozo. Su formato permite probar sabores y texturas distintos: la fresca resulta suave, mientras que las variedades secas y las cubiertas de pimienta ofrecen un sabor más concentrado.\n\nLa ġbejna tan-nagħaġ con denominación de origen protegida se elabora en las islas con leche cruda de oveja y cuajo de cordero. La denominación ampara las variedades fresca, seca y a la pimienta; no todos los quesos vendidos como ġbejna responden a esa misma elaboración.\n\nPuedes encontrarla en ensaladas, ftiras o tablas, o probarla con pan para comparar una pieza fresca y otra seca. Las formas de conservación y los aliños varían; algunas preparaciones utilizan vinagre, aceite o vino.\n\nContiene leche y no es vegana. Para una dieta vegetariana o pescetariana, comprueba el cuajo: la versión con DOP utiliza cuajo animal. Si evitas el alcohol, consulta también la conservación y los aliños.',
+          precio: 'Barato',
+          perfilAlimentario: {
+            dieta: { certeza: 'variable' as const },
+            alcohol: 'puede-contener' as const,
+            cerdo: 'no-contiene' as const
+          }
         },
         {
-          nombre: '🍰 Imqaret',
+          nombre: 'Imqaret',
           descripcion:
-            'Los Imqaret son el dulce más tradicional de Malta. Se elaboran con una fina masa frita rellena de una pasta de dátiles aromatizada con anís, canela y cítricos.\n\nSu origen se remonta a la influencia árabe en las islas, que introdujo el uso de los dátiles y las especias dulces en la repostería local.\n\nSe sirven calientes y son especialmente populares en ferias, mercados y puestos callejeros. Muchas cafeterías los acompañan con una bola de helado de vainilla, creando uno de los postres más típicos y queridos de las islas.',
-          precio: 'Barato'
+            'Los imqaret son uno de los dulces más reconocibles de Malta: pequeñas piezas de masa fina rellenas de pasta de dátiles y fritas hasta quedar crujientes. Suelen cortarse en rombos, con un interior oscuro, denso y aromático que contrasta con la cubierta dorada.\n\nEl relleno puede llevar anís, cítricos, canela u otras especias. Se relacionan con la tradición repostera árabe y tienen parientes en el Magreb, como los maqrout; forman parte de la cocina maltesa sin ser una invención exclusiva de las islas.\n\nEs habitual encontrarlos calientes en puestos y fiestas populares. Puedes comerlos solos como tentempié dulce o probar una presentación de postre con helado, que añade otro contraste de temperatura y textura.\n\nQue el relleno sea de dátiles no significa que sean veganos: las recetas pueden incorporar mantequilla, manteca o huevo, y algunas se aromatizan con anisete o Marsala. Pregunta por la masa, el licor y la grasa de fritura si tienes restricciones; el helado y otros acompañamientos también cuentan.',
+          precio: 'Barato',
+          perfilAlimentario: {
+            dieta: { certeza: 'variable' as const },
+            alcohol: 'puede-contener' as const,
+            cerdo: 'puede-contener' as const
+          }
+        },
+        {
+          nombre: 'Bigilla con galletti',
+          descripcion:
+            'La bigilla es una pasta de legumbres de la cocina maltesa que se toma con galletti, unas galletas saladas finas y crujientes. Es una buena forma de empezar una comida compartida o de probar un aperitivo local sin pedir un plato abundante.\n\nSu base tradicional son las pequeñas habas secas conocidas como ful ta’ Ġirba, cocidas y machacadas con ajo, aceite de oliva y perejil. También hay versiones con otras habas y con un toque de guindilla. El resultado suele ser más rústico que una crema lisa: no es un hummus de garbanzos y el tahini no forma parte de esa base.\n\nLos galletti sirven para recoger la pasta y contrastar con su textura. Si llega en una tabla con queso o salchicha maltesa, esos productos son acompañamientos y no ingredientes propios de la bigilla.\n\nLa base de legumbres y aceite es vegetal, pero comprueba la receta y los galletti antes de pedirla como opción vegana. Estos suelen llevar trigo; las versiones aromatizadas pueden incorporar leche, soja o sésamo. Para conocer la composición completa, pregunta también por los condimentos y consulta el envase cuando corresponda.',
+          perfilAlimentario: {
+            dieta: { certeza: 'variable' as const },
+            alcohol: 'no-contiene' as const,
+            cerdo: 'desconocido' as const
+          }
+        },
+        {
+          nombre: 'Timpana',
+          descripcion:
+            'La timpana reúne dos capas de cocina reconfortante: pasta con salsa de carne dentro de una envoltura de masa quebrada. Al cortarla se ven los macarrones y el relleno compacto, mientras la cubierta aporta una textura crujiente. Es una preparación festiva de la cocina maltesa, emparentada con otros pasteles de pasta del Mediterráneo.\n\nLa salsa suele combinar carne picada, tomate y cebolla. Las recetas pueden incorporar cerdo, beicon, hígados de pollo o huevo cocido; el huevo batido y el queso ayudan a ligar la pasta. La masa también cambia según quien la prepare, así que no todas las porciones tienen la misma proporción de relleno y cubierta.\n\nPuede resultar una comida muy completa por sí sola. Pregunta por el tamaño de la porción antes de añadir otro plato principal y, si no te gustan las vísceras, confirma si las lleva.\n\nLa versión de carne no es vegetariana ni pescetariana y puede contener cerdo. Trigo, huevo y leche son característicos de las recetas descritas; los caldos, salsas y condimentos pueden añadir otros alérgenos. Si tienes restricciones, consulta el relleno y la masa completos, y no deduzcas la ausencia de alcohol solo por el nombre del plato.',
+          perfilAlimentario: {
+            dieta: { certeza: 'confirmado' as const, compatibilidad: 'ninguno' as const },
+            alcohol: 'desconocido' as const,
+            cerdo: 'puede-contener' as const
+          }
+        },
+        {
+          nombre: 'Kinnie',
+          descripcion:
+            'Kinnie Original es un refresco maltés con gas y un sabor agridulce muy reconocible, con notas de naranja y botánicos. Merece probarlo si te gustan las bebidas con un punto amargo: ofrece una alternativa al sabor habitual de una cola o de un refresco de naranja dulce.\n\nPuedes tomarlo bien frío, solo o con hielo. Para una primera prueba, pide expresamente Kinnie Original y comprueba si te sirven el refresco tal cual o una mezcla. Su color oscuro procede del caramelo de la fórmula, que también incluye azúcar y aromas; no conviene interpretar ese color como señal de que sea una bebida alcohólica.\n\nOriginal es el refresco sin alcohol. Kinnie Aperitivo y los cócteles preparados con Kinnie son productos distintos y pueden llevar vino o destilados. Si quieres evitar el alcohol, concreta cuál estás pidiendo.\n\nPara alergias o una dieta vegana, revisa el etiquetado de la presentación que vayas a consumir y consulta al fabricante si necesitas aclarar la composición de los aromas. Que no se identifique un alérgeno en la información disponible no certifica que la bebida sea segura para todas las personas.',
+          perfilAlimentario: {
+            dieta: { certeza: 'desconocido' as const },
+            alcohol: 'no-contiene' as const,
+            cerdo: 'desconocido' as const
+          }
+        },
+        {
+          nombre: 'Kafè msajjar',
+          descripcion:
+            'El kafè msajjar, también llamado kafè Malti, es una forma aromática de acercarse al café tradicional maltés. Combina café con achicoria, clavo y anís en grano: una mezcla especiada y de sabor terroso que ofrece una experiencia diferente de un espresso corriente.\n\nLa preparación varía. Hay mezclas que se cuecen suavemente y se dejan reposar antes de servir; otras se preparan en cafetera de émbolo o adaptan la receta a una cafetera italiana. Algunas incorporan piel de cítricos. No esperes que todos los establecimientos lo elaboren con el mismo método ni que cualquier café servido en Malta sea esta especialidad.\n\nPregunta por la mezcla tradicional especiada y cómo la preparan. Se comercializa molida y también se sirve en algunas cafeterías, pero conviene confirmarlo antes de ir si quieres probarla durante la ruta.\n\nEl café negro con achicoria y especias tiene una base vegetal. Aun así, pide que aclaren si añaden leche, bebidas vegetales o licor: en algunas cartas, Maltese Coffee designa un café con anisete y nata. El anís en grano no es licor de anís. Leche, soja, almendra o avena añadidas cambian el perfil alimentario y los alérgenos; los dulces que lo acompañen deben valorarse por separado.',
+          perfilAlimentario: {
+            dieta: { certeza: 'variable' as const },
+            alcohol: 'no-contiene' as const,
+            cerdo: 'no-contiene' as const
+          }
         },
       ]
     },
