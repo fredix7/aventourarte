@@ -861,7 +861,7 @@ export const MALTA_GUIDE = {
               precio:
                 'Paseos por espacios públicos permitidos: gratuitos | Transporte marítimo y actividades contratadas: aparte | Estancia en Blue Lagoon: pase QR gratuito por franja, según las condiciones oficiales',
               direccion: 'Punto de llegada de referencia: desembarque de ferries de Blue Lagoon (Bejn il-Kmiemen), isla de Comino / Kemmuna, Malta',
-              maps: 'https://www.google.com/maps/search/?api=1&query=Blue%20Lagoon%20ferry%20terminal%2C%20Comino%2C%20Malta',
+              maps: 'https://maps.app.goo.gl/vPYBiTTff5MiwzHM8',
               telefono: 'Comino Ferries (salidas desde Malta): +356 7979 7900; Bella Comino (salidas desde Gozo): +356 9914 2706',
               web: 'https://visitgozo.com/experience/comino/',
               acceso: 'Comprueba el muelle y las condiciones de tu billete antes de viajar. La estancia en Blue Lagoon está regulada por el sistema oficial de pase QR; el tránsito sin detenerse por los caminos habilitados tiene condiciones distintas. Los caminos de Comino son irregulares y expuestos al sol; no se garantiza accesibilidad sin escalones ni asistencia fuera de los servicios contratados. Respeta los cierres, permanece en los caminos y evita los bordes de los acantilados y las salidas con mal tiempo.'
@@ -880,7 +880,9 @@ export const MALTA_GUIDE = {
               acceso:
                 'Para visitar y permanecer en Blue Lagoon es obligatorio reservar un pase QR gratuito por franja y presentarlo en los controles. No necesitan pase los menores de cinco años acompañados por un progenitor o tutor, ni quienes solo transitan por los caminos habilitados hacia otras zonas sin detenerse en Blue Lagoon. Consulta las demás excepciones en las condiciones oficiales.',
               reserva: 'https://blcomino.com/product/blue-lagoon/',
-              tipoReserva: 'visita' as const
+              tipoReserva: 'visita' as const,
+              direccion: 'Referencia práctica de llegada: desembarcadero de Blue Lagoon (Bejn il-Kmiemen), isla de Comino / Kemmuna, Malta; el mapa señala la zona de desembarque',
+              maps: 'https://maps.app.goo.gl/vPYBiTTff5MiwzHM8'
             },
             {
               nombre: 'Crystal Lagoon (La Laguna de Cristal)',
@@ -894,7 +896,7 @@ export const MALTA_GUIDE = {
               precio:
                 'Contemplación desde caminos públicos permitidos: gratuita | Transporte, excursiones y actividades acuáticas: aparte',
               direccion: 'Crystal Lagoon (Il-Bejta tal-Fenek), costa occidental de Comino, en el entorno costero entre Blue Lagoon y la Torre de Santa María, Malta',
-              maps: 'https://www.google.com/maps/search/?api=1&query=Crystal%20Lagoon%2C%20Comino%2C%20Malta',
+              maps: 'https://www.google.com/maps/search/?api=1&query=36.01009%2C14.32776',
               web: 'https://visitgozo.com/wp-content/uploads/2024/03/CominoWalk.pdf',
               acceso: 'La referencia de mapa señala la laguna; llegar al entorno superior a pie no equivale a disponer de acceso fácil al agua. Respeta los cierres y mantén distancia de los acantilados. No se garantiza baño, acceso sin escalones, vigilancia ni servicios. Si llegas en barco, confirma previamente la parada y las condiciones de entrada y salida del agua con el operador; con mala mar puede cambiarse o cancelarse.'
             },
