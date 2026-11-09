@@ -251,7 +251,7 @@ export const COPENHAGUE_GUIDE = {
               precio:
                 'Adultos: precio variable; consulta la venta oficial antes de reservar. Jóvenes de 18 a 26 años: tarifa reducida según venta vigente. Menores de 18 años: gratis. Grupos de 10 o más personas: tarifa específica según venta vigente. Incluido con Copenhagen Card Discover y con Parkmuseerne Pass, según condiciones. SMK Fridays: entrada gratuita en las fechas programadas. Acompañantes de personas con discapacidad: gratuidad según condiciones oficiales. Visitas guiadas y actividades especiales: consultar posibles suplementos. Consulta también las campañas anuales de gratuidad juvenil, como K7, según programación',
               web: 'https://www.smk.dk/en/',
-              reserva: 'https://www.smk.dk/en/',
+              reserva: 'https://shop.smk.dk/en/dagsbillet',
               telefono: '+45 33 74 84 94'
             },
             {

@@ -65,7 +65,7 @@ export const MALTA_GUIDE = {
                   'Tras la introducción del free tour, la mejor forma de comenzar la visita física a La Valeta es frente a su gran puerta de entrada moderna.\n\nLa Fuente de los Tritones es uno de los monumentos modernistas más importantes y reconocibles de Malta.\n\nSituada justo frente a la Puerta de la Ciudad, funciona como gran entrada simbólica a La Valeta y suele ser el primer gran monumento que ven muchos viajeros al llegar a la capital.\n\nFue diseñada por el arquitecto Victor Anastasi y esculpida en bronce por el artista maltés Vincent Apap, inaugurándose oficialmente en 1959.\n\n🏛️ Qué representa:\nLa fuente muestra tres enormes Tritones mitológicos sosteniendo una gran cuenca circular, simbolizando la histórica relación de Malta con el mar.\n\n💡 Curiosidad histórica:\nDurante décadas la fuente estuvo parcialmente deformada debido a daños estructurales provocados por el uso inadecuado del monumento como escenario de eventos.\n\nEl plato superior llegó incluso a colapsar en los años 70, obligando a instalar una columna central de refuerzo que alteró completamente el diseño original.\n\nTras una restauración integral inaugurada en 2018, la fuente recuperó finalmente su aspecto original.\n\n🌙 Experiencia viajera:\nAunque impresiona de día por su tamaño y la fuerza del agua, uno de los mejores momentos para verla es por la noche, cuando la iluminación crea un contraste precioso con las murallas fortificadas de La Valeta.',
                 foto: 'cld:europa/malta/la-valeta/fuente-tritones',
                 direccion: 'Triton Square, junto a Vjal Nelson y a la Puerta de la Ciudad, Floriana, Malta',
-                maps: 'https://www.google.com/maps/search/?api=1&query=Triton%20Fountain%2C%20Floriana%2C%20Malta',
+                maps: 'https://www.google.com/maps/search/?api=1&query=Triton%20Fountain&query_place_id=ChIJWQNDs9JaDhMRdi08TLNFpYM',
                 web: 'https://www.florianalocalcouncil.com/2017/04/03/triton-fountain/'
               },
               {
@@ -75,7 +75,7 @@ export const MALTA_GUIDE = {
                   'Desde la Fuente de los Tritones solo hay que avanzar unos metros para atravesar el acceso principal a la capital maltesa.\n\nLa Puerta de la Ciudad (City Gate) es la entrada principal a La Valeta y uno de los lugares donde mejor se entiende la mezcla entre historia militar y arquitectura contemporánea que define Malta.\n\nLa estructura actual, inaugurada en 2014, es la quinta gran puerta construida en este mismo punto a lo largo de la historia.\n\nFue diseñada por el prestigioso arquitecto italiano Renzo Piano como parte de un enorme proyecto de regeneración urbana que transformó completamente el acceso a la capital.\n\n🏛️ Qué la hace especial:\nA diferencia de las puertas monumentales tradicionales, Renzo Piano diseñó una enorme brecha abierta en las murallas de piedra caliza, creando una transición mucho más fluida entre la ciudad moderna y la capital histórica fortificada.\n\nEl objetivo era eliminar la sensación de barrera militar y convertir la entrada a La Valeta en un espacio más abierto y contemporáneo.\n\n⚔️ Contexto histórico:\nLa primera puerta de acceso fue construida en 1569 tras el Gran Sitio de Malta y funcionaba como un acceso estrictamente defensivo, protegido por fortificaciones y puentes levadizos.\n\nA lo largo de los siglos la entrada fue modificándose según las necesidades militares, urbanas y estéticas de cada época.\n\n💡 Curiosidad histórica:\nLa puerta anterior, construida en 1965 con un estilo modernista italiano, nunca terminó de convencer a muchos malteses porque rompía completamente con la estética barroca e histórica de La Valeta.\n\n🌍 Experiencia viajera:\nCruzar esta entrada es realmente el momento en el que empieza la experiencia de La Valeta.\n\nNada más atravesarla aparecen Republic Street, el moderno Parlamento maltés y las evocadoras ruinas del antiguo Teatro Real bombardeado durante la Segunda Guerra Mundial.\n\n📸 Consejo AvenTourArte:\nMerece la pena detenerse unos segundos justo antes de cruzarla para apreciar el contraste entre las murallas históricas, la Fuente de los Tritones y la arquitectura contemporánea integrada en la fortificación.',
                 foto: 'cld:europa/malta/la-valeta/puerta-ciudad',
                 direccion: 'City Gate, inicio de Republic Street, Valletta, Malta',
-                maps: 'https://www.google.com/maps/search/?api=1&query=Valletta%20City%20Gate%2C%20Republic%20Street%2C%20Valletta%2C%20Malta',
+                maps: 'https://www.google.com/maps/search/?api=1&query=35.89611%2C14.50917',
                 web: 'https://ghrc.gov.mt/portfolio/valletta-city-gate/'
               },
               {
@@ -780,6 +780,7 @@ export const MALTA_GUIDE = {
               maps: 'https://www.google.com/maps/search/?api=1&query=Mosta%20Rotunda%20Basilica%20of%20the%20Assumption%2C%20Mosta%2C%20Malta',
               telefono: '+356 2741 8368',
               web: 'https://mostarotundafoundation.org/visit/',
+              reserva: 'https://buy.stripe.com/3cI5kDaE0cXY57defd8AE01',
               acceso: 'Es un templo en uso: el culto y las celebraciones pueden restringir la visita turística. La planta baja dispone de acceso por rampa, pero la galería interior y el refugio solo se alcanzan por escaleras, sin ascensor. Consulta antes de elegir la entrada si necesitas un recorrido adaptado.'
             },
             {
@@ -1204,11 +1205,11 @@ export const MALTA_GUIDE = {
         {
           nombre: 'Roots (Marsaxlokk)',
           descripcion:
-            'Pequeño restaurante familiar situado en el paseo marítimo de Marsaxlokk, muy apreciado por los locales por su cocina marinera honesta y basada en producto fresco de temporada.\n\nSu carta cambia según las capturas del día, destacando los mejillones al vapor con ajo y vino blanco, el pulpo al estilo maltés, los calamares fritos y el pescado fresco preparado al horno o a la plancha.\n\nFrente a propuestas más sofisticadas del puerto, Roots ofrece una experiencia más cercana y tradicional, perfecta para quienes buscan disfrutar del auténtico ambiente pesquero de Marsaxlokk.\n\n✨ Consejo AvenTourArte:\nSi visitas el mercado dominical del pueblo, conviene reservar con antelación, ya que el restaurante cuenta con pocas mesas y suele llenarse rápidamente.',
+            'El restaurante Roots de Marsaxlokk cerró tras su último servicio el 30 de agosto de 2026, según el anuncio de sus propietarios.\n\nLa marca anunció un nuevo concepto de comercio en otro local; esto no supone la reapertura del restaurante original. No planifiques una comida ni una reserva en el antiguo restaurante.',
           horario:
-            'Mar–Dom: 12:00–16:00 | 18:30–22:30 aprox.',
+            'Restaurante cerrado desde el 30/08/2026',
           precio:
-            '≈ 30€–40€ por persona'
+            'No aplicable: restaurante cerrado'
         },
         {
           nombre: '🐟 La Capanna (Marsaxlokk)',

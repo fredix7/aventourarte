@@ -8,8 +8,19 @@
 
 # Node
 /node_modules
-npm-debug.log
-yarn-error.log
+
+# Playwright artifacts
+.playwright-mcp/
+playwright-report/
+test-results/
+blob-report/
+
+# Local logs and temporary tool output
+*.log
+*.tmp
+*.temp
+*.tsbuildinfo
+*~
 
 # IDEs and editors
 .idea/
