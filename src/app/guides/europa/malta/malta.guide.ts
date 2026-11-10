@@ -55,7 +55,7 @@ export const MALTA_GUIDE = {
                 tiposPlan: ['ruta', 'urbano'],
                 descripcion:
                   'La mejor forma de empezar Malta es entendiendo su contexto.\n\nLa Valeta no es una ciudad enorme, pero sí una de las capitales históricas más densas e importantes de Europa.\n\nFundada por la Orden de San Juan tras el Gran Asedio de 1565, toda la ciudad fue concebida como una fortaleza perfecta.\n\n💡 Experiencia viajera:\nAquí empiezas a entender que Malta no es solo mar y playas.\n\n✨ Consejo AvenTourArte:\nHacer el free tour el primer día cambia completamente cómo lees el resto del viaje.',
-                horario: 'Según reserva',
+                horario: 'Sin horario fijo; depende de la actividad que elijas',
                 precio: 'Aportación voluntaria'
               },
               {
@@ -93,16 +93,20 @@ export const MALTA_GUIDE = {
                 acceso: 'El exterior puede contemplarse desde el espacio público. El acceso al recinto y a los espectáculos depende de la programación y de las condiciones de cada evento.'
               },
               {
-                nombre: 'Palazzo Parisio (Republic Street)',
+                nombre: 'Palazzo Parisio (Merchants Street)',
                 tiposPlan: ['ruta', 'urbano', 'gratuito'],
                 descripcion:
-                  'Continuando el paseo por Republic Street y adentrándonos en el corazón de La Valeta, encontramos uno de los ejemplos más curiosos de cómo la ciudad ha sabido integrar su patrimonio histórico en la vida cotidiana.\n\nEl Palazzo Parisio es uno de los palacios barrocos más elegantes y curiosos de toda La Valeta.\n\nSituado en pleno corazón de Republic Street, este edificio histórico resume perfectamente cómo Malta ha integrado sus antiguos palacios nobiliarios en la vida moderna de la ciudad.\n\n🏛️ Historia del edificio:\nEl palacio fue construido en la década de 1740 por el noble italiano Domenico Parisio y posteriormente pasó a manos de la influyente familia Muscati Parisio.\n\nSu arquitectura representa uno de los mejores ejemplos del barroco tardío maltés dentro del casco histórico de La Valeta.\n\n⚔️ Curiosidad histórica fascinante:\nDurante la ocupación francesa de Malta en 1798, el edificio fue utilizado como residencia y cuartel general de Napoleón Bonaparte durante su breve estancia en la isla.\n\nEntre estas mismas paredes se tomaron algunas de las decisiones que transformaron completamente la administración y la historia de Malta.\n\n🛍️ La mezcla entre historia y modernidad:\nActualmente la planta baja del palacio alberga una de las tiendas más conocidas de Tommy Hilfiger en Malta.\n\nSin embargo, el auténtico espectáculo no está en la ropa, sino en la propia arquitectura histórica del edificio.\n\n💡 Qué mirar:\n• El gran patio interior barroco\n• Las arcadas de piedra caliza\n• La elegante escalera señorial\n• Los techos decorados y molduras originales\n• Los balcones tradicionales sobre Republic Street\n\n🌍 Experiencia viajera:\nEntrar aquí produce una sensación muy curiosa.\n\nEl contraste entre las colecciones modernas de moda y el interior aristocrático del siglo XVIII convierte el lugar en una de las experiencias más peculiares de La Valeta.\n\n✨ Consejo AvenTourArte:\nAunque no tengas intención de comprar nada, merece muchísimo la pena entrar unos minutos simplemente para admirar el patio y la arquitectura interior.\n\n📸 Consejo fotográfico:\nEl contraste entre las columnas barrocas, la iluminación moderna y las galerías interiores crea fotografías muy interesantes y diferentes al resto de monumentos de la ciudad.',
+                  'En Merchants Street, en el corazón de La Valeta, se encuentra el Palazzo Parisio, actualmente sede del Ministerio de Asuntos Exteriores de Malta.\n\nEl Palazzo Parisio es uno de los palacios barrocos más elegantes y curiosos de toda La Valeta.\n\nEste es el palacio histórico de La Valeta relacionado con la estancia de Napoleón en Malta.\n\n🏛️ Historia del edificio:\nEl palacio fue construido a comienzos del siglo XVIII por el obispo Sceberras y posteriormente fue residencia de Paolo Parisio Muscati.\n\nSu arquitectura representa uno de los mejores ejemplos del barroco tardío maltés dentro del casco histórico de La Valeta.\n\n⚔️ Curiosidad histórica fascinante:\nDurante la ocupación francesa de Malta en 1798, el edificio fue utilizado como residencia y cuartel general de Napoleón Bonaparte durante su breve estancia en la isla.\n\nEntre estas mismas paredes se tomaron algunas de las decisiones que transformaron completamente la administración y la historia de Malta.\n\n🏛️ Uso actual y visita:\nEl ministerio ocupa el palacio desde 1973. No hay una apertura turística ordinaria al interior acreditada; plantea esta parada como una contemplación exterior desde Merchants Street.\n\n💡 Qué mirar:\nLa fachada y los detalles arquitectónicos visibles desde la vía pública.\n\n✨ Consejo AvenTourArte:\nDetente ante el exterior para relacionar el edificio con la etapa francesa de Malta y respeta la actividad institucional.',
                 foto:
                   'cld:europa/malta/la-valeta/palazzo-parisio',
                 horario:
-                  'Lun–Sáb: 09:30–19:30 | Dom: 10:00–18:00',
+                  'Contemplación exterior desde la vía pública | Interior: sin horario de visita turística acreditado',
                 precio:
-                  'Acceso al edificio: Gratis | Compras según tienda'
+                  'Contemplación exterior: gratuita | No se ofrece una entrada turística al interior',
+                direccion: 'Palazzo Parisio, Merchants Street, Valletta VLT 1171, Malta',
+                maps: 'https://www.google.com/maps/search/?api=1&query=Palazzo%20Parisio%2C%20Merchants%20Street%2C%20Valletta%20VLT%201171%2C%20Malta',
+                telefono: 'Ministerio de Asuntos Exteriores (centralita institucional; no reservas turísticas): +356 2204 0000',
+                web: 'https://foreign.gov.mt/ministry/palazzo-parisio/'
               },
               {
                 nombre: 'Albergue de Castilla',
@@ -113,7 +117,7 @@ export const MALTA_GUIDE = {
                 horario: 'Exterior visitable 24h | Interior no visitable al público general',
                 precio: 'Gratis',
                 direccion: 'Misraħ Kastilja (Castille Place), Valletta, Malta',
-                maps: 'https://www.google.com/maps/search/?api=1&query=Auberge%20de%20Castille%2C%20Castille%20Place%2C%20Valletta%2C%20Malta',
+                maps: 'https://www.google.com/maps/search/?api=1&query=Auberge%20de%20Castille%2C%20Castille%20Place%2C%20Valletta%2C%20Malta&query_place_id=ChIJPeumyCxFDhMR59L7JZgpyDY',
                 web: 'https://primeminister.gov.mt/office-of-the-prime-minister-2/'
               },
               {
@@ -144,7 +148,20 @@ export const MALTA_GUIDE = {
                 direccion: 'Inicio orientativo: St. Lucia’s Street, junto al cruce con Merchants Street, Valletta, Malta | Otros tramos: Triq Sant’ Orsla y Old Theatre Street',
                 maps: 'https://www.google.com/maps/search/?api=1&query=St%20Lucia%20Street%20and%20Merchants%20Street%2C%20Valletta%2C%20Malta',
                 horario: 'Paseo exterior sin horario de visita | Los locales y edificios tienen sus propios horarios',
-                precio: 'Paseo exterior gratuito'
+                precio: 'Paseo exterior gratuito',
+                puntosPracticos: [
+                  {
+                    nombre: 'Triq Sant’ Orsla (acceso desde Castille Place)',
+                    direccion: 'St Ursula Street / Triq Sant’ Orsla, Valletta, Malta; referencia de acceso: Department of Information, 3 Castille Place',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Department%20of%20Information%2C%203%20Castille%20Place%2C%20Valletta%2C%20Malta',
+                    acceso: 'Para entrar en St Ursula Street desde Castille Place, toma la esquina junto al Department of Information indicada por el NSO. El mapa señala esa referencia exterior; continúa a pie por la calle. No corresponde a una visita al departamento.'
+                  },
+                  {
+                    nombre: 'Old Theatre Street',
+                    direccion: 'Old Theatre Street (Triq it-Teatru l-Antik), Valletta, Malta',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Old%20Theatre%20Street%20Valletta%20Malta'
+                  }
+                ]
               },
               {
                 nombre: 'Concatedral de San Juan',
@@ -196,7 +213,15 @@ export const MALTA_GUIDE = {
                   'Paseo exterior gratuito | Consumos, compras y actividades: según establecimiento',
                 direccion: 'Inicio orientativo: Is-Suq tal-Belt, Triq il-Merkanti, Valletta VLT 1175, Malta | Continúa por Merchants Street y Strait Street (Triq id-Dejqa)',
                 maps: 'https://g.page/suqtalbelt?share',
-                web: 'https://valletta2018.org/infrastructure-projects/strait-street-a-brand-name-of-art-culture-and-entertainment/'
+                web: 'https://valletta2018.org/infrastructure-projects/strait-street-a-brand-name-of-art-culture-and-entertainment/',
+                puntosPracticos: [
+                  {
+                    nombre: 'Strait Street (Triq id-Dejqa)',
+                    direccion: 'Strait Street (Triq id-Dejqa), Valletta, Malta',
+                    maps: 'https://www.google.com/maps/search/?api=1&query=Strait%20St%2C%20Valletta%2C%20Malta',
+                    web: 'https://valletta2018.org/infrastructure-projects/strait-street-a-brand-name-of-art-culture-and-entertainment/'
+                  }
+                ]
               },
               {
                 nombre: 'Teatro Manoel',
@@ -208,7 +233,7 @@ export const MALTA_GUIDE = {
                 precio:
                   'Visita turística: 10€ | Funciones y conciertos: precio según la función y la categoría de asiento',
                 direccion: 'Triq it-Teatru l-Antik, Valletta VLT 1426, Malta',
-                maps: 'https://www.google.com/maps/search/?api=1&query=Teatru%20Manoel%2C%20Valletta%2C%20Malta',
+                maps: 'https://www.google.com/maps/search/?api=1&query=Teatru%20Manoel%2C%20Valletta%2C%20Malta&query_place_id=ChIJQyneDyxFDhMRjYu8a6OcOrg',
                 telefono: '+356 2124 6389',
                 web: 'https://teatrumanoel.mt/visit/',
                 reserva: 'https://booking.teatrumanoel.mt/eng/comingsoon',
@@ -281,7 +306,7 @@ export const MALTA_GUIDE = {
                 maps: 'https://www.google.com/maps/search/?api=1&query=Casa%20Rocca%20Piccola%2C%2074%20Republic%20Street%2C%20Valletta%2C%20Malta',
                 telefono: '+356 2122 1499',
                 web: 'https://casaroccapiccola.com/',
-                acceso: 'Las salas principales disponen de ascensor desde 53 St Dominic Street; solicita el acceso en recepción. Los refugios tienen alrededor de 100 escalones y túneles estrechos, por lo que no son adecuados para personas con movilidad reducida.'
+                acceso: 'Las salas principales disponen de ascensor desde 53 St Dominic Street; solicita el acceso en recepción. Los refugios tienen alrededor de 100 escalones y túneles estrechos, por lo que no son adecuados para personas con movilidad reducida.\n\nEntradas en la web oficial, mediante el botón «Book Now»: permite elegir audioguía o visita guiada en inglés.'
               },
               {
                 nombre: 'Fuerte de San Telmo',
@@ -608,7 +633,17 @@ export const MALTA_GUIDE = {
               maps: 'https://maps.app.goo.gl/fc4LD2Wt5XU6FxGn7',
               telefono: 'Taquilla de barcas: +356 2164 0058',
               web: 'https://www.bluegrottomalta.com.mt/page-13',
-              acceso: 'El mirador y el paseo en barca son visitas distintas: el primero es gratuito y la excursión se paga aparte en Wied iż-Żurrieq. Consulta con los barqueros las salidas y el recorrido permitido; hay restricciones marítimas en sectores de esta costa por desprendimientos. No cruces zonas balizadas ni te acerques a paredes inestables.'
+              acceso: 'El mirador y el paseo en barca son visitas distintas: el primero es gratuito y la excursión se paga aparte en Wied iż-Żurrieq. Consulta con los barqueros las salidas y el recorrido permitido; hay restricciones marítimas en sectores de esta costa por desprendimientos. No cruces zonas balizadas ni te acerques a paredes inestables.',
+              puntosPracticos: [
+                {
+                  nombre: 'Blue Grotto Boat Service / puerto Wied iż-Żurrieq',
+                  direccion: 'Puerto de Wied iż-Żurrieq, Qrendi, Malta',
+                  maps: 'https://www.google.com/maps/search/?api=1&query=Blue%20Grotto%20Boat%20Service%20Wied%20iz%20Zurrieq%20Malta',
+                  telefono: 'Taquilla: +356 2164 0058',
+                  web: 'https://www.bluegrottomalta.com.mt/page-13',
+                  acceso: 'Este mapa corresponde al puerto de salida de las barcas de Wied iż-Żurrieq, no al mirador de Blue Grotto. El teléfono es de taquilla; no se presenta como canal de reserva acreditado.'
+                }
+              ]
             },
             {
               nombre: 'Templos de Ħaġar Qim y Mnajdra',
@@ -690,6 +725,7 @@ export const MALTA_GUIDE = {
             },
             {
             nombre: 'Palacio Falson',
+            reserva: 'mailto:bookings@palazzofalson.com?subject=Consulta%20de%20reserva%20para%20visita%20en%20grupo',
             tiposPlan: ['ruta', 'urbano', 'coste-variable'],
             descripcion:
               'Continuando por las tranquilas calles medievales de Mdina y acercándonos a los bastiones de la ciudad, aparece uno de los rincones más sorprendentes de toda la antigua capital: el Palacio Falson.\n\nConstruido en el siglo XIII, es el segundo edificio medieval más antiguo de Mdina y uno de los mejores ejemplos de arquitectura gótico-siciliana conservados en Malta.\n\nDurante siglos perteneció a familias nobles maltesas, pero su historia cambió por completo en 1927 cuando fue adquirido por el coleccionista, artista y filántropo Olof Frederick Gollcher.\n\nGollcher dedicó gran parte de su vida a restaurar el edificio y convertirlo en un extraordinario hogar-museo repleto de obras de arte, antigüedades y objetos curiosos procedentes de toda Europa.\n\n🏛️ Qué hace especial la visita:\nA diferencia de otros museos tradicionales, aquí da la sensación de estar recorriendo la casa privada de un aristócrata apasionado por el coleccionismo.\n\nLas estancias conservan una atmósfera íntima y auténtica que permite imaginar cómo era la vida de las élites maltesas a lo largo de los siglos.\n\n✨ Imprescindibles de la visita:\n• El patio central medieval y sus ventanas góticas originales\n• La colección de armas y armaduras históricas\n• La biblioteca con miles de volúmenes antiguos\n• Las salas decoradas con pinturas, muebles y objetos de época\n• El curioso reloj decimal de la Revolución Francesa\n\n📚 La colección Gollcher:\nEl museo alberga más de 3.500 piezas entre pinturas, manuscritos, joyas, armas, relojes y objetos decorativos reunidos durante décadas por su propietario.\n\nCada sala revela nuevas curiosidades y convierte la visita en una auténtica búsqueda de tesoros históricos.\n\n🌍 Experiencia viajera:\nSi la Catedral de San Pablo representa el poder religioso de Mdina, el Palacio Falson permite descubrir la cara más privada, doméstica y aristocrática de la ciudad.\n\nEs uno de esos lugares donde la historia se percibe de una forma mucho más cercana y humana.\n\n☕ El secreto mejor guardado:\nEn la parte superior del edificio se encuentra el Gustav Café, una agradable terraza con vistas sobre los tejados de Mdina.\n\nEs uno de los rincones más tranquilos de la ciudad para hacer una pausa antes de continuar hacia los bastiones.\n\n✨ Consejo AvenTourArte:\nLa audioguía incluida está especialmente bien realizada y convierte la visita en una experiencia muy inmersiva.\n\nMerece la pena recorrer el palacio sin prisas para descubrir pequeños detalles que suelen pasar desapercibidos.\n\n💡 Consejo práctico:\nLa visita suele durar entre 45 minutos y 1 hora.',
@@ -761,7 +797,7 @@ export const MALTA_GUIDE = {
                 'Confirma previamente con el gestor los días de visita y los turnos de las visitas guiadas',
               precio:
                 'Consulta con el gestor la tarifa vigente y los espacios incluidos en la visita',
-              direccion: 'Complejo de Santa Águeda, junto a la casa madre MSSP, Rabat RBT 2020, Malta',
+              direccion: 'Complejo de Santa Águeda, Triq Sant’ Agata, Ħal-Bajjada, Rabat RBT 2020, Malta; junto a la casa madre MSSP',
               maps: 'https://maps.app.goo.gl/nKUvMUUBjroLTFSA6',
               telefono: 'Casa madre MSSP (consultas): +356 2145 9222',
               web: 'https://web.depiromssp.org/malta/',
@@ -793,7 +829,16 @@ export const MALTA_GUIDE = {
               horario: 'Visita exterior con luz diurna y según los avisos de seguridad | Servicios y actividades: horarios propios y de temporada',
               precio: 'Acceso a las playas gratuito | Transporte, alquileres y servicios privados: aparte',
               web: 'https://www.visitmalta.com/en/attraction/golden-bay/',
-              acceso: 'El Maps identifica Golden Bay, no la entrada de Għajn Tuffieħa. Para continuar a esta última, dirígete a su entrada en la parte alta y utiliza la escalinata; no sigas atajos por las laderas o junto a los acantilados. Son accesos distintos y el descenso puede no ser adecuado para todas las personas. Comprueba el mar, las banderas y la señalización; no se garantiza un baño seguro ni servicios permanentes.'
+              acceso: 'El Maps identifica Golden Bay, no la entrada de Għajn Tuffieħa. Para continuar a esta última, dirígete a su entrada en la parte alta y utiliza la escalinata; no sigas atajos por las laderas o junto a los acantilados. Son accesos distintos y el descenso puede no ser adecuado para todas las personas. Comprueba el mar, las banderas y la señalización; no se garantiza un baño seguro ni servicios permanentes.',
+              puntosPracticos: [
+                {
+                  nombre: 'Għajn Tuffieħa Bay',
+                  direccion: 'Għajn Tuffieħa Bay, Mġarr, Malta',
+                  web: 'https://www.visitmalta.com/en/experience-the-sea/',
+                  maps: 'https://www.google.com/maps?cid=516968802120237521',
+                  acceso: 'El mapa localiza Għajn Tuffieħa Bay, una playa distinta de Golden Bay. El acceso por escaleras parte de la zona de aparcamiento de Triq Għajn Tuffieħa. La referencia sitúa la bahía; para bajar utiliza el acceso señalizado por escaleras.'
+                }
+              ]
             },
             {
               nombre: 'Ruta Costera Għajn Tuffieħa – Ġnejna Bay',
@@ -845,7 +890,7 @@ export const MALTA_GUIDE = {
               maps: 'https://www.google.com/maps/search/?api=1&query=St%20Agatha%27s%20Tower%20Red%20Tower%2C%20Mellieha%2C%20Malta',
               telefono: 'Apertura y voluntarios: +356 9934 7551',
               web: 'https://www.static.dinlarthelwa.org/heritage-sites/managed-heritage-sites/st-agathas-tower-the-red-tower-mellieha/',
-              acceso: 'La visita al interior y a la azotea depende de la apertura efectiva y de la presencia de voluntarios de Din l-Art Ħelwa. Llama antes de desplazarte. La azotea se alcanza por una escalera de caracol; consulta las condiciones de movilidad antes de ir. Puedes contemplar el exterior desde los espacios públicos permitidos, respetando cierres y señalización. Las visitas de grupos deben concertarse con antelación.'
+              acceso: 'La visita al interior y a la azotea depende de la apertura efectiva y de la presencia de voluntarios de Din l-Art Ħelwa. Llama antes de desplazarte. La azotea se alcanza por una escalera de caracol; consulta las condiciones de movilidad antes de ir. Puedes contemplar el exterior desde los espacios públicos permitidos, respetando cierres y señalización. Las visitas de grupos deben concertarse con antelación.\n\nVisitas de grupos: avisar con al menos una semana de antelación, si es posible, al +356 9934 7551.'
             }
           ]
         },
@@ -869,6 +914,7 @@ export const MALTA_GUIDE = {
             },
             {
               nombre: 'Blue Lagoon (La Laguna Azul)',
+              web: 'https://visitgozo.com/experience/comino/',
               tiposPlan: ['ruta', 'naturaleza', 'gratuito'],
               descripcion:
                 'La Blue Lagoon es el lugar más famoso y fotografiado de todo el archipiélago maltés.\n\nSituada entre la isla de Comino y el pequeño islote de Cominotto, esta laguna natural destaca por sus aguas increíblemente transparentes y por un color turquesa tan intenso que parece irreal.\n\nLa combinación de fondos de arena blanca, escasa profundidad y una extraordinaria claridad del agua convierte este rincón en una de las piscinas naturales más espectaculares del Mediterráneo.\n\n🌊 ¿Qué hace única a Blue Lagoon?\n\nLa laguna se asienta sobre una plataforma de arena clara que refleja la luz solar y genera sus característicos tonos azul turquesa y cian.\n\nLa visibilidad bajo el agua es excepcional, permitiendo observar el fondo marino con total nitidez incluso a varios metros de profundidad.\n\n🏊 Actividades recomendadas:\n\n• Nadar en aguas cristalinas.\n• Practicar snorkel.\n• Fotografiar la laguna desde los senderos superiores.\n• Cruzar hasta Cominotto cuando las condiciones del mar sean favorables.\n\n🏝️ Cominotto: la escapada secreta\n\nFrente a Blue Lagoon emerge el pequeño islote deshabitado de Cominotto.\n\nMuchos visitantes cruzan nadando los aproximadamente 100 metros que separan ambas orillas para descubrir una pequeña playa mucho más tranquila y obtener algunas de las mejores vistas de la laguna.\n\n⚠️ Es recomendable utilizar escarpines o calzado de agua debido a la naturaleza rocosa del terreno.\n\n🍔 Servicios disponibles:\n\nEn la parte superior de la laguna encontrarás diversos puestos de comida, bebidas, fruta fresca, helados y servicios básicos.\n\nTambién existen baños públicos y zonas de alquiler de tumbonas durante la temporada alta.\n\n⚠️ La realidad turística:\n\nBlue Lagoon es uno de los lugares más populares de Malta y puede alcanzar niveles elevados de afluencia durante los meses de verano.\n\nLa zona de arena es muy reducida y gran parte de los visitantes se distribuyen sobre plataformas rocosas alrededor de la laguna.\n\n✨ El mejor momento para visitarla\n\nLa auténtica magia de Blue Lagoon se vive a primera hora de la mañana.\n\nSi llegas en los primeros ferries del día (entre las 08:00 y las 09:00), encontrarás aguas completamente calmadas, pocos visitantes y unas condiciones perfectas para nadar, fotografiar el entorno o practicar snorkel.\n\nA partir de media mañana comienzan a llegar los grandes catamaranes turísticos procedentes de Malta, aumentando considerablemente la afluencia de visitantes.\n\n💡 Estrategia recomendada:\n\n• 08:00 – 10:00 → Disfrutar Blue Lagoon.\n• 10:00 – 12:00 → Explorar Crystal Lagoon y la Torre de Santa María.\n• 12:00 – 13:00 → Santa Maria Bay o descanso.\n• Regreso durante la tarde hacia Malta o continuación del viaje hacia Gozo.\n\n✨ Consejo AvenTourArte:\n\nNo te limites a permanecer junto a la laguna principal.\n\nLos senderos cercanos ofrecen algunas de las mejores panorámicas de Blue Lagoon y permiten descubrir rincones mucho menos concurridos que la zona de baño principal.',
@@ -903,6 +949,7 @@ export const MALTA_GUIDE = {
             },
             {
               nombre: 'Torre de Santa María',
+              reserva: 'mailto:info@dinlarthelwa.org?subject=Consulta%20de%20reserva%20de%20grupo%20para%20Santa%20Marija%20Tower%20Comino',
               tiposPlan: ['ruta', 'urbano', 'coste-variable'],
               descripcion:
                 'La Torre de Santa María, o Santa Marija Tower, domina los acantilados de Comino y ayuda a entender la posición estratégica de esta pequeña isla entre Malta y Gozo. Es la fortaleza de Comino: no debe confundirse con la Torre Roja de Mellieħa ni con la batería de Santa María, otro edificio de la misma isla.\n\n🏰 Una fortaleza sobre el canal:\nConstruida en 1618 durante el mandato de Alof de Wignacourt, formó parte de las defensas y comunicaciones entre las islas. Su planta cuadrada, las cuatro torretas de esquina y los gruesos muros de caliza le dan una silueta inconfundible incluso desde el exterior. En la película El Conde de Montecristo (2002) representó el Château d’If.\n\n🥾 Llegar caminando:\nDesde la zona de Blue Lagoon, los caminos costeros se acercan a Crystal Lagoon y continúan hacia la torre. Calcula el esfuerzo y el regreso según el recorrido elegido: hay terreno irregular, tramos expuestos y poca sombra. Lleva agua y calzado adecuado y no abandones los caminos para acercarte a los bordes.\n\n🏛️ Exterior e interior son visitas distintas:\nPuedes contemplar la fortificación desde las zonas exteriores abiertas y permitidas. Para entrar, consulta antes a Din l-Art Ħelwa: la apertura depende de voluntarios, de la temporada y de las condiciones de conservación. La bandera izada sirve como indicación de apertura, pero conviene confirmar la visita antes de desplazarte.\n\n🌊 Si se puede acceder:\nEl interior y la azotea permiten apreciar la construcción y el paisaje del canal, siempre que esos espacios estén abiertos. No cuentes con subir si la torre está cerrada o hay zonas restringidas. Los grupos y las visitas especiales deben concertarse con el gestor.\n\n💡 Para organizar el día:\nLa torre merece una parada por su presencia en el paisaje aunque no puedas entrar. Combínala con una caminata que deje margen para regresar al embarcadero y confirma por separado las condiciones de acceso interior y el barco de vuelta.',
@@ -947,7 +994,50 @@ export const MALTA_GUIDE = {
               direccion: 'Punto de llegada de referencia: puerto de Mġarr, Għajnsielem, Gozo / Għawdex, Malta; los demás destinos de la isla requieren desplazamiento desde el puerto',
               maps: 'https://www.google.com/maps/search/?api=1&query=Mgarr%20Harbour%2C%20Gozo%2C%20Malta',
               web: 'https://visitgozo.com/getting-to-gozo/',
-              acceso: 'Mġarr es el puerto de llegada, no el acceso directo a todas las visitas de Gozo. Planifica el transporte y las condiciones de movilidad de cada parada; el billete de ferry no incluye autobuses, entradas ni excursiones por la isla. Confirma antes de salir el horario de tu operador y deja margen para volver al muelle. Los distintos ferries tienen rutas y condiciones propias y pueden sufrir cambios por el tiempo o la operación.'
+              acceso: 'Mġarr es el puerto de llegada, no el acceso directo a todas las visitas de Gozo. Planifica el transporte y las condiciones de movilidad de cada parada; el billete de ferry no incluye autobuses, entradas ni excursiones por la isla. Confirma antes de salir el horario de tu operador y deja margen para volver al muelle. Los distintos ferries tienen rutas y condiciones propias y pueden sufrir cambios por el tiempo o la operación.',
+              puntosPracticos: [
+                {
+                  nombre: 'Cittadella / Victoria (combinado de museos opcional)',
+                  direccion: 'Cittadella, Victoria (Ir-Rabat), Gozo, Malta',
+                  maps: 'https://maps.app.goo.gl/nCgGTEeDnsPiBRBZ7',
+                  web: 'https://visitgozo.com/places/cittadella/',
+                  reserva: 'https://heritagemalta.mt/store/c260/',
+                  tipoReserva: 'entradas',
+                  acceso: 'La visita al recinto y a sus espacios públicos es distinta del combinado de museos. El enlace de entradas de Heritage Malta incluye Gran Castello Historic House, Old Prison y Cittadella Visitor Centre; no es una entrada general a Victoria ni a todos los edificios de la ciudadela.'
+                },
+                {
+                  nombre: 'Ġgantija Archaeological Park',
+                  direccion: 'Ġgantija Archaeological Park, Triq John Otto Bayer, Xagħra, Gozo',
+                  maps: 'https://www.google.com/maps?cid=17936940896425391592',
+                  telefono: '+356 2155 3194',
+                  web: 'https://heritagemalta.mt/explore/ggantija-archaeological-park/',
+                  reserva: 'https://heritagemalta.mt/store/c37/',
+                  tipoReserva: 'entradas',
+                  acceso: 'La web informativa y las entradas corresponden al parque arqueológico de Ġgantija, en Xagħra; no son un pase general para las visitas de Gozo.'
+                },
+                {
+                  nombre: 'Xwejni Salt Pans (Marsalforn)',
+                  direccion: 'Costa de Xwejni, al oeste de Qbajjar y Marsalforn, Gozo',
+                  maps: 'https://maps.app.goo.gl/MawetzLnddUL4SiV6',
+                  web: 'https://visitgozo.com/places/salt-pans/',
+                  acceso: 'Referencia para contemplar las salinas desde el recorrido público de la costa de Xwejni. No se ofrece entrada a las balsas de producción ni una actividad privada reservada.'
+                },
+                {
+                  nombre: 'Wied il-Għasri',
+                  direccion: 'Desembocadura de Wied il-Għasri, acceso por escaleras, Gozo',
+                  maps: 'https://maps.app.goo.gl/UahdWewHnyF541P5A',
+                  web: 'https://visitgozo.com/places/wied-il-ghasri/',
+                  acceso: 'El acceso a la cala incluye escaleras. El mapa localiza Wied il-Għasri, no una oficina de turismo ni un servicio de baño o excursión.'
+                },
+                {
+                  nombre: 'Ta’ Pinu Sanctuary',
+                  direccion: 'Ta’ Pinu Sanctuary, Ta’ Pinu Road, Għarb GRB 1704, Gozo, Malta',
+                  maps: 'https://www.google.com/maps?cid=2549545883271796508',
+                  telefono: '+356 2155 6187',
+                  web: 'https://www.tapinu.org/index.php/contact',
+                  acceso: 'Los datos corresponden al santuario de Ta’ Pinu, no al museo Karmni Grima. Las reservas de misas o del salón no se presentan como entradas turísticas.'
+                }
+              ]
             },
             {
               nombre: 'La Ventana Azul (Azure Window)',
@@ -961,7 +1051,29 @@ export const MALTA_GUIDE = {
               direccion: 'Entorno de Dwejra, San Lawrenz, Gozo, Malta | Referencia del mapa: Torre de Dwejra, junto a la bahía; la Ventana Azul se derrumbó en 2017',
               maps: 'https://maps.app.goo.gl/ZdQE8AMzRrccdaeH8',
               web: 'https://visitgozo.com/places/dwejra/',
-              acceso: 'El arco original desapareció en 2017; la visita es al paisaje de Dwejra. Usa los caminos abiertos y respeta cierres y señalización. La costa es rocosa y puede resultar resbaladiza o quedar expuesta al oleaje; no te acerques a los bordes ni a la orilla con mala mar. No se garantiza acceso sin escalones. El baño, el buceo y las salidas en barca requieren valorar las condiciones y sus requisitos específicos.'
+              acceso: 'El arco original desapareció en 2017; la visita es al paisaje de Dwejra. Usa los caminos abiertos y respeta cierres y señalización. La costa es rocosa y puede resultar resbaladiza o quedar expuesta al oleaje; no te acerques a los bordes ni a la orilla con mala mar. No se garantiza acceso sin escalones. El baño, el buceo y las salidas en barca requieren valorar las condiciones y sus requisitos específicos.',
+              puntosPracticos: [
+                {
+                  nombre: 'Blue Hole (referencia para contemplación desde tierra)',
+                  direccion: 'Mirador de Blue Hole, Dwejra, San Lawrenz, Gozo, Malta',
+                  web: 'https://visitgozo.com/places/dwejra/',
+                  maps: 'https://www.google.com/maps/search/?api=1&query=Blue%20Hole%20Viewpoint%2C%20Dwejra%2C%20Gozo%2C%20Malta&query_place_id=ChIJn_ajP4O2DxMRHKw0YgMLX3Y',
+                  acceso: 'El mapa identifica Blue Hole Viewpoint, no el centro del agujero ni el sitio de inmersión. La llegada desde la costa pasa por roca irregular; esta referencia no ofrece una ruta al agua ni una actividad de buceo.'
+                },
+                {
+                  nombre: 'Inland Sea',
+                  direccion: 'Inland Sea, Dwejra, San Lawrenz, Gozo; referencia geográfica de la laguna publicada por Visit Gozo',
+                  web: 'https://visitgozo.com/places/dwejra/',
+                  maps: 'https://www.google.com/maps/search/?api=1&query=36.053683%2C14.191077',
+                  acceso: 'Llega por la carretera de Dwejra y utiliza los accesos abiertos de la orilla. El mapa sitúa la laguna; no representa una ruta por el túnel ni una reserva de barca. Las salidas desde el muelle son un servicio distinto.'
+                },
+                {
+                  nombre: 'Fungus Rock',
+                  direccion: 'Fungus Rock, frente a la costa de Dwejra, San Lawrenz, Gozo; referencia terrestre: entorno de Torre Dwejra',
+                  web: 'https://visitgozo.com/places/dwejra/',
+                  acceso: 'El mapa principal de esta ficha señala Torre Dwejra, una referencia terrestre para contemplar Fungus Rock documentada por Din l-Art Ħelwa. No se ofrece acceso al islote, que es una reserva natural con acceso restringido.'
+                }
+              ]
             }
           ]
         },
@@ -978,7 +1090,22 @@ export const MALTA_GUIDE = {
               nombre: 'Compras y recuerdos',
               tiposPlan: ['ruta', 'urbano'],
               descripcion:
-                'Malta ofrece numerosas opciones para llevarse un recuerdo del viaje.\n\n🛍️ Productos típicos recomendados:\n• Sal marina artesanal de Gozo.\n• Licor de tuna (higo chumbo).\n• Miel maltesa.\n• Encajes tradicionales.\n• Cerámica artesanal.\n• Productos elaborados con piedra caliza maltesa.\n• Dulces locales y pastizzi para llevar.\n\n📍 Zonas recomendadas:\n• Republic Street (La Valeta).\n• The Point Shopping Mall (Sliema).\n• Bay Street Shopping Complex (St. Julian’s).\n• Tiendas de artesanía en Mdina y Rabat.'
+                'Malta ofrece numerosas opciones para llevarse un recuerdo del viaje.\n\n🛍️ Productos típicos recomendados:\n• Sal marina artesanal de Gozo.\n• Licor de tuna (higo chumbo).\n• Miel maltesa.\n• Encajes tradicionales.\n• Cerámica artesanal.\n• Productos elaborados con piedra caliza maltesa.\n• Dulces locales y pastizzi para llevar.\n\n📍 Zonas recomendadas:\n• Republic Street (La Valeta).\n• The Point Shopping Mall (Sliema).\n• Bay Street Shopping Complex (St. Julian’s).\n• Tiendas de artesanía en Mdina y Rabat.',
+              direccion: 'The Point Shopping Mall (referencia de compras en Sliema): Tigné Point TP 01, Sliema, Malta',
+              maps: 'https://www.google.com/maps/search/?api=1&query=The%20Point%20Shopping%20Mall%20Tigne%20Sliema%20Malta',
+              telefono: 'The Point Shopping Mall: +356 2247 0300',
+              web: 'https://thepointmalta.com/contactus/',
+              acceso: 'El enlace «Cómo llegar», la web y el teléfono corresponden a The Point Shopping Mall, en Sliema. Bay Street Shopping Complex, en St. Julian’s, y las zonas comerciales de La Valeta, Mdina y Rabat son destinos distintos.',
+              puntosPracticos: [
+                {
+                  nombre: 'Bay Street Shopping Complex',
+                  direccion: 'Bay Street Shopping Complex, St George’s Bay, St Julian’s STJ 3311, Malta',
+                  telefono: 'Grupo Bay Street: +356 2366 1585',
+                  web: 'https://baystreet.com.mt/contact/',
+                  maps: 'https://www.google.com/maps/search/?api=1&query=Bay%20Street%20Shopping%20Complex%2C%20St.%20George%27s%20Bay%2C%20St.%20Julian%27s%20STJ%203311%2C%20Malta',
+                  acceso: 'El enlace de direcciones corresponde a Bay Street Shopping Complex. El teléfono está identificado como contacto del grupo Bay Street y no pertenece a The Point de Sliema.'
+                }
+              ]
             },
             {
               nombre: 'Visitas opcionales según el horario del vuelo',
@@ -988,6 +1115,10 @@ export const MALTA_GUIDE = {
             },
             {
               nombre: 'Regreso al aeropuerto',
+              direccion: 'Malta International Airport, Luqa LQA 4000, Malta',
+              maps: 'https://www.google.com/maps/search/?api=1&query=Malta%20International%20Airport%20Luqa%20Malta',
+              telefono: 'Información general del aeropuerto: +356 2124 9600',
+              web: 'https://maltairport.com/contact-us/',
               tiposPlan: ['ruta', 'urbano'],
               descripcion:
                 'Llega el momento de despedirse de Malta tras varios días recorriendo fortalezas, ciudades históricas, templos prehistóricos, playas, acantilados y paisajes mediterráneos únicos.\n\n✈️ Consejo AvenTourArte:\nSe recomienda llegar al aeropuerto con al menos dos horas de antelación para vuelos internacionales.\n\nConviene tener en cuenta posibles retenciones de tráfico en los accesos a La Valeta, Sliema o St. Julian’s durante las horas punta.'
@@ -1124,6 +1255,10 @@ export const MALTA_GUIDE = {
       lugares: [
         {
           nombre: 'Piadina Caffe (La Valeta)',
+          direccion: '24, St. Lucia Street, Valletta VLT 1186, Malta',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Piadina%20Caffe%20La%20Valeta%20Malta',
+          telefono: '+356 9982 5353',
+          web: 'https://www.facebook.com/PiadinaCaffe',
           descripcion:
             'Piadina Caffe es uno de los locales con más encanto y personalidad de toda La Valeta.\n\nSituado en pleno corazón de St. Lucia’s Street, este pequeño rincón italiano se ha convertido en una de las paradas favoritas tanto de viajeros como de locales gracias a su ambiente bohemio y a sus mesas colocadas directamente sobre las famosas escalinatas de piedra.\n\n🏛️ Qué hace especial este lugar:\nAunque el interior es diminuto, la verdadera magia está fuera.\n\nMesitas pequeñas, cojines de colores, farolas tradicionales y el ambiente relajado de la calle crean una de las escenas más auténticas y fotogénicas de la ciudad.\n\n🌍 Experiencia viajera:\nEs el sitio perfecto para hacer una pausa mientras recorres La Valeta y simplemente observar cómo la vida fluye por las escaleras.\n\n🥙 Especialidad de la casa:\nLas protagonistas absolutas son las piadinas italianas, preparadas al momento y rellenas con ingredientes de gran calidad como mozzarella de búfala, prosciutto di Parma, rúcula, pesto o bresaola.\n\n💡 Qué probar:\n• Piadina de Prosciutto y mozzarella de búfala\n• Piadina de Bresaola con rúcula\n• Focaccia de mortadella y pistacho\n• Piadina dulce de Nutella\n• Aperol Spritz al atardecer\n\n☕ Ambiente según la hora:\nPor la mañana y al mediodía funciona como cafetería y parada rápida para comer algo informal.\n\nPero cuando cae la tarde, el ambiente cambia completamente y la calle se convierte en uno de los rincones más acogedores y bohemios de La Valeta.\n\n✨ Consejo AvenTourArte:\nTomarse una copa aquí por la noche mientras las farolas iluminan las escaleras es una de las experiencias más especiales y auténticas de toda la capital.\n\n⚠️ Consejo práctico:\nTiene muy pocas mesas y suele llenarse rápido los fines de semana.\n\nSi no encuentras sitio, pedir la piadina para llevar y seguir caminando por las calles cercanas sigue siendo una opción fantástica.',
           horario:
@@ -1132,6 +1267,11 @@ export const MALTA_GUIDE = {
         },
         {
           nombre: 'San Paolo Naufrago (La Valeta)',
+          direccion: '11, St. Lucia\'s Street, Valletta, Malta',
+          maps: 'https://www.google.com/maps/search/?api=1&query=San%20Paolo%20Naufrago%20La%20Valeta%20Malta',
+          telefono: '+356 2701 3353',
+          web: 'https://spnvalletta.com/',
+          reserva: 'https://app.tableo.com/widget/san-paolo-naufrago-valletta-malta',
           descripcion:
             'San Paolo Naufrago es una de las trattorias con más ambiente y personalidad de toda La Valeta.\n\nSituado en plena zona de las famosas escalinatas del casco histórico, el local combina perfectamente la atmósfera bohemia de la ciudad con cocina italiana casera y muy abundante.\n\n🏛️ Qué hace especial este lugar:\nAl igual que otros locales icónicos de St. Lucia’s Street, gran parte de su encanto está en las mesas y cojines colocados directamente sobre los peldaños de piedra.\n\nCenar aquí mientras las farolas iluminan las calles barrocas de La Valeta es una de las experiencias más especiales de la ciudad.\n\n🍕 Especialidad de la casa:\nSus pizzas artesanales de masa madre son uno de los grandes reclamos del restaurante.\n\nEl estilo recuerda a la pizza napolitana: masa fina, bordes aireados y productos italianos de muchísima calidad.\n\n💡 Qué probar:\n• Pizza San Paolo\n• Pizza de mortadela, burrata y pistacho\n• Pasta marinara con marisco fresco\n• Tabla de embutidos italianos para compartir\n• Vino italiano de la casa\n\n🌍 Experiencia viajera:\nPor la noche el ambiente de la escalinata se vuelve especialmente animado y acogedor.\n\nEntre conversaciones, luces cálidas y el movimiento constante de gente subiendo y bajando las escaleras, el lugar resume perfectamente la esencia nocturna de La Valeta.\n\n✨ Consejo AvenTourArte:\nSi puedes, intenta conseguir mesa en la parte exterior de los escalones.\n\nLa experiencia cambia completamente frente a comer dentro.\n\n⚠️ Consejo práctico:\nLas mesas exteriores suelen llenarse rápido durante la tarde y la noche, especialmente los fines de semana.',
           horario:
@@ -1141,6 +1281,9 @@ export const MALTA_GUIDE = {
         },
         {
           nombre: 'Grano (La Valeta)',
+          direccion: '26, Triq Santa Lucia, Valletta VLT 1183, Malta',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Grano%20La%20Valeta%20Malta',
+          telefono: '+356 2124 2718',
           descripcion:
             'Grano es uno de los grandes templos del street food gourmet de La Valeta.\n\nSituado muy cerca de las famosas escalinatas de St. Lucia’s Street, este pequeño local italiano se ha convertido en una parada imprescindible para quienes buscan comer rápido, pero con producto de altísima calidad.\n\n🥖 Qué hace especial este lugar:\nA diferencia de otras trattorias de la zona, Grano está especializado en schiacciate y bocadillos italianos preparados al momento con embutidos recién cortados y panes artesanales extremadamente crujientes.\n\nLa schiacciata, típica de Florencia, es una especie de pan plano ligero y aireado que aquí rellenan con combinaciones italianas espectaculares.\n\n💡 Qué probar:\n• Schiacciata de mortadella, stracciatella y pistacho\n• Bocadillo de porchetta romana\n• Combinaciones con bresaola, trufa y quesos curados italianos\n• Bocadillos gourmet de pastrami italiano\n\n🌍 Experiencia viajera:\nAunque el local apenas tiene espacio interior, precisamente eso forma parte de su encanto.\n\nLa experiencia ideal consiste en pedir el bocadillo para llevar y sentarse después en las escalinatas cercanas de St. Lucia’s Street o en los Jardines de Barrakka con vistas al puerto.\n\n✨ Consejo AvenTourArte:\nLa schiacciata de mortadella con crema de pistacho y burrata cremosa es probablemente uno de los mejores bocadillos que puedes comer en toda La Valeta.\n\n⚠️ Consejo práctico:\nNo abre por la noche, por lo que funciona mejor como parada para almorzar durante la ruta por el centro histórico.\n\nAdemás, suele haber bastante cola a mediodía debido a lo popular que se ha vuelto entre locales y viajeros.',
           horario:
@@ -1150,6 +1293,11 @@ export const MALTA_GUIDE = {
         },
         {
           nombre: 'Palazzo Preca Restaurant (La Valeta)',
+          direccion: '54, Strait Street, Valletta VLT 1434, Malta',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Palazzo%20Preca%20Restaurant%20La%20Valeta%20Malta',
+          telefono: '+356 2122 6777',
+          web: 'https://www.palazzoprecavalletta.com/',
+          reserva: 'https://www.palazzoprecavalletta.com/reservations',
           descripcion:
             'Palazzo Preca es uno de los restaurantes más elegantes, prestigiosos y recomendados de toda La Valeta.\n\nUbicado dentro de un palacio histórico del siglo XVI en plena Strait Street, este restaurante combina la cocina tradicional maltesa con técnicas mediterráneas refinadas y un ambiente señorial lleno de encanto.\n\n🏛️ Qué hace especial este lugar:\nEl restaurante está dirigido por las hermanas Ramona y Roberta Preca, quienes han convertido el local en uno de los grandes referentes gastronómicos de Malta gracias a una cocina basada en producto fresco, tradición familiar y presentaciones cuidadísimas.\n\nEl interior conserva techos altos, lámparas clásicas, piedra vista y una atmósfera íntima que encaja perfectamente con el carácter histórico de Strait Street.\n\n🐟 Especialidad de la casa:\nEl pescado fresco del día es el gran protagonista.\n\nCada jornada muestran las capturas locales disponibles y las preparan al estilo maltés o mediterráneo según el producto.\n\n💡 Qué probar:\n• Pescado fresco local a la parrilla\n• Pasta con bogavante o marisco\n• Carpaccio de pulpo\n• Tártaro de atún rojo\n• Fenek tradicional maltés (conejo estofado)\n• Postres caseros y dulces de almendra\n\n🍷 Experiencia gastronómica:\nLa carta de vinos está especialmente cuidada y merece mucho la pena probar vinos blancos malteses elaborados con variedades locales como Girgentina o Gellewza.\n\n🌍 Experiencia viajera:\nCenar aquí combina perfectamente con el ambiente nocturno de Strait Street.\n\nLa mezcla entre gastronomía refinada, piedra histórica y la atmósfera bohemia de la calle convierte la experiencia en una de las cenas más especiales que puedes hacer en La Valeta.\n\n✨ Consejo AvenTourArte:\nSi quieres probar el tradicional conejo maltés en una versión más sofisticada y cuidada, este es probablemente uno de los mejores sitios de la ciudad.\n\n⚠️ Consejo práctico:\nEs uno de los restaurantes más demandados de La Valeta, especialmente los fines de semana.\n\nReservar con antelación es prácticamente imprescindible para cenar.',
           horario:
@@ -1159,6 +1307,10 @@ export const MALTA_GUIDE = {
         },
         {
           nombre: 'Papannis Authentic Italian Restaurant (La Valeta)',
+          direccion: '55, Strait Street, Valletta, Malta',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Papannis%20Authentic%20Italian%20Restaurant%20La%20Valeta%20Malta',
+          telefono: '+356 2722 0031',
+          web: 'https://www.facebook.com/Merkanti.Valletta/',
           descripcion:
             'Papannis es una de las trattorias italianas más queridas y auténticas de toda La Valeta.\n\nSituado en plena Strait Street, prácticamente frente a Palazzo Preca, este pequeño restaurante familiar apuesta por una cocina italiana tradicional, abundante y muy casera que recuerda completamente al ambiente de una auténtica trattoria italiana.\n\n🏛️ Qué hace especial este lugar:\nA diferencia de otros restaurantes más sofisticados de la zona, aquí la experiencia gira alrededor de recetas tradicionales, pasta artesanal y un ambiente íntimo y acogedor.\n\nLas paredes de piedra vista, la estrechez del local y las mesas exteriores sobre Strait Street hacen que cenar aquí tenga muchísimo encanto.\n\n🍝 Especialidad de la casa:\nLa pasta fresca artesanal es la gran protagonista.\n\nTodo destaca por las salsas caseras, las raciones generosas y una cocina muy honesta centrada en el sabor.\n\n💡 Qué probar:\n• Lasaña casera tradicional\n• Spaghetti allo Scoglio con marisco\n• Raviolis de ricotta y espinacas\n• Pasta con crema de trufa y setas\n• Tiramisú casero\n• Panna cotta tradicional\n\n🌍 Experiencia viajera:\nPor la noche, el ambiente de Strait Street convierte la cena en una experiencia muy especial.\n\nLas mesas exteriores, la iluminación cálida y la atmósfera bohemia de la calle hacen que el lugar tenga muchísimo encanto.\n\n✨ Consejo AvenTourArte:\nSi buscas una cena italiana auténtica, abundante y con buena relación calidad-precio en pleno centro histórico de La Valeta, Papannis es una apuesta segurísima.\n\n🍷 Diferencia respecto a Palazzo Preca:\nMientras Palazzo Preca ofrece una experiencia más elegante y refinada, Papannis apuesta por una cocina italiana más tradicional, informal y muy centrada en la pasta.\n\n⚠️ Consejo práctico:\nEl interior es pequeño y suele llenarse rápidamente a partir de las 20:00, especialmente viernes y sábados.\n\nReservar es muy recomendable si quieres mesa en el exterior.',
           horario:
@@ -1168,6 +1320,11 @@ export const MALTA_GUIDE = {
         },
         {
           nombre: 'Trattoria Zero Sei (La Valeta)',
+          direccion: '75, Old Theatre Street, Valletta, Malta',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Trattoria%20Zero%20Sei%20La%20Valeta%20Malta',
+          telefono: '+356 2122 2010',
+          web: 'https://zeroseimalta.com/stores/zero-sei-trattoria-romana/',
+          reserva: 'tel:+35621222010',
           descripcion:
             'Zero Sei es una auténtica embajada de la cocina romana en pleno corazón de La Valeta.\n\nUbicado justo frente al histórico Teatro Manoel, este pequeño restaurante familiar se ha convertido en uno de los locales gastronómicos más famosos de Malta gracias a su fidelidad absoluta a las recetas tradicionales de Roma.\n\n🍝 Qué hace especial este lugar:\nZero Sei está considerado por muchísimos locales y viajeros como el lugar donde se sirve la mejor Carbonara de toda Malta.\n\nAquí no existen versiones adaptadas para turistas: la cocina sigue las recetas romanas clásicas con una precisión casi obsesiva.\n\n🏛️ Ambiente del local:\nEl restaurante conserva el espíritu auténtico de una trattoria romana tradicional.\n\nMesas estrechas, ambiente animado, ruido constante de platos y conversaciones, olor a queso pecorino y pimienta recién molida… todo recuerda muchísimo a los pequeños restaurantes del Trastevere romano.\n\n💡 Qué probar:\n• Tonnarelli Carbonara tradicional\n• Cacio e Pepe\n• Rigatoni all’Amatriciana\n• Burrata con mortadella y pistacho\n• Tabla de embutidos italianos\n• Tiramisú casero\n\n🥓 La Carbonara:\nEl plato estrella absoluto.\n\nPreparada exclusivamente con yema de huevo, Pecorino Romano DOP, pimienta negra y auténtico guanciale crujiente.\n\n⚠️ Importante:\nAquí la Carbonara se hace como en Roma.\n\nSin nata.\n\n🌍 Experiencia viajera:\nCenar en Zero Sei después de visitar el Teatro Manoel o recorrer Strait Street es una de las mejores experiencias gastronómicas de La Valeta.\n\nLa combinación entre ambiente histórico, cocina romana auténtica y el movimiento nocturno de la ciudad crea una atmósfera muy especial.\n\n✨ Consejo AvenTourArte:\nSi eres amante de la pasta italiana tradicional, este sitio es prácticamente obligatorio.\n\nEspecialmente la Carbonara y la Cacio e Pepe están a un nivel espectacular.\n\n🍷 Consejo gastronómico:\nAcompañar la pasta con vino italiano y terminar con el tiramisú casero convierte la cena en una experiencia redonda.\n\n⚠️ Consejo práctico:\nEl local es pequeño y muy demandado, especialmente los fines de semana y los días con funciones en el Teatro Manoel.\n\nReservar con antelación es muy recomendable.',
           horario:
@@ -1177,6 +1334,11 @@ export const MALTA_GUIDE = {
         },
         {
           nombre: 'Café Cordina (La Valeta)',
+          direccion: '244, Republic Street, Valletta VLT 1114, Malta',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Caf%C3%A9%20Cordina%20La%20Valeta%20Malta',
+          telefono: '+356 2065 0400',
+          web: 'https://caffecordina.com/contact-us/',
+          reserva: 'tel:+35620650400',
           descripcion:
             'Café Cordina es probablemente el café histórico más emblemático, elegante y famoso de toda Malta.\n\nSituado en plena Republic Square, frente a la Biblioteca Nacional y bajo la estatua de la Reina Victoria, este lugar lleva siendo punto de encuentro de políticos, artistas, viajeros y locales desde el siglo XIX.\n\n🏛️ Historia del lugar:\nFundado originalmente en 1837 en la ciudad de Cospicua y trasladado posteriormente a La Valeta, Café Cordina se ha convertido en una auténtica institución nacional.\n\nDurante décadas ha sido uno de los grandes salones sociales de la capital maltesa.\n\n✨ Qué hace especial este lugar:\nAunque su terraza exterior es uno de los lugares más animados y fotogénicos de Republic Square, el verdadero espectáculo aparece al entrar.\n\nEl interior conserva techos decorados, molduras barrocas y frescos pintados por el célebre artista maltés Giuseppe Calì, representando distintas etapas de la historia de Malta.\n\n🥐 Qué probar:\n• Pastizzi tradicionales de ricotta o guisantes\n• Kannoli malteses\n• Kwareżimal de almendra y miel\n• Helados artesanales\n• Café espresso maltés\n• Postres inspirados en el refresco local Kinnie\n\n💡 Los Pastizzi:\nSon el tentempié más famoso y típico de Malta.\n\nSe trata de pequeños hojaldres crujientes rellenos normalmente de ricotta cremosa o pasta de guisantes.\n\n🌍 Experiencia viajera:\nSentarse en la terraza de Café Cordina mientras la vida pasa frente a Republic Square es una de las experiencias más clásicas de La Valeta.\n\nSin embargo, entrar dentro permite descubrir una atmósfera mucho más elegante, tranquila e histórica.\n\n✨ Consejo AvenTourArte:\nSi quieres vivir la experiencia más auténtica, haz como muchos locales:\n\nentra al interior, pide directamente en la barra histórica de madera y disfruta del café admirando los frescos del techo.\n\n🛍️ Consejo práctico:\nTambién es uno de los mejores sitios de La Valeta para comprar dulces tradicionales malteses y pequeños regalos gastronómicos antes de volver del viaje.\n\n📸 Consejo fotográfico:\nLa terraza exterior con la Biblioteca Nacional y Republic Square al fondo es una de las escenas más clásicas y elegantes de la capital.',
           horario:
@@ -1186,6 +1348,10 @@ export const MALTA_GUIDE = {
         },
         {
           nombre: 'Novita Wharf Restaurant (Senglea)',
+          direccion: 'Xatt Juan B. Azopardo, Senglea (L-Isla), Malta',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Novita%20Wharf%20Restaurant%20Senglea%20Malta',
+          telefono: '+356 9971 9900',
+          web: 'https://www.facebook.com/novita.restaurant/',
           descripcion:
             'Novita es uno de los restaurantes con mejor ubicación de todas las Tres Ciudades.\n\nSituado en pleno paseo marítimo Juan B. Azzopardi Wharf de Senglea, combina una atmósfera relajada, vistas privilegiadas sobre el puerto y una cocina mediterránea muy ligada al mar.\n\n🌊 Qué hace especial este lugar:\nSu principal atractivo es la terraza junto al agua.\n\nDesde las mesas exteriores se contemplan los superyates amarrados en Birgu, el Fuerte de San Ángel y las históricas fortificaciones que rodean el Gran Puerto.\n\nEs uno de esos lugares donde el entorno forma parte de la experiencia gastronómica.\n\n🍽️ Qué comer:\nLa cocina se centra en recetas mediterráneas elaboradas con pescado fresco y productos locales.\n\nEntre los platos más recomendables destacan:\n\n• Pescado fresco del día a la plancha.\n• Espaguetis con almejas.\n• Pasta con mariscos.\n• Mejillones al estilo mediterráneo.\n• Conejo estofado maltés (Fenkata).\n• Salchicha tradicional maltesa con especias.\n\n🍺 El momento perfecto:\nAunque funciona muy bien tanto para comer como para cenar, el verdadero encanto aparece al final de la tarde.\n\nTomar una cerveza Cisk bien fría o una copa de vino local mientras el sol ilumina las murallas de Birgu es una de las experiencias más agradables de Senglea.\n\n🌍 Experiencia viajera:\nDespués de recorrer los Jardines Safe Haven, La Gardjola y las calles históricas de Senglea, Novita es el lugar ideal para sentarse junto al agua y disfrutar del ambiente pausado de las Tres Ciudades.\n\n✨ Consejo AvenTourArte:\nSi puedes, reserva una mesa exterior poco antes del atardecer.\n\nLas vistas del Fuerte de San Ángel iluminándose poco a poco mientras cae la noche crean una atmósfera difícil de superar.\n\n📸 Consejo fotográfico:\nLas mejores fotografías se consiguen desde la terraza mirando hacia Birgu y el puerto deportivo, especialmente durante la hora dorada.',
           horario:
@@ -1195,6 +1361,10 @@ export const MALTA_GUIDE = {
         },
         {
           nombre: 'Liska Restaurant (Marsaxlokk)',
+          direccion: 'Xatt is-Sajjieda, Marsaxlokk, Malta',
+          maps: 'https://www.google.com/maps/search/?api=1&query=Liska%20Restaurant%20Marsaxlokk%20Malta',
+          telefono: '+356 7937 2082',
+          web: 'https://www.facebook.com/Liska.restaurant/',
           descripcion:
             'Ubicado en primera línea del paseo marítimo de Marsaxlokk, el principal puerto pesquero de Malta, Liska es uno de los restaurantes marineros más recomendables de la isla para disfrutar de pescado y marisco fresco frente a la bahía.\n\nSu cocina combina recetas mediterráneas y producto local con una presentación moderna y cuidada. La terraza exterior permite contemplar los tradicionales luzzus mientras se disfruta de algunas de las mejores capturas del día.\n\n🍽️ Qué probar:\n• Pescado fresco del día preparado a la plancha o a la sal.\n• Tartar de atún rojo.\n• Carpaccio de pez espada.\n• Linguini con almejas y mejillones.\n• Stuffat tal-Qarnit (estofado tradicional de pulpo).\n• Raviolis de pescado con salsa marinera.\n\n🌍 Experiencia viajera:\nDespués de recorrer el mercado pesquero y pasear entre las coloridas embarcaciones del puerto, Liska es uno de los mejores lugares para descubrir la auténtica cocina marinera maltesa.\n\n✨ Consejo AvenTourArte:\nSi visitas Marsaxlokk un domingo, intenta reservar con antelación. Tras el mercado semanal la demanda se dispara y las mesas con vistas al puerto suelen llenarse rápidamente.\n\n📸 Consejo fotográfico:\nLas mejores vistas se disfrutan desde la terraza exterior al final de la tarde, cuando la luz dorada ilumina los luzzus y las fachadas del paseo marítimo.',
           horario:
@@ -1213,6 +1383,11 @@ export const MALTA_GUIDE = {
         },
         {
           nombre: '🐟 La Capanna (Marsaxlokk)',
+          direccion: '60, Xatt is-Sajjieda, Marsaxlokk, Malta',
+          maps: 'https://www.google.com/maps/search/?api=1&query=La%20Capanna%20Marsaxlokk%20Malta',
+          telefono: '+356 2165 7755',
+          web: 'https://www.facebook.com/lacapannarestaurant/',
+          reserva: 'https://www.thefork.com/restaurant/la-capanna-r857655',
           descripcion:
             'Uno de los restaurantes de pescado y marisco más reconocidos de Marsaxlokk. Su cocina se centra en el producto fresco del día, con excelentes pescados al horno o a la plancha, mariscos, risottos y especialidades mediterráneas tradicionales.\n\nSu terraza frente al puerto ofrece unas magníficas vistas a los coloridos luzzus y al ambiente marinero más auténtico de Malta.',
           horario:
@@ -1221,6 +1396,11 @@ export const MALTA_GUIDE = {
         },
         {
         nombre: "Coogi's Restaurant & Tea Garden (Mdina)",
+        direccion: '5, Saint Agatha\'s Esplanade, Mdina MDN 1160, Malta',
+        maps: 'https://www.google.com/maps/search/?api=1&query=Coogi\'s%20Restaurant%20%26%20Tea%20Garden%20Mdina%20Malta',
+        telefono: '+356 2145 9987',
+        web: 'https://www.coogis.co/contact-us',
+        reserva: 'https://app.tableo.com/r/3RG4qmp',
         descripcion:
           'Ubicado dentro de las murallas de Mdina, muy cerca de la Catedral de San Pablo, Coogi\'s es uno de los restaurantes más agradables y elegantes de la antigua capital.\n\nSu principal atractivo no es únicamente la cocina, sino también el entorno. Ocupa una histórica casa de piedra maltesa con un precioso patio interior cubierto de vegetación y varios espacios que conservan todo el encanto de la arquitectura tradicional de Mdina.\n\n🍽️ Qué esperar:\nA diferencia de la pizzería del mismo grupo, aquí la propuesta gastronómica es más elaborada y está orientada a una experiencia de comida o cena tranquila.\n\nLa carta combina cocina mediterránea, producto local y recetas italianas con una presentación más cuidada.\n\n🥩 Recomendaciones:\n• Carnes a la parrilla\n• Pescado fresco del día\n• Pastas caseras\n• Risottos\n• Postres artesanales\n• Selección de vinos malteses e internacionales\n\n🌿 El gran atractivo:\nSu romántico patio interior rodeado de enredaderas y piedra dorada es uno de los rincones más especiales para cenar en Mdina, especialmente cuando la ciudad empieza a vaciarse al caer la tarde.\n\n🌍 Experiencia viajera:\nDespués de recorrer la Catedral, el Palacio Falson o los bastiones de Mdina, es uno de los mejores lugares para detenerse a disfrutar de una comida pausada dentro de la Ciudad del Silencio.\n\n✨ Consejo AvenTourArte:\nSi visitas Mdina al atardecer, intenta reservar una mesa en el patio exterior. La combinación de iluminación tenue, piedra histórica y tranquilidad convierte la experiencia en una de las cenas más agradables de toda Malta.\n\n⚠️ Importante:\nLas mesas del patio suelen agotarse con facilidad durante la temporada alta, por lo que es muy recomendable reservar con antelación.',
         horario:
@@ -1230,6 +1410,11 @@ export const MALTA_GUIDE = {
         },
         {
           nombre: 'The de Mondion (Mdina)',
+          direccion: 'The Xara Palace, Misraħ il-Kunsill, Mdina MDN 1050, Malta',
+          maps: 'https://www.google.com/maps/search/?api=1&query=The%20de%20Mondion%20Mdina%20Malta',
+          telefono: '+356 2145 0560',
+          web: 'https://demondion.xaracollection.com/',
+          reserva: 'https://demondion.xaracollection.com/#book-a-table',
           descripcion:
             'Ubicado en la azotea del exclusivo Xara Palace Relais & Châteaux, dentro de las murallas de Mdina, The de Mondion representa la máxima expresión de la alta gastronomía en Malta.\n\nGalardonado con una Estrella Michelin, este restaurante ofrece una experiencia culinaria de autor que combina técnicas contemporáneas, producto local de primer nivel y una de las ubicaciones más espectaculares de toda la isla.\n\n🏛️ Un entorno excepcional:\nEl restaurante ocupa la planta superior de un histórico palacio nobiliario del siglo XVII convertido en hotel de lujo.\n\nSu privilegiada posición sobre los bastiones de Mdina permite disfrutar de unas vistas panorámicas únicas sobre el interior de Malta y el Mediterráneo.\n\n🌅 Cenar sobre las murallas:\nDurante los meses más cálidos, las mesas de la terraza exterior ofrecen una de las experiencias más memorables del país.\n\nVer cómo la luz desaparece lentamente sobre los campos malteses mientras se suceden los distintos pases del menú es parte esencial de la experiencia.\n\n🍽️ Cocina de autor:\nLa propuesta gastronómica gira en torno a menús degustación que evolucionan según la temporada y la disponibilidad de producto local.\n\nLos ingredientes tradicionales malteses son reinterpretados mediante técnicas modernas, cuidando al máximo la presentación, los matices y el equilibrio de sabores.\n\n✨ Qué esperar:\n• Menús degustación de alta cocina\n• Producto local reinterpretado con técnicas contemporáneas\n• Maridajes seleccionados por sumiller\n• Servicio extremadamente cuidado\n• Una de las mejores bodegas de Malta\n\n🌍 Experiencia viajera:\nMás que una cena, The de Mondion es una experiencia gastronómica completa.\n\nEs el lugar ideal para celebrar una ocasión especial o para poner el broche de oro a una estancia en Malta.\n\n✨ Consejo AvenTourArte:\nSi tienes previsto visitar Mdina al atardecer, una combinación perfecta consiste en recorrer los bastiones cuando la ciudad comienza a vaciarse y subir después a The de Mondion para disfrutar de la puesta de sol desde la terraza antes de comenzar la cena.\n\n⚠️ Importante:\nLas mesas con vistas son muy limitadas y suelen agotarse con bastante antelación, especialmente durante la temporada alta.\n\nSe recomienda reservar con varias semanas de margen.\n\n👔 Código de vestimenta:\nSmart Casual.\n\nNo se recomienda acudir con ropa deportiva, chanclas o prendas excesivamente informales.',
           horario:
@@ -1239,6 +1424,9 @@ export const MALTA_GUIDE = {
         },
         {
         nombre: 'Is-Serkin - Crystal Palace (Rabat)',
+        direccion: 'Triq San Pawl, Rabat, Malta',
+        maps: 'https://www.google.com/maps/search/?api=1&query=Is-Serkin%20-%20Crystal%20Palace%20Rabat%20Malta',
+        telefono: '+356 2145 3323',
         descripcion:
           'Después de descubrir la elegante Melite romana en la Domvs Romana, toca cambiar completamente de registro y sumergirse en uno de los lugares más auténticos y populares de Malta.\n\nCrystal Palace, conocido por todos los malteses como Is-Serkin, es probablemente la pastizzerija más famosa de toda la isla y una auténtica institución gastronómica nacional.\n\nUbicado a pocos pasos de la Domvs Romana, este modesto local lleva décadas alimentando a generaciones enteras de malteses, convirtiéndose en una parada obligatoria para cualquiera que quiera probar la comida callejera más emblemática del país.\n\n🥐 El producto estrella:\nLos protagonistas absolutos son los tradicionales pastizzi, unos pequeños hojaldres extremadamente crujientes elaborados siguiendo recetas tradicionales maltesas.\n\n✨ Los dos rellenos clásicos:\n• Pastizzi tal-Irkotta (requesón cremoso)\n• Pastizzi tal-Piżelli (crema especiada de guisantes)\n\nRecién salidos del horno, calientes y dorados, son uno de los sabores más representativos de Malta.\n\n☕ Cómo disfrutar la experiencia:\nMuchos locales acompañan los pastizzi con un té maltés tradicional o con una cerveza Cisk bien fría, especialmente durante las tardes más calurosas.\n\n🌍 Experiencia viajera:\nA diferencia de los monumentos históricos de Mdina o Rabat, aquí se descubre la Malta cotidiana.\n\nAgricultores, estudiantes, trabajadores, familias y viajeros comparten espacio alrededor de unas bandejas de hojaldres que salen constantemente del horno durante todo el día.\n\n💡 Curiosidad local:\nDurante años fue famoso por mantener horarios prácticamente interminables, convirtiéndose en parada habitual tanto para desayunos tempraneros como para quienes regresaban de una noche de fiesta.\n\n✨ Consejo AvenTourArte:\nPide uno de cada sabor para comparar cuál te gusta más. La mayoría de los visitantes terminan desarrollando una opinión muy firme sobre cuál es el auténtico rey de los pastizzi.\n\n🥟 Momento perfecto:\nEs la parada ideal antes o después de visitar las Catacumbas de San Pablo, permitiendo hacer una pausa gastronómica rápida sin alejarse del centro histórico de Rabat.\n\n📸 Consejo viajero:\nSi no encuentras mesa, pide los pastizzi para llevar y disfrútalos caminando hacia los jardines junto a la entrada de Mdina mientras contemplas las murallas de la antigua capital.',
         horario:

@@ -329,6 +329,12 @@
                   <ng-container *ngTemplateOutlet="relatedGuide; context: { $implicit: zona.guiaRelacionada }"></ng-container>
                   <app-practical-info [item]="zona" [mapHref]="zona.direccion || zona.maps || zona.mapaUrl ? mapUrl(zona) : ''"></app-practical-info>
                 </div>
+
+                <section class="detail-list" *ngFor="let punto of zona.puntosPracticos"
+                  [attr.aria-label]="'Lugar incluido: ' + punto.nombre">
+                  <h4>{{ punto.nombre }}</h4>
+                  <app-practical-info [item]="punto" [mapHref]="punto.maps || ''"></app-practical-info>
+                </section>
               </div>
             </mat-expansion-panel>
           </mat-accordion>

@@ -4,6 +4,8 @@ import { CHIPIONA_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/chipi
 import { JEREZ_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/jerez.guide';
 import { CORIA_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/coria.guide';
 import { COPENHAGUE_GUIDE } from '../../guides/europa/dinamarca/copenhague.guide';
+import { MALTA_GUIDE } from '../../guides/europa/malta/malta.guide';
+import { auditGuideEditorial } from '../../shared/guide-editorial-audit';
 import { PracticalInfoItem, TipoReserva } from '../../shared/practical-info';
 import { PracticalInfoComponent } from './practical-info.component';
 
@@ -23,6 +25,23 @@ describe('PracticalInfoComponent', () => {
       ...(section.subsecciones ?? []).flatMap<PracticalInfoItem & { maps?: string }>(subsection => subsection.lugares ?? [])
     ])
       .find(item => item.nombre === name);
+    expect(item).withContext(name).toBeDefined();
+    return item!;
+  };
+
+
+  const maltaItem = (name: string): Record<string, unknown> => {
+    const items: Record<string, unknown>[] = [];
+    for (const section of MALTA_GUIDE.secciones) {
+      for (const day of section.itinerario ?? []) {
+        for (const item of day.zonas ?? []) {
+          items.push(item);
+          items.push(...((item as Record<string, unknown>)['puntosPracticos'] as Record<string, unknown>[] ?? []));
+        }
+      }
+      items.push(...(section.lugares ?? []));
+    }
+    const item = items.find(item => item['nombre'] === name);
     expect(item).withContext(name).toBeDefined();
     return item!;
   };
@@ -399,4 +418,157 @@ describe('PracticalInfoComponent', () => {
     ]);
     expect(cancelledBeforeNavigation).toEqual([false, false, false]);
   });
+
+  it('keeps Malta booking instructions in access facts rather than invalid stored reservation links', () => {
+    for (const [name, instruction] of [
+      ['Casa Rocca Piccola', 'Entradas en la web oficial, mediante el botón «Book Now»: permite elegir audioguía o visita guiada en inglés.'],
+      ['Torre Roja (Torre de Santa Águeda)', 'Visitas de grupos: avisar con al menos una semana de antelación, si es posible, al +356 9934 7551.']
+    ]) {
+      const item = maltaItem(name);
+      setItem(item, String(item['maps']));
+      expect(item['reserva']).withContext(name).toBeUndefined();
+      const access = [...root.querySelectorAll<HTMLDetailsElement>('details')]
+        .find(detail => detail.querySelector('summary span')?.textContent === 'Acceso y condiciones')!;
+      expect(access).withContext(name).toBeDefined();
+      expect(access.querySelector('p')?.textContent).withContext(name).toContain(instruction);
+      expect(root.querySelector('.primary-action')).withContext(name).toBeNull();
+      expect(root.querySelector('.reservation-phone')).withContext(name).toBeNull();
+      expect(fixture.componentInstance.facts.some(fact => fact.label === 'Reservas')).toBeFalse();
+      expect(root.querySelector<HTMLAnchorElement>('.practical-website a')?.getAttribute('href')).toBe(String(item['web']));
+      access.open = false;
+      access.querySelector('summary')!.click();
+      expect(access.open).toBeTrue();
+    }
+    const issues = auditGuideEditorial(MALTA_GUIDE).errors.filter(issue =>
+      issue.category === 'links' && ['Casa Rocca Piccola', 'Torre Roja (Torre de Santa Águeda)'].includes(issue.item));
+    expect(issues).toEqual([]);
+  });
+
+  it('preserves the Malta group-request mailto actions, subjects and separate information websites', () => {
+    const measure = spyOn(TestBed.inject(AnalyticsService), 'action');
+    for (const [name, recipient] of [
+      ['Palacio Falson', 'bookings@palazzofalson.com'],
+      ['Torre de Santa María', 'info@dinlarthelwa.org']
+    ]) {
+      const item = maltaItem(name);
+      setItem(item);
+      const booking = root.querySelector<HTMLAnchorElement>('.primary-action')!;
+      expect(booking.getAttribute('href')).toBe(String(item['reserva']));
+      const href = new URL(booking.getAttribute('href')!);
+      expect(href.protocol).toBe('mailto:');
+      expect(href.pathname).toBe(recipient);
+      expect(href.searchParams.get('subject')).toContain('grupo');
+      expect(booking.getAttribute('aria-label')).toBe('Reservar por correo: ' + name);
+      expect(booking.getAttribute('target')).toBeNull();
+      expect(booking.getAttribute('rel')).toBeNull();
+      expect(booking.tabIndex).toBe(0);
+      expect(root.querySelector<HTMLAnchorElement>('.practical-website a')?.getAttribute('href')).toBe(String(item['web']));
+      booking.click();
+    }
+    expect(measure.calls.allArgs()).toEqual([
+      ['outbound', { kind: 'booking' }], ['outbound', { kind: 'booking' }]
+    ]);
+    expect(cancelledBeforeNavigation).toEqual([false, false]);
+  });
+
+  it('reuses the accredited Zero Sei and Cordina telephone as one accessible reservation action', () => {
+    const measure = spyOn(TestBed.inject(AnalyticsService), 'action');
+    for (const [name, href] of [
+      ['Trattoria Zero Sei (La Valeta)', 'tel:+35621222010'],
+      ['Café Cordina (La Valeta)', 'tel:+35620650400']
+    ]) {
+      const item = maltaItem(name);
+      setItem(item);
+      expect(item['reserva']).toBe(href);
+      const links = [...root.querySelectorAll<HTMLAnchorElement>('.phone-link')];
+      expect(links).toHaveSize(1);
+      expect(links[0].getAttribute('href')).toBe(href);
+      expect(links[0].classList.contains('reservation-phone')).toBeTrue();
+      expect(links[0].getAttribute('aria-label')).toContain('Llamar para reservar a ' + name);
+      expect(links[0].getAttribute('target')).toBeNull();
+      expect(links[0].tabIndex).toBe(0);
+      expect(root.querySelector('.primary-action')).toBeNull();
+      expect(fixture.componentInstance.facts.some(fact => fact.label === 'Reservas')).toBeFalse();
+      links[0].click();
+    }
+    expect(measure.calls.allArgs()).toEqual([
+      ['outbound', { kind: 'booking' }], ['outbound', { kind: 'booking' }]
+    ]);
+    expect(cancelledBeforeNavigation).toEqual([false, false]);
+  });
+
+  it('renders Malta HTTPS museum tickets separately from their informative websites', () => {
+    for (const [name, href] of [
+      ['Cittadella / Victoria (combinado de museos opcional)', 'https://heritagemalta.mt/store/c260/'],
+      ['Ġgantija Archaeological Park', 'https://heritagemalta.mt/store/c37/']
+    ]) {
+      const item = maltaItem(name);
+      setItem(item);
+      const booking = root.querySelector<HTMLAnchorElement>('.primary-action')!;
+      expect(booking.getAttribute('href')).toBe(href);
+      expect(booking.textContent).toContain('Comprar entradas');
+      expect(booking.getAttribute('aria-label')).toBe('Comprar entradas: ' + name + ' (se abre en otra pestaña)');
+      expect(booking.target).toBe('_blank');
+      expect(booking.rel).toContain('noopener');
+      expect(root.querySelector<HTMLAnchorElement>('.practical-website a')?.getAttribute('href')).toBe(String(item['web']));
+      expect(root.querySelector<HTMLAnchorElement>('.practical-website a')?.getAttribute('href')).not.toBe(href);
+    }
+  });
+
+  it('keeps institutional, shopping and quay phone labels intact without inventing reservations', () => {
+    const measure = spyOn(TestBed.inject(AnalyticsService), 'action');
+    for (const [name, label, href] of [
+      ['Palazzo Parisio (Merchants Street)', 'Ministerio de Asuntos Exteriores (centralita institucional; no reservas turísticas)', 'tel:+35622040000'],
+      ['Compras y recuerdos', 'The Point Shopping Mall', 'tel:+35622470300'],
+      ['Bay Street Shopping Complex', 'Grupo Bay Street', 'tel:+35623661585'],
+      ['Blue Grotto Boat Service / puerto Wied iż-Żurrieq', 'Taquilla', 'tel:+35621640058']
+    ]) {
+      const item = maltaItem(name);
+      setItem(item);
+      expect(root.querySelectorAll('.contact-group')).toHaveSize(1);
+      expect(root.querySelector('.group-label')?.textContent).toBe(label);
+      const links = [...root.querySelectorAll<HTMLAnchorElement>('.phone-link')];
+      expect(links).toHaveSize(1);
+      expect(links[0].getAttribute('href')).toBe(href);
+      expect(links[0].getAttribute('aria-label')).toContain('Llamar a ' + label + ' al ');
+      expect(links[0].getAttribute('aria-label')).not.toContain('Llamar para reservar');
+      expect(links[0].classList.contains('reservation-phone')).toBeFalse();
+      expect(root.querySelector('.primary-action')).toBeNull();
+      links[0].click();
+    }
+    expect(measure).not.toHaveBeenCalled();
+    expect(cancelledBeforeNavigation).toEqual([false, false, false, false]);
+  });
+
+  it('keeps non-linkable reservation guidance as accessible text without extracting embedded numbers', () => {
+    const measure = spyOn(TestBed.inject(AnalyticsService), 'action');
+    const instruction = 'Consultar para grupos: +356 9934 7551; confirmar antes de viajar.';
+    setItem({ nombre: 'Información de prueba', reserva: instruction });
+    expect(root.querySelectorAll('a')).toHaveSize(0);
+    const details = root.querySelector<HTMLDetailsElement>('details')!;
+    expect(details.querySelector('summary span')?.textContent).toBe('Reservas');
+    expect(details.querySelector('p')?.textContent).toBe(instruction);
+    details.querySelector('summary')!.click();
+    expect(details.open).toBeTrue();
+    expect(measure).not.toHaveBeenCalled();
+  });
+
+  it('clears a previously reserved phone when reserva is absent even if tipoReserva remains set', () => {
+    const measure = spyOn(TestBed.inject(AnalyticsService), 'action');
+    const telefono = '+356 2122 2010';
+    setItem({ nombre: 'Prueba', telefono, reserva: 'tel:+35621222010', tipoReserva: 'mesa' });
+    expect(root.querySelector('.reservation-phone')).not.toBeNull();
+    for (const reserva of [undefined, '']) {
+      setItem({ nombre: 'Prueba', telefono, reserva, tipoReserva: 'mesa' });
+      const link = root.querySelector<HTMLAnchorElement>('.phone-link')!;
+      expect(link.getAttribute('href')).toBe('tel:+35621222010');
+      expect(link.classList.contains('reservation-phone')).toBeFalse();
+      expect(link.getAttribute('aria-label')).toBe('Llamar a Prueba al +356 2122 2010');
+      expect(root.querySelector('.primary-action')).toBeNull();
+      expect(fixture.componentInstance.facts.some(fact => fact.label === 'Reservas')).toBeFalse();
+      link.click();
+    }
+    expect(measure).not.toHaveBeenCalled();
+  });
+
 });
