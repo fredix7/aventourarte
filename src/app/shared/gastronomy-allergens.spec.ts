@@ -101,6 +101,31 @@ describe('gastronomy allergens', () => {
     expect(profile).toEqual({ status: 'variable', contains: ['gluten', 'huevo'], possible: ['leche'] });
   });
 
+  it('preserves registry ingredients when a card only adds possible allergens', () => {
+    const base = dishAllergenProfile('Carbonara');
+    const original = JSON.stringify(base);
+    const profile = resolveDishAllergenProfile({
+      nombre: 'Carbonara', posiblesAlergenos: ['soja', 'leche', 'soja']
+    });
+
+    expect(profile).toEqual({
+      status: 'variable', contains: ['gluten', 'huevo', 'leche'], possible: ['soja']
+    });
+    expect(classifySelectedAllergens(profile, ['soja'])).toBe('posible');
+    expect(profileAvoidsSelectedAllergens(profile, ['pescado'])).toBeFalse();
+    expect(JSON.stringify(base)).toBe(original);
+  });
+
+  it('does not treat possible-only data as a complete ingredient list', () => {
+    const profile = resolveDishAllergenProfile({
+      nombre: 'Receta local sin registro', perfilAlergenos: 'complete',
+      posiblesAlergenos: ['leche']
+    });
+
+    expect(profile).toEqual({ status: 'variable', contains: [], possible: ['leche'] });
+    expect(classifySelectedAllergens(profile, ['gluten'])).toBe('sin-datos');
+  });
+
   it('distinguishes confirmed and possible allergens from missing data and no selection', () => {
     const variable = { status: 'variable' as const, contains: ['gluten'] as const, possible: ['huevo'] as const };
     const profile = { ...variable, contains: [...variable.contains], possible: [...variable.possible] };

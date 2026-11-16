@@ -53,8 +53,9 @@ import { VEJER_GUIDE } from '../../guides/europa/espana/andalucia/cadiz/vejer.gu
 
 import { ALMENSILLA_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/almensilla.guide';
 import { CORIA_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/coria.guide';
-
+import { LEBRIJA_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/lebrija.guide';
 import { MAIRENA_ALJARAFE_GUIDE } from '../../guides/europa/espana/andalucia/sevilla/mairena-aljarafe.guide';
+
 import { MALTA_GUIDE } from '../../guides/europa/malta/malta.guide';
 import { ROMA_VATICANO_GUIDE } from '../../guides/europa/italia/roma-vaticano.guide';
 import { BUCAREST_GUIDE } from '../../guides/europa/rumania/bucarest.guide';
@@ -76,6 +77,7 @@ export const GUIDE_REGISTRY: Readonly<Record<string, any>> = {
 
   'europa/espana/andalucia/sevilla/almensilla': ALMENSILLA_GUIDE,
   'europa/espana/andalucia/sevilla/coria-del-rio': CORIA_GUIDE,
+  'europa/espana/andalucia/sevilla/lebrija': LEBRIJA_GUIDE,
   'europa/espana/andalucia/sevilla/mairena-del-aljarafe': MAIRENA_ALJARAFE_GUIDE,
   
   'europa/italia/roma-vaticano': ROMA_VATICANO_GUIDE,

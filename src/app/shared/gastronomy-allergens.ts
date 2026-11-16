@@ -248,6 +248,18 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Orejitas de Abad', variable(['gluten', 'huevo'], ['sesamo'])],
     ['Keicho Sake o Sake de Coria', complete(['leche'])],
     
+    // Lebrija
+    ['Vinos de Lebrija', variable([], ['sulfitos', 'huevo', 'leche'])],
+    ['Telera de Lebrija', variable(['gluten'])],
+    ['Ajo lebrijano o ajo molinero', variable(['gluten'], ['huevo'])],
+    ['Puchera lebrijana', variable([], ['gluten', 'sulfitos'])],
+    ['Caracoles blanquillos de Lebrija', variable(['moluscos'])],
+    ['Habas corchas', complete([])],
+    ['Tortas de aceite con sal', variable(['gluten'])],
+    ['Rosquetes de Lebrija', variable(['gluten'], ['huevo', 'leche'])],
+    ['Borrachitas de Lebrija', variable(['gluten'])],
+    ['Dulces de las concepcionistas: corderos, rebaños y coronillas', variable(['frutos-cascara'], ['gluten'])],
+
     // Mairena del Aljarafe
     ['Mosto del Aljarafe', variable([], ['sulfitos'])],
     ['Sopeao del Aljarafe', complete(['gluten'])],
@@ -288,15 +300,11 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Ftira', variable(['gluten'], ['pescado', 'leche', 'huevo'])],
     ['Pastizzi', variable(['gluten'], ['leche', 'huevo'])],
     ['Qassatat', variable(['gluten'], ['leche', 'huevo', 'pescado'])],
-    // El gluten posible corresponde al pan que puede acompañar al queso, no a los ingredientes propios de la ġbejna
     ['Ġbejna', variable(['leche'], ['gluten', 'sulfitos'])],
     ['Imqaret', variable(['gluten'], ['leche', 'huevo', 'soja'])],
-    // Bigilla: el trigo pertenece a los galletti; leche, soja y sésamo dependen de su variante.
     ['Bigilla con galletti', variable(['gluten'], ['leche', 'soja', 'sesamo'])],
     ['Timpana', variable(['gluten', 'huevo', 'leche'], ['apio', 'soja'])],
-    // Original: no se identifican alérgenos en la fórmula pública; no es un perfil completo.
     ['Kinnie', variable()],
-    // Café negro: los posibles alérgenos corresponden a leche o bebidas vegetales añadidas.
     ['Kafè msajjar', variable([], ['leche', 'soja', 'frutos-cascara', 'gluten'])],
 
     // Rumania
@@ -354,25 +362,28 @@ export function resolveDishAllergenProfile(item: {
 } | null | undefined, guidePath = ''): DishAllergenProfile | null {
   const base = dishAllergenProfile(item?.nombre ?? '', guidePath);
 
-  if (!Array.isArray(item?.alergenos)) return base;
+  const inlineContains = Array.isArray(item?.alergenos)
+    ? item.alergenos
+    : null;
 
-  const contains = [...new Set(item.alergenos)];
+  const inlinePossible = Array.isArray(item?.posiblesAlergenos)
+    ? item.posiblesAlergenos
+    : null;
 
+  if (inlineContains === null && inlinePossible === null) return base;
+
+  const contains = [...new Set(inlineContains ?? base?.contains ?? [])];
+  const isComplete = inlineContains !== null && item?.perfilAlergenos === 'complete';
+
+  // La receta concreta define los ingredientes confirmados. Si es variable,
+  // el registro aporta posibles variantes, sin convertirlas en ingredientes suyos.
   const possible = [...new Set([
-    ...(item.posiblesAlergenos ?? []),
-    ...(item.perfilAlergenos === 'complete'
-      ? [] : (base?.contains ?? [])),
-    ...(item.perfilAlergenos === 'complete'
-      ? [] : (base?.possible ?? []))
+    ...(inlinePossible ?? []),
+    ...(isComplete || inlineContains === null ? [] : (base?.contains ?? [])),
+    ...(isComplete ? [] : (base?.possible ?? []))
   ])].filter(id => !contains.includes(id));
 
-  return {
-    status: item.perfilAlergenos === 'complete'
-      ? 'complete'
-      : 'variable',
-    contains,
-    possible
-  };
+  return { status: isComplete ? 'complete' : 'variable', contains, possible };
 }
 
 export function profileAvoidsSelectedAllergens(

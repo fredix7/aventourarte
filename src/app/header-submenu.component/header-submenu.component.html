@@ -1,13 +1,15 @@
-<li class="menu-item" [class.open]="isOpen">
+<li class="menu-item" [class.open]="isOpen" (pointerenter)="onPointerEnter($event)" (pointerleave)="onPointerLeave($event)" (keydown)="onKeydown($event)" (focusout)="onFocusOut($event)">
   <button
+    #trigger
     *ngIf="node.hijos?.length; else guideLink"
     class="menu-btn"
     type="button"
     (click)="onClick(node, $event)"
     [attr.aria-expanded]="isOpen"
+    [attr.aria-controls]="panelId"
   >
     <span *ngIf="node.flag" class="flag-container">
-      <img [src]="node.flag" [alt]="node.nombre + ' flag'" class="flag-icon" />
+      <img [src]="node.flag" alt="" class="flag-icon" />
     </span>
 
     <span
@@ -28,7 +30,7 @@
       (click)="onSelected(node)"
     >
       <span *ngIf="node.flag" class="flag-container">
-        <img [src]="node.flag" [alt]="node.nombre + ' flag'" class="flag-icon" />
+        <img [src]="node.flag" alt="" class="flag-icon" />
       </span>
 
       <span
@@ -41,14 +43,17 @@
     </a>
   </ng-template>
 
-  <ul *ngIf="node.hijos?.length" class="submenu">
+  <div #panel *ngIf="node.hijos?.length" class="submenu" [id]="panelId" [attr.inert]="!isOpen ? '' : null">
+    <ul class="submenu-list" (scroll)="onPanelScroll($event)">
     <ng-container *ngFor="let child of node.hijos">
       <app-header-submenu
         [node]="child"
+        [compact]="compact"
         [isOpen]="openChildKey === keyOf(child)"
         (toggleOpen)="toggleChild($event)"
         (selected)="selected.emit($event)">
       </app-header-submenu>
     </ng-container>
-  </ul>
+    </ul>
+  </div>
 </li>

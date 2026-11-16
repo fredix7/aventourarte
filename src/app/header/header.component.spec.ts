@@ -131,7 +131,19 @@ describe('HeaderComponent', () => {
     expect(link.tabIndex).toBe(0);
   });
 
-  for (const query of ['Lebrija', 'Nueva York']) {
+  it('suggests Lebrija from the navigation tree and links to its guide', () => {
+    fixture.componentRef.setInput('treeData', TRAVEL_TREE);
+    component.searchQuery = 'Lebrija';
+    fixture.detectChanges();
+
+    const link = fixture.nativeElement.querySelector('a.search-result') as HTMLAnchorElement;
+    expect(component.searchResults.map(result => result.path)).toEqual([
+      'europa/espana/andalucia/sevilla/lebrija'
+    ]);
+    expect(link.getAttribute('href')).toBe('/guia/europa/espana/andalucia/sevilla/lebrija');
+  });
+
+  for (const query of ['Nueva York']) {
     it(`shows no suggestions for ${query}, which has no published guide`, () => {
       fixture.componentRef.setInput('treeData', TRAVEL_TREE);
       component.searchQuery = query;

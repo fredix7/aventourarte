@@ -1,23 +1,26 @@
 <header class="app-header">
-  <div class="logo-container">
+  <div class="logo-container" [attr.inert]="compact && menuOpen ? '' : null">
     <a routerLink="/" aria-label="Ir al inicio de AvenTourArte">
       <img src="assets/logo.png" alt="AvenTourArte logo" class="logo-img" />
     </a>
   </div>
 
   <button
+    #menuToggle
     class="menu-toggle"
     type="button"
     [class.is-open]="menuOpen"
     (click)="toggleMenu()"
     [attr.aria-expanded]="menuOpen"
-    aria-label="Abrir o cerrar menu"
+    aria-controls="destination-navigation"
+    [attr.inert]="compact && menuOpen ? '' : null"
+    [attr.aria-label]="text.destinations"
   >
     <span class="menu-icon" aria-hidden="true"></span>
     <span class="menu-toggle-text">{{ text.destinations }}</span>
   </button>
 
-  <div class="header-actions">
+  <div class="header-actions" [attr.inert]="compact && menuOpen ? '' : null">
     <div class="destination-search">
       <label class="sr-only" for="destination-search">{{ text.searchLabel }}</label>
       <input
@@ -87,21 +90,35 @@
     </div>
   </div>
 
-  <div class="backdrop" *ngIf="menuOpen" (click)="menuOpen = false"></div>
+  <div class="backdrop" *ngIf="compact && menuOpen" (click)="closeMenu()" aria-hidden="true"></div>
 
-  <nav class="main-menu" [class.open]="menuOpen" aria-label="Destinos">
+  <nav
+    id="destination-navigation"
+    class="main-menu"
+    [class.open]="menuOpen"
+    [attr.role]="compact && menuOpen ? 'dialog' : null"
+    [attr.aria-modal]="compact && menuOpen ? 'true' : null"
+    [attr.aria-label]="text.destinations"
+    [cdkTrapFocus]="compact && menuOpen"
+  >
     <div class="mobile-menu-heading">
-      <p class="mobile-menu-kicker">{{ text.exploreKicker }}</p>
-      <p class="mobile-menu-title">{{ text.exploreTitle }}</p>
+      <div>
+        <p class="mobile-menu-kicker">{{ text.exploreKicker }}</p>
+        <p class="mobile-menu-title">{{ text.destinations }}</p>
+      </div>
+      <button #menuClose class="menu-close" type="button" (click)="closeMenu()" [attr.aria-label]="text.destinations + ' · ' + closeLabel">
+        <span aria-hidden="true">×</span>
+      </button>
     </div>
 
     <ul>
       <ng-container *ngFor="let continent of treeData">
         <app-header-submenu
           [node]="continent"
+          [compact]="compact"
           [isOpen]="openContinentKey === (continent.path ?? continent.nombre)"
           (toggleOpen)="toggleContinent($event)"
-          (selected)="menuOpen = false">
+          (selected)="closeMenu()">
         </app-header-submenu>
       </ng-container>
     </ul>
