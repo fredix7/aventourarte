@@ -23375,7 +23375,7 @@ La muestra permite acercarse a manuscritos antiguos, libros raros, mapas, dibujo
 Entre los materiales destacados pueden encontrarse documentos relacionados con S\xF8ren Kierkegaard, manuscritos de Karen Blixen y escritos de Hans Christian Andersen. La selecci\xF3n expuesta puede variar por motivos de conservaci\xF3n, por lo que conviene disfrutar de las piezas disponibles sin dar por garantizada la presencia de un documento concreto.
 
 \u{1F4A1} Por qu\xE9 merece la pena:
-Despu\xE9s de visitar museos de esculturas, arqueolog\xEDa o palacios, TREASURES ofrece otra forma de acercarse a la historia: a trav\xE9s de las palabras, los dibujos y los documentos originales. Es una visita especialmente interesante para comprender c\xF3mo una biblioteca puede conservar la memoria cultural de un pa\xEDs.
+En comparaci\xF3n con los museos de esculturas y arqueolog\xEDa o los palacios, TREASURES ofrece otra forma de acercarse a la historia: a trav\xE9s de las palabras, los dibujos y los documentos originales. Es una visita especialmente interesante para comprender c\xF3mo una biblioteca puede conservar la memoria cultural de un pa\xEDs.
 
 \u{1F56F}\uFE0F La Sala de Lectura Antigua:
 La parte hist\xF3rica de la biblioteca conserva una de sus estancias m\xE1s evocadoras: la Sala de Lectura Antigua, inaugurada en 1906 y pr\xE1cticamente conservada en su aspecto original. Sus mesas de madera, l\xE1mparas de cristal verde y detalles decorativos crean una atm\xF3sfera muy distinta a la del atrio contempor\xE1neo.
@@ -24368,7 +24368,7 @@ La idea naci\xF3 despu\xE9s de que Carl Jacobsen asistiera a una representaci\xF
 Jacobsen encarg\xF3 entonces a Edvard Eriksen una escultura que trasladara aquel personaje al espacio p\xFAblico. La intenci\xF3n no era reproducir una escena espectacular del ballet, sino crear una figura serena y melanc\xF3lica que recordara el deseo de la sirena de pertenecer a un mundo diferente al suyo.
 
 \u{1F4A1} Una conexi\xF3n con el D\xEDa 1:
-El Teatro Real de Kongens Nytorv, que habremos conocido durante nuestro recorrido por el centro, fue el escenario que inspir\xF3 este encargo. La Sirenita permite reconocer c\xF3mo un mismo edificio puede estar relacionado con la historia del ballet, la literatura y algunos de los monumentos m\xE1s c\xE9lebres de la ciudad.
+El Teatro Real de Kongens Nytorv, incluido en el recorrido por el centro, fue el escenario que inspir\xF3 este encargo. La Sirenita permite reconocer c\xF3mo un mismo edificio puede estar relacionado con la historia del ballet, la literatura y algunos de los monumentos m\xE1s c\xE9lebres de la ciudad.
 
 \u{1F469}\u200D\u{1F3A8} Ellen Price y Eline Eriksen:
 El rostro de la escultura estuvo inspirado en la bailarina Ellen Price, que hab\xEDa interpretado a la protagonista en el ballet de 1909. Sin embargo, Price no quiso posar desnuda para el escultor, por lo que Eriksen utiliz\xF3 a su esposa, Eline Eriksen, como modelo para el cuerpo.
@@ -25423,7 +25423,7 @@ Uno de los grandes tesoros patrimoniales de T\xEDvoli es el Pantomimeteatret, co
 
 Su elemento m\xE1s famoso es el espectacular tel\xF3n con forma de cola de pavo real. A diferencia de un teatro convencional, este gran abanico decorado se despliega y recoge mec\xE1nicamente para descubrir el escenario.
 
-Aqu\xED contin\xFAan represent\xE1ndose pantomimas protagonizadas por personajes como Pierrot, Harlequin y Columbine, adem\xE1s de espect\xE1culos de ballet. Parte de la programaci\xF3n del escenario est\xE1 incluida con la entrada general al parque, aunque debemos consultar qu\xE9 representaciones coinciden con nuestra fecha.
+Aqu\xED contin\xFAan represent\xE1ndose pantomimas protagonizadas por personajes como Pierrot, Harlequin y Columbine, adem\xE1s de espect\xE1culos de ballet. Parte de la programaci\xF3n del escenario est\xE1 incluida con la entrada general al parque, aunque debemos consultar qu\xE9 representaciones coinciden con la fecha de tu visita.
 
 No hace falta entender dan\xE9s para disfrutar de muchas de estas funciones: la pantomima se basa precisamente en el gesto, la m\xFAsica y la expresi\xF3n corporal.
 
@@ -25490,7 +25490,7 @@ T\xEDvoli mantiene una programaci\xF3n cultural muy activa. Seg\xFAn la temporad
 
 Friday Rock es una de las programaciones musicales m\xE1s conocidas durante el verano, pero los artistas, horarios, condiciones de acceso y posibles reservas cambian cada a\xF1o. Lo mismo ocurre con los espect\xE1culos navide\xF1os, Halloween y otras producciones especiales.
 
-Consulta el programa para nuestra fecha antes de llegar. Si coincide una representaci\xF3n incluida que nos interese, puede merecer la pena organizar el recorrido por el parque alrededor de su horario.
+Consulta el programa para la fecha elegida antes de llegar. Si coincide una representaci\xF3n incluida que nos interese, puede merecer la pena organizar el recorrido por el parque alrededor de su horario.
 
 \u{1F319} T\xEDvoli despu\xE9s del anochecer:
 Aunque podemos entrar durante el d\xEDa, merece la pena intentar permanecer hasta que empiece a oscurecer. Miles de puntos de luz, fachadas iluminadas, atracciones y reflejos sobre el agua transforman considerablemente el ambiente.
@@ -25737,7 +25737,7 @@ Si combinamos Frederiksberg y Home of Carlsberg durante el D\xEDa 4, dedicar\xED
 No es necesario combinar la cata y la visita de las bodegas. Elige una \xFAnicamente si te interesa especialmente la cultura cervecera y comprueba su horario antes de reservar, porque realizar ambas puede convertir este d\xEDa flexible en otra jornada excesivamente cargada.
 
 \u{1F4A1} Consejo pr\xE1ctico:
-Los horarios de Home of Carlsberg cambian seg\xFAn la \xE9poca del a\xF1o. Durante parte de la temporada abre hasta m\xE1s tarde los viernes y s\xE1bados, y en julio y agosto ampl\xEDa habitualmente el horario todos los d\xEDas. La \xFAltima franja de acceso a la exposici\xF3n se sit\xFAa dos horas antes del cierre, por lo que conviene consultar el calendario oficial para nuestra fecha antes de reservar.
+Los horarios de Home of Carlsberg cambian seg\xFAn la \xE9poca del a\xF1o. Durante parte de la temporada abre hasta m\xE1s tarde los viernes y s\xE1bados, y en julio y agosto ampl\xEDa habitualmente el horario todos los d\xEDas. La \xFAltima franja de acceso a la exposici\xF3n se sit\xFAa dos horas antes del cierre, por lo que conviene consultar el calendario oficial para la fecha elegida antes de reservar.
 
 La reserva anticipada est\xE1 recomendada y puede realizarse hasta tres meses antes. Llega aproximadamente diez minutos antes de tu franja para recoger la pulsera de acceso. Las entradas se ofrecen como no reembolsables ni modificables; revisa las condiciones de cambio y devoluci\xF3n antes de comprar.
 
@@ -25933,7 +25933,7 @@ Despu\xE9s de varios d\xEDas organizados alrededor de monumentos, palacios, barr
 Puede que acabemos subiendo a una torre que qued\xF3 pendiente, entrando en un museo, comprando una minifigura de LEGO o simplemente tomando un caf\xE9 antes de marcharnos. Todas esas opciones cumplen igualmente bien la funci\xF3n de esta \xFAltima ma\xF1ana.
 
 \u2728 Consejo AvenTourArte:
-Decide qu\xE9 hacer \xFAnicamente cuando sepas qu\xE9 ha quedado realmente pendiente de los d\xEDas anteriores. Si hemos completado las visitas prioritarias, no inventes una nueva ruta solo para llenar horas: desayuna tranquilamente, realiza las compras que necesites y disfruta de un \xFAltimo paseo por el centro.
+Decide qu\xE9 hacer \xFAnicamente cuando sepas qu\xE9 ha quedado realmente pendiente de los d\xEDas anteriores. Si hemos completado las visitas prioritarias, no hace falta a\xF1adir m\xE1s visitas \xFAnicamente para ocupar la ma\xF1ana: desayuna tranquilamente, realiza las compras que necesites y disfruta de un \xFAltimo paseo por el centro.
 
 Si queda pendiente una visita que realmente quer\xEDas realizar, selecciona solo una y comprueba que su horario, duraci\xF3n y ubicaci\xF3n nos permiten regresar c\xF3modamente a por el equipaje.
 
@@ -26038,7 +26038,7 @@ Ese contraste es precisamente lo que convierte Bakken y Dyrehaven en algo m\xE1s
 \u2728 Consejo AvenTourArte:
 Si solo dispones de unas horas, selecciona un paseo por Dyrehaven y termina en Bakken, sin intentar alcanzar todos los rincones del bosque. Si queremos convertirlo en una jornada completa, podemos ampliar el paseo hasta Eremitageslottet y reservar despu\xE9s varias horas para las atracciones, juegos y ambiente del parque.
 
-No comprar\xEDa una pulsera autom\xE1ticamente. La entrada a Bakken es gratuita, as\xED que primero decide cu\xE1ntas atracciones quieres utilizar y compara la pulsera con el sistema de cupones o el pago individual publicado para nuestra fecha.
+No comprar\xEDa una pulsera autom\xE1ticamente. La entrada a Bakken es gratuita, as\xED que primero decide cu\xE1ntas atracciones quieres utilizar y compara la pulsera con el sistema de cupones o el pago individual publicado para la fecha de tu visita.
 
 \u{1F4A1} Consejo pr\xE1ctico:
 Dyrehaven puede disfrutarse durante todo el a\xF1o, mientras que Bakken funciona mediante temporadas y d\xEDas de apertura concretos, con campa\xF1as de primavera y verano y aperturas adicionales en determinadas fechas de oto\xF1o y Navidad. Atracciones, restauraci\xF3n y espect\xE1culos pueden tener horarios diferentes, por lo que consulta siempre el calendario oficial antes de desplazarte.
@@ -26296,7 +26296,7 @@ Kronborg tiene numerosos escalones y no dispone de ascensor, por lo que muchas z
 
 Las mochilas grandes y el equipaje no pueden introducirse en el castillo y existe guardarropa gratuito. Los cochecitos tampoco pueden utilizarse en el interior. Se permiten fotograf\xEDas personales sin tr\xEDpode siempre que se respeten las indicaciones del personal.
 
-Los horarios cambian seg\xFAn temporada y pueden existir cierres o actividades especiales. Comprueba siempre el calendario oficial para nuestra fecha antes de desplazarte, especialmente si queremos subir a la torre o asistir a alguna actividad teatral.`,direccion:"Kronborg 2C, 3000 Helsing\xF8r",maps:"https://www.google.com/maps/place/Kronborg+Slot/@56.039332,12.621799,17z/data=!3m1!4b1!4m6!3m5!1s0x4652310d8be4e5e3:0xc201c3cdc1f14036!8m2!3d56.039332!4d12.621799!16zL20vMDlxN3A",horario:"Horario estacional. En invierno abre habitualmente de martes a domingo 10:00\u201316:00, con aperturas adicionales durante determinadas vacaciones. En diciembre de 2026, la programaci\xF3n navide\xF1a anuncia martes a viernes 10:00\u201316:00 y s\xE1bados y domingos 10:00\u201317:00. En noviembre, confirma la hora de cierre del d\xEDa elegido antes de desplazarte. No des por hecho que este horario especial se repetir\xE1 en otros a\xF1os. Durante la temporada principal abre todos los d\xEDas, generalmente desde las 10:00 y con cierre variable seg\xFAn periodo. Cerrado el 24, 25 y 31 de diciembre y sujeto a eventos o cierres extraordinarios. Consulta el calendario oficial para la fecha concreta antes de desplazarte",precio:"Adultos: 150 DKK en taquilla / 135 DKK online. Ni\xF1os: entrada gratuita. Incluido con Copenhagen Card Discover; la tarjeta incluye tambi\xE9n el transporte p\xFAblico hasta Helsing\xF8r mientras permanezca activa durante todo el trayecto. Visitas guiadas y actividades especiales: pueden requerir reserva o suplemento seg\xFAn programaci\xF3n",web:"https://kronborg.dk/en/",reserva:"https://kronborg.dk/en/tickets/day-ticket",telefono:"+45 49 21 30 78"},{nombre:"Castillo de Frederiksborg \xB7 Hiller\xF8d",tiposPlan:["opcional","urbano","naturaleza","museo","de-pago"],tipoReserva:"entradas",descripcion:`Al norte de Copenhague, en la ciudad de Hiller\xF8d, Frederiksborg ofrece una de las excursiones palaciegas m\xE1s completas del viaje. El castillo se levanta sobre tres peque\xF1as islas del lago Slotss\xF8en y combina arquitectura renacentista, historia de la monarqu\xEDa, una de las grandes colecciones de retratos de Dinamarca y extensos jardines barrocos y paisaj\xEDsticos.
+Los horarios cambian seg\xFAn temporada y pueden existir cierres o actividades especiales. Comprueba siempre el calendario oficial para la fecha de tu visita antes de desplazarte, especialmente si queremos subir a la torre o asistir a alguna actividad teatral.`,direccion:"Kronborg 2C, 3000 Helsing\xF8r",maps:"https://www.google.com/maps/place/Kronborg+Slot/@56.039332,12.621799,17z/data=!3m1!4b1!4m6!3m5!1s0x4652310d8be4e5e3:0xc201c3cdc1f14036!8m2!3d56.039332!4d12.621799!16zL20vMDlxN3A",horario:"Horario estacional. En invierno abre habitualmente de martes a domingo 10:00\u201316:00, con aperturas adicionales durante determinadas vacaciones. En diciembre de 2026, la programaci\xF3n navide\xF1a anuncia martes a viernes 10:00\u201316:00 y s\xE1bados y domingos 10:00\u201317:00. En noviembre de 2026, confirma la hora de cierre del d\xEDa elegido antes de desplazarte. No des por hecho que este horario especial se repetir\xE1 en otros a\xF1os. Durante la temporada principal abre todos los d\xEDas, generalmente desde las 10:00 y con cierre variable seg\xFAn periodo. Cerrado el 24, 25 y 31 de diciembre y sujeto a eventos o cierres extraordinarios. Consulta el calendario oficial para la fecha concreta antes de desplazarte",precio:"Adultos: 150 DKK en taquilla / 135 DKK online. Ni\xF1os: entrada gratuita. Incluido con Copenhagen Card Discover; la tarjeta incluye tambi\xE9n el transporte p\xFAblico hasta Helsing\xF8r mientras permanezca activa durante todo el trayecto. Visitas guiadas y actividades especiales: pueden requerir reserva o suplemento seg\xFAn programaci\xF3n",web:"https://kronborg.dk/en/",reserva:"https://kronborg.dk/en/tickets/day-ticket",telefono:"+45 49 21 30 78"},{nombre:"Castillo de Frederiksborg \xB7 Hiller\xF8d",tiposPlan:["opcional","urbano","naturaleza","museo","de-pago"],tipoReserva:"entradas",descripcion:`Al norte de Copenhague, en la ciudad de Hiller\xF8d, Frederiksborg ofrece una de las excursiones palaciegas m\xE1s completas del viaje. El castillo se levanta sobre tres peque\xF1as islas del lago Slotss\xF8en y combina arquitectura renacentista, historia de la monarqu\xEDa, una de las grandes colecciones de retratos de Dinamarca y extensos jardines barrocos y paisaj\xEDsticos.
 
 No debemos confundirlo con el Palacio de Frederiksberg que hemos dejado como alternativa dentro del D\xEDa 4. Frederiksborg se encuentra fuera de Copenhague y justifica por s\xED solo una excursi\xF3n de medio d\xEDa largo o una jornada tranquila si queremos recorrer tambi\xE9n Hiller\xF8d, los jardines y el entorno del lago.
 
@@ -26385,7 +26385,7 @@ El Gran Sal\xF3n, antigua sala de baile de Christian IV, es uno de los espacios 
 
 El techo, la decoraci\xF3n y otros elementos fueron recreados utilizando documentaci\xF3n hist\xF3rica y representaciones del sal\xF3n desaparecido. Precisamente por ello esta sala permite entender el enorme esfuerzo realizado durante el siglo XIX para devolver al castillo una imagen pr\xF3xima a su antigua magnificencia.
 
-Las salas pueden cerrar temporalmente por restauraciones, montajes de exposiciones o actividades especiales. Si una estancia concreta es especialmente importante para nosotros, conviene consultar los avisos publicados por el museo antes de viajar.
+Las salas pueden cerrar temporalmente por restauraciones, montajes de exposiciones o actividades especiales. Si te interesa visitar alguna sala en particular, conviene consultar los avisos publicados por el museo antes de viajar.
 
 \u{1F333} El Jard\xEDn Barroco:
 Despu\xE9s del interior, no regresar\xEDa directamente a Copenhague. Al otro lado del lago se extiende uno de los elementos que justifican dedicar m\xE1s tiempo a la excursi\xF3n: los jardines del castillo.
@@ -26550,7 +26550,7 @@ Quienes utilicen Copenhagen Card deben adquirir el suplemento espec\xEDfico de n
 \u{1F5E3}\uFE0F Visitas guiadas incluidas:
 El museo organiza tambi\xE9n visitas guiadas en ingl\xE9s centradas en los cinco barcos originales. Estas visitas se programan regularmente y pueden estar incluidas con la entrada ordinaria seg\xFAn la programaci\xF3n vigente.
 
-El n\xFAmero de visitas y sus horarios pueden modificarse seg\xFAn temporada, vacaciones escolares y programas especiales, por lo que comprueba el calendario de nuestra fecha si queremos aprovechar una visita concreta.
+El n\xFAmero de visitas y sus horarios pueden modificarse seg\xFAn temporada, vacaciones escolares y programas especiales, por lo que comprueba el calendario de la fecha elegida si quieres aprovechar una visita concreta.
 
 \u{1F30D} Experiencia viajera:
 Roskilde permite comprender dos transformaciones fundamentales de la historia danesa en una misma jornada. En la catedral contemplamos c\xF3mo el reino se cristianiz\xF3, desarroll\xF3 una monarqu\xEDa y cre\xF3 una tradici\xF3n funeraria que se mantiene durante siglos; junto al fiordo descubrimos el sistema de navegaci\xF3n que hab\xEDa permitido a las comunidades escandinavas comerciar, explorar, colonizar y combatir mucho antes.
@@ -26762,7 +26762,7 @@ LEGOLAND est\xE1 pensado para ocupar una jornada completa. Incluso seleccionando
 
 No organizar\xEDa por tanto una visita contando con pasar \xFAnicamente dos o tres horas antes de regresar hacia Copenhague. El desplazamiento desde la capital es demasiado importante para aprovechar tan poco tiempo dentro del parque.
 
-Las atracciones cierran habitualmente antes que el propio recinto, por lo que conviene consultar tanto el horario general como la hora de cierre de las atracciones para nuestra fecha.
+Las atracciones cierran habitualmente antes que el propio recinto, por lo que conviene consultar tanto el horario general como la hora de cierre de las atracciones para la fecha de tu visita.
 
 \u{1F3E8} Hacer noche en Billund:
 Si LEGOLAND constituye uno de los objetivos importantes del viaje, la opci\xF3n m\xE1s c\xF3moda es pasar al menos una noche en Billund. El propio resort dispone de Hotel LEGOLAND, LEGOLAND Castle Hotel y Holiday Village, adem\xE1s de existir otros alojamientos en la localidad.
@@ -26779,7 +26779,7 @@ LEGOLAND comercializa modalidades combinadas que pueden permitir visitar ambos e
 \u{1F686} Desde Copenhague \xB7 no existe tren directo hasta Billund:
 Billund no dispone de estaci\xF3n ferroviaria. Si viajamos desde Copenhague en transporte p\xFAblico, debemos combinar tren y autob\xFAs.
 
-La propia LEGOLAND recomienda utilizar estaciones como Vejle, Kolding, Fredericia o Give y continuar desde all\xED mediante los autobuses que llegan hasta la entrada del parque. Desde Copenhague, Vejle suele ser una de las conexiones m\xE1s pr\xE1cticas, aunque debemos consultar el planificador de transporte para nuestra fecha concreta.
+La propia LEGOLAND recomienda utilizar estaciones como Vejle, Kolding, Fredericia o Give y continuar desde all\xED mediante los autobuses que llegan hasta la entrada del parque. Desde Copenhague, Vejle suele ser una de las conexiones m\xE1s pr\xE1cticas, aunque debemos consultar el planificador de transporte para el d\xEDa que tengas previsto viajar.
 
 Otra posibilidad es integrar Billund dentro de una ruta m\xE1s amplia por Jutlandia en lugar de regresar inmediatamente a Copenhague.
 
@@ -26791,7 +26791,7 @@ La conveniencia depender\xE1 de los vuelos disponibles para nuestras fechas, por
 \u{1F4C5} Un calendario muy diferente al de un museo:
 LEGOLAND no abre necesariamente todos los d\xEDas del a\xF1o. Su calendario combina temporadas de primavera y verano con aperturas seleccionadas durante otros meses, Halloween, Navidad y jornadas cerradas incluso dentro de periodos en los que el parque funciona regularmente.
 
-Por ello no debemos planificar alojamiento o transporte hasta haber confirmado que el parque abre realmente en nuestra fecha.
+Por ello no debemos planificar alojamiento o transporte hasta haber confirmado que el parque abre realmente en la fecha elegida.
 
 \u{1F39F}\uFE0F Precios din\xE1micos:
 Las entradas online utilizan precios variables en funci\xF3n de la fecha y del producto seleccionado. Comprar anticipadamente puede resultar considerablemente m\xE1s barato que adquirir la entrada directamente en taquilla.
@@ -27090,7 +27090,7 @@ Da primero una vuelta completa antes de pedir. Si buscas gastronom\xEDa danesa, 
 - Producto de temporada o alguna elaboraci\xF3n del d\xEDa que destaque entre los puestos.`,horario:`Lunes a viernes: 10:00\u201319:00.
 S\xE1bados y domingos: 10:00\u201318:00.
 
-Cada puesto puede mantener su propio horario y algunos servicios de restauraci\xF3n pueden abrir o cerrar a horas diferentes; conviene comprobar el establecimiento concreto si buscas uno en particular.`,precio:"Entrada gratuita. Consumo seg\xFAn puesto y producto; precios variables.",direccion:"Frederiksborggade 21, 1360 K\xF8benhavn K",maps:"https://www.google.com/maps/place/TorvehallerneKBH/data=!4m2!3m1!1s0x465253051285311b:0x7374ede35ce9623b",web:"https://torvehallernekbh.dk/"},{nombre:"Mia's foderbr\xE6t",descripcion:`Mia's foderbr\xE6t es un peque\xF1o p\xF8lsevogn situado al comienzo de Nyhavn y una de las opciones m\xE1s c\xF3modas de esta gu\xEDa para probar el hot dog dan\xE9s durante la ruta por el puerto. Frente a los restaurantes que ocupan las fachadas hist\xF3ricas del canal, mantiene el formato m\xE1s sencillo de los tradicionales puestos de salchichas: pedir, recoger el perrito y continuar el paseo.
+Cada puesto puede mantener su propio horario y algunos servicios de restauraci\xF3n pueden abrir o cerrar a horas diferentes; conviene comprobar el establecimiento concreto si buscas uno en particular.`,precio:"Entrada gratuita. Consumo seg\xFAn puesto y producto; precios variables.",direccion:"Frederiksborggade 21, 1360 K\xF8benhavn K",maps:"https://www.google.com/maps/place/TorvehallerneKBH/data=!4m2!3m1!1s0x465253051285311b:0x7374ede35ce9623b",web:"https://torvehallernekbh.dk/"},{nombre:"Mia's foderbr\xE6t",descripcion:`Mia's foderbr\xE6t, un peque\xF1o p\xF8lsevogn situado al comienzo del canal, es una parada c\xF3moda durante el recorrido por Nyhavn para probar el hot dog dan\xE9s. Frente a los restaurantes que ocupan las fachadas hist\xF3ricas del canal, mantiene el formato m\xE1s sencillo de los tradicionales puestos de salchichas: pedir, recoger el perrito y continuar el paseo.
 
 \u{1F32D} Un p\xF8lsevogn en pleno Nyhavn:
 Su ubicaci\xF3n en Nyhavn 1 permite incorporarlo f\xE1cilmente a la jornada que recorre Kongens Nytorv, el canal y Christianshavn. Es especialmente \xFAtil si queremos probar esta parte de la cultura gastron\xF3mica danesa sin convertirla en una comida larga de restaurante.
