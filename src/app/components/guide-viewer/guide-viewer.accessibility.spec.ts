@@ -70,8 +70,36 @@ describe('GuideViewerComponent gastronomy accessibility', () => {
     expect(states).toEqual([
       'Compatible con tus filtros', 'Compatible con tus filtros', 'Compatible con tus filtros',
       'Por confirmar', 'Por confirmar', 'Por confirmar',
-      'No encaja con tus filtros', 'No encaja con tus filtros', 'No encaja con tus filtros'
+      'No encaja con tus filtros', 'No encaja con tus filtros'
     ]);
+  });
+
+  it('keeps a failed dish photograph labelled and removes the unavailable zoom action', () => {
+    const frame = cards()[0].querySelector<HTMLElement>('.item-image')!;
+    const image = frame.querySelector('img')!;
+    image.dispatchEvent(new Event('error'));
+    fixture.detectChanges();
+    expect(image.alt).toContain('Fotografía no disponible');
+    expect(frame.getAttribute('role')).toBe('group');
+    expect(frame.hasAttribute('tabindex')).toBeFalse();
+    expect(frame.getAttribute('aria-label')).toBe('Fotografía no disponible');
+    frame.click();
+    frame.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.expandedPhoto).toBeNull();
+    expect(labelledElements(frame)[1]).toBe(cards()[0].querySelector('h3')!);
+  });
+
+  it('moves keyboard focus into the photo dialog and restores the triggering photograph on close', async () => {
+    const frame = cards()[0].querySelector<HTMLElement>('.item-image')!;
+    frame.focus();
+    frame.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(document.activeElement).toBe(root.querySelector('.lightbox-close')!);
+    fixture.componentInstance.closePhoto();
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(frame);
   });
 
   it('updates the associated state after filtering and removes obsolete references when cleared', () => {

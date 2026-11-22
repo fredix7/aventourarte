@@ -169,7 +169,6 @@ const DISH_ALLERGEN_PROFILES: Record<string, DishAllergenProfile> = Object.fromE
     ['Urta a la roteña', complete(['pescado'], ['gluten', 'sulfitos'])],
     ['Sopa de urta', variable(['pescado', 'crustaceos', 'moluscos'], ['gluten', 'huevo', 'sulfitos'])],
     ['Arranque roteño', complete(['gluten'])],
-    ['Berza roteña', variable([], ['apio', 'gluten', 'sulfitos'])],
     ['Pizza roteña', variable(['gluten', 'leche'], ['huevo', 'pescado', 'crustaceos', 'mostaza', 'soja'])],
     ['Arroz al Shorty’s', variable(['crustaceos', 'soja'], ['gluten', 'huevo'])],
     ['Carne al Shorty’s', variable([], ['soja', 'gluten'])],

@@ -1,6 +1,7 @@
 import { Component, HostListener, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { TRAVEL_TREE, TravelNode } from '../../data/travel-data';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +9,7 @@ import { filter, Subscription } from 'rxjs';
 import { InfoGeneralComponent } from '../../info-general.component/info-general.component';
 import { ImageService } from '../../shared/image.service';
 import { ImgUrlPipe } from '../../shared/img-url.pipe';
+import { ImageFallbackDirective } from '../../shared/image-fallback.directive';
 import { GuideEditorialAuditComponent } from '../guide-editorial-audit/guide-editorial-audit.component';
 import { PlanFilterComponent } from '../plan-filter/plan-filter.component';
 import { GuideShareComponent } from '../guide-share/guide-share.component';
@@ -91,11 +93,13 @@ export const GUIDE_REGISTRY: Readonly<Record<string, any>> = {
   standalone: true,
   imports: [
     CommonModule,
+    CdkTrapFocus,
     RouterLink,
     InfoGeneralComponent,
     MatExpansionModule,
     MatIconModule,
     ImgUrlPipe,
+    ImageFallbackDirective,
     GuideEditorialAuditComponent,
     PlanFilterComponent,
     GuideShareComponent,

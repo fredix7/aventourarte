@@ -81,18 +81,18 @@ describe('guide editorial audit', () => {
     expect(report.status).toBe('ready-with-warnings');
     expect(report.entities).toEqual({ total: 57, complete: 57 });
     expect(report.photos).toEqual({
-      total: 34,
-      useful: 17,
-      placeholder: 17,
+      total: 33,
+      useful: 19,
+      placeholder: 14,
       missing: 0,
-      notApplicable: 23
+      notApplicable: 24
     });
-    expect(report.practical).toEqual({ total: 48, complete: 48 });
+    expect(report.practical).toEqual({ total: 49, complete: 49 });
     expect(report.links).toEqual({ total: 70, valid: 70 });
-    expect(report.allergens).toEqual({ total: 9, complete: 9 });
-    expect(report.cloudinary.uniqueReferences).toBe(22);
+    expect(report.allergens).toEqual({ total: 8, complete: 8 });
+    expect(report.cloudinary.uniqueReferences).toBe(24);
     expect(report.errors).toEqual([]);
-    expect(report.warnings.length).toBe(17);
+    expect(report.warnings.length).toBe(14);
   });
 
   it('keeps the first Almensilla version reviewable while placeholder images remain', () => {

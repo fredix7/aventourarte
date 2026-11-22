@@ -10,15 +10,17 @@
     <div class="hero-media" *ngIf="guide.flag || guide.flag2">
       <figure class="flag-frame" *ngIf="guide.flag" [style.--frame-bg]="photoFrameBg(guide.flag)">
         <img
+          appImageFallback
           [src]="guide.flag | imgUrl: 900"
-          [alt]="guide.nombre + ' flag'"
+          [alt]="'Bandera de ' + guide.nombre"
           class="city-flag"
         />
       </figure>
       <figure class="flag-frame" *ngIf="guide.flag2" [style.--frame-bg]="photoFrameBg(guide.flag2)">
         <img
+          appImageFallback
           [src]="guide.flag2 | imgUrl: 900"
-          [alt]="guide.nombre + ' second flag'"
+          [alt]="'Segunda bandera de ' + guide.nombre"
           class="city-flag"
         />
       </figure>
@@ -288,15 +290,17 @@
                 <figure
                   class="image-frame zone-image zoomable-image"
                   *ngIf="zona.foto"
-                  role="button"
-                  tabindex="0"
-                  aria-label="Ampliar imagen"
+                  [class.photo-unavailable]="zoneImage.failed"
+                  [attr.role]="zoneImage.failed ? 'group' : 'button'"
+                  [attr.tabindex]="zoneImage.failed ? null : 0"
+                  [attr.aria-label]="zoneImage.failed ? zona.nombre + ': fotografía no disponible' : 'Ampliar imagen'"
                   [style.--frame-bg]="photoFrameBg(zona.foto)"
-                  (click)="openPhoto(zona.foto, zona.nombre, galleryFor(zona.foto, zona.fotos))"
-                  (keydown.enter)="openPhoto(zona.foto, zona.nombre, galleryFor(zona.foto, zona.fotos))"
-                  (keydown.space)="openPhoto(zona.foto, zona.nombre, galleryFor(zona.foto, zona.fotos)); $event.preventDefault()"
+                  (click)="!zoneImage.failed && openPhoto(zona.foto, zona.nombre, galleryFor(zona.foto, zona.fotos))"
+                  (keydown.enter)="!zoneImage.failed && openPhoto(zona.foto, zona.nombre, galleryFor(zona.foto, zona.fotos))"
+                  (keydown.space)="!zoneImage.failed && openPhoto(zona.foto, zona.nombre, galleryFor(zona.foto, zona.fotos)); $event.preventDefault()"
                 >
                   <img
+                    appImageFallback #zoneImage="imageFallback"
                     [src]="zona.foto | imgUrl: 1400"
                     [alt]="zona.nombre"
                     loading="lazy"
@@ -308,15 +312,17 @@
                   <figure
                     class="image-frame zoomable-image"
                     *ngFor="let foto of zona.fotos"
-                    role="button"
-                    tabindex="0"
-                    aria-label="Ampliar imagen"
+                    [class.photo-unavailable]="zoneGalleryImage.failed"
+                    [attr.role]="zoneGalleryImage.failed ? 'group' : 'button'"
+                    [attr.tabindex]="zoneGalleryImage.failed ? null : 0"
+                    [attr.aria-label]="zoneGalleryImage.failed ? zona.nombre + ': fotografía no disponible' : 'Ampliar imagen'"
                     [style.--frame-bg]="photoFrameBg(foto)"
-                    (click)="openPhoto(foto, zona.nombre, galleryFor(zona.foto, zona.fotos))"
-                    (keydown.enter)="openPhoto(foto, zona.nombre, galleryFor(zona.foto, zona.fotos))"
-                    (keydown.space)="openPhoto(foto, zona.nombre, galleryFor(zona.foto, zona.fotos)); $event.preventDefault()"
+                    (click)="!zoneGalleryImage.failed && openPhoto(foto, zona.nombre, galleryFor(zona.foto, zona.fotos))"
+                    (keydown.enter)="!zoneGalleryImage.failed && openPhoto(foto, zona.nombre, galleryFor(zona.foto, zona.fotos))"
+                    (keydown.space)="!zoneGalleryImage.failed && openPhoto(foto, zona.nombre, galleryFor(zona.foto, zona.fotos)); $event.preventDefault()"
                   >
                     <img
+                      appImageFallback #zoneGalleryImage="imageFallback"
                       [src]="foto | imgUrl: 1200"
                       [alt]="zona.nombre"
                       loading="lazy"
@@ -392,16 +398,18 @@
                     class="image-frame item-image zoomable-image"
                     *ngIf="item.foto"
                     [attr.id]="isGastronomySection(section) ? dishAnchor(section, item) + '-image' : null"
-                    role="button"
-                    tabindex="0"
-                    aria-label="Ampliar imagen"
+                    [class.photo-unavailable]="itemImage.failed"
+                    [attr.role]="itemImage.failed ? 'group' : 'button'"
+                    [attr.tabindex]="itemImage.failed ? null : 0"
+                    [attr.aria-label]="itemImage.failed ? 'Fotografía no disponible' : 'Ampliar imagen'"
                     [attr.aria-labelledby]="isGastronomySection(section) ? dishAnchor(section, item) + '-image ' + dishLabelIds(section, item) : null"
                     [style.--frame-bg]="photoFrameBg(item.foto)"
-                    (click)="openPhoto(item.foto, item.nombre, galleryFor(item.foto, item.fotos))"
-                    (keydown.enter)="openPhoto(item.foto, item.nombre, galleryFor(item.foto, item.fotos))"
-                    (keydown.space)="openPhoto(item.foto, item.nombre, galleryFor(item.foto, item.fotos)); $event.preventDefault()"
+                    (click)="!itemImage.failed && openPhoto(item.foto, item.nombre, galleryFor(item.foto, item.fotos))"
+                    (keydown.enter)="!itemImage.failed && openPhoto(item.foto, item.nombre, galleryFor(item.foto, item.fotos))"
+                    (keydown.space)="!itemImage.failed && openPhoto(item.foto, item.nombre, galleryFor(item.foto, item.fotos)); $event.preventDefault()"
                   >
                     <img
+                      appImageFallback #itemImage="imageFallback"
                       [src]="item.foto | imgUrl: 1200"
                       [alt]="item.nombre"
                       loading="lazy"
@@ -532,15 +540,17 @@
                     <figure
                       class="image-frame zoomable-image"
                       *ngFor="let foto of item.fotos"
-                      role="button"
-                      tabindex="0"
-                      aria-label="Ampliar imagen"
+                      [class.photo-unavailable]="itemGalleryImage.failed"
+                      [attr.role]="itemGalleryImage.failed ? 'group' : 'button'"
+                      [attr.tabindex]="itemGalleryImage.failed ? null : 0"
+                      [attr.aria-label]="itemGalleryImage.failed ? item.nombre + ': fotografía no disponible' : 'Ampliar imagen'"
                       [style.--frame-bg]="photoFrameBg(foto)"
-                      (click)="openPhoto(foto, item.nombre, galleryFor(item.foto, item.fotos))"
-                      (keydown.enter)="openPhoto(foto, item.nombre, galleryFor(item.foto, item.fotos))"
-                      (keydown.space)="openPhoto(foto, item.nombre, galleryFor(item.foto, item.fotos)); $event.preventDefault()"
+                      (click)="!itemGalleryImage.failed && openPhoto(foto, item.nombre, galleryFor(item.foto, item.fotos))"
+                      (keydown.enter)="!itemGalleryImage.failed && openPhoto(foto, item.nombre, galleryFor(item.foto, item.fotos))"
+                      (keydown.space)="!itemGalleryImage.failed && openPhoto(foto, item.nombre, galleryFor(item.foto, item.fotos)); $event.preventDefault()"
                     >
                       <img
+                        appImageFallback #itemGalleryImage="imageFallback"
                         [src]="foto | imgUrl: 1000"
                         [alt]="item.nombre"
                         loading="lazy"
@@ -577,23 +587,25 @@
   <div
     *ngIf="expandedPhoto"
     class="photo-lightbox"
+    cdkTrapFocus
+    [cdkTrapFocusAutoCapture]="true"
     role="dialog"
     aria-modal="true"
     aria-label="Imagen ampliada"
     (click)="closePhotoFromBackdrop($event)"
   >
-    <button type="button" class="lightbox-close" aria-label="Cerrar imagen" (click)="closePhoto()">
+    <button type="button" class="lightbox-close" cdkFocusInitial aria-label="Cerrar imagen" (click)="closePhoto()">
       <mat-icon>close</mat-icon>
     </button>
 
     <div class="lightbox-toolbar" (click)="$event.stopPropagation()">
-      <button type="button" aria-label="Alejar imagen" (click)="zoomOut()" [disabled]="zoomLevel <= 0.5">
+      <button type="button" aria-label="Alejar imagen" (click)="zoomOut()" [disabled]="lightboxImage.failed || zoomLevel <= 0.5">
         <mat-icon>zoom_out</mat-icon>
       </button>
-      <button type="button" aria-label="Restablecer zoom" (click)="resetZoom()">
+      <button type="button" aria-label="Restablecer zoom" (click)="resetZoom()" [disabled]="lightboxImage.failed">
         <span>{{ zoomLevel | percent:'1.0-0' }}</span>
       </button>
-      <button type="button" aria-label="Ampliar imagen" (click)="zoomIn()" [disabled]="zoomLevel >= 4">
+      <button type="button" aria-label="Ampliar imagen" (click)="zoomIn()" [disabled]="lightboxImage.failed || zoomLevel >= 4">
         <mat-icon>zoom_in</mat-icon>
       </button>
     </div>
@@ -610,7 +622,7 @@
 
     <div
       class="lightbox-stage"
-      [class.pannable]="zoomLevel > 1"
+      [class.pannable]="!lightboxImage.failed && zoomLevel > 1"
       [class.panning]="isPanning"
       (click)="closePhotoFromBackdrop($event)"
       (wheel)="zoomPhotoWheel($event)"
@@ -621,6 +633,7 @@
       (pointerleave)="endLightboxPointer($event)"
     >
       <img
+        appImageFallback #lightboxImage="imageFallback"
         class="lightbox-image"
         [src]="expandedPhoto.src | imgUrl: 2200"
         [alt]="expandedPhoto.alt"
