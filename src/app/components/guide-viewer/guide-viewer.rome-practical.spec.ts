@@ -122,13 +122,30 @@ describe('GuideViewerComponent Rome practical destinations', () => {
     show('que-ver');
     expect(root.querySelectorAll('.zone-card').length).toBe(43);
     expect(card('Shopping').querySelector('.practical-map, .primary-action')).toBeNull();
-    expect(card('Antichi Sapori – Pizza Rossa').querySelector('a[href]')).toBeNull();
+    expect(card('Pausa gastronómica – Pizza rossa romana').querySelector('a[href]')).toBeNull();
     show('donde-comer');
     expect(root.querySelectorAll('.item-card').length).toBe(16);
     expect(card('Da Baffetto (Centro histórico)').querySelector('a[href]')).toBeNull();
     expect(root.querySelector('a[href*="pizzeriabaffetto"]')).toBeNull();
     show('gastronomia');
     expect(root.querySelectorAll('.item-card').length).toBe(17);
+  });
+
+  it('keeps the optional pizza pause generic and meal budgets consistent with their restaurants', () => {
+    show('que-ver');
+    const pause = card('Pausa gastronómica – Pizza rossa romana');
+    expect(pause.textContent).toContain('pausa opcional');
+    expect(root.textContent).not.toContain('Antichi Sapori');
+    const meal = main(card('Última comida en Roma – Da Baffetto o Cantina e Cucina')).textContent!;
+    show('donde-comer');
+    for (const [name, label] of [
+      ['Da Baffetto (Centro histórico)', 'Da Baffetto'],
+      ['Cantina e Cucina (Centro histórico)', 'Cantina e Cucina']
+    ]) {
+      const estimate = main(card(name)).textContent!.match(/\d+€ – \d+€ por persona/)?.[0];
+      expect(estimate).withContext(name).toBeDefined();
+      expect(meal).toContain(`${label}: ${estimate}`);
+    }
   });
 
   it('uses the museum entrance instead of its centre and does not render unresolved map searches', () => {
