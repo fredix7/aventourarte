@@ -422,7 +422,7 @@ describe('PracticalInfoComponent', () => {
   it('keeps Malta booking instructions in access facts rather than invalid stored reservation links', () => {
     for (const [name, instruction] of [
       ['Casa Rocca Piccola', 'Entradas en la web oficial, mediante el botón «Book Now»: permite elegir audioguía o visita guiada en inglés.'],
-      ['Torre Roja (Torre de Santa Águeda)', 'Visitas de grupos: avisar con al menos una semana de antelación, si es posible, al +356 9934 7551.']
+      ['Torre Roja (Torre de Santa Águeda)', 'Para grupos, concierta la visita con al menos una semana de antelación, si es posible, en el +356 9934 7551.']
     ]) {
       const item = maltaItem(name);
       setItem(item, String(item['maps']));
@@ -518,7 +518,7 @@ describe('PracticalInfoComponent', () => {
   it('keeps institutional, shopping and quay phone labels intact without inventing reservations', () => {
     const measure = spyOn(TestBed.inject(AnalyticsService), 'action');
     for (const [name, label, href] of [
-      ['Palazzo Parisio (Merchants Street)', 'Ministerio de Asuntos Exteriores (centralita institucional; no reservas turísticas)', 'tel:+35622040000'],
+      ['Palazzo Parisio (Merchants Street)', 'Ministerio de Asuntos Exteriores', 'tel:+35622040000'],
       ['Compras y recuerdos', 'The Point Shopping Mall', 'tel:+35622470300'],
       ['Bay Street Shopping Complex', 'Grupo Bay Street', 'tel:+35623661585'],
       ['Blue Grotto Boat Service / puerto Wied iż-Żurrieq', 'Taquilla', 'tel:+35621640058']

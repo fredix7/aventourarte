@@ -108,8 +108,9 @@ describe('GuideViewerComponent Rome practical destinations', () => {
     expect(stairs.querySelector<HTMLAnchorElement>('.primary-action')!.href).toContain('/52251275/');
     expect(lift.textContent).toContain('320 escalones');
     expect(stairs.textContent).toContain('551 escalones');
-    const treasury = point('Museo del Tesoro — cerrado temporalmente');
+    const treasury = point('Museo del Tesoro');
     expect(treasury.querySelector('.primary-action')).toBeNull();
+    expect(treasury.textContent).toContain('cerrado temporalmente por obras');
     const request = point('Necrópolis Vaticana — solicitud de visita guiada');
     expect(request.querySelector('.primary-action')!.textContent).toContain('Reservar visita');
     expect(request.textContent).toContain('confirma la visita antes del pago');
@@ -125,6 +126,11 @@ describe('GuideViewerComponent Rome practical destinations', () => {
     expect(card('Pausa gastronómica – Pizza rossa romana').querySelector('a[href]')).toBeNull();
     show('donde-comer');
     expect(root.querySelectorAll('.item-card').length).toBe(16);
+    const pompi = card('Pompi');
+    expect(pompi.textContent).not.toContain('Pastini');
+    expect(pompi.textContent).toContain('Via della Croce 88');
+    expect(pompi.textContent).toContain('Via Albalonga 7b');
+    expect(point('Pompi Albalonga — Re di Roma').textContent).toContain('viernes 07:00–00:00');
     expect(card('Da Baffetto (Centro histórico)').querySelector('a[href]')).toBeNull();
     expect(root.querySelector('a[href*="pizzeriabaffetto"]')).toBeNull();
     show('gastronomia');

@@ -63,6 +63,7 @@ describe('GuideViewerComponent grouped practical places', () => {
     const names = points().map(element => element.querySelector('h4')!.textContent!.trim());
     expect(new Set(names).size).toBe(14);
     expect(names.filter(name => name.startsWith('Blue Hole')).length).toBe(1);
+    expect(names).toContain('Blue Hole');
     expect(point('Blue Hole').closest('.zone-card')).toBe(zone('La Ventana Azul (Azure Window)'));
     expect(points().every(element => element.getAttribute('aria-label') ===
       'Lugar incluido: ' + element.querySelector('h4')!.textContent!.trim())).toBeTrue();
@@ -81,7 +82,8 @@ describe('GuideViewerComponent grouped practical places', () => {
     expect(map(zone('Isla de Gozo (Għawdex)'))!.href).toContain('Mgarr%20Harbour');
     expect(map(point('Ġgantija'))!.href).not.toContain('Mgarr');
     expect(map(point('Fungus Rock'))).toBeNull();
-    expect(point('Fungus Rock').textContent).toContain('mapa principal');
+    expect(point('Fungus Rock').textContent).toContain('Contempla Fungus Rock desde la costa de Dwejra');
+    expect(point('Fungus Rock').textContent).toContain('reserva natural con acceso restringido');
     expect(map(zone('La Ventana Azul (Azure Window)'))!.getAttribute('href'))
       .toBe('https://maps.app.goo.gl/ZdQE8AMzRrccdaeH8');
   });
@@ -105,6 +107,7 @@ describe('GuideViewerComponent grouped practical places', () => {
     expect(points().flatMap(element => Array.from(element.querySelectorAll('.primary-action'))).length).toBe(2);
     expect(point('Ta’ Pinu').querySelector('.primary-action')).toBeNull();
     expect(point('Blue Grotto Boat Service').querySelector('.primary-action')).toBeNull();
+    expect(point('Blue Grotto Boat Service').textContent).toContain('espera su confirmación');
     expect(map(point('Triq Sant’ Orsla'))!.href).toContain('Department%20of%20Information');
     expect(point('Triq Sant’ Orsla').querySelector('.phone-link')).toBeNull();
     expect(map(point('Blue Hole'))!.href).toContain('query_place_id=ChIJn_ajP4O2DxMRHKw0YgMLX3Y');
@@ -123,6 +126,23 @@ describe('GuideViewerComponent grouped practical places', () => {
     expect(points().length).toBe(0);
     expect(Array.from(root.querySelectorAll('.zone-card h3')).map(element => element.textContent)).toEqual(namesBefore);
     expect(map(zone('Palazzo Parisio (Merchants Street)'))!.href).toContain('Merchants%20Street');
+    const palazzo = zone('Palazzo Parisio (Merchants Street)');
+    expect(palazzo.textContent).toContain('El interior no está abierto al turismo ordinario');
+    expect(palazzo.textContent).toContain('aperturas excepcionales');
+    expect(palazzo.textContent).toContain('Contemplación de la fachada: gratuita');
+    expect(palazzo.querySelector('.primary-action')).toBeNull();
+    const archaeology = zone('Museo Nacional de Arqueología');
+    expect(archaeology.textContent).toContain('Entrada de pago');
+    expect(archaeology.textContent).toContain('precio de la fecha seleccionada');
+    expect(archaeology.textContent).not.toContain('Adultos: 8€');
+    expect(archaeology.textContent).toContain('sala infantil está cerrada por reformas');
+    const palace = zone('Palacio del Gran Maestre');
+    expect(palace.textContent).toContain('La Sala del Trono permanece cerrada al público hasta nuevo aviso');
+    expect(palace.textContent).toContain('Las demás Salas de Estado y la Armería pueden tener cierres parciales');
+    expect(palace.querySelector<HTMLAnchorElement>('.practical-website a')?.href)
+      .toBe('https://heritagemalta.mt/explore/grand-masters-palace/');
+    expect(zone('Explorando Malta: rutas, excursiones y grandes paisajes').textContent)
+      .not.toContain('que realizamos durante nuestra estancia');
     expect(zone('Free Tour por La Valeta').textContent).toContain('Sin horario fijo');
     expect(map(zone('Compras y recuerdos'))!.href).toContain('The%20Point');
   });
