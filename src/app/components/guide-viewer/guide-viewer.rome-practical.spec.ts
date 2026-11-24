@@ -113,7 +113,7 @@ describe('GuideViewerComponent Rome practical destinations', () => {
     expect(treasury.textContent).toContain('cerrado temporalmente por obras');
     const request = point('Necrópolis Vaticana — solicitud de visita guiada');
     expect(request.querySelector('.primary-action')!.textContent).toContain('Reservar visita');
-    expect(request.textContent).toContain('confirma la visita antes del pago');
+    expect(request.textContent).toContain('confirme la visita antes de pagar');
     const museums = card('Museos Vaticanos y Capilla Sixtina');
     expect(museums.querySelector('.primary-action')).toBeNull();
     expect(museums.querySelectorAll('section[aria-label^="Lugar incluido: "]').length).toBe(0);
