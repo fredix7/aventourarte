@@ -62,7 +62,7 @@ export const MALTA_GUIDE = {
                 nombre: 'Fuente de los Tritones',
                 tiposPlan: ['ruta', 'urbano'],
                 descripcion:
-                  'Tras la introducción del free tour, la mejor forma de comenzar la visita física a La Valeta es frente a su gran puerta de entrada moderna.\n\nLa Fuente de los Tritones es uno de los monumentos modernistas más importantes y reconocibles de Malta.\n\nSituada justo frente a la Puerta de la Ciudad, funciona como gran entrada simbólica a La Valeta y suele ser el primer gran monumento que ven muchos viajeros al llegar a la capital.\n\nFue diseñada por el arquitecto Victor Anastasi y esculpida en bronce por el artista maltés Vincent Apap, inaugurándose oficialmente en 1959.\n\n🏛️ Qué representa:\nLa fuente muestra tres enormes Tritones mitológicos sosteniendo una gran cuenca circular, simbolizando la histórica relación de Malta con el mar.\n\n💡 Curiosidad histórica:\nDurante décadas la fuente estuvo parcialmente deformada debido a daños estructurales provocados por el uso inadecuado del monumento como escenario de eventos.\n\nEl plato superior llegó incluso a colapsar en los años 70, obligando a instalar una columna central de refuerzo que alteró completamente el diseño original.\n\nTras una restauración integral inaugurada en 2018, la fuente recuperó finalmente su aspecto original.\n\n🌙 Experiencia viajera:\nAunque impresiona de día por su tamaño y la fuerza del agua, uno de los mejores momentos para verla es por la noche, cuando la iluminación crea un contraste precioso con las murallas fortificadas de La Valeta.',
+                  'Tras la introducción del free tour, la mejor forma de comenzar la visita a La Valeta es frente a su gran puerta de entrada moderna.\n\nLa Fuente de los Tritones es uno de los monumentos modernistas más importantes y reconocibles de Malta.\n\nSituada justo frente a la Puerta de la Ciudad, funciona como gran entrada simbólica a La Valeta y suele ser el primer gran monumento que ven muchos viajeros al llegar a la capital.\n\nFue diseñada por el arquitecto Victor Anastasi y esculpida en bronce por el artista maltés Vincent Apap, inaugurándose oficialmente en 1959.\n\n🏛️ Qué representa:\nLa fuente muestra tres enormes Tritones mitológicos sosteniendo una gran cuenca circular, simbolizando la histórica relación de Malta con el mar.\n\n💡 Curiosidad histórica:\nDurante décadas la fuente estuvo parcialmente deformada debido a daños estructurales provocados por el uso inadecuado del monumento como escenario de eventos.\n\nEl plato superior llegó incluso a colapsar en los años 70, obligando a instalar una columna central de refuerzo que alteró completamente el diseño original.\n\nTras una restauración integral inaugurada en 2018, la fuente recuperó finalmente su aspecto original.\n\n🌙 Experiencia viajera:\nAunque impresiona de día por su tamaño y la fuerza del agua, uno de los mejores momentos para verla es por la noche, cuando la iluminación crea un contraste precioso con las murallas fortificadas de La Valeta.',
                 foto: 'cld:europa/malta/la-valeta/fuente-tritones',
                 direccion: 'Triton Square, junto a Vjal Nelson y a la Puerta de la Ciudad, Floriana, Malta',
                 maps: 'https://www.google.com/maps/search/?api=1&query=Triton%20Fountain&query_place_id=ChIJWQNDs9JaDhMRdi08TLNFpYM',
@@ -320,7 +320,7 @@ export const MALTA_GUIDE = {
                 precio:
                   'Adultos: 10€ | Jóvenes de 12–17 años, estudiantes y personas de 60 años o más: 7,50€ | Niños 6–11 años: 5,50€ | Niños 1–5 años: Gratis',
                 acceso:
-                  'La sala de la Primera Guerra Mundial está cerrada temporalmente y la experiencia de artillería y la audiovisual no están operativas. Comprueba su reapertura y las zonas que puedes visitar antes de comprar. Consulta también el calendario de In Guardia: los días de representación, la visita ordinaria al fuerte y al museo comienza a las 12:00.',
+                  'La sala de la Primera Guerra Mundial está cerrada temporalmente y las experiencias de artillería y audiovisual están suspendidas temporalmente. Comprueba su reapertura y las zonas que puedes visitar antes de comprar. Consulta también el calendario de In Guardia: los días de representación, la visita ordinaria al fuerte y al museo comienza a las 12:00.',
                 direccion: 'Fort St Elmo and National War Museum, Mediterranean Street, Valletta, Malta',
                 maps: 'https://www.google.com/maps/search/?api=1&query=Fort%20St%20Elmo%20and%20National%20War%20Museum%2C%20Mediterranean%20Street%2C%20Valletta%2C%20Malta',
                 telefono: '+356 2123 3088',
@@ -801,7 +801,7 @@ export const MALTA_GUIDE = {
               maps: 'https://maps.app.goo.gl/nKUvMUUBjroLTFSA6',
               telefono: 'Casa madre MSSP (consultas): +356 2145 9222',
               web: 'https://web.depiromssp.org/malta/',
-              acceso: 'Santa Águeda forma parte del complejo de la Missionary Society of St Paul (MSSP), con gestión independiente de las Catacumbas de San Pablo de Heritage Malta. Confirma turnos, tarifa y condiciones de movilidad antes de desplazarte. El teléfono es el contacto de la casa madre MSSP para consultas.'
+              acceso: 'Santa Águeda, de la Missionary Society of St Paul (MSSP), se visita por separado de las Catacumbas de San Pablo de Heritage Malta. Llama a la casa madre MSSP para confirmar turnos, tarifa y condiciones de movilidad antes de ir.'
             },
             {
               nombre: 'Rotonda de Mosta (Basílica de la Asunción)',
@@ -883,14 +883,14 @@ export const MALTA_GUIDE = {
               foto:
                 'cld:europa/malta/mellieha/torre-roja',
               horario:
-                'Interior: lun–sáb 10:00–16:00 | Domingos cerrado | Confirma por teléfono la apertura efectiva y la presencia de voluntarios antes de ir',
+                'Interior: lun–sáb 10:00–16:00 | Domingos cerrado | Confirma por teléfono la apertura y la presencia de voluntarios antes de ir',
               precio:
                 'Interior: adultos 2,50€ | Niños de 12 años o menos: gratis | Contemplación exterior desde espacios públicos permitidos: gratuita',
               direccion: 'St Agatha’s Tower (Red Tower), cresta de Marfa, l-Aħrax tal-Mellieħa, Mellieħa, Malta',
               maps: 'https://www.google.com/maps/search/?api=1&query=St%20Agatha%27s%20Tower%20Red%20Tower%2C%20Mellieha%2C%20Malta',
               telefono: 'Apertura y voluntarios: +356 9934 7551',
               web: 'https://www.static.dinlarthelwa.org/heritage-sites/managed-heritage-sites/st-agathas-tower-the-red-tower-mellieha/',
-              acceso: 'La visita al interior y a la azotea depende de la apertura efectiva y de la presencia de voluntarios de Din l-Art Ħelwa. Llama antes de desplazarte. La azotea se alcanza por una escalera de caracol; consulta las condiciones de movilidad antes de ir. Puedes contemplar el exterior desde los espacios públicos permitidos, respetando cierres y señalización. Para grupos, concierta la visita con al menos una semana de antelación, si es posible, en el +356 9934 7551.'
+              acceso: 'La visita al interior y a la azotea depende de la apertura y de la presencia de voluntarios de Din l-Art Ħelwa. Llama antes de desplazarte. La azotea se alcanza por una escalera de caracol; consulta las condiciones de movilidad antes de ir. Puedes contemplar el exterior desde los espacios públicos permitidos, respetando cierres y señalización. Para grupos, concierta la visita con al menos una semana de antelación, si es posible, en el +356 9934 7551.'
             }
           ]
         },
@@ -1103,7 +1103,7 @@ export const MALTA_GUIDE = {
                   telefono: 'Grupo Bay Street: +356 2366 1585',
                   web: 'https://baystreet.com.mt/contact/',
                   maps: 'https://www.google.com/maps/search/?api=1&query=Bay%20Street%20Shopping%20Complex%2C%20St.%20George%27s%20Bay%2C%20St.%20Julian%27s%20STJ%203311%2C%20Malta',
-                  acceso: 'Centro comercial de St. Julian’s. Para consultas, llama al contacto del grupo Bay Street.'
+                  acceso: 'Centro comercial de St. Julian’s. Para consultas, llama a Bay Street.'
                 }
               ]
             },
@@ -1200,7 +1200,7 @@ export const MALTA_GUIDE = {
         {
           nombre: 'Imqaret',
           descripcion:
-            'Los imqaret son uno de los dulces más reconocibles de Malta: pequeñas piezas de masa fina rellenas de pasta de dátiles y fritas hasta quedar crujientes. Suelen cortarse en rombos, con un interior oscuro, denso y aromático que contrasta con la cubierta dorada.\n\nEl relleno puede llevar anís, cítricos, canela u otras especias. Se relacionan con la tradición repostera árabe y tienen parientes en el Magreb, como los maqrout; forman parte de la cocina maltesa sin ser una invención exclusiva de las islas.\n\nEs habitual encontrarlos calientes en puestos y fiestas populares. Puedes comerlos solos como tentempié dulce o probar una presentación de postre con helado, que añade otro contraste de temperatura y textura.\n\nQue el relleno sea de dátiles no significa que sean veganos: las recetas pueden incorporar mantequilla, manteca o huevo, y algunas se aromatizan con anisete o Marsala. Pregunta por la masa, el licor y la grasa de fritura si tienes restricciones; el helado y otros acompañamientos también cuentan.',
+            'Los imqaret son uno de los dulces más reconocibles de Malta: pequeñas piezas de masa fina rellenas de pasta de dátiles y fritas hasta quedar crujientes. Suelen cortarse en rombos, con un interior oscuro, denso y aromático que contrasta con la cubierta dorada.\n\nEl relleno puede llevar anís, cítricos, canela u otras especias. Forman parte de la repostería maltesa y están emparentados con dulces de tradición árabe y magrebí, como los maqrout.\n\nEs habitual encontrarlos calientes en puestos y fiestas populares. Puedes comerlos solos como tentempié dulce o probar una presentación de postre con helado, que añade otro contraste de temperatura y textura.\n\nQue el relleno sea de dátiles no significa que sean veganos: las recetas pueden incorporar mantequilla, manteca o huevo, y algunas se aromatizan con anisete o Marsala. Pregunta por la masa, el licor y la grasa de fritura si tienes restricciones; el helado y otros acompañamientos también cuentan.',
           precio: 'Barato',
           perfilAlimentario: {
             dieta: { certeza: 'variable' as const },
@@ -1221,7 +1221,7 @@ export const MALTA_GUIDE = {
         {
           nombre: 'Timpana',
           descripcion:
-            'La timpana reúne dos capas de cocina reconfortante: pasta con salsa de carne dentro de una envoltura de masa quebrada. Al cortarla se ven los macarrones y el relleno compacto, mientras la cubierta aporta una textura crujiente. Es una preparación festiva de la cocina maltesa, emparentada con otros pasteles de pasta del Mediterráneo.\n\nLa salsa suele combinar carne picada, tomate y cebolla. Las recetas pueden incorporar cerdo, beicon, hígados de pollo o huevo cocido; el huevo batido y el queso ayudan a ligar la pasta. La masa también cambia según quien la prepare, así que no todas las porciones tienen la misma proporción de relleno y cubierta.\n\nPuede resultar una comida muy completa por sí sola. Pregunta por el tamaño de la porción antes de añadir otro plato principal y, si no te gustan las vísceras, confirma si las lleva.\n\nLa versión de carne no es vegetariana ni pescetariana y puede contener cerdo. El trigo, el huevo y la leche son ingredientes habituales; los caldos, salsas y condimentos pueden añadir otros alérgenos. Si tienes restricciones, consulta el relleno y la masa completos, y no deduzcas la ausencia de alcohol solo por el nombre del plato.',
+            'La timpana reúne dos capas de cocina reconfortante: pasta con salsa de carne dentro de una envoltura de masa quebrada. Al cortarla se ven los macarrones y el relleno compacto, mientras la cubierta aporta una textura crujiente. Es una preparación festiva de la cocina maltesa, emparentada con otros pasteles de pasta del Mediterráneo.\n\nLa salsa suele combinar carne picada, tomate y cebolla. Las recetas pueden incorporar cerdo, beicon, hígados de pollo o huevo cocido; el huevo batido y el queso ayudan a ligar la pasta. La masa también cambia según quien la prepare, así que no todas las porciones tienen la misma proporción de relleno y cubierta.\n\nPuede resultar una comida muy completa por sí sola. Pregunta por el tamaño de la porción antes de añadir otro plato principal y, si no te gustan las vísceras, confirma si las lleva.\n\nLa versión de carne no es vegetariana ni pescetariana y puede contener cerdo. El trigo, el huevo y la leche son ingredientes habituales; los caldos, salsas y condimentos pueden añadir otros alérgenos. Si tienes restricciones, consulta el relleno y la masa completos. Si evitas el alcohol, pregunta si lo utilizan en la preparación.',
           perfilAlimentario: {
             dieta: { certeza: 'confirmado' as const, compatibilidad: 'ninguno' as const },
             alcohol: 'desconocido' as const,
@@ -1231,7 +1231,7 @@ export const MALTA_GUIDE = {
         {
           nombre: 'Kinnie',
           descripcion:
-            'Kinnie Original es un refresco maltés con gas y un sabor agridulce muy reconocible, con notas de naranja y botánicos. Merece probarlo si te gustan las bebidas con un punto amargo: ofrece una alternativa al sabor habitual de una cola o de un refresco de naranja dulce.\n\nPuedes tomarlo bien frío, solo o con hielo. Para una primera prueba, pide expresamente Kinnie Original y comprueba si te sirven el refresco tal cual o una mezcla. Su color oscuro procede del caramelo de la fórmula, que también incluye azúcar y aromas; no conviene interpretar ese color como señal de que sea una bebida alcohólica.\n\nOriginal es el refresco sin alcohol. Kinnie Aperitivo y los cócteles preparados con Kinnie son productos distintos y pueden llevar vino o destilados. Si quieres evitar el alcohol, concreta cuál estás pidiendo.\n\nPara alergias o una dieta vegana, revisa la etiqueta del producto y consulta al fabricante si necesitas aclarar la composición de los aromas. Si tienes una alergia, confirma los ingredientes y posibles trazas antes de consumirlo.',
+            'Kinnie Original es un refresco maltés con gas y un sabor agridulce muy reconocible, con notas de naranja y botánicos. Merece probarlo si te gustan las bebidas con un punto amargo: ofrece una alternativa al sabor habitual de una cola o de un refresco de naranja dulce.\n\nPuedes tomarlo bien frío, solo o con hielo. Para una primera prueba, pide expresamente Kinnie Original y comprueba si te sirven el refresco tal cual o una mezcla. Su color oscuro procede del caramelo de la fórmula, que también incluye azúcar y aromas.\n\nOriginal es el refresco sin alcohol. Kinnie Aperitivo y los cócteles preparados con Kinnie son productos distintos y pueden llevar vino o destilados. Si quieres evitar el alcohol, concreta cuál estás pidiendo.\n\nPara alergias o una dieta vegana, revisa la etiqueta del producto y consulta al fabricante si necesitas aclarar la composición de los aromas. Si tienes una alergia, confirma los ingredientes y posibles trazas antes de consumirlo.',
           perfilAlimentario: {
             dieta: { certeza: 'desconocido' as const },
             alcohol: 'no-contiene' as const,
@@ -1375,7 +1375,7 @@ export const MALTA_GUIDE = {
         {
           nombre: 'Roots (Marsaxlokk)',
           descripcion:
-            'El antiguo restaurante Roots de Marsaxlokk está cerrado y no admite reservas para comer. El nuevo concepto comercial de la marca es un negocio distinto: elige otro restaurante para organizar tu comida en Marsaxlokk.',
+            'El antiguo restaurante Roots de Marsaxlokk está cerrado y no admite reservas para comer. Elige otro restaurante para organizar tu comida en Marsaxlokk.',
           horario:
             'Restaurante cerrado',
         },
