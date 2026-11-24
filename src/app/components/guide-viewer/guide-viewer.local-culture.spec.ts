@@ -82,11 +82,11 @@ for (const [destination, path, expectedCards] of [
       }
       if (destination === 'Malta') {
         const seasonal = cards.find(card => card.querySelector('h3')?.textContent?.includes('San Lawrenz'))!;
-        expect(seasonal.textContent).toContain('corresponda al año de tu viaje');
+        expect(seasonal.textContent).toContain('programa de la festa del año de tu viaje');
         expect(seasonal.textContent).toContain('se concentran en los días de celebración');
         expect(seasonal.textContent).toContain('El paseo por la plaza y el pueblo es gratuito');
         expect(seasonal.textContent).toContain('Para entrar en la iglesia');
-        expect(seasonal.textContent).toContain('los actos de la festa se rigen por su programa');
+        expect(seasonal.textContent).toContain('consulta el programa para conocer los actos de la festa');
         expect(seasonal.textContent).toContain('Gratuito');
         expect(seasonal.textContent).not.toContain('Coste variable');
         expect(seasonal.querySelector<HTMLAnchorElement>('.practical-map a')!.href)

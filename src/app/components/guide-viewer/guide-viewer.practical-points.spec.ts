@@ -107,7 +107,7 @@ describe('GuideViewerComponent grouped practical places', () => {
     expect(points().flatMap(element => Array.from(element.querySelectorAll('.primary-action'))).length).toBe(2);
     expect(point('Ta’ Pinu').querySelector('.primary-action')).toBeNull();
     expect(point('Blue Grotto Boat Service').querySelector('.primary-action')).toBeNull();
-    expect(point('Blue Grotto Boat Service').textContent).toContain('espera su confirmación');
+    expect(point('Blue Grotto Boat Service').textContent).toContain('confirma la reserva antes de ir');
     expect(map(point('Triq Sant’ Orsla'))!.href).toContain('Department%20of%20Information');
     expect(point('Triq Sant’ Orsla').querySelector('.phone-link')).toBeNull();
     expect(map(point('Blue Hole'))!.href).toContain('query_place_id=ChIJn_ajP4O2DxMRHKw0YgMLX3Y');
@@ -127,13 +127,13 @@ describe('GuideViewerComponent grouped practical places', () => {
     expect(Array.from(root.querySelectorAll('.zone-card h3')).map(element => element.textContent)).toEqual(namesBefore);
     expect(map(zone('Palazzo Parisio (Merchants Street)'))!.href).toContain('Merchants%20Street');
     const palazzo = zone('Palazzo Parisio (Merchants Street)');
-    expect(palazzo.textContent).toContain('El interior no está abierto al turismo ordinario');
-    expect(palazzo.textContent).toContain('aperturas excepcionales');
-    expect(palazzo.textContent).toContain('Contemplación de la fachada: gratuita');
+    expect(palazzo.textContent).toContain('El interior está cerrado a las visitas turísticas');
+    expect(palazzo.textContent).toContain('apertura especial');
+    expect(palazzo.textContent).toContain('Ver la fachada: gratis');
     expect(palazzo.querySelector('.primary-action')).toBeNull();
     const archaeology = zone('Museo Nacional de Arqueología');
     expect(archaeology.textContent).toContain('Entrada de pago');
-    expect(archaeology.textContent).toContain('precio de la fecha seleccionada');
+    expect(archaeology.textContent).toContain('precio para el día de tu visita');
     expect(archaeology.textContent).not.toContain('Adultos: 8€');
     expect(archaeology.textContent).toContain('sala infantil está cerrada por reformas');
     const palace = zone('Palacio del Gran Maestre');
